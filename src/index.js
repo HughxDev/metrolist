@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import '@patterns/stylesheets/public.css';
+
 import Metrolist from './components/Metrolist';
 import * as serviceWorker from './serviceWorker';
+
+import './index.css';
+import '@patterns/stylesheets/public.css';
 
 ReactDOM.render( <Metrolist />, document.getElementById( 'root' ) );
 
