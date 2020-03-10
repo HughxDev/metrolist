@@ -10,4 +10,19 @@ module.exports = {
   // "rules": {
   //   ...a11yOff,
   // },
+  "settings": {
+    "import/resolver": {
+      /*
+        Match up with webpack.config.js alias
+        so that eslint-plugin-import doesn’t complain.
+        via: https://github.com/benmosher/eslint-plugin-import/issues/496#issuecomment-567769738
+      */
+      "alias": {
+        "map": [
+          ["@patterns", "./patterns"]
+        ],
+        "extensions": [".js"]
+      },
+    },
+  },
 };

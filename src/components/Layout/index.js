@@ -1,4 +1,7 @@
 import React from 'react';
+import letterBLogoDark from '@patterns/images/b-dark.svg';
+import cityOfBostonWordmark from '@patterns/images/public/logo.svg';
+import cityOfBostonSeal from '@patterns/images/public/seal.svg';
 
 function Layout( props ) {
   return (
@@ -8,7 +11,7 @@ function Layout( props ) {
         <div className="nv-m-h">
           <div className="nv-m-h-ic">
             <img
-              src="/images/b-dark.svg"
+              src={ letterBLogoDark }
               title="B"
               aria-hidden="true"
               className="nv-m-h-i"
@@ -147,11 +150,11 @@ function Layout( props ) {
           </label>
           <div className="lo">
             <a href="/" className="lo-l">
-              <img src="/images/public/logo.svg" alt="City of Boston" className="lo-i" />
+              <img src={ cityOfBostonWordmark } alt="City of Boston" className="lo-i" />
             </a>
           </div>
           <a href="/" className="s">
-            <img src="/images/public/seal.svg" alt="City of Boston" className="s-i" />
+            <img src={ cityOfBostonSeal } alt="City of Boston" className="s-i" />
           </a>
           <nav className="nv-h">
             <ul className="nv-h-l">

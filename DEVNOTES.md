@@ -30,3 +30,20 @@
   - Ejecting…
 - The Drupal site only uses Babel, not Webpack. Would have to add for Drupal integration.
   - Looks like the relevant package.json: `boston.gov-d8/docroot/core/package.json`.
+- Ejecting was also a disaster because it gives you an insane Webpack config. Manually uninstalling react-scripts and setting up Webpack/Babel: `yarn add @babel/core @babel/preset-env @babel/preset-react webpack webpack-cli webpack-dev-server babel-loader css-loader style-loader html-webpack-plugin`. (via [tutorial](https://dev.to/vish448/create-react-project-without-create-react-app-3goh))
+- Create React App had its own way of resolving `%PUBLIC_URL%` in `public/index.html`. Adding to dotenv and calling from `htmlWebpackPlugin.options.PUBLIC_URL`.
+- Trying to compile `patterns/stylesheets/public.styl` using stylus-loader hangs Webpack. The process runs out of memory!
+  - Looks like the culprits are:
+    - `@require 'base/**/**/base.styl'`, which has `@require('*.styl')`.
+    - `@require 'grid/modern/base.styl';`, which has `@require('*.styl')`.
+    - …basically, anything with excessive globbing?
+      - Tried to switch from `**/**` (why double?) to just `**` but it didn’t help. This is too much work; abandoning.
+- New approach: download [precompiled stylesheet](https://patterns.boston.gov/css/public.css) for existing components.
+  - public.css has unresolved variables in it??
+  - Relative file URLs get messed up if `public.css` is outside of the patterns directory structure.
+    - Couldn’t find an obvious way to map URLs to outside the folder via Webpack.
+    - Workaround: download `public.css` to same directory as `public.styl`. In `.gitmodules`, set `ignore = dirty`. Now the addition of `public.css` won’t affect commits.
+- Replacing hard-coded image paths in `src/components/Layout/index.js` with React imports to include in Webpack build process. Otherwise, images are broken.
+- SVGs referenced in `public.css` need a Webpack loader to resolve. Using `file-loader`.
+- Aliasing `patterns/` to `@patterns/` in imports to avoid doing `../../..` since it sits outside of the `src` directory.
+  - This is done in `webpack.config.js` but has to be mirrored in `.eslintrc.js` in order to silence ESLint errors.

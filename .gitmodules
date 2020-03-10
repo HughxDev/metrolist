@@ -1,3 +1,4 @@
 [submodule "patterns"]
 	path = patterns
 	url = git@github.com:CityOfBoston/patterns.git
+	ignore = dirty
