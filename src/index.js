@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+// import './index.css';
+import './patterns/stylesheets/public.scss';
 import Metrolist from './components/Metrolist';
 import * as serviceWorker from './serviceWorker';
 
