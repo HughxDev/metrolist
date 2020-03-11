@@ -249,13 +249,13 @@ function Layout( props ) {
           </nav>
           <div className="h-s">
             <form className="sf" acceptCharset="UTF-8" method="get">
-              <input name="utf8" type="hidden" value="✓" />
+              <input name="utf8" type="hidden" value="✓" readOnly />
               <div className="sf-i">
                 <input
                   type="text"
                   name="q"
                   id="q"
-                  value=""
+                  defaultValue=""
                   placeholder="Search…"
                   className="sf-i-f"
                   autoComplete="off"

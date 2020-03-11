@@ -3,7 +3,7 @@ import React from 'react';
 import Layout from '../Layout';
 import Logo from '../Logo';
 import Tagline from '../Tagline';
-import JimmyHoffa from '../JimmyHoffa';
+import Icon from '../Icon';
 
 import './Metrolist.scss';
 
@@ -11,7 +11,7 @@ function Metrolist() {
   return (
     <Layout>
       <article>
-        <JimmyHoffa>Goodbye World</JimmyHoffa>
+        <Icon icon="wallet" />
         <header>
           <hgroup>
             <h1><Logo width="145" /></h1>
