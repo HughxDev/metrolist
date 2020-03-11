@@ -23,3 +23,5 @@ yarn-debug.log*
 yarn-error.log*
 
 # Project-specific
+src/components/Icon/icons_manifest.json
+report.*.json
