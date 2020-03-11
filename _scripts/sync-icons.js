@@ -8,10 +8,22 @@ console.log( 'Fetching icons manifest from patterns.boston.gov…' );
 fetch( endpoint )
   .then( ( response ) => response.json() )
   .then( ( json ) => {
-    json = JSON.stringify( json, null, 2 );
+    const iconsByName = {};
+
+    json.forEach( ( iconEntry ) => {
+      const iconId = iconEntry.title;
+      delete iconEntry.filename;
+      delete iconEntry.title;
+      delete iconEntry.directory;
+      iconEntry.url = iconEntry.url.replace( 'https://assets.boston.gov', '' );
+      iconEntry.category = iconEntry.category.replace( ' ', '_' );
+      iconsByName[iconId] = iconEntry;
+    } );
+
     fs.writeFile(
       'src/components/Icon/icons_manifest.json',
-      json,
+      JSON.stringify( iconsByName ),
+      // JSON.stringift( iconsByName, null, 2 ),
       'utf8',
       ( writeFileError ) => {
         if ( !writeFileError ) {

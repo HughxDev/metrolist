@@ -62,4 +62,7 @@
           - Loading `const Dotenv = require( 'dotenv-webpack' );` + `plugins: [ new Dotenv(), ]` sets `process.env.*` in the React context *only*! Not available in Webpack config!
           - Thus, using both allows `process.env.*` (as defined in .env) to be global!
           - We actually don’t need `--env` passed to `webpack-dev-server` as that simply sets a variable called `env` to `true`. And thus, we don’t need `module.exports` to be a function. …what a journey.
-    
+    - Hot reloading breaks; possible that `__ICONS_MANIFEST__` is too large.
+      - Maybe we skip the local sync and just do a `fetch` with caching if on dev.
+        - Hybrid approach: Still use the sync script, but par down redundant keys and minify. Use a dynamic `import()` for the generated JSON in the [class-ified] React component that calls setState on Promise resolution and re-renders the icon component which now has a `src`.
+          - There is a visible lag as the images are lazy-loaded. Does this matter? For production, perhaps static analysis could slot in the appropriate URLs? Might be getting too complex though…

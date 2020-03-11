@@ -50,12 +50,5 @@ module.exports = {
       "NODE_ENV": process.env.NODE_ENV,
     } ),
     new Dotenv(),
-    new webpack.DefinePlugin( {
-      "__ICONS_MANIFEST__": (
-        ( process.env.NODE_ENV === 'development' )
-          ? fs.readFileSync( 'src/components/Icon/icons_manifest.json' )
-          : 'null'
-      ),
-    } ),
   ],
 };

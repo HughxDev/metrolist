@@ -11,7 +11,7 @@ function Metrolist() {
   return (
     <Layout>
       <article>
-        <Icon icon="wallet" />
+
         <header>
           <hgroup>
             <h1><Logo width="145" /></h1>
@@ -21,6 +21,14 @@ function Metrolist() {
         <div className="sh cl">
           <h2 className="sh-title">Start Your Search</h2>
         </div>
+        <a>
+          <Icon icon="wallet" width="50" />
+          <span>Find housing based on your income</span>
+        </a>
+        <a>
+          <Icon icon="neighborhood" width="50" />
+          <span>See the most recent listings</span>
+        </a>
       </article>
     </Layout>
   );
