@@ -47,3 +47,19 @@
 - SVGs referenced in `public.css` need a Webpack loader to resolve. Using `file-loader`.
 - Aliasing `patterns/` to `@patterns/` in imports to avoid doing `../../..` since it sits outside of the `src` directory.
   - This is done in `webpack.config.js` but has to be mirrored in `.eslintrc.js` in order to silence ESLint errors.
+- Icons are on S3 at `https://assets.boston.gov/icons/accessboston/` which is the single source of truth. So probably shouldn’t bring in to local Webpack pipeline.
+  - SVG assets only, no PNGs.
+    - Fallbacks necessary?
+  - Setting up an icon syncing script: S3 → icons_manifest.json.
+    - Can check if an icon is valid via PropTypes, but don’t want to pull in such a large JSON object (319 KB file w/o minifying) in production. Using Webpack will conditionally load the object into an `__ICONS_MANIFEST__` global.
+      - This proved very difficult! For some reason, `process.env.NODE_ENV` is not set at the time that `webpack.config.js` is read. Have to do ALL of the following:
+        - Call `webpack-dev-server --open --env`. `--env` allows you to export an environment variable to your `webpack.config.js` using a function expression: `module.exports = ( env ) => {}`. If your `module.exports` is just a JSON structure, it can’t be fully dynamic. Normally you would do `--env.FOO_BAR=baz` but hanging conditions on an argument defeats the point of using a `.env` file.
+        - `require( 'dotenv' ).config();`. This SHOULD pull in everything from `.env`, but for some reason some key(s) were missing.
+        - `const Dotenv = require( 'dotenv-webpack' );` + `plugins: [ new Dotenv(), ]`. This filled in the gaps in the `.env` import.
+        - After toggling a bunch/researching:
+          - `process.env.NODE_ENV` would be replaced globally regardless of whether dotenv or dotenv-webpack were loaded. That’s because Webpack is setting it independently, which can be turned off via `optimization.nodeEnv = false`.
+          - Loading `require( 'dotenv' ).config()` sets `process.env.*` in the Webpack config context *only*. Not passed onto React!
+          - Loading `const Dotenv = require( 'dotenv-webpack' );` + `plugins: [ new Dotenv(), ]` sets `process.env.*` in the React context *only*! Not available in Webpack config!
+          - Thus, using both allows `process.env.*` (as defined in .env) to be global!
+          - We actually don’t need `--env` passed to `webpack-dev-server` as that simply sets a variable called `env` to `true`. And thus, we don’t need `module.exports` to be a function. …what a journey.
+    

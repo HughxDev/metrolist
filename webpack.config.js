@@ -1,8 +1,9 @@
 require( 'dotenv' ).config();
-
-// https://dev.to/vish448/create-react-project-without-create-react-app-3goh
+const Dotenv = require( 'dotenv-webpack' );
+const webpack = require( 'webpack' );
 const path = require( 'path' );
 const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
+const fs = require( 'fs' );
 
 module.exports = {
   "entry": "./src/index.js",
@@ -39,11 +40,22 @@ module.exports = {
     ],
   },
   "mode": "development",
+  "optimization": {
+    "nodeEnv": false,
+  },
   "plugins": [
     new HtmlWebpackPlugin( {
       "template": "public/index.html",
       "PUBLIC_URL": process.env.PUBLIC_URL,
       "NODE_ENV": process.env.NODE_ENV,
+    } ),
+    new Dotenv(),
+    new webpack.DefinePlugin( {
+      "__ICONS_MANIFEST__": (
+        ( process.env.NODE_ENV === 'development' )
+          ? fs.readFileSync( 'src/components/Icon/icons_manifest.json' )
+          : 'null'
+      ),
     } ),
   ],
 };
