@@ -7,6 +7,9 @@ module.exports = {
   "extends": [
     "hughx/react",
   ],
+  "parserOptions": {
+    "ecmaVersion": 2020,
+  },
   // "rules": {
   //   ...a11yOff,
   // },

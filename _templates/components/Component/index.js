@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import './Component.scss';
+
 function Component( props ) {
   return (
-    <div>
+    <div className="cob-component">
       <b>Hello World</b>
-      <p>{ props.children }</p>
+      <p>{ props.children || 'Child nodes go here' }</p>
     </div>
   );
 }
@@ -13,3 +15,5 @@ function Component( props ) {
 Component.propTypes = {
   "children": PropTypes.node,
 };
+
+export default Component;

@@ -46,6 +46,7 @@
     "build": "webpack",
     "test": "echo 'not set up'",
     "eject": "echo 'not CRA'",
+    "add-component": "node add-component.js",
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public"
   },
