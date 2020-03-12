@@ -1,7 +1,28 @@
 // <Column />
 @import '@globals';
 
+/*
+  .b-c { // “block content” @ patterns/stylesheets/components/block/_main.styl
+    width: 100%
+    max-width: 66.67rem
+    margin-left: auto
+    margin-right: auto
+    padding: $sizing-700 10%
+    position: relative
+  }
+*/
+
 .cob-column {
   width: ( $nominal-width-desktop__content / $nominal-width-desktop ) * 100%;
   margin: 0 auto;
+}
+
+.cob-column.cob-column--jumbotron {
+  // width: 100%;
+  // max-width: 66.67rem;
+  // margin-left: auto;
+  // margin-right: auto;
+  // padding: $sizing-700 10%;
+  padding: $sizing-700 0;
+  position: relative;
 }
