@@ -6,6 +6,12 @@
   background-color: white;
   border: 1px solid black;
   flex: 1;
+  height: 262px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  // &__content {}
 
   &__image,
   &__text {
