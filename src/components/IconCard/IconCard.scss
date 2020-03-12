@@ -1,0 +1,22 @@
+// <IconCard />
+@import '@globals';
+
+.cob-icon-card {
+  text-align: center;
+  background-color: white;
+  border: 1px solid black;
+  flex: 1;
+
+  &__image,
+  &__text {
+    display: block;
+  }
+
+  &__image {
+    margin: 0 auto;
+  }
+
+  &__text {
+    font-style: italic;
+  }
+}
