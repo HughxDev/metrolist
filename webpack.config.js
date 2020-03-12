@@ -37,7 +37,8 @@ module.exports = {
         "test": /\.s[ac]ss$/i,
         "use": [
           "style-loader",
-          "css-loader",
+          // "css-loader",
+          "postcss-loader",
           "sass-loader",
           // {
           //   "loader": "sass-loader",
