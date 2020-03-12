@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { numericString } from 'airbnb-prop-types';
+import { hasOwnProperty } from '@util/objects';
 
 // import 'whatwg-fetch';
 import './Icon.scss';
+import iconsManifest from './icons_manifest.json';
 
 class Icon extends React.Component {
   constructor( props ) {
     super();
-
-    console.log( 'props', props );
 
     this.state = {
       "attributes": {
@@ -22,22 +22,11 @@ class Icon extends React.Component {
       this.state.attributes.className += ` cob-icon--${props.icon}`;
       delete this.state.attributes.icon;
 
-      import( './icons_manifest.json' )
-        .then( ( iconsManifest ) => {
-          // console.log( 'typeof iconsManifest', typeof iconsManifest );
-
-          if ( iconsManifest[props.icon] ) { // TODO: Object.prototype.hasOwnProperty.call(foo, "bar");
-            this.setState( {
-              ...this.state,
-              "attributes": {
-                ...this.state.attributes,
-                "src": `https://assets.boston.gov${iconsManifest[props.icon].url}`,
-              },
-            } );
-          } else {
-            console.error( `Could not find an icon definition for ${props.icon}.` );
-          }
-        } );
+      if ( hasOwnProperty( iconsManifest, props.icon ) ) {
+        this.state.attributes.src = `https://assets.boston.gov${iconsManifest[props.icon].url}`;
+      } else {
+        console.error( `Could not find an icon definition for \`${props.icon}\`.` );
+      }
     }
   }
 
