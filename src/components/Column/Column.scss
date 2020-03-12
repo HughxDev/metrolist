@@ -1,0 +1,7 @@
+// <Column />
+@import '@globals';
+
+.cob-column {
+  width: ( $nominal-width-desktop__content / $nominal-width-desktop ) * 100%;
+  margin: 0 auto;
+}
