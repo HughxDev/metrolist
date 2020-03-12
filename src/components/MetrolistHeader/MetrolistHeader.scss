@@ -1,0 +1,16 @@
+// <MetrolistHeader />
+@import '@globals';
+
+.cob-metrolist-header {
+  background-color: white;
+
+  &__heading-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  // &__heading {}
+
+  // &__subheading {}
+}
