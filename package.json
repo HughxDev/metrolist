@@ -52,7 +52,7 @@
     "build": "webpack",
     "test": "echo 'not set up'",
     "eject": "echo 'not CRA'",
-    "add-component": "node _scripts/add-component.js",
+    "component": "node _scripts/component.js",
     "sync-icons": "node _scripts/sync-icons.js",
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public"
