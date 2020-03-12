@@ -22,9 +22,11 @@ module.exports = {
       */
       "alias": {
         "map": [
-          ["@patterns", "./patterns"]
+          ["@patterns", "./patterns"],
+          ["@util", "./src/util"],
+          ["@globals", "./src/globals"],
         ],
-        "extensions": [".js"]
+        "extensions": [".js", ".scss"],
       },
     },
   },

@@ -1,9 +1,11 @@
 require( 'dotenv' ).config();
 const Dotenv = require( 'dotenv-webpack' );
-const webpack = require( 'webpack' );
+// const webpack = require( 'webpack' );
 const path = require( 'path' );
+// const fs = require( 'fs' );
+
 const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
-const fs = require( 'fs' );
+const CopyPlugin = require( 'copy-webpack-plugin' );
 
 module.exports = {
   "entry": "./src/index.js",
@@ -14,6 +16,8 @@ module.exports = {
   "resolve": {
     "alias": {
       "@patterns": path.resolve( __dirname, 'patterns' ),
+      "@util": path.resolve( __dirname, 'src/util' ),
+      "@globals": path.resolve( __dirname, 'src/globals' ),
     },
   },
   "module": {
@@ -31,7 +35,19 @@ module.exports = {
       },
       {
         "test": /\.s[ac]ss$/i,
-        "use": ["style-loader", "css-loader", "sass-loader"],
+        "use": [
+          "style-loader",
+          "css-loader",
+          "sass-loader",
+          // {
+          //   "loader": "sass-loader",
+          //   "options": {
+          //     "sassOptions": {
+          //       "includePaths": ["src/sass"],
+          //     },
+          //   },
+          // },
+        ],
       },
       {
         "test": /\.svg$/,
@@ -50,5 +66,8 @@ module.exports = {
       "NODE_ENV": process.env.NODE_ENV,
     } ),
     new Dotenv(),
+    new CopyPlugin( [
+      { "from": "public" },
+    ] ),
   ],
 };

@@ -10,8 +10,7 @@ import './Metrolist.scss';
 function Metrolist() {
   return (
     <Layout>
-      <article>
-
+      <article className="cob-metrolist">
         <header>
           <hgroup>
             <h1><Logo width="145" /></h1>
