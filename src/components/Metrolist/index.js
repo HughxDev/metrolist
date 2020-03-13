@@ -12,25 +12,23 @@ import './Metrolist.scss';
 
 function Metrolist() {
   return (
-    <Layout>
-      <article className="cob-metrolist">
-        <MetrolistHeader />
-        <Column jumbotron>
-          <SectionHeader>Start Your Search</SectionHeader>
-          <Row>
-            <IconCard icon="wallet" href="/income">Find housing based on your income</IconCard>
-            <IconCard icon="neighborhood" href="/recent">See the most recent listings</IconCard>
-          </Row>
-        </Column>
-        <MetrolistInfo />
-        {/* <MetrolistAffordableHousingInfo /> */}
-        {/* <MetrolistMailingListSignup /> */}
-        {/* <MetrolistListYourProperty /> */}
-        {/* <MetrolistWorkshopsAndClasses /> */}
-        {/* <MetrolistToolsAndResources /> */}
-        {/* <MetrolistFeedbackForm /> */}
-      </article>
-    </Layout>
+    <article className="cob-metrolist">
+      <MetrolistHeader />
+      <Column jumbotron>
+        <SectionHeader>Start Your Search</SectionHeader>
+        <Row>
+          <IconCard icon="wallet" href="/income">Find housing based on your income</IconCard>
+          <IconCard icon="neighborhood" href="/recent">See the most recent listings</IconCard>
+        </Row>
+      </Column>
+      <MetrolistInfo />
+      {/* <MetrolistAffordableHousingInfo /> */}
+      {/* <MetrolistMailingListSignup /> */}
+      {/* <MetrolistListYourProperty /> */}
+      {/* <MetrolistWorkshopsAndClasses /> */}
+      {/* <MetrolistToolsAndResources /> */}
+      {/* <MetrolistFeedbackForm /> */}
+    </article>
   );
 }
 

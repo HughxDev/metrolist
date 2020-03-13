@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Metrolist from './components/Metrolist';
+import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 
 import './index.css';
 import '@patterns/stylesheets/public.css';
 
-ReactDOM.render( <Metrolist />, document.getElementById( 'root' ) );
+ReactDOM.render( <App />, document.getElementById( 'root' ) );
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
