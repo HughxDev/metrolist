@@ -66,3 +66,20 @@
       - Maybe we skip the local sync and just do a `fetch` with caching if on dev.
         - Hybrid approach: Still use the sync script, but par down redundant keys and minify. Use a dynamic `import()` for the generated JSON in the [class-ified] React component that calls setState on Promise resolution and re-renders the icon component which now has a `src`.
           - There is a visible lag as the images are lazy-loaded. Does this matter? For production, perhaps static analysis could slot in the appropriate URLs? Might be getting too complex though…
+
+## Fix Storybook
+
+- Since getting out of Create React App, Storybook broke.
+- Disabled CRA plugin.
+- Storybook can’t parse special paths such as the aliased `@patterns/`.
+- Storybook has its own Webpack config (`./.storybook/webpack.config.js`) and doesn’t read from the root config (`./webpack.config.js`) by default.
+- Attempting to extend the exist Webpack also failed.
+  - Actually it was just irrelevant config keys screwing it up. Imported the root config and then deleted everything except "resolve" and "module".
+  - Still getting this but it’s non-blocking:
+  ```
+  DeprecationWarning: Extend-mode configuration is deprecated, please use full-control mode instead.
+  ```
+
+## Update Storybook Files for Components
+
+- 
