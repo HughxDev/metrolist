@@ -6,4 +6,10 @@ export default {
   "column": Column,
 };
 
-export const Default = () => <Column />;
+export const Default = () => (
+  <Column>
+    <div style={ {
+      "border": "1px solid black",
+    } }>Content</div>
+  </Column>
+);

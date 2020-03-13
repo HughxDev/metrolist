@@ -6,4 +6,4 @@ export default {
   "icon": Icon,
 };
 
-export const Default = () => <Icon />;
+export const Default = () => <Icon icon="wallet" />;
