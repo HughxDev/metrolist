@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Layout from '../Layout';
 import Metrolist from '../Metrolist';
 
+import '@patterns/stylesheets/public.css';
 import './App.scss';
 
 function App( props ) {
