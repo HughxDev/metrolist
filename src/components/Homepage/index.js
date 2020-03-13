@@ -6,16 +6,17 @@ import Row from '@components/Row';
 import IconCard from '@components/IconCard';
 
 // Sub-components
-import Header from './MetrolistHeader';
-import Info from './MetrolistInfo';
-import Logo from './MetrolistLogo';
-import Tagline from './MetrolistTagline';
+import Header from '../Header';
+import About from '../About';
+import Logo from '../Logo';
+import Tagline from '../Tagline';
+import AffordableHousingInfo from '../AffordableHousingInfo';
 
-import './Metrolist.scss';
+import './Homepage.scss';
 
-function Metrolist() {
+function Homepage() {
   return (
-    <article className="cob-metrolist">
+    <article className="cob-homepage">
       <Header />
       <Column jumbotron>
         <SectionHeader>Start Your Search</SectionHeader>
@@ -24,8 +25,8 @@ function Metrolist() {
           <IconCard icon="neighborhood" href="/recent">See the most recent listings</IconCard>
         </Row>
       </Column>
-      <Info />
-      {/* <MetrolistAffordableHousingInfo /> */}
+      <About />
+      <AffordableHousingInfo />
       {/* <MetrolistMailingListSignup /> */}
       {/* <MetrolistListYourProperty /> */}
       {/* <MetrolistWorkshopsAndClasses /> */}
@@ -35,8 +36,9 @@ function Metrolist() {
   );
 }
 
-Metrolist.Header = Header;
-Metrolist.Logo = Logo;
-Metrolist.Tagline = Tagline;
+Homepage.Header = Header;
+Homepage.Logo = Logo;
+Homepage.Tagline = Tagline;
+Homepage.AffordableHousingInfo = AffordableHousingInfo;
 
-export default Metrolist;
+export default Homepage;

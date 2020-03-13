@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import Column from '@components/Column';
 import DetailItem from '@components/DetailItem';
 
-import './MetrolistInfo.scss';
+import './About.scss';
 
-function MetrolistInfo( props ) {
+function About() {
   return (
-    <footer className="cob-metrolist-info">
+    <footer className="cob-about">
       <Column jumbotron>
         <p>We provide access to income-restricted homes for rent and purchase in Boston and the surrounding area.</p>
         <DetailItem emailAddress="metrolist@boston.gov" />
@@ -17,8 +17,8 @@ function MetrolistInfo( props ) {
   );
 }
 
-MetrolistInfo.propTypes = {
+About.propTypes = {
   "children": PropTypes.node,
 };
 
-export default MetrolistInfo;
+export default About;

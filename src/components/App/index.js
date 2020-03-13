@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Layout from '../Layout';
-import Metrolist from '../Metrolist';
+import Layout from '@components/Layout';
+import Homepage from '@components/Homepage';
 
 import '@patterns/stylesheets/public.css';
 import './App.scss';
@@ -9,7 +9,7 @@ import './App.scss';
 function App() {
   return (
     <Layout>
-      <Metrolist />
+      <Homepage />
     </Layout>
   );
 }

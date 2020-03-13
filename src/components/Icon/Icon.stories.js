@@ -2,7 +2,7 @@ import React from 'react';
 import Icon from './index';
 
 export default {
-  "title": "Icon",
+  "title": "Parts/Icon",
   "icon": Icon,
 };
 

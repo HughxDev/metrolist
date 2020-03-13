@@ -1,15 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import Column from '@components/Column';
-import Logo from '../MetrolistLogo';
-import Tagline from '../MetrolistTagline';
+import Logo from '../Logo';
+import Tagline from '../Tagline';
 
-import './MetrolistHeader.scss';
+import './Header.scss';
 
-function MetrolistHeader() {
+function Header() {
   return (
-    <header className="cob-metrolist-header">
+    <header className="cob-header">
       <Column>
         <hgroup className="cob-metrolist-header__heading-container">
           <h1 className="cob-metrolist-header__heading">
@@ -24,4 +23,4 @@ function MetrolistHeader() {
   );
 }
 
-export default MetrolistHeader;
+export default Header;

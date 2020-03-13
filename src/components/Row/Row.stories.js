@@ -2,7 +2,7 @@ import React from 'react';
 import Row from './index';
 
 export default {
-  "title": "Row",
+  "title": "Scaffolding/Row",
   "row": Row,
 };
 

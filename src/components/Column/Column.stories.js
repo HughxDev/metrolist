@@ -2,7 +2,7 @@ import React from 'react';
 import Column from './index';
 
 export default {
-  "title": "Column",
+  "title": "Scaffolding/Column",
   "column": Column,
 };
 

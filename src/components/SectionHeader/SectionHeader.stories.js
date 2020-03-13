@@ -2,8 +2,8 @@ import React from 'react';
 import SectionHeader from './index';
 
 export default {
-  "title": "SectionHeader",
+  "title": "Banners/SectionHeader",
   "section-header": SectionHeader,
 };
 
-export const Default = () => <SectionHeader />;
+export const Default = () => <SectionHeader>Section Header</SectionHeader>;

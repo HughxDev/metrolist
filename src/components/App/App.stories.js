@@ -3,7 +3,7 @@ import React from 'react';
 import App from './index';
 
 export default {
-  "title": "App",
+  "title": "Scaffolding/App",
   "app": App,
 };
 

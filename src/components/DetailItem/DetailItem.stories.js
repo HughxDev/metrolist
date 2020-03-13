@@ -2,7 +2,7 @@ import React from 'react';
 import DetailItem from './index';
 
 export default {
-  "title": "DetailItem",
+  "title": "Widgets/DetailItem",
   "detail-item": DetailItem,
 };
 

@@ -2,7 +2,7 @@ import React from 'react';
 import Layout from './index';
 
 export default {
-  "title": "Layout",
+  "title": "Scaffolding/Layout",
   "component": Layout,
 };
 
