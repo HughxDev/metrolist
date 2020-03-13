@@ -1,19 +1,22 @@
 import React from 'react';
 
-import Layout from '../Layout';
-import SectionHeader from '../SectionHeader';
-import Column from '../Column';
-import Row from '../Row';
-import IconCard from '../IconCard';
-import MetrolistHeader from '../MetrolistHeader';
-import MetrolistInfo from '../MetrolistInfo';
+import SectionHeader from '@components/SectionHeader';
+import Column from '@components/Column';
+import Row from '@components/Row';
+import IconCard from '@components/IconCard';
+
+// Sub-components
+import Header from './MetrolistHeader';
+import Info from './MetrolistInfo';
+import Logo from './MetrolistLogo';
+import Tagline from './MetrolistTagline';
 
 import './Metrolist.scss';
 
 function Metrolist() {
   return (
     <article className="cob-metrolist">
-      <MetrolistHeader />
+      <Header />
       <Column jumbotron>
         <SectionHeader>Start Your Search</SectionHeader>
         <Row>
@@ -21,7 +24,7 @@ function Metrolist() {
           <IconCard icon="neighborhood" href="/recent">See the most recent listings</IconCard>
         </Row>
       </Column>
-      <MetrolistInfo />
+      <Info />
       {/* <MetrolistAffordableHousingInfo /> */}
       {/* <MetrolistMailingListSignup /> */}
       {/* <MetrolistListYourProperty /> */}
@@ -31,5 +34,9 @@ function Metrolist() {
     </article>
   );
 }
+
+Metrolist.Header = Header;
+Metrolist.Logo = Logo;
+Metrolist.Tagline = Tagline;
 
 export default Metrolist;

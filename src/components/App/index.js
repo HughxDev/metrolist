@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import Layout from '../Layout';
 import Metrolist from '../Metrolist';
@@ -7,16 +6,12 @@ import Metrolist from '../Metrolist';
 import '@patterns/stylesheets/public.css';
 import './App.scss';
 
-function App( props ) {
+function App() {
   return (
     <Layout>
       <Metrolist />
     </Layout>
   );
 }
-
-App.propTypes = {
-  "children": PropTypes.node,
-};
 
 export default App;

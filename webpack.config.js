@@ -18,6 +18,7 @@ module.exports = {
       "@patterns": path.resolve( __dirname, 'patterns' ),
       "@util": path.resolve( __dirname, 'src/util' ),
       "@globals": path.resolve( __dirname, 'src/globals' ),
+      "@components": path.resolve( __dirname, 'src/components' ),
     },
   },
   "module": {

@@ -25,6 +25,7 @@ module.exports = {
           ["@patterns", "./patterns"],
           ["@util", "./src/util"],
           ["@globals", "./src/globals"],
+          ["@components", "./src/components"]
         ],
         "extensions": [".js", ".scss"],
       },
