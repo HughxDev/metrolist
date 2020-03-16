@@ -9,11 +9,15 @@ import CardText from './_CardText';
 import './Card.scss';
 
 function Card( props ) {
-  return (
-    <a className="cob-card" { ...props }>
-      { props.children }
-    </a>
-  );
+  let CardElement;
+
+  if ( props.href ) {
+    CardElement = React.createElement( 'a', { "className": "cob-card", ...props }, props.children );
+  } else {
+    CardElement = React.createElement( 'div', { "className": "cob-card", ...props }, props.children );
+  }
+
+  return CardElement;
 }
 
 Card.propTypes = {
