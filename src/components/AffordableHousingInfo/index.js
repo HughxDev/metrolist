@@ -15,7 +15,7 @@ import './AffordableHousingInfo.scss';
 function AffordableHousingInfo() {
   const placeholderImage = {
     "src": "/images/placeholder.png",
-    "srcset": "/images/placeholder.png 1x, /images/placeholder@2x.png 2x, /images/placeholder@3x.png 3x",
+    "srcSet": "/images/placeholder.png 1x, /images/placeholder@2x.png 2x, /images/placeholder@3x.png 3x",
     "width": "284",
     // "height": "166",
     "alt": " ",
