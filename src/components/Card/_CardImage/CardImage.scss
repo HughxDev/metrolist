@@ -1,0 +1,8 @@
+// <CardImage />
+@import '@globals';
+
+.cob-card__image {
+  display: block;
+  width: 100%;
+  border-bottom: 3px solid $color-charles-blue;
+}
