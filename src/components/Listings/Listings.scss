@@ -1,0 +1,17 @@
+// <Listings />
+@import '@globals';
+
+.cob-listings {
+  display: flex;
+}
+  .cob-listings__filters,
+  .cob-listings__homes {
+    // border: 1px solid black;
+    display: inline-block;
+  }
+  .cob-listings__filters {
+    width: 25%;
+  }
+  .cob-listings__homes {
+    width: 75%;
+  }

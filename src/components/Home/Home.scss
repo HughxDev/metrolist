@@ -1,0 +1,12 @@
+// <Home />
+@import '@globals';
+
+.cob-home {
+  // border: 1px solid black;
+  margin: 1.5rem 0;
+}
+  .cob-home__title {
+    font-family: $font-family-heading;
+    font-size: (30 / 16) * 1rem;
+    font-weight: bold;
+  }

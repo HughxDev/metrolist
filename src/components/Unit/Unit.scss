@@ -1,0 +1,13 @@
+// <Unit />
+@import '@globals';
+
+.cob-unit {}
+  .cob-unit__size {
+    text-align: left;
+  }
+  .cob-unit__ami-qualification {
+    text-align: center;
+  }
+  .cob-unit__price {
+    text-align: right;
+  }

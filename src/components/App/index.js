@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Layout from '@components/Layout';
-import Homepage from '@components/Homepage';
+import Listings from '@components/Listings';
 
 import '@patterns/stylesheets/public.css';
 import './App.scss';
@@ -9,7 +9,7 @@ import './App.scss';
 function App() {
   return (
     <Layout>
-      <Homepage />
+      <Listings />
     </Layout>
   );
 }

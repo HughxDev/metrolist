@@ -37,6 +37,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
+    "react-number-format": "^4.4.1",
     "replace-in-file": "^5.0.2",
     "rimraf": "^3.0.2",
     "rucksack-css": "^1.0.2",
