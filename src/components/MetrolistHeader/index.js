@@ -4,11 +4,11 @@ import Column from '@components/Column';
 import Logo from '../Logo';
 import Tagline from '../Tagline';
 
-import './Header.scss';
+import './MetrolistHeader.scss';
 
-function Header() {
+function MetrolistHeader() {
   return (
-    <header className="cob-header">
+    <header className="cob-metrolist-header">
       <Column>
         <hgroup className="cob-metrolist-header__heading-container">
           <h1 className="cob-metrolist-header__heading">
@@ -23,4 +23,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default MetrolistHeader;
