@@ -4,20 +4,17 @@ import SectionHeader from '@components/SectionHeader';
 import Column from '@components/Column';
 import Row from '@components/Row';
 import IconCard from '@components/IconCard';
-
-// Sub-components
-import Header from '../Header';
-import About from '../About';
-import Logo from '../Logo';
-import Tagline from '../Tagline';
-import AffordableHousingInfo from '../AffordableHousingInfo';
+import MetrolistHeader from '@components/MetrolistHeader';
+import About from '@components/About';
+import AffordableHousingInfo from '@components/AffordableHousingInfo';
+import MailingListSignup from '@components/MailingListSignup';
 
 import './Homepage.scss';
 
 function Homepage() {
   return (
     <article className="cob-homepage">
-      <Header />
+      <MetrolistHeader />
       <Column jumbotron>
         <SectionHeader>Start Your Search</SectionHeader>
         <Row>
@@ -27,7 +24,7 @@ function Homepage() {
       </Column>
       <About />
       <AffordableHousingInfo />
-      {/* <MetrolistMailingListSignup /> */}
+      <MailingListSignup />
       {/* <MetrolistListYourProperty /> */}
       {/* <MetrolistWorkshopsAndClasses /> */}
       {/* <MetrolistToolsAndResources /> */}
@@ -35,10 +32,5 @@ function Homepage() {
     </article>
   );
 }
-
-Homepage.Header = Header;
-Homepage.Logo = Logo;
-Homepage.Tagline = Tagline;
-Homepage.AffordableHousingInfo = AffordableHousingInfo;
 
 export default Homepage;

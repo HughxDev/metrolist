@@ -1,0 +1,31 @@
+// <MailingListSignup />
+@import '@globals';
+
+.cob-mailing-list-signup {
+  background-color: $color-white;
+}
+  .cob-mailing-list-signup__content {
+    display: flex;
+  }
+
+  .cob-mailing-list-signup__text,
+  .cob-mailing-list-signup__form {
+    display: inline-block;
+  }
+
+  .cob-mailing-list-signup__text {
+    font-style: italic;
+    width: 40%;
+    margin-right: 1.5rem;
+    font-size: 1.125rem;
+    color: $color-charles-blue;
+    line-height: 1.5;
+
+    & > p {
+      max-width: $max-line-length;
+    }
+  }
+
+  .cob-mailing-list-signup__form {
+    width: 60%;
+  }
