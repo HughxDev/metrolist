@@ -80,6 +80,12 @@
   DeprecationWarning: Extend-mode configuration is deprecated, please use full-control mode instead.
   ```
 
-## Update Storybook Files for Components
+## Outline Drupal vs React portions
 
-- 
+From Jim:
+> Subscription,
+> Feedback,
+> Metrolist home (add custom header work),
+> Affordable Housing page,
+> Income Restricted guide page,
+> and the lower components on the React pages.
