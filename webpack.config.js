@@ -52,7 +52,7 @@ module.exports = {
         ],
       },
       {
-        "test": /\.svg$/,
+        "test": /\.(svg|webp|png|jpe?g|gif)$/,
         "use": "file-loader",
       },
     ],
