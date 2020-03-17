@@ -3,6 +3,7 @@
 
 .cob-metrolist-header {
   background-color: white;
+  padding-top: ( 42 / 16 ) * 1rem;
 }
   .cob-metrolist-header__heading-container {
     display: flex;
@@ -10,8 +11,9 @@
     align-items: flex-end;
   }
 
-  // .cob-metrolist-header__heading {}
-
+  .cob-metrolist-header__heading,
   .cob-metrolist-header__subheading {
     margin-bottom: .5rem;
   }
+
+  // 85 / 213
