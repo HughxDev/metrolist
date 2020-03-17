@@ -40,7 +40,7 @@ function AffordableHousingInfo() {
   ];
 
   return (
-    <Row>
+    <Row as="section">
       <Column className="cob-affordable-housing-info" jumbotron>
         <SectionHeader>Learn About Affordable Housing</SectionHeader>
         <Deck>{

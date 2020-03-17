@@ -4,10 +4,21 @@ import PropTypes from 'prop-types';
 import './Row.scss';
 
 function Row( props ) {
-  return <div className="cob-row">{ props.children }</div>;
+  let RowElement;
+  const targetProps = { ...props };
+
+  if ( props.as ) {
+    delete targetProps.as;
+    RowElement = React.createElement( props.as, { "className": "cob-row", ...targetProps }, props.children );
+  } else {
+    RowElement = React.createElement( 'div', { "className": "cob-row", ...targetProps }, props.children );
+  }
+
+  return RowElement;
 }
 
 Row.propTypes = {
+  "as": PropTypes.oneOfType( [PropTypes.string, PropTypes.node] ),
   "children": PropTypes.node,
 };
 
