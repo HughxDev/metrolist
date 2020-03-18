@@ -4,12 +4,13 @@ import PropTypes from 'prop-types';
 import './Listings.scss';
 
 import Filters from '@components/Filters';
-import Home from '@components/Home';
+import Homes from '@components/Homes';
 
 const demoHomes = [
   {
     "title": "Neazor Point",
-    "listingDate": "2020-04-01",
+    "listingDate": "2020-04-01T00:00:00",
+    "applicationDueDate": "2020-05-01",
     "city": "Boston",
     "neighborhood": "West Roxbury",
     "type": "apartment",
@@ -35,7 +36,8 @@ const demoHomes = [
   },
   {
     "title": "The Maltby Building",
-    "listingDate": "2020-03-01",
+    "listingDate": "2020-03-01T00:00:00",
+    "applicationDueDate": "2020-04-01",
     "city": "Boston",
     "neighborhood": "Hyde Park",
     "type": "apartment",
@@ -53,7 +55,8 @@ const demoHomes = [
   },
   {
     "title": "Carlton Heights Building",
-    "listingDate": "2020-02-01",
+    "listingDate": "2020-02-01T00:00:00",
+    "applicationDueDate": "2020-03-01",
     "city": "Boston",
     "neighborhood": "Hyde Park",
     "type": "apartment",
@@ -77,11 +80,7 @@ function Listings( props ) {
   return (
     <article className="cob-listings">
       <Filters className="cob-listings__filters" />
-      <div className="cob-listings__homes">{
-        homes.length
-          ? homes.map( ( home, index ) => <Home key={ index } home={ home } /> )
-          : <p>No homes match the selected filters.</p>
-      }</div>
+      <Homes className="cob-listings__homes" homes={ homes } />
     </article>
   );
 }

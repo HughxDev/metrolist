@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Units from '@components/Units';
 
 import { capitalize } from '@util/strings';
+import { date, dateTime } from '@util/datetime';
 
 import './Home.scss';
 
@@ -38,9 +39,9 @@ Home.propTypes = {
   "home": PropTypes.shape(
     {
       "title": PropTypes.string,
-      "listingDate": PropTypes.string,
-      "applicationDueDate": PropTypes.string,
-      "assignment": PropTypes.oneOf( ['lottery', 'waitlist'] ),
+      "listingDate": dateTime,
+      "applicationDueDate": date,
+      "assignment": PropTypes.oneOf( ['market', 'lottery', 'waitlist'] ),
       "city": PropTypes.string,
       "neighborhood": PropTypes.string,
       "type": PropTypes.oneOf( ['apartment', 'house'] ),
