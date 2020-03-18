@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import letterBLogoDark from '@patterns/images/b-dark.svg';
 import cityOfBostonWordmark from '@patterns/images/public/logo.svg';
 import cityOfBostonSeal from '@patterns/images/public/seal.svg';
@@ -265,7 +267,7 @@ function Layout( props ) {
             </form>
           </div>
         </header>
-        <div className="mn-c">{ props.children }</div>
+        <div className={ `mn-c${props.className ? ` ${props.className}` : ''}` }>{ props.children }</div>
         <footer className="ft">
           <div className="ft-c">
             <ul className="ft-ll ft-ll--r">
@@ -297,5 +299,9 @@ function Layout( props ) {
     </>
   );
 }
+
+Layout.propTypes = {
+  "className": PropTypes.string,
+};
 
 export default Layout;

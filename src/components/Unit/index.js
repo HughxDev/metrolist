@@ -35,7 +35,12 @@ function formatPrice( price, priceRate ) {
       displayType={ 'text' }
       prefix={ '$' }
       thousandSeparator={ true }
-      renderText={ ( value ) => `${value}/${priceRate.substring( 0, 2 )}.` }
+      renderText={ ( value ) => (
+        <>
+          { `${value}/` }
+          <abbr className="cob-unit__price-rate" title={ priceRate.substring( 0, 5 ) }>{ priceRate.substring( 0, 2 )}.</abbr>
+        </>
+      ) }
     />
   );
 }
@@ -53,9 +58,9 @@ function Unit( { unit } ) {
   */
   return (
     <tr className="cob-unit">
-      <td className="cob-unit__size">{ formatSize( size, bedrooms, numberOfIdenticalUnits ) }</td>
-      <td className="cob-unit__ami-qualification">{ formatAmiQualification( amiQualification ) }</td>
-      <td className="cob-unit__price">{ formatPrice( price, priceRate ) }</td>
+      <td className="cob-unit__cell cob-unit__size">{ formatSize( size, bedrooms, numberOfIdenticalUnits ) }</td>
+      <td className="cob-unit__cell cob-unit__ami-qualification">{ formatAmiQualification( amiQualification ) }</td>
+      <td className="cob-unit__cell cob-unit__price">{ formatPrice( price, priceRate ) }</td>
     </tr>
   );
 }

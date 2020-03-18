@@ -1,7 +1,11 @@
 // <HomeInfo />
 @import '@globals';
 
-.cob-home-info {}
+.cob-home-info {
+  line-height: ( 24px / 16px ) * 1rem;
+  font-size: ( 15px / 16px ) * 1rem;
+  margin: 0;
+}
   .cob-home-info__key {
     @extend %dt-inline;
   }

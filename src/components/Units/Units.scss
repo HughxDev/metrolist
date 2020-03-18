@@ -3,7 +3,16 @@
 
 .cob-units {
   width: 100%;
+  // margin: 0 auto;
+  border-collapse: collapse;
+  font-family: $font-family-montserrat;
+  margin-bottom: ( 44px / 16px ) * 1rem;
 }
+  .cob-units__size,
+  .cob-units__ami-qualification,
+  .cob-units__price {
+    padding: $table-cell-spacing;
+  }
   .cob-units__size {
     text-align: left;
   }

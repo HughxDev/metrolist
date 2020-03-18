@@ -3,6 +3,8 @@
 
 .cob-listings {
   display: flex;
+  width: ( $nominal-width-desktop-metrolist-search__content / $nominal-width-desktop ) * 100%;
+  margin: ( ( 80px / 16px ) * 1rem ) auto 0;
 }
   .cob-listings__filters,
   .cob-listings__homes {

@@ -16,19 +16,24 @@ function Home( { home } ) {
 
   return (
     <article className="cob-home">
-      <header>
-        <h2 className="cob-home__title">{ title }</h2>
-        <p>{ [city, neighborhood, capitalize( type )].join( ' – ' ) }</p>
-      </header>
-      <Units units={ units } />
-      <footer>
-        <HomeInfo info={ {
-          listingDate,
-          applicationDueDate,
-          assignment,
-        } } />
-        <a href="#">More info</a>
-      </footer>
+      <div className="cob-home__content">
+        <header className="cob-home__header">
+          <h2 className="cob-home__title">{ title }</h2>
+          <p className="cob-home__byline">{ [city, neighborhood, capitalize( type )].join( ' – ' ) }</p>
+        </header>
+        <Units units={ units } />
+        <footer className="cob-home__footer">
+          <HomeInfo
+            className="cob-home-footer__home-info"
+            info={ {
+              listingDate,
+              applicationDueDate,
+              assignment,
+            } }
+          />
+          <a className="cob-home-footer__more-info-link btn btn--700 btn--metrolist" href="#">More info</a>
+        </footer>
+      </div>
     </article>
   );
 }

@@ -81,7 +81,7 @@ function Listings( props ) {
   const homes = ( props.homes || demoHomes );
 
   return (
-    <article className="cob-listings">
+    <article className={ `cob-listings${props.className ? ` ${props.className}` : ''}` }>
       <Filters className="cob-listings__filters" />
       <Homes className="cob-listings__homes" homes={ homes } />
     </article>
@@ -90,6 +90,7 @@ function Listings( props ) {
 
 Listings.propTypes = {
   "homes": PropTypes.arrayOf( PropTypes.object ),
+  "className": PropTypes.string,
 };
 
 export default Listings;

@@ -1,12 +1,42 @@
 // <Home />
 @import '@globals';
+@import '@globals/overrides/_buttons';
 
 .cob-home {
   // border: 1px solid black;
-  margin: 1.5rem 0;
+  margin: ( 8px / 16px ) * 1rem;
+  padding: ( (18px / 16px) * 1rem) ( (26px / 16px) * 1rem); // mockup
+  // padding: ( 20px / 16px * 1rem ); // average
+  // width: 889px
+  background-color: $color-white;
+  color: $color-metrolist-home-text;
+
+  &:first-child,
+  &:first-of-type {
+    margin-top: 0;
+  }
 }
+  .cob-home__content {
+    width: 85.826771653543307%;
+    width: 100%;
+  }
+  .cob-home__header {
+    
+  }
   .cob-home__title {
+    line-height: .8;
+    text-transform: uppercase;
     font-family: $font-family-heading;
     font-size: (30 / 16) * 1rem;
     font-weight: bold;
+  }
+  .cob-home__byline {
+    line-height: .8;
+    margin: ( ( 24px / 16px ) * 1rem ) 0;
+    font-size: ( 21px / 16px ) * 1rem;
+  }
+  .cob-home__footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
   }
