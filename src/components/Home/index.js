@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Units from '@components/Units';
+import HomeInfo from '@components/HomeInfo';
 
 import { capitalize } from '@util/strings';
 import { date, dateTime } from '@util/datetime';
@@ -21,14 +22,11 @@ function Home( { home } ) {
       </header>
       <Units units={ units } />
       <footer>
-        <dl>
-          <dt>Posted:</dt>
-          <dd>{ listingDate }</dd>
-          <dt>Income restricted:</dt>
-          <dd>{ assignment }</dd>
-          <dt>Application Due:</dt>
-          <dd>{ applicationDueDate }</dd>
-        </dl>
+        <HomeInfo info={ {
+          listingDate,
+          applicationDueDate,
+          assignment,
+        } } />
         <a href="#">More info</a>
       </footer>
     </article>
@@ -41,7 +39,7 @@ Home.propTypes = {
       "title": PropTypes.string,
       "listingDate": dateTime,
       "applicationDueDate": date,
-      "assignment": PropTypes.oneOf( ['market', 'lottery', 'waitlist'] ),
+      "assignment": PropTypes.oneOf( [null, 'lottery', 'waitlist'] ),
       "city": PropTypes.string,
       "neighborhood": PropTypes.string,
       "type": PropTypes.oneOf( ['apartment', 'house'] ),
