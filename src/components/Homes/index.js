@@ -7,11 +7,15 @@ import './Homes.scss';
 
 function Homes( { homes, className } ) {
   return (
-    <div className={ `ml-homes${className ? ` ${className}` : ''}` }>{
-      homes.length
-        ? homes.map( ( home, index ) => <Home key={ index } home={ home } /> )
-        : <p>No homes match the selected filters.</p>
-    }</div> );
+    <article className={ `ml-homes${className ? ` ${className}` : ''}` }>
+      <h3 className="sr-only">Results</h3>
+      {
+        homes.length
+          ? homes.map( ( home, index ) => <Home key={ index } home={ home } /> )
+          : <p>No homes match the selected filters.</p>
+      }
+    </article>
+  );
 }
 
 Homes.propTypes = {

@@ -82,8 +82,11 @@ function Listings( props ) {
 
   return (
     <article className={ `ml-listings${props.className ? ` ${props.className}` : ''}` }>
-      <Filters className="ml-listings__filters" />
-      <Homes className="ml-listings__homes" homes={ homes } />
+      <h2 className="sr-only">Search</h2>
+      <div className="ml-listings__content">
+        <Filters className="ml-listings__filters" />
+        <Homes className="ml-listings__homes" homes={ homes } />
+      </div>
     </article>
   );
 }

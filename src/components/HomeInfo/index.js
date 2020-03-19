@@ -62,8 +62,6 @@ function formatValue( key, value ) {
 }
 
 function HomeInfo( { info } ) {
-  console.log( 'info', info );
-
   return (
     <dl className="ml-home-info">{
       Object.keys( info )

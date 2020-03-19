@@ -1,0 +1,11 @@
+// <FilterGroup />
+@import '@globals';
+
+.ml-filter-group {
+  background-color: $color-white;
+  padding: 27px 20px;
+
+  & + & {
+    margin-top: $panel-spacing;
+  }
+}
