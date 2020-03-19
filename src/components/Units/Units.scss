@@ -1,24 +1,24 @@
 // <Units />
 @import '@globals';
 
-.cob-units {
+.ml-units {
   width: 100%;
   // margin: 0 auto;
   border-collapse: collapse;
   font-family: $font-family-montserrat;
   margin-bottom: ( 44px / 16px ) * 1rem;
 }
-  .cob-units__size,
-  .cob-units__ami-qualification,
-  .cob-units__price {
+  .ml-units__size,
+  .ml-units__ami-qualification,
+  .ml-units__price {
     padding: $table-cell-spacing;
   }
-  .cob-units__size {
+  .ml-units__size {
     text-align: left;
   }
-  .cob-units__ami-qualification {
+  .ml-units__ami-qualification {
     text-align: center;
   }
-  .cob-units__price {
+  .ml-units__price {
     text-align: right;
   }

@@ -10,14 +10,14 @@ import './MailingListSignup.scss';
 
 function MailingListSignup( props ) {
   return (
-    <Row as="section" className="cob-mailing-list-signup">
+    <Row as="section" className="ml-mailing-list-signup">
       <Column jumbotron>
         <SectionHeader>Sign up for Metrolist Emails</SectionHeader>
-        <div className="cob-mailing-list-signup__content">
-          <div className="cob-mailing-list-signup__text">
+        <div className="ml-mailing-list-signup__content">
+          <div className="ml-mailing-list-signup__text">
             <p>Receive the Metrolist email. A weekly digest featuring the most recent affordable housing listings.</p>
           </div>
-          <SubscriptionForm className="cob-mailing-list-signup__form" />
+          <SubscriptionForm className="ml-mailing-list-signup__form" />
         </div>
       </Column>
     </Row>

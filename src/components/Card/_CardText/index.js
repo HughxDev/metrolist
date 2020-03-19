@@ -5,7 +5,7 @@ import './CardText.scss';
 
 function CardText( props ) {
   return (
-    <div className="cob-card__text">
+    <div className="ml-card__text">
       { props.children }
     </div>
   );

@@ -1,24 +1,24 @@
 // <Unit />
 @import '@globals';
 
-.cob-unit {
-  & + & > .cob-unit__cell {
+.ml-unit {
+  & + & > .ml-unit__cell {
     padding-top: $table-cell-spacing--big;
   }
 }
-  .cob-unit__cell {
+  .ml-unit__cell {
     padding: $table-cell-spacing;
     border-bottom: 1px solid #D8D8D8;
   }
-  .cob-unit__size {
+  .ml-unit__size {
     text-align: left;
   }
-  .cob-unit__ami-qualification {
+  .ml-unit__ami-qualification {
     text-align: center;
   }
-  .cob-unit__price {
+  .ml-unit__price {
     text-align: right;
   }
-  .cob-unit__price-rate {
+  .ml-unit__price-rate {
     text-decoration: none;
   }

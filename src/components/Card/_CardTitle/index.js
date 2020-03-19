@@ -5,7 +5,7 @@ import './CardTitle.scss';
 
 function CardTitle( props ) {
   return (
-    <b className="cob-card__title">
+    <b className="ml-card__title">
       { props.children }
     </b>
   );

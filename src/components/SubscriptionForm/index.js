@@ -5,7 +5,7 @@ import './SubscriptionForm.scss';
 
 function SubscriptionForm( props ) {
   return (
-    <form className={ `cob-subscription-form${props.className ? ( ` ${props.className}` ) : ''}` } action="https://www.boston.gov" method="GET">
+    <form className={ `ml-subscription-form${props.className ? ( ` ${props.className}` ) : ''}` } action="https://www.boston.gov" method="GET">
       <div className="fs">
         <div className="fs-c fs-c--i">
           <div className="txt">

@@ -9,9 +9,9 @@ function Row( props ) {
 
   if ( props.as ) {
     delete targetProps.as;
-    RowElement = React.createElement( props.as, { "className": "cob-row", ...targetProps }, props.children );
+    RowElement = React.createElement( props.as, { "className": "ml-row", ...targetProps }, props.children );
   } else {
-    RowElement = React.createElement( 'div', { "className": "cob-row", ...targetProps }, props.children );
+    RowElement = React.createElement( 'div', { "className": "ml-row", ...targetProps }, props.children );
   }
 
   return RowElement;

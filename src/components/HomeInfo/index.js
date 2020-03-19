@@ -65,15 +65,15 @@ function HomeInfo( { info } ) {
   console.log( 'info', info );
 
   return (
-    <dl className="cob-home-info">{
+    <dl className="ml-home-info">{
       Object.keys( info )
         .map( ( key, index ) => {
           const value = info[key];
 
           return (
             <React.Fragment key={ index }>
-              <dt className="cob-home-info__key">{ formatKey( key, value ) }</dt>
-              { value && <dd className="cob-home-info__value">{ formatValue( key, value ) }</dd> }
+              <dt className="ml-home-info__key">{ formatKey( key, value ) }</dt>
+              { value && <dd className="ml-home-info__value">{ formatValue( key, value ) }</dd> }
             </React.Fragment>
           );
         } )

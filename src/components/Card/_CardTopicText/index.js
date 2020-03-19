@@ -5,7 +5,7 @@ import './CardTopicText.scss';
 
 function CardTopicText( props ) {
   return (
-    <i className="cob-card__topic-text">{ props.children }</i>
+    <i className="ml-card__topic-text">{ props.children }</i>
   );
 }
 

@@ -13,13 +13,13 @@ class Icon extends React.Component {
 
     this.state = {
       "attributes": {
-        "className": "cob-icon",
+        "className": "ml-icon",
         ...props,
       },
     };
 
     if ( props.icon ) {
-      this.state.attributes.className += ` cob-icon--${props.icon}`;
+      this.state.attributes.className += ` ml-icon--${props.icon}`;
       delete this.state.attributes.icon;
 
       if ( hasOwnProperty( iconsManifest, props.icon ) ) {

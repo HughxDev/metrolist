@@ -6,7 +6,7 @@ import './CardImage.scss';
 
 function CardImage( props ) {
   return (
-    <img className="cob-card__image" { ...props } />
+    <img className="ml-card__image" { ...props } />
   );
 }
 

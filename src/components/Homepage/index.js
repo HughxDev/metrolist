@@ -4,7 +4,7 @@ import SectionHeader from '@components/SectionHeader';
 import Column from '@components/Column';
 import Row from '@components/Row';
 import IconCard from '@components/IconCard';
-import MetrolistHeader from '@components/MetrolistHeader';
+import AppHeader from '@components/AppHeader';
 import About from '@components/About';
 import AffordableHousingInfo from '@components/AffordableHousingInfo';
 import MailingListSignup from '@components/MailingListSignup';
@@ -13,8 +13,8 @@ import './Homepage.scss';
 
 function Homepage() {
   return (
-    <article className="cob-homepage">
-      <MetrolistHeader />
+    <article className="ml-homepage">
+      <AppHeader />
       <Column jumbotron>
         <SectionHeader>Start Your Search</SectionHeader>
         <Row>

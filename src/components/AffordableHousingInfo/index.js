@@ -41,7 +41,7 @@ function AffordableHousingInfo() {
 
   return (
     <Row as="section">
-      <Column className="cob-affordable-housing-info" jumbotron>
+      <Column className="ml-affordable-housing-info" jumbotron>
         <SectionHeader>Learn About Affordable Housing</SectionHeader>
         <Deck>{
           feed.map( ( entry, index ) => (

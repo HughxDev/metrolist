@@ -5,7 +5,7 @@ import './Deck.scss';
 
 function Deck( props ) {
   return (
-    <div className="cob-deck">
+    <div className="ml-deck">
       { props.children }
     </div>
   );

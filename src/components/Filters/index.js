@@ -5,7 +5,7 @@ import './Filters.scss';
 
 function Filters( props ) {
   return (
-    <div className={ `cob-filters${props.className ? ` ${props.className}` : ''}` }>
+    <div className={ `ml-filters${props.className ? ` ${props.className}` : ''}` }>
       <b>Filters</b>
     </div>
   );

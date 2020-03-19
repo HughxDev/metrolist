@@ -8,7 +8,7 @@ import './About.scss';
 
 function About() {
   return (
-    <footer className="cob-about">
+    <footer className="ml-about">
       <Column jumbotron>
         <p>We provide access to income-restricted homes for rent and purchase in Boston and the surrounding area.</p>
         <DetailItem emailAddress="metrolist@boston.gov" />

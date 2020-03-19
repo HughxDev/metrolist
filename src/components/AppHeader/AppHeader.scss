@@ -1,18 +1,18 @@
-// <MetrolistHeader />
+// <AppHeader />
 @import '@globals';
 
-.cob-metrolist-header {
+.ml-app-header {
   background-color: white;
   padding-top: ( 42 / 16 ) * 1rem;
 }
-  .cob-metrolist-header__heading-container {
+  .ml-app-header__heading-container {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
   }
 
-  .cob-metrolist-header__heading,
-  .cob-metrolist-header__subheading {
+  .ml-app-header__heading,
+  .ml-app-header__subheading {
     margin-bottom: .5rem;
   }
 

@@ -12,9 +12,9 @@ function Card( props ) {
   let CardElement;
 
   if ( props.href ) {
-    CardElement = React.createElement( 'a', { "className": "cob-card", ...props }, props.children );
+    CardElement = React.createElement( 'a', { "className": "ml-card", ...props }, props.children );
   } else {
-    CardElement = React.createElement( 'div', { "className": "cob-card", ...props }, props.children );
+    CardElement = React.createElement( 'div', { "className": "ml-card", ...props }, props.children );
   }
 
   return CardElement;

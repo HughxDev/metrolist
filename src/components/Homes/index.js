@@ -7,7 +7,7 @@ import './Homes.scss';
 
 function Homes( { homes, className } ) {
   return (
-    <div className={ `cob-homes${className ? ` ${className}` : ''}` }>{
+    <div className={ `ml-homes${className ? ` ${className}` : ''}` }>{
       homes.length
         ? homes.map( ( home, index ) => <Home key={ index } home={ home } /> )
         : <p>No homes match the selected filters.</p>

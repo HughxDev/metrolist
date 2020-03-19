@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import './Column.scss';
 
 function Column( props ) {
-  return <div className={ `cob-column${props.jumbotron ? ' cob-column--jumbotron' : ''}` }>{ props.children }</div>;
+  return <div className={ `ml-column${props.jumbotron ? ' ml-column--jumbotron' : ''}` }>{ props.children }</div>;
 }
 
 Column.propTypes = {

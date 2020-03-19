@@ -7,12 +7,12 @@ import './Units.scss';
 
 function Units( { units } ) {
   return (
-    <table className="cob-units">
+    <table className="ml-units">
       <thead>
         <tr>
-          <th className="cob-units__size" scope="col">Size</th>
-          <th className="cob-units__ami-qualification" scope="col">Qualification</th>
-          <th className="cob-units__price" scope="col">Price</th>
+          <th className="ml-units__size" scope="col">Size</th>
+          <th className="ml-units__ami-qualification" scope="col">Qualification</th>
+          <th className="ml-units__price" scope="col">Price</th>
         </tr>
       </thead>
       <tbody>
