@@ -1,23 +1,7 @@
 // References:
 // https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch04s07.html
 
-function propTypeErrorMessage( {
-  propName, componentName, got, expected, example,
-} ) {
-  let errorMessage = (
-    `Invalid prop \`${propName}\` supplied to \`${componentName}\`.`
-    + ` Got \`${got}\` (${typeof got});`
-    + ` expected ${expected}`
-  );
-
-  if ( example ) {
-    errorMessage += `, e.g. \`${example}\`.`;
-  } else {
-    errorMessage += '.';
-  }
-
-  return errorMessage;
-}
+import { propTypeErrorMessage } from './errors';
 
 // XML Schema: date (ISO 8601)
 export function isDate( dateString ) {
