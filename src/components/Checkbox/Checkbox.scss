@@ -2,7 +2,7 @@
 @import '@globals';
 
 .ml-checkbox {
-  font-size: ( 30px / 16px ) * 1rem;
+  font-size: $font-size-filter-label;
   // border: 1px solid rgba(20, 20, 180, 0.5);
 }
   .ml-checkbox + .ml-checkbox {
@@ -15,7 +15,7 @@
   }
     // TODO: Don’t style by structure
     .ml-checkbox__subcategories > .ml-checkbox {
-      font-size: ( 21px / 16px ) * 1rem;
+      font-size: $font-size-filter-label--small;
     }
     .ml-checkbox__subcategories > .ml-checkbox + .ml-checkbox {
       margin-top: 1rem;
@@ -36,9 +36,8 @@
     vertical-align: middle;
   }
   .ml-checkbox__text {
+    @extend %filter-label-text;
     margin-left: 1rem;
-    line-height: 0;
-    font-style: italic;
   }
   .ml-checkbox__form-control-container {
     position: relative;
