@@ -2,14 +2,18 @@
 @import '@globals';
 @import '@globals/overrides/_buttons';
 
+$padding-home-vertical: ( (18px / 16px) * 1rem);
+$padding-home-horizontal: ( (26px / 16px) * 1rem);
+
 .ml-home {
   // border: 1px solid black;
   margin: $panel-spacing;
-  padding: ( (18px / 16px) * 1rem) ( (26px / 16px) * 1rem); // mockup
+  padding: $padding-home-vertical $padding-home-horizontal; // mockup
   // padding: ( 20px / 16px * 1rem ); // average
   // width: 889px
   background-color: $color-white;
   color: $color-metrolist-home-text;
+  position: relative;
 
   &:first-child,
   &:first-of-type {
@@ -39,4 +43,17 @@
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
+  }
+  .ml-home__just-listed {
+    text-transform: uppercase;
+    color: $color-homes-just-listed;
+    font-family: $font-family-montserrat;
+    font-size: ( 21px / 16px ) * 1rem;
+    // line-height: ( 27px / 16px ) * 1rem; // mockup
+    line-height: 0.75;
+    letter-spacing: ( 1.5px / 16px ) * 1rem;
+    position: absolute;
+    top: $padding-home-vertical;
+    right: $padding-home-horizontal;
+    // border: 1px solid black;
   }

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 
 import Units from '@components/Units';
 import HomeInfo from '@components/HomeInfo';
@@ -8,6 +9,26 @@ import { capitalize } from '@util/strings';
 import { date, dateTime } from '@util/datetime';
 
 import './Home.scss';
+
+function wasJustListed( listingDate, unitOfTime = 'days', newnessThreshold = 1 ) {
+  const now = moment();
+  const then = moment( listingDate );
+  const diff = now.diff( then, unitOfTime );
+
+  if ( diff <= newnessThreshold ) {
+    return true;
+  }
+
+  return false;
+}
+
+function renderJustListed( listingDate ) {
+  if ( wasJustListed( listingDate ) ) {
+    return <b className="ml-home__just-listed">Just listed!</b>;
+  }
+
+  return null;
+}
 
 function Home( { home } ) {
   const {
@@ -20,6 +41,7 @@ function Home( { home } ) {
         <header className="ml-home__header">
           <h2 className="ml-home__title">{ title }</h2>
           <p className="ml-home__byline">{ [city, neighborhood, capitalize( type )].join( ' – ' ) }</p>
+          { renderJustListed( listingDate ) }
         </header>
         <Units units={ units } />
         <footer className="ml-home__footer">
