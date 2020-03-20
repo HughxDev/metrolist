@@ -3,24 +3,13 @@ const { ncp } = require( 'ncp' );
 const replace = require( 'replace-in-file' );
 const path = require( 'path' );
 const rimraf = require( 'rimraf' );
-const { snakeCase, pascalCase } = require( 'change-case' );
+const { slugify, componentCase } = require( '../src/util/strings.node.js' );
 
 ncp.limit = 16;
 
 const templateDirectory = '_templates/components';
 const componentDirectory = 'src/components';
 
-function slugify( text ) {
-  return snakeCase( text ).replace( /_/g, '-' );
-}
-
-function capitalize( text ) {
-  return text.charAt( 0 ).toUpperCase() + text.slice( 1 );
-}
-
-function componentCase( text ) {
-  return capitalize( pascalCase( text ) );
-}
 
 function addComponent() {
   const componentName = componentCase( process.argv.slice( 3 )[0] );
