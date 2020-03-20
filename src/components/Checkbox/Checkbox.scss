@@ -29,6 +29,7 @@
     display: block;
     line-height: 0;
     white-space: nowrap;
+    height: ( 35px / 16px ) * 1rem;
   }
   .ml-checkbox__text,
   .ml-checkbox__form-control-container {
@@ -37,14 +38,16 @@
   }
   .ml-checkbox__text {
     @extend %filter-label-text;
-    margin-left: 1rem;
   }
+    .ml-checkbox__form-control-container + .ml-checkbox__text {
+      margin-left: 1rem;
+    }
   .ml-checkbox__form-control-container {
     position: relative;
     border: 2px solid #383838;
     background-color: $color-white;
+    height: 100%;
     width: ( 35px / 16px ) * 1rem;
-    height: ( 35px / 16px ) * 1rem;
     text-align: center;
   }
   .ml-checkbox__form-control,

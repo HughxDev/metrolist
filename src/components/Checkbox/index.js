@@ -7,7 +7,15 @@ function renderText( text ) {
   return <span className="ml-checkbox__text">{ text }</span>;
 }
 
-function renderLabel( children ) {
+function renderLabel( children, subcategoriesOnly ) {
+  if ( subcategoriesOnly ) {
+    return (
+      <span className="ml-checkbox__label">
+        { renderText( children ) }
+      </span>
+    );
+  }
+
   return (
     <label className="ml-checkbox__label">
       <span className="ml-checkbox__form-control-container">
@@ -19,10 +27,10 @@ function renderLabel( children ) {
   );
 }
 
-function renderChoices( { children } ) {
+function renderChoices( { children, subcategoriesOnly } ) {
   switch ( typeof children ) {
     case 'string':
-      return renderLabel( children );
+      return renderLabel( children, subcategoriesOnly );
 
     case 'object': {
       let firstRenderedChoice;
@@ -30,7 +38,7 @@ function renderChoices( { children } ) {
       const firstChild = childArray.shift();
 
       if ( firstChild.type.displayName === 'FilterLabel' ) {
-        firstRenderedChoice = renderLabel( firstChild );
+        firstRenderedChoice = renderLabel( firstChild, subcategoriesOnly );
       }
 
       return (
@@ -66,6 +74,7 @@ Checkbox.propTypes = {
   "className": PropTypes.string,
   "count": PropTypes.number,
   "criterion": PropTypes.string,
+  "subcategoriesOnly": PropTypes.bool,
 };
 
 export default Checkbox;

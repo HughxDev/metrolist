@@ -33,6 +33,15 @@ function FiltersPanel( props ) {
         <FilterGroup>
           <Filter type="scale" criterion="bedrooms" value="0,1,2,3,4+">Bedrooms</Filter>
         </FilterGroup>
+        <FilterGroup>
+          <Filter>
+            <Filter.Label>Eligibility (AMI%)</Filter.Label>
+            <Filter type="checkbox">50%</Filter>
+            <Filter type="checkbox">60%</Filter>
+            <Filter type="checkbox">70%</Filter>
+            <Filter type="checkbox">80%</Filter>
+          </Filter>
+        </FilterGroup>
       </div>
     </section>
   );

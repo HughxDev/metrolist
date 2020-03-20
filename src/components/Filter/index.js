@@ -11,8 +11,9 @@ function renderFormControl( props ) {
     case 'scale':
       return <Scale { ...props } />;
     case 'checkbox':
-    default:
       return <Checkbox { ...props } />;
+    default:
+      return <Checkbox subcategoriesOnly { ...props } />;
   }
 }
 
