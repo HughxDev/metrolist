@@ -1,0 +1,26 @@
+// <Callout />
+@import '@globals';
+
+.ml-callout {
+  text-align: center;
+  border: 2px solid $color-filters-callout-border;
+  margin-top: ( 31px / 16px ) * 1rem;
+  padding:
+    ( ( 26px / 16px ) * 1rem ) /* t */
+    // ( ( 26px / 16px ) * 1rem ) /* r */
+    // ( ( 29px / 16px ) * 1rem ) /* b */
+    // ( ( 29px / 16px ) * 1rem ) /* l */
+  ;
+}
+  .ml-callout__heading {
+    font-style: italic;
+    color: $color-optimistic-blue;
+    font-size: ( 28px / 16px ) * 1rem;
+    line-height: ( 33px / 16px ) * 1rem;
+  }
+  .ml-callout__text {
+
+    font-size: ( 18px / 16px ) * 1rem;
+    line-height: ( 32px / 16px ) * 1rem;
+    color: $color-metrolist-home-text;
+  }

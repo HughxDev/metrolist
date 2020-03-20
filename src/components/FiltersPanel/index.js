@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 import FilterGroup from '@components/FilterGroup';
 import Filter from '@components/Filter';
+import Callout from '@components/Callout';
+import Icon from '@components/Icon';
 
 import './FiltersPanel.scss';
 
@@ -41,6 +43,14 @@ function FiltersPanel( props ) {
             <Filter type="checkbox">70%</Filter>
             <Filter type="checkbox">80%</Filter>
           </Filter>
+          <Callout>
+            <Icon icon="wallet" width="67" />
+            <Callout.Heading>Search for housing based on your income</Callout.Heading>
+            <Callout.Text>
+              <p>Enter basic information to help determine your eligibility for income-restricted housing.</p>
+              <a className="btn btn--700 btn--metrolist" style={ { "width": "100%" } } href="#">Search</a>
+            </Callout.Text>
+          </Callout>
         </FilterGroup>
       </div>
     </section>
