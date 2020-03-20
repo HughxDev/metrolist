@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import FilterGroup from '@components/FilterGroup';
 import Filter from '@components/Filter';
 
-import './Filters.scss';
+import './FiltersPanel.scss';
 
-function Filters( props ) {
+function FiltersPanel( props ) {
   return (
-    <section className={ `ml-filters${props.className ? ` ${props.className}` : ''}` }>
-      <h3 className="sr-only">Filters</h3>
+    <section className={ `ml-filters-panel${props.className ? ` ${props.className}` : ''}` }>
+      <h3 className="sr-only">FiltersPanel</h3>
       <div className="ml-filters__content">
         <FilterGroup>
           <Filter type="checkbox" criterion="offer" value="rental">For Rent</Filter>
@@ -38,8 +38,8 @@ function Filters( props ) {
   );
 }
 
-Filters.propTypes = {
+FiltersPanel.propTypes = {
   "className": PropTypes.string,
 };
 
-export default Filters;
+export default FiltersPanel;

@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 import './Listings.scss';
 
-import Filters from '@components/Filters';
-import Homes from '@components/Homes';
+import FiltersPanel from '@components/FiltersPanel';
+import ResultsPanel from '@components/ResultsPanel';
 
 const demoHomes = [
   {
@@ -84,8 +84,8 @@ function Listings( props ) {
     <article className={ `ml-listings${props.className ? ` ${props.className}` : ''}` }>
       <h2 className="sr-only">Search</h2>
       <div className="ml-listings__content">
-        <Filters className="ml-listings__filters" />
-        <Homes className="ml-listings__homes" homes={ homes } />
+        <FiltersPanel className="ml-listings__filters" />
+        <ResultsPanel className="ml-listings__results" homes={ homes } />
       </div>
     </article>
   );

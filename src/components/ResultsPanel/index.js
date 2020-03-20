@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 
 import Home from '@components/Home';
 
-import './Homes.scss';
+import './ResultsPanel.scss';
 
-function Homes( { homes, className } ) {
+function ResultsPanel( { homes, className } ) {
   return (
-    <article className={ `ml-homes${className ? ` ${className}` : ''}` }>
+    <article className={ `ml-results-panel${className ? ` ${className}` : ''}` }>
       <h3 className="sr-only">Results</h3>
       {
         homes.length
@@ -18,9 +18,9 @@ function Homes( { homes, className } ) {
   );
 }
 
-Homes.propTypes = {
+ResultsPanel.propTypes = {
   "homes": PropTypes.arrayOf( PropTypes.object ),
   "className": PropTypes.string,
 };
 
-export default Homes;
+export default ResultsPanel;

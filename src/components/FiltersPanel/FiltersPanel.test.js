@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import Homes from './index';
+import FiltersPanel from './index';
 
 test( 'renders', () => {
 
