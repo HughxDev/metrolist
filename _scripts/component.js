@@ -10,49 +10,91 @@ ncp.limit = 16;
 const templateDirectory = '_templates/components';
 const componentDirectory = 'src/components';
 
+function addComponent( componentName, subcomponentName, recursionLevel = 1 ) {
+  componentName = ( componentName || process.argv.slice( 3 )[0] );
+  subcomponentName = ( subcomponentName || '' );
 
-function addComponent() {
-  const componentName = componentCase( process.argv.slice( 3 )[0] );
-  const targetDirectory = `${componentDirectory}/${componentName}`;
+  let subcomponentFullName;
+
+  // If we have an element-level component i.e. `Component/Subcomponent`:
+  if ( subcomponentName ) {
+    subcomponentFullName = `${componentName}${subcomponentName}`;
+  } else {
+    if ( componentName.indexOf( '/' ) !== -1 ) {
+      const componentNameParts = componentName.split( '/' );
+      componentName = componentCase( componentNameParts[0] );
+      subcomponentName = componentCase( componentNameParts[1] );
+      subcomponentFullName = `${componentName}${subcomponentName}`;
+    } else {
+      componentName = componentCase( componentName );
+      subcomponentFullName = subcomponentName;
+    }
+  }
+
+  const hasSubcomponent = ( ( recursionLevel === 1 ) && subcomponentName );
+  const isSubcomponent = ( ( recursionLevel > 1 ) && subcomponentName );
+
+  let targetDirectory = `${componentDirectory}/${componentName}`;
+  if ( isSubcomponent ) {
+    targetDirectory += `/_${subcomponentFullName}`;
+  }
+
   const replaceOptions = {
     "files": [
       `${targetDirectory}/**.js`,
       `${targetDirectory}/**.scss`,
     ],
     "from": [/\bComponent\b/g, /\bcomponent\b/g],
-    "to": [componentName, `${slugify( componentName )}`],
   };
+  if ( isSubcomponent ) {
+    replaceOptions.to = [subcomponentFullName, `${slugify( componentName )}__${slugify( subcomponentName )}`];
+  } else {
+    replaceOptions.to = [componentName, `${slugify( componentName )}`];
+  }
 
   if ( fs.existsSync( targetDirectory ) ) {
     console.error( `Component already exists: ${componentName} @ ${targetDirectory}/index.js` );
     process.exit( 1 );
   }
 
-  ncp( `${templateDirectory}/Component`, targetDirectory, {
-    "rename": function rename( target ) {
-      const pathInfo = path.parse( target );
-      const filename = pathInfo.base.replace( replaceOptions.from[0], replaceOptions.to[0] );
-      const resolution = path.resolve( targetDirectory, filename );
+  ncp(
+    // Source
+    `${templateDirectory}/Component`,
+    // Destination
+    targetDirectory,
+    // Options
+    {
+      "rename": function rename( target ) {
+        const pathInfo = path.parse( target );
+        const filename = pathInfo.base.replace( replaceOptions.from[0], replaceOptions.to[0] );
+        const resolution = path.resolve( targetDirectory, filename );
 
-      return resolution;
+        return resolution;
+      },
     },
-  }, async ( error ) => {
-    if ( error ) {
-      rimraf.sync( targetDirectory );
-      console.error( error );
-      process.exit( 1 );
-    }
+    // Callback
+    async ( error ) => {
+      if ( error ) {
+        rimraf.sync( targetDirectory );
+        console.error( `ncp failed:\n  ${error.toString()}` );
+        process.exit( 1 );
+      }
 
-    try {
-      await replace( replaceOptions );
-    } catch ( replacementError ) {
-      rimraf.sync( targetDirectory );
-      console.error( 'Error occurred:', replacementError );
-      process.exit( 1 );
-    }
+      try {
+        await replace( replaceOptions );
 
-    console.log( `Component created: ${componentName} @ ${targetDirectory}/index.js` );
-  } );
+        if ( hasSubcomponent ) {
+          addComponent( componentName, subcomponentName, 2 );
+        }
+      } catch ( replacementError ) {
+        rimraf.sync( targetDirectory );
+        console.error( '`replace-in-file` error:', replacementError );
+        process.exit( 1 );
+      }
+
+      console.log( `Component created: ${isSubcomponent ? subcomponentFullName : componentName} @ ${targetDirectory}/index.js` );
+    },
+  );
 }
 
 async function renameComponent() {
