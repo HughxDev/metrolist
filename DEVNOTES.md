@@ -182,3 +182,23 @@ From Jim:
     - https://github.com/webpack-contrib/mini-css-extract-plugin
     - https://github.com/NMFR/optimize-css-assets-webpack-plugin
   - Solution: move all output-producing classes to `globals/util.scss` and import once in `index.js`. May have to revisit for production build.
+
+## Mobile styles for Listings (Search) view
+
+- Text doesn’t match:
+  - Desktop: “For Rent, For Sale”
+  - Mobile: “Rent, Buy”
+- Element functions don’t match:
+  - Desktop: Checkbox
+  - Mobile: Button
+    - <del>Indication of checked/unchecked state is indicated by a border. Nonstandard.</del> <ins>This was only true in the Sketch file; the InVision link corrects this by using blue bg = checked, white bg = unchecked. But the default view shows both as blue bg which makes them appear as buttons.</ins>
+    - The different backgrounds for checked/unchecked in button form imply mutual exclusivity, whereas the checkboxes do not.
+- The “Apply Filters” button exists on Mobile but not Desktop. Why?
+- No need for mobile Unit listings to be all-caps
+- Mismatched wording:
+  - Desktop: “Search for housing based on your income / Enter basic information to help determine your eligibility for income-restricted housing.”
+  - Mobile: “Find housing based on your income / Use the AMI Estimator Tool to find housing”
+- Extra content:
+  - Desktop: Nothing
+  - Mobile: “Learn about income eligibility? / Area Media Income (AMI). Learn about it here.”
+- Selection state should be reflected in mobile dropdown menus. E.g. when you select Income Eligibility > 60% and then collapse the menu, the label should say something like “Income Eligibility: 60%”, maybe with option to clear the selection somehow. Same with master “Filter” dropdown. While they might not all fit, could present e.g. “5 filters applied”.
