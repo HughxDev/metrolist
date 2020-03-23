@@ -57,84 +57,157 @@ function addComponent( componentName, subcomponentName, recursionLevel = 1 ) {
       return addComponent( componentName, subcomponentName, 2 );
     }
 
-    console.error( `Component already exists: ${componentName} @ ${targetDirectory}/index.js` );
-    process.exit( 1 );
+    reject( `Component already exists: ${componentName} @ ${targetDirectory}/index.js` );
   }
 
-  ncp(
-    // Source
-    `${templateDirectory}/Component`,
-    // Destination
-    targetDirectory,
-    // Options
-    {
-      "rename": function rename( target ) {
-        const pathInfo = path.parse( target );
-        const filename = pathInfo.base.replace( replaceOptions.from[0], replaceOptions.to[0] );
-        const resolution = path.resolve( targetDirectory, filename );
+  return new Promise( ( resolve, reject ) => {
+    ncp(
+      // Source
+      `${templateDirectory}/Component`,
+      // Destination
+      targetDirectory,
+      // Options
+      {
+        "rename": function rename( target ) {
+          const pathInfo = path.parse( target );
+          const filename = pathInfo.base.replace( replaceOptions.from[0], replaceOptions.to[0] );
+          const resolution = path.resolve( targetDirectory, filename );
 
-        return resolution;
+          return resolution;
+        },
       },
-    },
-    // Callback
-    async ( error ) => {
-      if ( error ) {
-        rimraf.sync( targetDirectory );
-        console.error( `ncp failed:\n  ${error.toString()}` );
-        process.exit( 1 );
-      }
-
-      try {
-        await replace( replaceOptions );
-
-        if ( hasSubcomponent ) {
-          addComponent( componentName, subcomponentName, 2 );
+      // Callback
+      async ( error ) => {
+        if ( error ) {
+          rimraf.sync( targetDirectory );
+          reject( `ncp failed:\n  ${error.toString()}` );
         }
-      } catch ( replacementError ) {
-        rimraf.sync( targetDirectory );
-        console.error( `replace-in-file failed:\n  ${replacementError.toString()}` );
-        process.exit( 1 );
-      }
 
-      console.log( `Component created: ${isSubcomponent ? subcomponentFullName : componentName} @ ${targetDirectory}/index.js` );
-    },
-  );
+        try {
+          await replace( replaceOptions );
+
+          if ( hasSubcomponent ) {
+            addComponent( componentName, subcomponentName, 2 )
+              .then( ( successMessage ) => {
+                resolve( successMessage );
+              } )
+              .catch( ( errorMessage ) => {
+                reject( errorMessage );
+              } );
+          }
+        } catch ( replacementError ) {
+          rimraf.sync( targetDirectory );
+          reject( `replace-in-file failed:\n  ${replacementError.toString()}` );
+        }
+
+        resolve( `Component created: ${isSubcomponent ? subcomponentFullName : componentName} @ ${targetDirectory}/` );
+      },
+    );
+  } );
 }
 
 async function renameComponent() {
-  const existingComponentName = componentCase( process.argv.slice( 3 )[0] );
-  const newComponentName = componentCase( process.argv.slice( 4 )[0] );
-  const sourceDirectory = `${componentDirectory}/${existingComponentName}`;
-  const targetDirectory = `${componentDirectory}/${newComponentName}`;
+  const existingComponentId = process.argv.slice( 3 )[0];
+  const newComponentId = process.argv.slice( 4 )[0];
 
-  const existingComponentNameRegex = new RegExp( `\\b${existingComponentName}\\b`, 'g' );
-  const existingComponentClassNameRegex = new RegExp( `\\b${slugify( existingComponentName )}\\b`, 'g' );
+  let existingBlockComponentName;
+  let existingElementComponentShortName;
+  let existingElementComponentName;
+
+  let existingBlockComponentNameRegex;
+  let existingClassNameRegex;
+
+  let newBlockComponentName;
+  let newElementComponentShortName;
+  let newElementComponentName;
+
+  let newComponentClassName;
+
+  let sourceDirectory;
+  let targetDirectoryBase;
+  let targetDirectory;
+
+  // Existing component is block-level:
+  if ( existingComponentId.indexOf( '/' ) === -1 ) {
+    // Naming:
+    existingBlockComponentName = componentCase( existingComponentId );
+
+    // Find/Replace:
+    sourceDirectory = `${componentDirectory}/${existingBlockComponentName}`;
+    existingBlockComponentNameRegex = new RegExp( `\\b${existingBlockComponentName}\\b`, 'g' );
+    existingClassNameRegex = new RegExp( `\\b${slugify( existingBlockComponentName )}\\b`, 'g' );
+
+  // Existing component is element-level (subcomponent):
+  } else {
+    // Naming:
+    const existingComponentIdParts = existingComponentId.split( '/' );
+    existingBlockComponentName = componentCase( existingComponentIdParts[0] );
+    existingElementComponentShortName = componentCase( existingComponentIdParts[1] );
+    existingElementComponentName = `${existingBlockComponentName}${existingElementComponentShortName}`;
+
+    // Find/Replace:
+    sourceDirectory = `${componentDirectory}/${existingBlockComponentName}/_${existingElementComponentName}`;
+    existingBlockComponentNameRegex = new RegExp( `\\b${existingElementComponentName}\\b`, 'g' );
+    existingClassNameRegex = new RegExp( `\\b${slugify( existingBlockComponentName )}__${slugify( existingElementComponentShortName )}\\b`, 'g' );
+  }
+
+  const existingComponentName = ( existingElementComponentName || existingBlockComponentName );
+
+  // New component name is block-level:
+  if ( newComponentId.indexOf( '/' ) === -1 ) {
+    // Naming:
+    newBlockComponentName = componentCase( newComponentId );
+
+    // Find/Replace:
+    targetDirectoryBase = `${componentDirectory}/${newBlockComponentName}`;
+    targetDirectory = targetDirectoryBase;
+    newComponentClassName = slugify( newBlockComponentName );
+
+  // New component name is element-level (subcomponent):
+  } else {
+    // Naming:
+    const newComponentIdParts = newComponentId.split( '/' );
+    newBlockComponentName = componentCase( newComponentIdParts[0] );
+    newElementComponentShortName = componentCase( newComponentIdParts[1] );
+    newElementComponentName = `${newBlockComponentName}${newElementComponentShortName}`;
+
+    // Find/Replace:
+    targetDirectoryBase = `${componentDirectory}/${newBlockComponentName}`;
+    targetDirectory = `${targetDirectoryBase}/_${newElementComponentName}`;
+    newComponentClassName = `${slugify( newBlockComponentName )}__${slugify( newElementComponentShortName )}`;
+  }
+
+  const newComponentName = ( newElementComponentName || newBlockComponentName );
 
   const replaceOptions = {
     "files": [
       `${sourceDirectory}/**.js`,
       `${sourceDirectory}/**.scss`,
     ],
-    "from": [existingComponentNameRegex, existingComponentClassNameRegex],
-    "to": [newComponentName, `${slugify( newComponentName )}`],
+    "from": [existingBlockComponentNameRegex, existingClassNameRegex],
+    "to": [newComponentName, newComponentClassName],
   };
 
   try {
     await replace( replaceOptions );
   } catch ( replacementError ) {
-    console.error( 'Error occurred:', replacementError );
+    console.error( `replace-in-file failed:\n  ${replacementError.toString()}` );
     process.exit( 1 );
+  }
+
+  if ( !fs.existsSync( targetDirectoryBase ) ) {
+    await addComponent( newBlockComponentName );
   }
 
   fs.rename( sourceDirectory, targetDirectory, ( renameDirError ) => {
     if ( renameDirError ) {
-      console.error( 'Error occurred:', renameDirError );
+      console.error( `fs.rename failed:\n  ${renameDirError.toString()}` );
       process.exit( 1 );
     }
 
     fs.readdir( targetDirectory, ( dirError, files ) => {
       if ( dirError ) {
-        console.error( 'Error occurred:', dirError );
+        console.error( `fs.readdir failed:\n  ${dirError.toString()}` );
         process.exit( 1 );
       }
 
@@ -148,12 +221,12 @@ async function renameComponent() {
             process.exit( 1 );
           }
         } );
-      } );
-    } );
-  } );
+      } ); // files.forEach
 
-  console.log( `Component renamed: ${existingComponentName} → ${newComponentName} @ ${targetDirectory}/index.js` );
-  console.warn( `References to ${existingComponentName} in other files must be replaced manually.` );
+      console.log( `Component renamed: ${existingComponentId} → ${newComponentId} @ ${targetDirectory}/` );
+      console.warn( `References to ${existingBlockComponentName} in other files must be replaced manually.` );
+    } ); // fs.readdir
+  } ); // fs.rename
 }
 
 function removeComponent() {
@@ -188,7 +261,14 @@ const action = process.argv.slice( 2 )[0];
 
 switch ( action ) {
   case 'add':
-    addComponent();
+    addComponent()
+      .then( ( successMessage ) => {
+        console.log( successMessage );
+      } )
+      .catch( ( errorMessage ) => {
+        console.error( errorMessage );
+        process.exit( 1 );
+      } );
     break;
 
   case 'rename':
