@@ -44,7 +44,7 @@ function addComponent( componentName, subcomponentName, recursionLevel = 1 ) {
       `${targetDirectory}/**.js`,
       `${targetDirectory}/**.scss`,
     ],
-    "from": [/\bComponent\b/g, /\bcomponent\b/g],
+    "from": [/\bComponent\b/g, /(?<!["'`])\bcomponent(?<!["'`])\b(?!:)/g],
   };
   if ( isSubcomponent ) {
     replaceOptions.to = [subcomponentFullName, `${slugify( componentName )}__${slugify( subcomponentName )}`];
