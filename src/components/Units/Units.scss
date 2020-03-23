@@ -6,7 +6,7 @@
   // margin: 0 auto;
   border-collapse: collapse;
   font-family: $font-family-montserrat;
-  margin-bottom: ( 44px / 16px ) * 1rem;
+  margin-bottom: rem( 44px );
 }
   .ml-units__size,
   .ml-units__ami-qualification,

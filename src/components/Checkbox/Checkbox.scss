@@ -6,12 +6,12 @@
   // border: 1px solid rgba(20, 20, 180, 0.5);
 }
   .ml-checkbox + .ml-checkbox {
-    margin-top: ( 25px / 16px ) * 1rem;
+    margin-top: rem( 25px );
   }
   .ml-checkbox__subcategories {
-    // margin-left: ( 47px / 16px ) * 1rem; // mockup
-    margin-left: ( 35px / 16px ) * 1rem;
-    margin-top: ( 21px / 16px ) * 1rem;
+    // margin-left: rem( 47px ); // mockup
+    margin-left: rem( 35px );
+    margin-top: rem( 21px );
   }
     // TODO: Don’t style by structure
     .ml-checkbox__subcategories > .ml-checkbox {
@@ -21,7 +21,7 @@
       margin-top: 1rem;
     }
     .ml-checkbox__subcategories > .ml-checkbox > .ml-checkbox__label > .ml-checkbox__text {
-      margin-left: ( 13px / 16px ) * 1rem;
+      margin-left: rem( 13px );
       font-style: normal;
     }
 
@@ -29,7 +29,7 @@
     display: block;
     line-height: 0;
     white-space: nowrap;
-    height: ( 35px / 16px ) * 1rem;
+    height: rem( 35px );
   }
   .ml-checkbox__text,
   .ml-checkbox__form-control-container {
@@ -47,7 +47,7 @@
     border: 2px solid #383838;
     background-color: $color-white;
     height: 100%;
-    width: ( 35px / 16px ) * 1rem;
+    width: rem( 35px );
     text-align: center;
   }
   .ml-checkbox__form-control,
@@ -67,16 +67,16 @@
     line-height: 0;
   }
   .ml-checkbox__form-control-ui {
-    width: ( 23px / 16px ) * 1rem;
-    height: ( 23px / 16px ) * 1rem;
-    top: ( 4px / 16px ) * 1rem;
-    left: ( 4px / 16px ) * 1rem;
+    width: rem( 23px );
+    height: rem( 23px );
+    top: rem( 4px );
+    left: rem( 4px );
   }
   .ml-checkbox__form-control:checked ~ .ml-checkbox__form-control-ui {
     background-color: $color-optimistic-blue;
   }
   .ml-checkbox__more-link {
-    font-size: ( 21px / 16px ) * 1rem;
+    font-size: rem( 21px );
     font-style: italic;
     color: inherit;
     text-decoration: underline;

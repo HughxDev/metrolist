@@ -4,23 +4,23 @@
 .ml-callout {
   text-align: center;
   border: 2px solid $color-filters-callout-border;
-  margin-top: ( 31px / 16px ) * 1rem;
+  margin-top: rem( 31px );
   padding:
-    ( ( 26px / 16px ) * 1rem ) /* t */
-    // ( ( 26px / 16px ) * 1rem ) /* r */
-    // ( ( 29px / 16px ) * 1rem ) /* b */
-    // ( ( 29px / 16px ) * 1rem ) /* l */
+    rem( 26px ) /* t */
+    // rem( 26px ) /* r */
+    // rem( 29px ) /* b */
+    // rem( 29px ) /* l */
   ;
 }
   .ml-callout__heading {
     font-style: italic;
     color: $color-optimistic-blue;
-    font-size: ( 28px / 16px ) * 1rem;
-    line-height: ( 33px / 16px ) * 1rem;
+    font-size: rem( 28px );
+    line-height: rem( 33px );
   }
   .ml-callout__text {
 
-    font-size: ( 18px / 16px ) * 1rem;
-    line-height: ( 32px / 16px ) * 1rem;
+    font-size: rem( 18px );
+    line-height: rem( 32px );
     color: $color-metrolist-home-text;
   }

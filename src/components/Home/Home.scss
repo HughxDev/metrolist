@@ -2,14 +2,14 @@
 @import '@globals';
 @import '@globals/overrides/_buttons';
 
-$padding-home-vertical: ( (18px / 16px) * 1rem);
-$padding-home-horizontal: ( (26px / 16px) * 1rem);
+$padding-home-vertical: rem( 18px );
+$padding-home-horizontal: rem( 26px );
 
 .ml-home {
   // border: 1px solid black;
   margin: $panel-spacing;
   padding: $padding-home-vertical $padding-home-horizontal; // mockup
-  // padding: ( 20px / 16px * 1rem ); // average
+  // padding: rem( 20px ); // average
   // width: 889px
   background-color: $color-white;
   color: $color-metrolist-home-text;
@@ -31,13 +31,13 @@ $padding-home-horizontal: ( (26px / 16px) * 1rem);
     line-height: .8;
     text-transform: uppercase;
     font-family: $font-family-heading;
-    font-size: (30 / 16) * 1rem;
+    font-size: rem( 30px );
     font-weight: bold;
   }
   .ml-home__byline {
     line-height: .8;
-    margin: ( ( 24px / 16px ) * 1rem ) 0;
-    font-size: ( 21px / 16px ) * 1rem;
+    margin: rem( 24px ) 0;
+    font-size: rem( 21px );
   }
   .ml-home__footer {
     display: flex;
@@ -48,8 +48,8 @@ $padding-home-horizontal: ( (26px / 16px) * 1rem);
     text-transform: uppercase;
     color: $color-homes-just-listed;
     font-family: $font-family-montserrat;
-    font-size: ( 21px / 16px ) * 1rem;
-    // line-height: ( 27px / 16px ) * 1rem; // mockup
+    font-size: rem( 21px );
+    // line-height: rem( 27px ); // mockup
     line-height: 0.75;
     letter-spacing: ( 1.5px / 16px ) * 1rem;
     position: absolute;
