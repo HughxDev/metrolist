@@ -149,13 +149,35 @@ async function renameComponent() {
   } );
 
   console.log( `Component renamed: ${existingComponentName} → ${newComponentName} @ ${targetDirectory}/index.js` );
+  console.warn( `References to ${existingComponentName} in other files must be replaced manually.` );
 }
 
 function removeComponent() {
-  const componentName = componentCase( process.argv.slice( 3 )[0] );
-  const targetDirectory = `${componentDirectory}/${componentName}`;
+  const componentId = process.argv.slice( 3 )[0];
+  let componentName;
+  let subcomponentFullName;
+  let targetDirectory;
+  let isSubcomponent = false;
+
+  // Block-level component:
+  if ( componentId.indexOf( '/' ) === -1 ) {
+    componentName = componentCase( componentId );
+    targetDirectory = `${componentDirectory}/${componentName}`;
+  // Element-level component:
+  } else {
+    isSubcomponent = true;
+    const componentIdParts = componentId.split( '/' );
+    componentName = componentCase( componentIdParts[0] );
+    const subcomponentName = componentCase( componentIdParts[1] );
+    subcomponentFullName = `${componentName}${subcomponentName}`;
+    targetDirectory = `${componentDirectory}/${componentName}/_${subcomponentFullName}`;
+  }
+
+  const componentOrSubcomponentFullName = ( isSubcomponent ? subcomponentFullName : componentName );
 
   rimraf.sync( targetDirectory );
+  console.log( `Component deleted: ${componentOrSubcomponentFullName}` );
+  console.warn( `References to ${componentOrSubcomponentFullName} in other files must be removed manually.` );
 }
 
 const action = process.argv.slice( 2 )[0];
