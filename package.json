@@ -17,6 +17,7 @@
     "@testing-library/user-event": "^10.0.0",
     "airbnb-prop-types": "^2.15.0",
     "babel-loader": "^8.0.6",
+    "bootstrap": "^4.4.1",
     "change-case": "^4.1.1",
     "copy-webpack-plugin": "^5.1.1",
     "css-loader": "^3.4.2",

@@ -5,17 +5,21 @@
   width: ( $nominal-width-desktop-metrolist-search__content / $nominal-width-desktop ) * 100%;
   margin: rem( 80px ) auto 0;
 }
-  .ml-listings__content {
-    display: flex;
-  }
-  .ml-listings__filters,
-  .ml-listings__results {
-    // border: 1px solid black;
-    display: inline-block;
-  }
-  .ml-listings__filters {
-    width: 27%;
-  }
-  .ml-listings__results {
-    width: 73%;
+  @include media-breakpoint-up( lg ) {
+    .ml-listings__content {
+      display: flex;
+    }
+
+    .ml-listings__filters,
+    .ml-listings__results {
+      // border: 1px solid black;
+      display: inline-block;
+    }
+
+    .ml-listings__filters {
+      width: 27%;
+    }
+    .ml-listings__results {
+      width: 73%;
+    }
   }
