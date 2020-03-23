@@ -53,6 +53,10 @@ function addComponent( componentName, subcomponentName, recursionLevel = 1 ) {
   }
 
   if ( fs.existsSync( targetDirectory ) ) {
+    if ( hasSubcomponent ) {
+      return addComponent( componentName, subcomponentName, 2 );
+    }
+
     console.error( `Component already exists: ${componentName} @ ${targetDirectory}/index.js` );
     process.exit( 1 );
   }
@@ -88,7 +92,7 @@ function addComponent( componentName, subcomponentName, recursionLevel = 1 ) {
         }
       } catch ( replacementError ) {
         rimraf.sync( targetDirectory );
-        console.error( '`replace-in-file` error:', replacementError );
+        console.error( `replace-in-file failed:\n  ${replacementError.toString()}` );
         process.exit( 1 );
       }
 
