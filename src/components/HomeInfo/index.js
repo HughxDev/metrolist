@@ -61,9 +61,9 @@ function formatValue( key, value ) {
   return formattedValue;
 }
 
-function HomeInfo( { info } ) {
+function HomeInfo( { className, info } ) {
   return (
-    <dl className="ml-home-info">{
+    <dl className={ `ml-home-info${className ? ` ${className}` : ''}` }>{
       Object.keys( info )
         .map( ( key, index ) => {
           const value = info[key];
@@ -80,6 +80,7 @@ function HomeInfo( { info } ) {
 }
 
 HomeInfo.propTypes = {
+  "className": PropTypes.string,
   "info": PropTypes.object,
 };
 

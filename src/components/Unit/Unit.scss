@@ -5,10 +5,21 @@
   & + & > .ml-unit__cell {
     padding-top: $table-cell-spacing--big;
   }
+  @include media-breakpoint-up( lg ) {
+    & + & > .ml-unit__cell {
+      padding-top: $table-cell-spacing--big-large;
+    }
+  }
 }
   .ml-unit__cell {
     padding: $table-cell-spacing;
     border-bottom: 1px solid #D8D8D8;
+    width: 33.333333%;
+  }
+  @include media-breakpoint-up( lg ) {
+    .ml-unit__cell {
+      padding: $table-cell-spacing--large;
+    }
   }
   .ml-unit__size {
     text-align: left;

@@ -10,7 +10,11 @@ $sizing-700: 2.1875rem;
 $sizing-800: 3.125rem;
 $sizing-900: 4rem;
 
-$table-cell-spacing: rem( 10px );
-$table-cell-spacing--big: rem( 21px );
+$table-cell-spacing: rem( 4px );
+$table-cell-spacing--big: ( 8.4px );
 
-$panel-spacing: rem( 8px );
+$table-cell-spacing--large: rem( 10px );
+$table-cell-spacing--big-large: rem( 21px );
+
+$panel-spacing: rem( 12px 0 );
+$panel-spacing--large: rem( 8px );

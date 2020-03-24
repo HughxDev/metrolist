@@ -13,8 +13,13 @@
 */
 
 .ml-column {
-  width: ( $nominal-width-desktop__content / $nominal-width-desktop ) * 100%;
+  width: ( $nominal-width-mobile-listings__content / $nominal-width-mobile ) * 100%;
   margin: 0 auto;
+}
+@include media-breakpoint-up( lg ) {
+  .ml-column {
+    width: ( $nominal-width-desktop-listings__content / $nominal-width-desktop ) * 100%;
+  }
 }
 
 .ml-column.ml-column--jumbotron {

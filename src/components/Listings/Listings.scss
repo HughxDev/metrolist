@@ -1,11 +1,16 @@
 // <Listings />
 @import '@globals';
+  .ml-listings {
+    width: ( $nominal-width-mobile-listings__content / $nominal-width-mobile ) * 100%;
+    margin: rem( 10px ) auto 0;
+  }
 
-.ml-listings {
-  width: ( $nominal-width-desktop-metrolist-search__content / $nominal-width-desktop ) * 100%;
-  margin: rem( 80px ) auto 0;
-}
   @include media-breakpoint-up( lg ) {
+    .ml-listings {
+      width: ( $nominal-width-desktop-listings__content / $nominal-width-desktop ) * 100%;
+      margin-top: rem( 80px );
+    }
+
     .ml-listings__content {
       display: flex;
     }

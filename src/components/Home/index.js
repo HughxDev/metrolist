@@ -4,6 +4,7 @@ import moment from 'moment';
 
 import UnitGroup from '@components/UnitGroup';
 import HomeInfo from '@components/HomeInfo';
+import Button from '@components/Button';
 
 import { capitalize } from '@util/strings';
 import { date, dateTime } from '@util/datetime';
@@ -53,7 +54,7 @@ function Home( { home } ) {
               assignment,
             } }
           />
-          <a className="ml-home-footer__more-info-link btn btn--700 btn--metrolist" href="#">More info</a>
+          <Button className="ml-home-footer__more-info-link" href="#">More info</Button>
         </footer>
       </div>
     </article>

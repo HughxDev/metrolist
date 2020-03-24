@@ -3,17 +3,36 @@
 
 .ml-app-header {
   background-color: white;
-  padding-top: rem( 42px );
+  padding: rem( 14px 0 11px );
+  text-align: center;
+  // display: none;
 }
-  .ml-app-header__heading-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
+  @include media-breakpoint-up( lg ) {
+    .ml-app-header {
+      padding: rem( 42px 0 0 );
+      text-align: left;
+    }
+  }
+  .ml-app-header__heading-container {}
+  @include media-breakpoint-up( lg ) {
+    .ml-app-header__heading-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
   }
 
-  .ml-app-header__heading,
-  .ml-app-header__subheading {
+  .ml-app-header__heading {
     margin-bottom: .5rem;
+  }
+
+  .ml-app-header__subheading {
+    margin-bottom: 0;
+  }
+  @include media-breakpoint-up( lg ) {
+    .ml-app-header__subheading {
+      margin-bottom: .5rem;
+    }
   }
 
   // 85 / 213

@@ -6,11 +6,15 @@
   // margin: 0 auto;
   border-collapse: collapse;
   font-family: $font-family-montserrat;
-  margin-bottom: rem( 44px );
+  font-size: rem( 14px );
 }
-  .ml-unit-group__size,
-  .ml-unit-group__ami-qualification,
-  .ml-unit-group__price {
+  @include media-breakpoint-up( lg ) {
+    .ml-unit-group {
+      font-size: rem( 16px );
+    }
+  }
+  .ml-unit-group__cell {
+    width: 33.333333%;
     padding: $table-cell-spacing;
   }
   .ml-unit-group__size {

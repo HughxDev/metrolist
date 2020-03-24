@@ -2,8 +2,13 @@
 @import '@globals';
 
 .ml-filters-panel {
-
+  
 }
+  @include media-breakpoint-down( md ) {
+    .ml-filters-panel {
+      display: none;
+    }
+  }
   .ml-filters__content {
     // background-color: $color-white;
   }

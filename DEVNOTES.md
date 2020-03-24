@@ -201,4 +201,7 @@ From Jim:
 - Extra content:
   - Desktop: Nothing
   - Mobile: “Learn about income eligibility? / Area Media Income (AMI). Learn about it here.”
+- Missing content:
+  - Desktop: Metrolist Header
+  - Mobile: Nothing
 - Selection state should be reflected in mobile dropdown menus. E.g. when you select Income Eligibility > 60% and then collapse the menu, the label should say something like “Income Eligibility: 60%”, maybe with option to clear the selection somehow. Same with master “Filter” dropdown. While they might not all fit, could present e.g. “5 filters applied”.
