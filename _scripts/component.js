@@ -109,8 +109,7 @@ function addComponent( componentName, subcomponentName, recursionLevel = 1 ) {
               } );
           }, // ncp callback
         ); // ncp
-      } ), // new Promise
-      ) // then
+      } ) ) // then
   ); // return
 }
 
@@ -122,7 +121,7 @@ function renameComponent() {
   let existingElementComponentShortName;
   let existingElementComponentName;
 
-  let existingBlockComponentNameRegex;
+  let existingComponentNameRegex;
   let existingClassNameRegex;
 
   let newBlockComponentName;
@@ -135,27 +134,33 @@ function renameComponent() {
   let targetDirectoryBase;
   let targetDirectory;
 
+  let isSubcomponent;
+
   // Existing component is block-level:
   if ( existingComponentId.indexOf( '/' ) === -1 ) {
+    isSubcomponent = false;
+
     // Naming:
     existingBlockComponentName = componentCase( existingComponentId );
 
-    // Find/Replace:
+    // Path:
     sourceDirectory = `${componentDirectory}/${existingBlockComponentName}`;
-    existingBlockComponentNameRegex = new RegExp( `\\b${existingBlockComponentName}\\b`, 'g' );
+    existingComponentNameRegex = new RegExp( `\\b${existingBlockComponentName}\\b`, 'g' );
     existingClassNameRegex = new RegExp( `\\b${slugify( existingBlockComponentName )}\\b`, 'g' );
 
   // Existing component is element-level (subcomponent):
   } else {
+    isSubcomponent = true;
+
     // Naming:
     const existingComponentIdParts = existingComponentId.split( '/' );
     existingBlockComponentName = componentCase( existingComponentIdParts[0] );
     existingElementComponentShortName = componentCase( existingComponentIdParts[1] );
     existingElementComponentName = `${existingBlockComponentName}${existingElementComponentShortName}`;
 
-    // Find/Replace:
+    // Path:
     sourceDirectory = `${componentDirectory}/${existingBlockComponentName}/_${existingElementComponentName}`;
-    existingBlockComponentNameRegex = new RegExp( `\\b${existingElementComponentName}\\b`, 'g' );
+    existingComponentNameRegex = new RegExp( `\\b${existingElementComponentName}\\b`, 'g' );
     existingClassNameRegex = new RegExp( `\\b${slugify( existingBlockComponentName )}__${slugify( existingElementComponentShortName )}\\b`, 'g' );
   }
 
@@ -163,23 +168,27 @@ function renameComponent() {
 
   // New component name is block-level:
   if ( newComponentId.indexOf( '/' ) === -1 ) {
+    isSubcomponent = false;
+
     // Naming:
     newBlockComponentName = componentCase( newComponentId );
 
-    // Find/Replace:
+    // Path:
     targetDirectoryBase = `${componentDirectory}/${newBlockComponentName}`;
     targetDirectory = targetDirectoryBase;
     newComponentClassName = slugify( newBlockComponentName );
 
   // New component name is element-level (subcomponent):
   } else {
+    isSubcomponent = true;
+
     // Naming:
     const newComponentIdParts = newComponentId.split( '/' );
     newBlockComponentName = componentCase( newComponentIdParts[0] );
     newElementComponentShortName = componentCase( newComponentIdParts[1] );
     newElementComponentName = `${newBlockComponentName}${newElementComponentShortName}`;
 
-    // Find/Replace:
+    // Path:
     targetDirectoryBase = `${componentDirectory}/${newBlockComponentName}`;
     targetDirectory = `${targetDirectoryBase}/_${newElementComponentName}`;
     newComponentClassName = `${slugify( newBlockComponentName )}__${slugify( newElementComponentShortName )}`;
@@ -192,14 +201,14 @@ function renameComponent() {
       `${sourceDirectory}/**.js`,
       `${sourceDirectory}/**.scss`,
     ],
-    "from": [existingBlockComponentNameRegex, existingClassNameRegex],
+    "from": [existingComponentNameRegex, existingClassNameRegex],
     "to": [newComponentName, newComponentClassName],
   };
 
   return (
     replace( replaceOptions )
       .then( () => {
-        if ( !fs.existsSync( targetDirectoryBase ) ) {
+        if ( !fs.existsSync( targetDirectoryBase ) && isSubcomponent ) {
           return addComponent( newBlockComponentName );
         }
 
@@ -208,7 +217,7 @@ function renameComponent() {
       .then( () => new Promise( ( resolve, reject ) => {
         fs.rename( sourceDirectory, targetDirectory, ( renameDirError ) => {
           if ( renameDirError ) {
-            console.error( `fs.rename failed:` );
+            console.error( `fs.rename( sourceDirectory = "${sourceDirectory}", targetDirectory = "${targetDirectory}" ) failed:` );
             reject( renameDirError );
           }
 
@@ -224,7 +233,7 @@ function renameComponent() {
 
               fs.rename( existingFilePath, newFilePath, ( renameError ) => {
                 if ( renameError ) {
-                  console.error( `fs.rename failed:` );
+                  console.error( `fs.rename( existingFilePath, newFilePath ) failed:` );
                   reject( renameError );
                 }
               } );
