@@ -31,12 +31,16 @@ function addComponent( componentName, subcomponentName, recursionLevel = 1 ) {
     }
   }
 
-  const hasSubcomponent = ( ( recursionLevel === 1 ) && subcomponentName );
-  const isSubcomponent = ( ( recursionLevel > 1 ) && subcomponentName );
+  const hasSubcomponent = ( ( recursionLevel === 1 ) && ( subcomponentName.length > 0 ) );
+  const isSubcomponent = ( ( recursionLevel > 1 ) && ( subcomponentName.length > 0 ) );
 
-  let targetDirectory = `${componentDirectory}/${componentName}`;
+  const targetDirectoryBase = `${componentDirectory}/${componentName}`;
+  let targetDirectory;
+
   if ( isSubcomponent ) {
-    targetDirectory += `/_${subcomponentFullName}`;
+    targetDirectory = `${targetDirectoryBase}/_${subcomponentFullName}`;
+  } else {
+    targetDirectory = targetDirectoryBase;
   }
 
   const replaceOptions = {
@@ -52,15 +56,27 @@ function addComponent( componentName, subcomponentName, recursionLevel = 1 ) {
     replaceOptions.to = [componentName, `${slugify( componentName )}`];
   }
 
-  if ( fs.existsSync( targetDirectory ) ) {
-    if ( hasSubcomponent ) {
-      return addComponent( componentName, subcomponentName, 2 );
+  return new Promise( async ( resolve, reject ) => {
+    console.log( 'targetDirectoryBase', targetDirectoryBase );
+    console.log( 'targetDirectory', targetDirectory );
+    console.log( 'fs.existsSync( targetDirectoryBase )', fs.existsSync( targetDirectoryBase ) );
+    console.log( 'hasSubcomponent', hasSubcomponent );
+    console.log( '---' );
+
+    if ( fs.existsSync( targetDirectory ) ) {
+      if ( hasSubcomponent ) {
+        await addComponent( componentName, subcomponentName, 2 )
+          .then( ( successMessage ) => {
+            resolve( successMessage );
+          } )
+          .catch( ( error ) => {
+            reject( error );
+          } );
+      } else {
+        reject( new Error( `Component already exists: ${componentName} @ ${targetDirectory}/` ) );
+      }
     }
 
-    reject( `Component already exists: ${componentName} @ ${targetDirectory}/index.js` );
-  }
-
-  return new Promise( ( resolve, reject ) => {
     ncp(
       // Source
       `${templateDirectory}/Component`,
@@ -77,27 +93,29 @@ function addComponent( componentName, subcomponentName, recursionLevel = 1 ) {
         },
       },
       // Callback
-      async ( error ) => {
-        if ( error ) {
+      async ( ncpError ) => {
+        if ( ncpError ) {
           rimraf.sync( targetDirectory );
-          reject( `ncp failed:\n  ${error.toString()}` );
+          console.error( `ncp failed:` );
+          reject( ncpError );
         }
 
         try {
-          await replace( replaceOptions );
+          replace.sync( replaceOptions );
 
           if ( hasSubcomponent ) {
-            addComponent( componentName, subcomponentName, 2 )
+            await addComponent( componentName, subcomponentName, 2 )
               .then( ( successMessage ) => {
                 resolve( successMessage );
               } )
-              .catch( ( errorMessage ) => {
-                reject( errorMessage );
+              .catch( ( error ) => {
+                reject( error );
               } );
           }
         } catch ( replacementError ) {
           rimraf.sync( targetDirectory );
-          reject( `replace-in-file failed:\n  ${replacementError.toString()}` );
+          console.error( `replace-in-file failed:` );
+          reject( replacementError );
         }
 
         resolve( `Component created: ${isSubcomponent ? subcomponentFullName : componentName} @ ${targetDirectory}/` );
@@ -106,7 +124,7 @@ function addComponent( componentName, subcomponentName, recursionLevel = 1 ) {
   } );
 }
 
-async function renameComponent() {
+function renameComponent() {
   const existingComponentId = process.argv.slice( 3 )[0];
   const newComponentId = process.argv.slice( 4 )[0];
 
@@ -188,45 +206,49 @@ async function renameComponent() {
     "to": [newComponentName, newComponentClassName],
   };
 
-  try {
-    await replace( replaceOptions );
-  } catch ( replacementError ) {
-    console.error( `replace-in-file failed:\n  ${replacementError.toString()}` );
-    process.exit( 1 );
-  }
-
-  if ( !fs.existsSync( targetDirectoryBase ) ) {
-    await addComponent( newBlockComponentName );
-  }
-
-  fs.rename( sourceDirectory, targetDirectory, ( renameDirError ) => {
-    if ( renameDirError ) {
-      console.error( `fs.rename failed:\n  ${renameDirError.toString()}` );
-      process.exit( 1 );
+  return new Promise( async ( resolve, reject ) => {
+    try {
+      await replace( replaceOptions );
+    } catch ( replacementError ) {
+      console.error( `replace-in-file failed:` );
+      reject( replacementError );
     }
 
-    fs.readdir( targetDirectory, ( dirError, files ) => {
-      if ( dirError ) {
-        console.error( `fs.readdir failed:\n  ${dirError.toString()}` );
-        process.exit( 1 );
+    if ( !fs.existsSync( targetDirectoryBase ) ) {
+      await addComponent( newBlockComponentName );
+    }
+
+    fs.rename( sourceDirectory, targetDirectory, ( renameDirError ) => {
+      if ( renameDirError ) {
+        console.error( `fs.rename failed:` );
+        reject( renameDirError );
       }
 
-      files.forEach( ( file ) => {
-        const existingFilePath = path.join( targetDirectory, file );
-        const newFilePath = path.join( targetDirectory, file.replace( existingComponentName, newComponentName ) );
+      fs.readdir( targetDirectory, ( dirError, files ) => {
+        if ( dirError ) {
+          console.error( `fs.readdir failed:` );
+          reject( dirError );
+        }
 
-        fs.rename( existingFilePath, newFilePath, ( renameError ) => {
-          if ( renameError ) {
-            console.error( 'Error occurred:', renameError );
-            process.exit( 1 );
-          }
-        } );
-      } ); // files.forEach
+        files.forEach( ( file ) => {
+          const existingFilePath = path.join( targetDirectory, file );
+          const newFilePath = path.join( targetDirectory, file.replace( existingComponentName, newComponentName ) );
 
-      console.log( `Component renamed: ${existingComponentId} → ${newComponentId} @ ${targetDirectory}/` );
-      console.warn( `References to ${existingBlockComponentName} in other files must be replaced manually.` );
-    } ); // fs.readdir
-  } ); // fs.rename
+          fs.rename( existingFilePath, newFilePath, ( renameError ) => {
+            if ( renameError ) {
+              console.error( `fs.rename failed:` );
+              reject( renameError );
+            }
+          } );
+        } ); // files.forEach
+
+        resolve(
+          `Component renamed: ${existingComponentId} → ${newComponentId} @ ${targetDirectory}/`
+          + `\nReferences to ${existingBlockComponentName} in other files must be replaced manually.`,
+        );
+      } ); // fs.readdir
+    } ); // fs.rename
+  } );
 }
 
 function removeComponent() {
@@ -252,9 +274,21 @@ function removeComponent() {
 
   const componentOrSubcomponentFullName = ( isSubcomponent ? subcomponentFullName : componentName );
 
-  rimraf.sync( targetDirectory );
-  console.log( `Component deleted: ${componentOrSubcomponentFullName}` );
-  console.warn( `References to ${componentOrSubcomponentFullName} in other files must be removed manually.` );
+  return new Promise( ( resolve, reject ) => {
+    rimraf.sync( targetDirectory );
+
+    rimraf( targetDirectory, ( deletionError ) => {
+      if ( deletionError ) {
+        console.error( `rimraf failed:` );
+        reject( deletionError );
+      }
+
+      resolve(
+        `Component deleted: ${componentOrSubcomponentFullName}`
+        + `\nReferences to ${componentOrSubcomponentFullName} in other files must be removed manually.`,
+      );
+    } );
+  } );
 }
 
 const action = process.argv.slice( 2 )[0];
@@ -263,10 +297,13 @@ switch ( action ) {
   case 'add':
     addComponent()
       .then( ( successMessage ) => {
+        console.log( 'switch success' );
         console.log( successMessage );
+        process.exit( 0 );
       } )
-      .catch( ( errorMessage ) => {
-        console.error( errorMessage );
+      .catch( ( error ) => {
+        console.log( 'switch error' );
+        console.error( error );
         process.exit( 1 );
       } );
     break;
@@ -275,14 +312,30 @@ switch ( action ) {
   case 'rn':
   case 'mv':
   case 'move':
-    renameComponent();
+    renameComponent()
+      .then( ( successMessage ) => {
+        console.log( successMessage );
+        process.exit( 0 );
+      } )
+      .catch( ( error ) => {
+        console.error( error );
+        process.exit( 1 );
+      } );
     break;
 
   case 'delete':
   case 'del':
   case 'remove':
   case 'rm':
-    removeComponent();
+    removeComponent()
+      .then( ( successMessage ) => {
+        console.log( successMessage );
+        process.exit( 0 );
+      } )
+      .catch( ( error ) => {
+        console.error( error );
+        process.exit( 1 );
+      } );
     break;
 
   default:
