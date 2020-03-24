@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Column from '@components/Column';
+import Column from '../../_deferred-components/Column';
 import Logo from '../Logo';
 import Tagline from '../Tagline';
 
