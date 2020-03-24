@@ -56,72 +56,62 @@ function addComponent( componentName, subcomponentName, recursionLevel = 1 ) {
     replaceOptions.to = [componentName, `${slugify( componentName )}`];
   }
 
-  return new Promise( async ( resolve, reject ) => {
-    console.log( 'targetDirectoryBase', targetDirectoryBase );
-    console.log( 'targetDirectory', targetDirectory );
-    console.log( 'fs.existsSync( targetDirectoryBase )', fs.existsSync( targetDirectoryBase ) );
-    console.log( 'hasSubcomponent', hasSubcomponent );
-    console.log( '---' );
-
-    if ( fs.existsSync( targetDirectory ) ) {
-      if ( hasSubcomponent ) {
-        await addComponent( componentName, subcomponentName, 2 )
-          .then( ( successMessage ) => {
-            resolve( successMessage );
-          } )
-          .catch( ( error ) => {
-            reject( error );
-          } );
-      } else {
-        reject( new Error( `Component already exists: ${componentName} @ ${targetDirectory}/` ) );
-      }
-    }
-
-    ncp(
-      // Source
-      `${templateDirectory}/Component`,
-      // Destination
-      targetDirectory,
-      // Options
-      {
-        "rename": function rename( target ) {
-          const pathInfo = path.parse( target );
-          const filename = pathInfo.base.replace( replaceOptions.from[0], replaceOptions.to[0] );
-          const resolution = path.resolve( targetDirectory, filename );
-
-          return resolution;
-        },
-      },
-      // Callback
-      async ( ncpError ) => {
-        if ( ncpError ) {
-          rimraf.sync( targetDirectory );
-          console.error( `ncp failed:` );
-          reject( ncpError );
-        }
-
-        try {
-          replace.sync( replaceOptions );
-
+  return (
+    Promise.resolve()
+      .then( () => {
+        if ( fs.existsSync( targetDirectory ) ) {
           if ( hasSubcomponent ) {
-            await addComponent( componentName, subcomponentName, 2 )
-              .then( ( successMessage ) => {
-                resolve( successMessage );
-              } )
-              .catch( ( error ) => {
-                reject( error );
-              } );
+            return addComponent( componentName, subcomponentName, 2 );
           }
-        } catch ( replacementError ) {
-          rimraf.sync( targetDirectory );
-          console.error( `replace-in-file failed:` );
-          reject( replacementError );
-        }
 
-        resolve( `Component created: ${isSubcomponent ? subcomponentFullName : componentName} @ ${targetDirectory}/` );
-      },
-    );
-  } );
+          throw new Error( `Component already exists: ${componentName} @ ${targetDirectory}/` );
+        }
+      } )
+      .then( () => new Promise( ( resolve, reject ) => {
+        ncp(
+          // Source
+          `${templateDirectory}/Component`,
+          // Destination
+          targetDirectory,
+          // Options
+          {
+            "rename": function rename( target ) {
+              const pathInfo = path.parse( target );
+              const filename = pathInfo.base.replace( replaceOptions.from[0], replaceOptions.to[0] );
+              const resolution = path.resolve( targetDirectory, filename );
+
+              return resolution;
+            },
+          },
+          // Callback
+          ( ncpError ) => {
+            if ( ncpError ) {
+              rimraf.sync( targetDirectory );
+              console.error( `ncp failed:` );
+              reject( ncpError );
+            }
+
+            replace( replaceOptions )
+              .then( () => {
+                if ( hasSubcomponent ) {
+                  return addComponent( componentName, subcomponentName, 2 );
+                }
+
+                return true;
+              } )
+              .then( () => {
+                resolve( `Component created: ${isSubcomponent ? subcomponentFullName : componentName} @ ${targetDirectory}/` );
+              } )
+              .catch( ( replacementError ) => {
+                rimraf.sync( targetDirectory );
+                console.error( `replace-in-file failed:` );
+                reject( replacementError );
+              } );
+          }, // ncp callback
+        ); // ncp
+      } ), // new Promise
+      ) // then
+  ); // return
 }
 
 function renameComponent() {
@@ -206,49 +196,48 @@ function renameComponent() {
     "to": [newComponentName, newComponentClassName],
   };
 
-  return new Promise( async ( resolve, reject ) => {
-    try {
-      await replace( replaceOptions );
-    } catch ( replacementError ) {
-      console.error( `replace-in-file failed:` );
-      reject( replacementError );
-    }
-
-    if ( !fs.existsSync( targetDirectoryBase ) ) {
-      await addComponent( newBlockComponentName );
-    }
-
-    fs.rename( sourceDirectory, targetDirectory, ( renameDirError ) => {
-      if ( renameDirError ) {
-        console.error( `fs.rename failed:` );
-        reject( renameDirError );
-      }
-
-      fs.readdir( targetDirectory, ( dirError, files ) => {
-        if ( dirError ) {
-          console.error( `fs.readdir failed:` );
-          reject( dirError );
+  return (
+    replace( replaceOptions )
+      .then( () => {
+        if ( !fs.existsSync( targetDirectoryBase ) ) {
+          return addComponent( newBlockComponentName );
         }
 
-        files.forEach( ( file ) => {
-          const existingFilePath = path.join( targetDirectory, file );
-          const newFilePath = path.join( targetDirectory, file.replace( existingComponentName, newComponentName ) );
+        return true;
+      } )
+      .then( () => new Promise( ( resolve, reject ) => {
+        fs.rename( sourceDirectory, targetDirectory, ( renameDirError ) => {
+          if ( renameDirError ) {
+            console.error( `fs.rename failed:` );
+            reject( renameDirError );
+          }
 
-          fs.rename( existingFilePath, newFilePath, ( renameError ) => {
-            if ( renameError ) {
-              console.error( `fs.rename failed:` );
-              reject( renameError );
+          fs.readdir( targetDirectory, ( dirError, files ) => {
+            if ( dirError ) {
+              console.error( `fs.readdir failed:` );
+              reject( dirError );
             }
-          } );
-        } ); // files.forEach
 
-        resolve(
-          `Component renamed: ${existingComponentId} → ${newComponentId} @ ${targetDirectory}/`
-          + `\nReferences to ${existingBlockComponentName} in other files must be replaced manually.`,
-        );
-      } ); // fs.readdir
-    } ); // fs.rename
-  } );
+            files.forEach( ( file ) => {
+              const existingFilePath = path.join( targetDirectory, file );
+              const newFilePath = path.join( targetDirectory, file.replace( existingComponentName, newComponentName ) );
+
+              fs.rename( existingFilePath, newFilePath, ( renameError ) => {
+                if ( renameError ) {
+                  console.error( `fs.rename failed:` );
+                  reject( renameError );
+                }
+              } );
+            } ); // files.forEach
+
+            resolve(
+              `Component renamed: ${existingComponentId} → ${newComponentId} @ ${targetDirectory}/`
+                + `\nReferences to ${existingBlockComponentName} in other files must be replaced manually.`,
+            );
+          } ); // fs.readdir
+        } ); // fs.rename
+      } ) ) // then
+  );
 }
 
 function removeComponent() {
