@@ -1,24 +1,24 @@
-// <Units />
+// <UnitGroup />
 @import '@globals';
 
-.ml-units {
+.ml-unit-group {
   width: 100%;
   // margin: 0 auto;
   border-collapse: collapse;
   font-family: $font-family-montserrat;
   margin-bottom: rem( 44px );
 }
-  .ml-units__size,
-  .ml-units__ami-qualification,
-  .ml-units__price {
+  .ml-unit-group__size,
+  .ml-unit-group__ami-qualification,
+  .ml-unit-group__price {
     padding: $table-cell-spacing;
   }
-  .ml-units__size {
+  .ml-unit-group__size {
     text-align: left;
   }
-  .ml-units__ami-qualification {
+  .ml-unit-group__ami-qualification {
     text-align: center;
   }
-  .ml-units__price {
+  .ml-unit-group__price {
     text-align: right;
   }

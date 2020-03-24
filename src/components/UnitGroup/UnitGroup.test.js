@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import Units from './index';
+import UnitGroup from './index';
 
 test( 'renders', () => {
 

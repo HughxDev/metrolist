@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
-import Units from '@components/Units';
+import UnitGroup from '@components/UnitGroup';
 import HomeInfo from '@components/HomeInfo';
 
 import { capitalize } from '@util/strings';
@@ -43,7 +43,7 @@ function Home( { home } ) {
           <p className="ml-home__byline">{ [city, neighborhood, capitalize( type )].join( ' – ' ) }</p>
           { renderJustListed( listingDate ) }
         </header>
-        <Units units={ units } />
+        <UnitGroup units={ units } />
         <footer className="ml-home__footer">
           <HomeInfo
             className="ml-home-footer__home-info"
