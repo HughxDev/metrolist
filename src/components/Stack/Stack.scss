@@ -1,0 +1,37 @@
+// <Stack />
+@import '@globals';
+
+// Reference: https://absolutely.every-layout.dev/layouts/stack/
+
+$space: 1.5rem;
+
+.ml-stack {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+  .ml-stack.ml-stack--space-1 {
+    & > * + * {
+      margin-top: $space;
+    }
+  }
+  .ml-stack.ml-stack--space-1_25 {
+    & > * + * {
+      margin-top: ( $space * 1.25 );
+    }
+  }
+  .ml-stack.ml-stack--space-1_5 {
+    & > * + * {
+      margin-top: ( $space * 1.5 );
+    }
+  }
+  .ml-stack.ml-stack--space-2 {
+    & > * + * {
+      margin-top: ( $space * 2 );
+    }
+  }
+
+.ml-stack > * {
+  margin-top: 0;
+  margin-bottom: 0;
+}
