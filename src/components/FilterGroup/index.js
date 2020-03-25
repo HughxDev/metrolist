@@ -5,11 +5,17 @@ import './FilterGroup.scss';
 
 function FilterGroup( props ) {
   return (
-    <div className={ `ml-filter-group${props.className ? ` ${props.className}` : ''}` }>
+    <fieldset className={ `ml-filter-group${props.className ? ` ${props.className}` : ''}` }>
       { props.children }
-    </div>
+    </fieldset>
   );
 }
+
+FilterGroup.Label = ( props ) => <legend>{ props.children }</legend>;
+FilterGroup.Label.displayName = 'FilterGroupLabel';
+FilterGroup.Label.propTypes = {
+  "children": PropTypes.node,
+};
 
 FilterGroup.propTypes = {
   "children": PropTypes.node,

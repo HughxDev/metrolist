@@ -21,8 +21,8 @@ import './Scale.scss';
 
 function Scale( props ) {
   return (
-    <fieldset className={ `ml-scale${props.className ? ` ${props.className}` : ''}` }>
-      <legend className="ml-scale__heading">{ props.children }</legend>
+    <div className={ `ml-scale${props.className ? ` ${props.className}` : ''}` }>
+      {/* <legend className="ml-scale__heading">{ props.children }</legend> */}
       <div className="ml-scale__inputs">{
         props.value.split( ',' )
           .map( ( value, index ) => (
@@ -32,7 +32,7 @@ function Scale( props ) {
             </label>
           ) )
       }</div>
-    </fieldset>
+    </div>
   );
 }
 

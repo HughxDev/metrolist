@@ -58,8 +58,14 @@ function renderChoices( { children, subcategoriesOnly } ) {
 }
 
 function Checkbox( props ) {
+  let modifierClasses = '';
+
+  if ( props.button ) {
+    modifierClasses += ' ml-checkbox--button';
+  }
+
   return (
-    <div className={ `ml-checkbox${props.className ? ` ${props.className}` : ''}` }>
+    <div className={ `ml-checkbox${modifierClasses}${props.className ? ` ${props.className}` : ''}` }>
       { renderChoices( props ) }
     </div>
   );
@@ -70,6 +76,7 @@ Checkbox.defaultProps = {
 };
 
 Checkbox.propTypes = {
+  "button": PropTypes.bool,
   "children": PropTypes.node,
   "className": PropTypes.string,
   "count": PropTypes.number,

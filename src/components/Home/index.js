@@ -54,7 +54,7 @@ function Home( { home } ) {
               assignment,
             } }
           />
-          <Button className="ml-home-footer__more-info-link" href="#">More info</Button>
+          <Button className="ml-home-footer__more-info-link" as="link" href="#">More info</Button>
         </footer>
       </div>
     </article>

@@ -52,6 +52,17 @@ Don’t reflect the expected DOM structure in class names, as this is this expec
 .ml-block__subelement {} // Good
 ```
 
+#### BEM within Sass
+
+Don’t use parent selectors to construct BEM classes. This allows the full selector to be searchable in IDEs.
+```scss
+.ml-block {
+  &__element {} // Bad
+}
+.ml__block {}
+.ml-block__element {} // Good
+```
+
 ### Spacing
 
 Don’t declare margins directly on components, only in wrappers.

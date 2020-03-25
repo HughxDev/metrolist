@@ -1,5 +1,6 @@
 // <Scale />
 @import '@globals';
+@import '@globals/typography/filter-labels';
 
 .ml-scale {
   border: 0;
@@ -13,7 +14,8 @@
     display: flex;
   }
   .ml-scale__heading {
-    @extend %filter-label-text;
+    line-height: 1;
+    font-style: italic;
     font-size: $font-size-filter-label;
     border: 0;
     margin: 0 0 rem( 18px );

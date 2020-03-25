@@ -5,6 +5,7 @@ import './Button.scss';
 
 function Button( props ) {
   let htmlElement;
+  const attributes = { ...props };
 
   switch ( props.as ) {
     case 'a':
@@ -16,13 +17,14 @@ function Button( props ) {
       htmlElement = 'button';
   }
 
-  delete props.as;
+  delete attributes.as;
+  delete attributes.children;
 
   return (
     React.createElement(
       htmlElement,
       {
-        ...props,
+        ...attributes,
         "className": `btn btn--metrolist${props.className ? ` ${props.className}` : ''}`,
       },
       props.children,

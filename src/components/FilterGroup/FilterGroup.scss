@@ -2,10 +2,16 @@
 @import '@globals';
 
 .ml-filter-group {
+  border: 1px solid rgba( 40, 180, 40, 0.5 );
   background-color: $color-white;
-  padding: 27px 20px;
-
-  & + & {
-    margin-top: $panel-spacing;
+  padding: rem( 16px 21px );
+}
+@include media-breakpoint-up( large ) {
+  .ml-filter-group {
+    padding: rem( 27px 20px );
+  
+    & + & {
+      margin-top: $panel-spacing;
+    }
   }
 }

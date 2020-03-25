@@ -30,6 +30,194 @@ $space: 1.5rem;
       margin-top: ( $space * 2 );
     }
   }
+  .ml-stack.ml-stack--topple-until {
+    flex-direction: row;
+  }
+  .ml-stack.ml-stack--topple-until > * {
+    flex: 1;
+  }
+  @include media-breakpoint-up( xsmall ) {
+    .ml-stack.ml-stack--topple-until.ml-stack--topple-until-xsmall {
+      flex-direction: column;
+
+      & > * {
+        flex: none;
+      }
+
+      &.ml-stack--space-rent-sale > * + * {
+        margin-top: rem( 25px );
+      }
+    }
+  }
+  @include media-breakpoint-up( small ) {
+    .ml-stack.ml-stack--topple-until.ml-stack--topple-until-small {
+      flex-direction: column;
+
+      & > * {
+        flex: none;
+      }
+
+      &.ml-stack--space-rent-sale > * + * {
+        margin-top: rem( 25px );
+      }
+    }
+  }
+  @include media-breakpoint-up( medium ) {
+    .ml-stack.ml-stack--topple-until.ml-stack--topple-until-medium {
+      flex-direction: column;
+
+      & > * {
+        flex: none;
+      }
+
+      &.ml-stack--space-rent-sale > * + * {
+        margin-top: rem( 25px );
+      }
+    }
+  }
+  @include media-breakpoint-up( large ) {
+    .ml-stack.ml-stack--topple-until.ml-stack--topple-until-large {
+      flex-direction: column;
+
+      & > * {
+        flex: none;
+      }
+
+      &.ml-stack--space-rent-sale > * + * {
+        margin-top: rem( 25px );
+      }
+    }
+  }
+  @include media-breakpoint-up( xlarge ) {
+    .ml-stack.ml-stack--topple-until.ml-stack--topple-until-xlarge {
+      flex-direction: column;
+
+      & > * {
+        flex: none;
+      }
+
+      &.ml-stack--space-rent-sale > * + * {
+        margin-top: rem( 25px );
+      }
+    }
+  }
+
+  .ml-stack.ml-stack--align-left {
+    text-align: left;
+  }
+    @include media-breakpoint-up( xsmall ) {
+      .ml-stack.ml-stack--align-left-xsmall {
+        text-align: left;
+      }
+    }
+    @include media-breakpoint-up( small ) {
+      .ml-stack.ml-stack--align-left-small[class*="-xsmall"],
+      .ml-stack.ml-stack--align-left-small {
+        text-align: left;
+      }
+    }
+    @include media-breakpoint-up( medium ) {
+      .ml-stack.ml-stack--align-left-medium[class*="-xsmall"],
+      .ml-stack.ml-stack--align-left-medium[class*="-small"],
+      .ml-stack.ml-stack--align-left-medium {
+        text-align: left;
+      }
+    }
+    @include media-breakpoint-up( large ) {
+      .ml-stack.ml-stack--align-left-large[class*="-xsmall"],
+      .ml-stack.ml-stack--align-left-large[class*="-small"],
+      .ml-stack.ml-stack--align-left-large[class*="-medium"],
+      .ml-stack.ml-stack--align-left-large {
+        text-align: left;
+      }
+    }
+    @include media-breakpoint-up( xlarge ) {
+      .ml-stack.ml-stack--align-left-xlarge[class*="-xsmall"],
+      .ml-stack.ml-stack--align-left-xlarge[class*="-small"],
+      .ml-stack.ml-stack--align-left-xlarge[class*="-medium"],
+      .ml-stack.ml-stack--align-left-xlarge[class*="-large"],
+      .ml-stack.ml-stack--align-left-xlarge {
+        text-align: left;
+      }
+    }
+
+  .ml-stack.ml-stack--align-center {
+    text-align: center;
+  }
+    @include media-breakpoint-up( xsmall ) {
+      .ml-stack.ml-stack--align-center-xsmall {
+        text-align: center;
+      }
+    }
+    @include media-breakpoint-up( small ) {
+      .ml-stack.ml-stack--align-center-small[class*="-xsmall"],
+      .ml-stack.ml-stack--align-center-small {
+        text-align: center;
+      }
+    }
+    @include media-breakpoint-up( medium ) {
+      .ml-stack.ml-stack--align-center-medium[class*="-xsmall"],
+      .ml-stack.ml-stack--align-center-medium[class*="-small"],
+      .ml-stack.ml-stack--align-center-medium {
+        text-align: center;
+      }
+    }
+    @include media-breakpoint-up( large ) {
+      .ml-stack.ml-stack--align-center-large[class*="-xsmall"],
+      .ml-stack.ml-stack--align-center-large[class*="-small"],
+      .ml-stack.ml-stack--align-center-large[class*="-medium"],
+      .ml-stack.ml-stack--align-center-large {
+        text-align: center;
+      }
+    }
+    @include media-breakpoint-up( xlarge ) {
+      .ml-stack.ml-stack--align-center-xlarge[class*="-xsmall"],
+      .ml-stack.ml-stack--align-center-xlarge[class*="-small"],
+      .ml-stack.ml-stack--align-center-xlarge[class*="-medium"],
+      .ml-stack.ml-stack--align-center-xlarge[class*="-large"],
+      .ml-stack.ml-stack--align-center-xlarge {
+        text-align: center;
+      }
+    }
+
+    .ml-stack.ml-stack--align-right {
+      text-align: right;
+    }
+      @include media-breakpoint-up( xsmall ) {
+        .ml-stack.ml-stack--align-right-xsmall {
+          text-align: right;
+        }
+      }
+      @include media-breakpoint-up( small ) {
+        .ml-stack.ml-stack--align-right-small[class*="-xsmall"],
+        .ml-stack.ml-stack--align-right-small {
+          text-align: right;
+        }
+      }
+      @include media-breakpoint-up( medium ) {
+        .ml-stack.ml-stack--align-right-medium[class*="-xsmall"],
+        .ml-stack.ml-stack--align-right-medium[class*="-small"],
+        .ml-stack.ml-stack--align-right-medium {
+          text-align: right;
+        }
+      }
+      @include media-breakpoint-up( large ) {
+        .ml-stack.ml-stack--align-right-large[class*="-xsmall"],
+        .ml-stack.ml-stack--align-right-large[class*="-small"],
+        .ml-stack.ml-stack--align-right-large[class*="-medium"],
+        .ml-stack.ml-stack--align-right-large {
+          text-align: right;
+        }
+      }
+      @include media-breakpoint-up( xlarge ) {
+        .ml-stack.ml-stack--align-right-xlarge[class*="-xsmall"],
+        .ml-stack.ml-stack--align-right-xlarge[class*="-small"],
+        .ml-stack.ml-stack--align-right-xlarge[class*="-medium"],
+        .ml-stack.ml-stack--align-right-xlarge[class*="-large"],
+        .ml-stack.ml-stack--align-right-xlarge {
+          text-align: right;
+        }
+      }
 
 .ml-stack > * {
   margin-top: 0;

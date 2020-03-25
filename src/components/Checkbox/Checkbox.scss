@@ -1,21 +1,46 @@
 // <Checkbox />
 @import '@globals';
+@import '@globals/typography/filter-labels';
+
+$checkbox-dimensions__pixels: 33px;
+$checkbox-dimensions: rem( $checkbox-dimensions__pixels );
+
+$checkbox-dimensions__pixels--desktop: 35px;
+$checkbox-dimensions--desktop: rem( $checkbox-dimensions__pixels--desktop );
+
+$checkbox-checked-box__dimensions-pixels--desktop: 23px;
+$checkbox-checked-box__dimensions--desktop: rem( $checkbox-checked-box__dimensions-pixels--desktop );
+
+$checkbox-dimensions-shrink-factor: ( $checkbox-dimensions__pixels / $checkbox-dimensions__pixels--desktop );
+
+$checkbox-checked-box__dimensions-pixels: ( $checkbox-dimensions__pixels - 12 );
+$checkbox-checked-box__dimensions: rem( $checkbox-checked-box__dimensions-pixels );
 
 .ml-checkbox {
+  font-family: $font-family-montserrat;
   font-size: $font-size-filter-label;
-  // border: 1px solid rgba(20, 20, 180, 0.5);
 }
-  .ml-checkbox + .ml-checkbox {
-    margin-top: rem( 25px );
+  @include media-breakpoint-up( large ) {
+    .ml-checkbox {
+      font-family: inherit;
+      font-size: $font-size-filter-label--desktop;
+    }
   }
-  .ml-checkbox__subcategories {
-    // margin-left: rem( 47px ); // mockup
-    margin-left: rem( 35px );
-    margin-top: rem( 21px );
-  }
+  // .ml-checkbox.ml-checkbox--button {
+  //   border: 2px solid $color-metrolist-text-blue;
+  // }
+
+  .ml-checkbox__subcategories {}
     // TODO: Don’t style by structure
-    .ml-checkbox__subcategories > .ml-checkbox {
-      font-size: $font-size-filter-label--small;
+    @include media-breakpoint-up( large ) {
+      .ml-checkbox__subcategories {
+        margin-left: rem( 35px );
+        margin-top: rem( 21px );
+      }
+
+      .ml-checkbox__subcategories > .ml-checkbox {
+        font-size: $font-size-filter-label--desktop-small;
+      }
     }
     .ml-checkbox__subcategories > .ml-checkbox + .ml-checkbox {
       margin-top: 1rem;
@@ -29,26 +54,41 @@
     display: block;
     line-height: 0;
     white-space: nowrap;
-    height: rem( 35px );
+    height: $checkbox-dimensions;
   }
+    @include media-breakpoint-up( large ) {
+      .ml-checkbox__label {
+        height: $checkbox-dimensions--desktop;
+      }
+    }
   .ml-checkbox__text,
   .ml-checkbox__form-control-container {
     display: inline-block;
     vertical-align: middle;
   }
   .ml-checkbox__text {
-    @extend %filter-label-text;
+    line-height: 1;
   }
+    @include media-breakpoint-up( large ) {
+      .ml-checkbox__text {
+        font-style: italic;
+      }
+    }
     .ml-checkbox__form-control-container + .ml-checkbox__text {
       margin-left: 1rem;
     }
   .ml-checkbox__form-control-container {
     position: relative;
     border: 2px solid #383838;
-    background-color: $color-white;
     height: 100%;
-    width: rem( 35px );
     text-align: center;
+    width: $checkbox-dimensions;
+  }
+  @include media-breakpoint-up( large ) {
+    .ml-checkbox__form-control-container {
+      background-color: $color-white;
+      width: $checkbox-dimensions--desktop;
+    }
   }
   .ml-checkbox__form-control,
   .ml-checkbox__form-control-ui {
@@ -67,11 +107,19 @@
     line-height: 0;
   }
   .ml-checkbox__form-control-ui {
-    width: rem( 23px );
-    height: rem( 23px );
+    width: $checkbox-checked-box__dimensions;
+    height: $checkbox-checked-box__dimensions;
     top: rem( 4px );
     left: rem( 4px );
   }
+    @include media-breakpoint-up( large ) {
+      .ml-checkbox__form-control-ui {
+        width: $checkbox-checked-box__dimensions--desktop;
+        height: $checkbox-checked-box__dimensions--desktop;
+        top: rem( 4px );
+        left: rem( 4px );
+      }
+    }
   .ml-checkbox__form-control:checked ~ .ml-checkbox__form-control-ui {
     background-color: $color-optimistic-blue;
   }
