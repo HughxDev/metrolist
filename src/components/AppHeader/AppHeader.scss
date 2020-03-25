@@ -23,13 +23,14 @@
   }
 
   .ml-app-header__heading {
-    margin-bottom: .5rem;
+    margin-bottom: .25rem;
   }
 
   .ml-app-header__subheading {
     margin-bottom: 0;
   }
   @include media-breakpoint-up( lg ) {
+    .ml-app-header__heading,
     .ml-app-header__subheading {
       margin-bottom: .5rem;
     }
