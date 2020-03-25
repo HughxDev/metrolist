@@ -16,7 +16,7 @@
   width: ( $nominal-width-mobile-listings__content / $nominal-width-mobile ) * 100%;
   margin: 0 auto;
 }
-@include media-breakpoint-up( lg ) {
+@include media-breakpoint-up( large ) {
   .ml-column {
     width: ( $nominal-width-desktop-listings__content / $nominal-width-desktop ) * 100%;
   }

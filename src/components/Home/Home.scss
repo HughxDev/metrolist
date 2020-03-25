@@ -20,7 +20,7 @@ $padding-home-horizontal--large: rem( 26px );
     margin-top: 0;
   }
 }
-  @include media-breakpoint-up( lg ) {
+  @include media-breakpoint-up( large ) {
     .ml-home {
       margin: $panel-spacing--large;
       padding: $padding-home-vertical--large $padding-home-horizontal--large; // mockup
@@ -43,7 +43,7 @@ $padding-home-horizontal--large: rem( 26px );
     letter-spacing: rem( 0.01px );
     text-transform: uppercase;
   }
-  @include media-breakpoint-up( lg ) {
+  @include media-breakpoint-up( large ) {
     .ml-home__title {
       line-height: .8;
       font-size: rem( 30px );
@@ -57,7 +57,7 @@ $padding-home-horizontal--large: rem( 26px );
     line-height: .8;
     margin: rem( 10px 0 );
   }
-  @include media-breakpoint-up( lg ) {
+  @include media-breakpoint-up( large ) {
     .ml-home__byline {
       font-size: rem( 21px );
       margin: rem( 24px 0 );
@@ -85,7 +85,7 @@ $padding-home-horizontal--large: rem( 26px );
     top: $padding-home-vertical;
     right: $padding-home-horizontal;
   }
-  @include media-breakpoint-up( lg ) {
+  @include media-breakpoint-up( large ) {
     .ml-home__just-listed {
       font-size: rem( 21px );
       letter-spacing: rem( 1.5px );

@@ -7,14 +7,14 @@
   text-align: center;
   // display: none;
 }
-  @include media-breakpoint-up( lg ) {
+  @include media-breakpoint-up( large ) {
     .ml-app-header {
       padding: rem( 42px 0 0 );
       text-align: left;
     }
   }
   .ml-app-header__heading-container {}
-  @include media-breakpoint-up( lg ) {
+  @include media-breakpoint-up( large ) {
     .ml-app-header__heading-container {
       display: flex;
       justify-content: space-between;
@@ -29,7 +29,7 @@
   .ml-app-header__subheading {
     margin-bottom: 0;
   }
-  @include media-breakpoint-up( lg ) {
+  @include media-breakpoint-up( large ) {
     .ml-app-header__heading,
     .ml-app-header__subheading {
       margin-bottom: .5rem;

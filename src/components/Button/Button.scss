@@ -11,13 +11,13 @@
   letter-spacing: rem( 0.01px );
   text-align: center;
 }
-@include media-breakpoint-up( sm ) {
+@include media-breakpoint-up( small ) {
   .btn.btn--metrolist {
     min-width: rem( 125px );
     width: ( 125 / $nominal-width-home ) * 100%;
   }
 }
-@include media-breakpoint-up( lg ) {
+@include media-breakpoint-up( large ) {
   .btn.btn--metrolist {
     min-width: rem( 220px );
     width: ( 220 / $nominal-width-home-desktop ) * 100%;

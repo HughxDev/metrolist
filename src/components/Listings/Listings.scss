@@ -5,7 +5,7 @@
     margin: rem( 10px ) auto 0;
   }
 
-  @include media-breakpoint-up( lg ) {
+  @include media-breakpoint-up( large ) {
     .ml-listings {
       width: ( $nominal-width-desktop-listings__content / $nominal-width-desktop ) * 100%;
       margin-top: rem( 80px );

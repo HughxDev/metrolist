@@ -24,19 +24,19 @@ $logo-width-extra-large: 160px;
 // Copy-pasted from Bootstrap. Don’t want to import all variables.
 // via: https://github.com/twbs/bootstrap/blob/64a5987cc0927f4d1efecb7e1407d3bc3d6c23af/scss/_variables.scss#L274-L280
 $bs-grid-breakpoints: (
-  xs: 0,
+  xsmall: 0,
   // sm-incl: 575px,
-  sm: 576px,
+  small: 576px,
   // md-incl: 767px,
-  md: 768px,
+  medium: 768px,
   // lg-incl: 991px,
-  lg: 992px,
+  large: 992px,
   // xl-incl: 1199px,
-  xl: 1200px,
+  xlarge: 1200px,
 );
 
 $ml-grid-breakpoints: (
-  home-info--two-column: map-get( $bs-grid-breakpoints, 'sm' ),
+  home-info--two-column: map-get( $bs-grid-breakpoints, 'small' ),
 );
 
 $grid-breakpoints: map-merge( $bs-grid-breakpoints, $ml-grid-breakpoints );

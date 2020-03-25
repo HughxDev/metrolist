@@ -5,7 +5,7 @@
   & + & > .ml-unit__cell {
     padding-top: $table-cell-spacing--big;
   }
-  @include media-breakpoint-up( lg ) {
+  @include media-breakpoint-up( large ) {
     & + & > .ml-unit__cell {
       padding-top: $table-cell-spacing--big-large;
     }
@@ -16,7 +16,7 @@
     border-bottom: 1px solid #D8D8D8;
     width: 33.333333%;
   }
-  @include media-breakpoint-up( lg ) {
+  @include media-breakpoint-up( large ) {
     .ml-unit__cell {
       padding: $table-cell-spacing--large;
     }
