@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Icon from '@components/Icon';
+import detailsMarker from './details-marker.svg';
+
 import './FilterGroup.scss';
 
 function FilterGroup( props ) {
@@ -11,7 +14,7 @@ function FilterGroup( props ) {
   );
 }
 
-FilterGroup.Label = ( props ) => <legend>{ props.children }</legend>;
+FilterGroup.Label = ( props ) => <legend className="ml-filter-group__label">{ props.children } <Icon use="#icon-details-marker" /></legend>;
 FilterGroup.Label.displayName = 'FilterGroupLabel';
 FilterGroup.Label.propTypes = {
   "children": PropTypes.node,

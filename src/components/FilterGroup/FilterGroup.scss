@@ -1,17 +1,51 @@
 // <FilterGroup />
 @import '@globals';
 
+$filter-group-label-height: 40px;
+// $filter-group-label-padding-top-bottom: 17px;
+
+$filter-group-padding-top-bottom: 16px;
+$filter-group-padding-left-right: 21px;
+$filter-group-padding: ( $filter-group-padding-top-bottom + $filter-group-label-height ) $filter-group-padding-left-right $filter-group-padding-top-bottom;
+
+$filter-group-padding-top-bottom--desktop: 27px;
+$filter-group-padding-left-right--desktop: 20px;
+$filter-group-padding--desktop: ( $filter-group-padding-top-bottom--desktop + $filter-group-label-height ) $filter-group-padding-left-right--desktop $filter-group-padding-top-bottom--desktop;
+
 .ml-filter-group {
-  border: 1px solid rgba( 40, 180, 40, 0.5 );
+  // border: 1px solid rgba( 40, 180, 40, 0.5 );
+  border: 0;
   background-color: $color-white;
-  padding: rem( 16px 21px );
+  padding: rem( $filter-group-padding );
+  position: relative;
 }
 @include media-breakpoint-up( large ) {
   .ml-filter-group {
-    padding: rem( 27px 20px );
+    padding: rem( $filter-group-padding--desktop );
   
     & + & {
       margin-top: $panel-spacing;
     }
   }
 }
+  .ml-filter-group__label {
+    height: $filter-group-label-height;
+    padding: 0 $filter-group-padding-left-right;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background-color: $color-metrolist-text-blue;
+    font-family: $font-family-montserrat;
+    font-weight: 500;
+    font-size: rem( 12px );
+    color: $color-white;
+    letter-spacing: rem( 0.86px );
+    line-height: 1;
+    text-transform: uppercase;
+    position: absolute;
+    top: 0;
+    left: 0;
+    // margin-left: rem( $filter-group-padding-left-right * -1 );
+    // margin-right: rem( $filter-group-padding-left-right * -1 );
+  }

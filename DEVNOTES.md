@@ -185,6 +185,8 @@ From Jim:
 
 ## Mobile styles for Listings (Search) view
 
+### Resolved
+
 - Text doesn’t match:
   - Desktop: “For Rent, For Sale”
   - Mobile: “Rent, Buy”
@@ -205,6 +207,10 @@ From Jim:
   - Desktop: Metrolist Header
   - Mobile: Nothing
 - Selection state should be reflected in mobile dropdown menus. E.g. when you select Income Eligibility > 60% and then collapse the menu, the label should say something like “Income Eligibility: 60%”, maybe with option to clear the selection somehow. Same with master “Filter” dropdown. While they might not all fit, could present e.g. “5 filters applied”.
+
+### Unresolved
+
 - Style of checkbox checks:
   - Desktop: Square
   - Mobile: Checkmark
+- Details arrows don’t match [Drawer arrows](https://patterns.boston.gov/components/detail/drawers--default.html) in Fleet
