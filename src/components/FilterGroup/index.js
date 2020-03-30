@@ -37,6 +37,7 @@ class FilterGroup extends React.Component {
           "disclosureTarget": groupId,
           "isExpanded": this.state.isExpanded,
           "handleExpandCollapse": this.handleExpandCollapse,
+          "handleDoubleClick": this.handleDoubleClick,
         },
         firstChild.props.children,
       );
@@ -50,6 +51,13 @@ class FilterGroup extends React.Component {
         </div>
       </>
     );
+  }
+
+  handleDoubleClick( event ) {
+    // https://stackoverflow.com/a/43321596/214325
+    if ( event.detail > 1 ) { // Number of clicks
+      event.preventDefault();
+    }
   }
 
   render() {
@@ -76,6 +84,7 @@ FilterGroup.Label = function FilterGroupLabel( props ) {
       aria-expanded={ props.isExpanded.toString() }
       aria-controls={ props.disclosureTarget }
       onClick={ props.handleExpandCollapse }
+      onMouseDown={ props.handleDoubleClick }
     >
       <span className="ml-filter-group__label-text">{ props.children }</span>
       <Icon className="ml-filter-group__icon" use="#icon-details-marker" />
@@ -85,6 +94,7 @@ FilterGroup.Label = function FilterGroupLabel( props ) {
 FilterGroup.Label.displayName = 'FilterGroupLabel';
 FilterGroup.Label.propTypes = {
   "handleExpandCollapse": PropTypes.func,
+  "handleDoubleClick": PropTypes.func,
   "isExpanded": PropTypes.bool,
   "disclosureTarget": PropTypes.string,
   "children": PropTypes.node,
