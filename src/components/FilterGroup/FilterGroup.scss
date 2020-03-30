@@ -59,11 +59,17 @@ $filter-group-padding--desktop: ( $filter-group-padding-top-bottom--desktop + $f
   }
   .ml-filter-group__label-text {
     flex: 1;
-    border:1px solid white;
+    // border:1px solid white;
   }
   .ml-filter-group__icon {
-    border: 1px solid white;
+    // border: 1px solid white;
     // height: 100%;
+    transform: rotate( 0deg );
+    transition: transform .125s ease;
+
+    .ml-filter-group.ml-filter-group--expanded & {
+      transform: rotate( -180deg );
+    }
   }
 
   .ml-filter-group__filters {
