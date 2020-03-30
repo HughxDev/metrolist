@@ -4,7 +4,8 @@
 .ml-callout {
   text-align: center;
   border: 2px solid $color-filters-callout-border;
-  margin-top: rem( 31px );
+  // margin-top: rem( 31px );
+  background-color: $color-white;
   padding:
     rem( 26px ) /* t */
     // rem( 26px ) /* r */

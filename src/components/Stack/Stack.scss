@@ -36,6 +36,13 @@ $space: 1.5rem;
   .ml-stack.ml-stack--topple-until > * {
     flex: 1;
   }
+
+  .ml-stack.ml-stack--space-panel {
+    & > * + * {
+      margin-top: $panel-spacing;
+    }
+  }
+
   @include media-breakpoint-up( xsmall ) {
     .ml-stack.ml-stack--topple-until.ml-stack--topple-until-xsmall {
       flex-direction: column;
@@ -85,6 +92,12 @@ $space: 1.5rem;
 
       &.ml-stack--space-rent-sale > * + * {
         margin-top: rem( 25px );
+      }
+    }
+
+    .ml-stack.ml-stack--space-panel {
+      & > * + * {
+        margin-top: $panel-spacing--desktop;
       }
     }
   }

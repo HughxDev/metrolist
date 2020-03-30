@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Row from '@components/Row';
+import Stack from '@components/Stack';
+
 import './Checkbox.scss';
 
 function renderText( text ) {
@@ -18,11 +21,13 @@ function renderLabel( children, subcategoriesOnly ) {
 
   return (
     <label className="ml-checkbox__label">
-      <span className="ml-checkbox__form-control-container">
-        <input className="ml-checkbox__form-control" type="checkbox" />
-        <span className="ml-checkbox__form-control-ui"></span>
-      </span>
-      { renderText( children ) }
+      <Row className="ml-checkbox__label-content" space="panel" align="middle">
+        <span className="ml-checkbox__form-control-container">
+          <input className="ml-checkbox__form-control" type="checkbox" />
+          <span className="ml-checkbox__form-control-ui"></span>
+        </span>
+        { renderText( children ) }
+      </Row>
     </label>
   );
 }
@@ -44,10 +49,10 @@ function renderChoices( { children, subcategoriesOnly } ) {
       return (
         <>
           { firstRenderedChoice }
-          <div className="ml-checkbox__subcategories">
+          <Stack className="ml-checkbox__subcategories" space="panel">
             { childArray }
             { ( childArray.length > 3 ) && <a className="ml-checkbox__more-link" href="#">more…</a> }
-          </div>
+          </Stack>
         </>
       );
     }

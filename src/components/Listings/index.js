@@ -5,6 +5,7 @@ import './Listings.scss';
 
 import FiltersPanel from '@components/FiltersPanel';
 import ResultsPanel from '@components/ResultsPanel';
+import Row from '@components/Row';
 
 const demoHomes = [
   {
@@ -83,10 +84,10 @@ function Listings( props ) {
   return (
     <article className={ `ml-listings${props.className ? ` ${props.className}` : ''}` }>
       <h2 className="sr-only">Search</h2>
-      <div className="ml-listings__content">
-        <FiltersPanel className="ml-listings__filters" />
-        <ResultsPanel className="ml-listings__results" homes={ homes } />
-      </div>
+      <Row space="panel" stackUntil="medium">
+        <FiltersPanel className="ml-listings__filters" columnWidth="1/3" />
+        <ResultsPanel className="ml-listings__results" columnWidth="2/3" homes={ homes } />
+      </Row>
     </article>
   );
 }

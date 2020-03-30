@@ -9,20 +9,20 @@ $padding-home-vertical--large: rem( 18px );
 $padding-home-horizontal--large: rem( 26px );
 
 .ml-home {
-  margin: $panel-spacing 0;
+  // margin: $panel-spacing 0;
   padding: $padding-home-vertical $padding-home-horizontal; // mockup
   background-color: $color-white;
   color: $color-metrolist-text-blue;
   position: relative;
 
-  &:first-child,
-  &:first-of-type {
-    margin-top: 0;
-  }
+  // &:first-child,
+  // &:first-of-type {
+  //   margin-top: 0;
+  // }
 }
   @include media-breakpoint-up( large ) {
     .ml-home {
-      margin: $panel-spacing--large;
+      // margin: $panel-spacing--large;
       padding: $padding-home-vertical--large $padding-home-horizontal--large; // mockup
       // padding: rem( 20px ); // average
       // width: 889px

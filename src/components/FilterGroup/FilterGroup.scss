@@ -33,9 +33,9 @@ $filter-group-padding--desktop: ( $filter-group-padding-top-bottom--desktop + $f
   .ml-filter-group {
     padding: rem( $filter-group-padding--desktop );
   
-    & + & {
-      margin-top: $panel-spacing;
-    }
+    // & + & {
+    //   margin-top: $panel-spacing;
+    // }
   }
 }
   .ml-filter-group__label {

@@ -20,13 +20,13 @@
       display: inline-block;
     }
 
-    $filters-width: 31%;
-    .ml-listings__filters {
-      width: $filters-width;
-    }
-    .ml-listings__results {
-      width: ( 100% - $filters-width );
-    }
+    // $filters-width: 31%;
+    // .ml-listings__filters {
+    //   width: $filters-width;
+    // }
+    // .ml-listings__results {
+    //   width: ( 100% - $filters-width );
+    // }
   }
 
   @include media-breakpoint-up( xlarge ) {
