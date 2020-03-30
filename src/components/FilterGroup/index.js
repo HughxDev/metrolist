@@ -14,11 +14,13 @@ class FilterGroup extends React.Component {
       "isExpanded": props.isExpanded,
     };
     this.handleExpandCollapse = this.handleExpandCollapse.bind( this );
+    // this.handleWindowResize = this.handleWindowResize.bind( this );
+    this.updateFiltersHeight = this.updateFiltersHeight.bind( this );
     this.$filters = React.createRef();
   }
 
   handleExpandCollapse() {
-    console.log( 'clicked' );
+    this.updateFiltersHeight();
     this.setState( {
       "isExpanded": !this.state.isExpanded,
     } );
@@ -53,8 +55,31 @@ class FilterGroup extends React.Component {
     );
   }
 
+  // handleWindowResize() {}
+
+  updateFiltersHeight() {
+    const $filters = this.$filters.current;
+    const currentHeight = `${this.$filters.current.style.height}`;
+
+    $filters.style.height = '';
+
+    // Could be setImmediate but probably not worth loading the polyfill just for this
+    setTimeout( () => {
+      const newHeight = getComputedStyle( $filters ).getPropertyValue( 'height' );
+
+      if (
+        this.state.isExpanded
+        && ( newHeight !== currentHeight )
+      ) {
+        $filters.style.height = newHeight;
+      }
+    }, 1 );
+  }
+
   componentDidMount() {
-    this.$filters.current.style.height = getComputedStyle( this.$filters.current ).getPropertyValue( 'height' );
+    this.updateFiltersHeight();
+
+    window.addEventListener( 'resize', this.updateFiltersHeight );
   }
 
   render() {
