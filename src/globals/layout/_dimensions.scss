@@ -41,6 +41,10 @@ $ml-grid-breakpoints: (
 
 $grid-breakpoints: map-merge( $bs-grid-breakpoints, $ml-grid-breakpoints );
 
+// html {
+//   font-range: map-get( $grid-breakpoints, 'small' ) map-get( $grid-breakpoints, 'large' );
+// }
+
 // To match other Boston.gov specs:
 
 // From Docs: https://docs.boston.gov/digital/getting-started/life-on-the-digital-team/software-engineering-working-agreement#browsers-we-support

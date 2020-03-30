@@ -19,11 +19,14 @@ $checkbox-checked-box__dimensions: rem( $checkbox-checked-box__dimensions-pixels
 .ml-checkbox {
   font-family: $font-family-montserrat;
   font-size: $font-size-filter-label;
+  // white-space: nowrap;
+  // font-size: responsive $font-size-filter-label $font-size-filter-label--desktop;
 }
   @include media-breakpoint-up( large ) {
     .ml-checkbox {
       font-family: inherit;
       font-size: $font-size-filter-label--desktop;
+      // font-size: responsive rem( 19.9px ) $font-size-filter-label--desktop;
     }
   }
   // .ml-checkbox.ml-checkbox--button {
@@ -53,7 +56,7 @@ $checkbox-checked-box__dimensions: rem( $checkbox-checked-box__dimensions-pixels
   .ml-checkbox__label {
     display: block;
     line-height: 0;
-    white-space: nowrap;
+    // white-space: nowrap;
     height: $checkbox-dimensions;
   }
     @include media-breakpoint-up( large ) {

@@ -7,7 +7,6 @@
 
   @include media-breakpoint-up( large ) {
     .ml-listings {
-      width: ( $nominal-width-desktop-listings__content / $nominal-width-desktop ) * 100%;
       margin-top: rem( 80px );
     }
 
@@ -21,10 +20,18 @@
       display: inline-block;
     }
 
+    $filters-width: 31%;
     .ml-listings__filters {
-      width: 27%;
+      width: $filters-width;
     }
     .ml-listings__results {
-      width: 73%;
+      width: ( 100% - $filters-width );
+    }
+  }
+
+  @include media-breakpoint-up( xlarge ) {
+    .ml-listings {
+      width: ( $nominal-width-desktop-listings__content / $nominal-width-desktop ) * 100%;
+      // max-width: rem( $nominal-width-desktop * 1px );
     }
   }

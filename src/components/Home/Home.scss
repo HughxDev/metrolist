@@ -9,7 +9,7 @@ $padding-home-vertical--large: rem( 18px );
 $padding-home-horizontal--large: rem( 26px );
 
 .ml-home {
-  margin: $panel-spacing;
+  margin: $panel-spacing 0;
   padding: $padding-home-vertical $padding-home-horizontal; // mockup
   background-color: $color-white;
   color: $color-metrolist-text-blue;

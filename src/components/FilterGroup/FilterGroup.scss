@@ -16,6 +16,8 @@ $filter-group-padding--desktop: ( $filter-group-padding-top-bottom--desktop + $f
   // border: 1px solid rgba( 40, 180, 40, 0.5 );
   border: 0;
   background-color: $color-white;
+  margin-inline-end: 0;
+  margin-inline-start: 0;
   padding: rem( $filter-group-padding );
   position: relative;
 
@@ -37,6 +39,7 @@ $filter-group-padding--desktop: ( $filter-group-padding-top-bottom--desktop + $f
   }
 }
   .ml-filter-group__label {
+    cursor: default;
     height: $filter-group-label-height;
     padding: 0 $filter-group-padding-left-right;
     display: flex;
@@ -49,7 +52,7 @@ $filter-group-padding--desktop: ( $filter-group-padding-top-bottom--desktop + $f
     font-size: rem( 16px );
     color: $color-white;
     letter-spacing: rem( 0.86px );
-    line-height: .65;
+    line-height: .85;
     text-transform: uppercase;
     position: absolute;
     top: 0;
