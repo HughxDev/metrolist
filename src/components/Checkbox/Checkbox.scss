@@ -1,20 +1,6 @@
 // <Checkbox />
 @import '@globals';
-@import '@globals/typography/filter-labels';
-
-$checkbox-dimensions__pixels: 33px;
-$checkbox-dimensions: rem( $checkbox-dimensions__pixels );
-
-$checkbox-dimensions__pixels--desktop: 35px;
-$checkbox-dimensions--desktop: rem( $checkbox-dimensions__pixels--desktop );
-
-$checkbox-checked-box__dimensions-pixels--desktop: 23px;
-$checkbox-checked-box__dimensions--desktop: rem( $checkbox-checked-box__dimensions-pixels--desktop );
-
-$checkbox-dimensions-shrink-factor: ( $checkbox-dimensions__pixels / $checkbox-dimensions__pixels--desktop );
-
-$checkbox-checked-box__dimensions-pixels: ( $checkbox-dimensions__pixels - 12 );
-$checkbox-checked-box__dimensions: rem( $checkbox-checked-box__dimensions-pixels );
+@import '@globals/typography/filters';
 
 .ml-checkbox {
   font-family: $font-family-montserrat;
@@ -33,10 +19,18 @@ $checkbox-checked-box__dimensions: rem( $checkbox-checked-box__dimensions-pixels
   //   border: 2px solid $color-metrolist-text-blue;
   // }
 
-  .ml-checkbox__subcategories {}
+  .ml-checkbox__subcategories {
+    display: block;
+    // column-count: 2;
+  }
+    .ml-checkbox__subcategories > .ml-checkbox {
+      break-inside: avoid-column;
+    }
+
     // TODO: Don’t style by structure
     @include media-breakpoint-up( large ) {
       .ml-checkbox__subcategories {
+        // column-count: 1;
         // margin-left: rem( 35px );
         // margin-top: rem( 21px );
       }

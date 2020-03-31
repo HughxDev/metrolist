@@ -2,26 +2,49 @@
 @import '@globals';
 
 .ml-callout {
-  text-align: center;
-  border: 2px solid $color-filters-callout-border;
+  border: 2px solid #45789C;
   // margin-top: rem( 31px );
   background-color: $color-white;
-  padding:
-    rem( 26px ) /* t */
-    // rem( 26px ) /* r */
-    // rem( 29px ) /* b */
-    // rem( 29px ) /* l */
-  ;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
+  @include media-breakpoint-up( large ) {
+    .ml-callout {
+      flex-direction: column;
+      // border: 2px solid $color-filters-callout-border;
+      text-align: center;
+      padding:
+        rem( 26px ) /* t */
+        // rem( 26px ) /* r */
+        // rem( 29px ) /* b */
+        // rem( 29px ) /* l */
+      ;
+    }
+
+    [class*="ml-callout__"] {
+      width: 100%;
+    }
+  }
   .ml-callout__heading {
     font-style: italic;
     color: $color-optimistic-blue;
-    font-size: rem( 28px );
-    line-height: rem( 33px );
+    // color: #00A5EB;
+    font-size: rem( 18px );
+  }
+  @include media-breakpoint-up( large ) {
+    .ml-callout__heading {
+      line-height: rem( 33px );
+      color: $color-optimistic-blue;
+      font-size: rem( 28px );
+    }
   }
   .ml-callout__text {
-
     font-size: rem( 18px );
     line-height: rem( 32px );
     color: $color-metrolist-text-blue;
+  }
+  .ml-callout__cta {
+    flex: none;
   }

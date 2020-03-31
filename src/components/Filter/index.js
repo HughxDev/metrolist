@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Checkbox from '@components/Checkbox';
-import Button from '@components/Button';
 import Scale from '@components/Scale';
 
 import './Filter.scss';
 
 function renderFormControl( props ) {
+  // console.log( 'props', props );
   switch ( props.type ) { // eslint-disable-line react/prop-types
     case 'scale':
       return <Scale { ...props } />;
@@ -26,6 +26,7 @@ function Filter( props ) {
 
 Filter.propTypes = {
   "className": PropTypes.string,
+  "columnWidth": PropTypes.oneOfType( [PropTypes.string, PropTypes.bool] ),
   "type": PropTypes.oneOf( ['checkbox', 'checkbox-button', 'scale'] ),
   "criterion": PropTypes.string,
   "value": PropTypes.string,

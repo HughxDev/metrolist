@@ -3,7 +3,7 @@
 
 // Reference: https://absolutely.every-layout.dev/layouts/stack/
 
-$space: 1.5rem;
+$space: 1rem;
 
 .ml-stack {
   display: flex;
@@ -11,36 +11,59 @@ $space: 1.5rem;
   justify-content: flex-start;
 }
   .ml-stack.ml-stack--space-1 {
-    & > * + * {
+    & > :not([class*="--hide-until-"]) + * {
       margin-top: $space;
     }
   }
   .ml-stack.ml-stack--space-1_25 {
-    & > * + * {
+    & > :not([class*="--hide-until-"]) + * {
       margin-top: ( $space * 1.25 );
     }
   }
   .ml-stack.ml-stack--space-1_5 {
-    & > * + * {
+    & > :not([class*="--hide-until-"]) + * {
       margin-top: ( $space * 1.5 );
     }
   }
   .ml-stack.ml-stack--space-2 {
-    & > * + * {
+    & > :not([class*="--hide-until-"]) + * {
       margin-top: ( $space * 2 );
     }
   }
   .ml-stack.ml-stack--topple-until {
     flex-direction: row;
   }
-  .ml-stack.ml-stack--topple-until > * {
+  .ml-stack.ml-stack--topple-until > [data-column-width="1/2"] {
     flex: 1;
   }
 
   .ml-stack.ml-stack--space-panel {
-    & > * + * {
+    & > :not([class*="--hide-until-"]) + * {
       margin-top: $panel-spacing;
     }
+  }
+
+  .ml-stack.ml-stack--space-sister-checkboxes {
+    & > :not([class*="--hide-until-"]) + * {
+      margin-top: rem( 38px );
+    }
+  }
+
+  .ml-stack.ml-stack--space-subcategories {
+    & > :not([class*="--hide-until-"]) + * {
+      margin-top: $panel-spacing;
+    }
+  }
+  @include media-breakpoint-up( large ) {
+    .ml-stack.ml-stack--space-subcategories {
+      & > :not([class*="--hide-until-xlarge"]) + * {
+        margin-top: rem( 21px );
+      }
+    }
+  }
+
+  .ml-stack.ml-stack--indent-checkbox {
+    margin-left: rem( 35px );
   }
 
   @include media-breakpoint-up( xsmall ) {
@@ -51,7 +74,7 @@ $space: 1.5rem;
         flex: none;
       }
 
-      &.ml-stack--space-rent-sale > * + * {
+      &.ml-stack--space-rent-sale > :not([class*="--hide-until-small"]) + * {
         margin-top: rem( 25px );
       }
     }
@@ -64,7 +87,7 @@ $space: 1.5rem;
         flex: none;
       }
 
-      &.ml-stack--space-rent-sale > * + * {
+      &.ml-stack--space-rent-sale > :not([class*="--hide-until-medium"]) + * {
         margin-top: rem( 25px );
       }
     }
@@ -77,7 +100,7 @@ $space: 1.5rem;
         flex: none;
       }
 
-      &.ml-stack--space-rent-sale > * + * {
+      &.ml-stack--space-rent-sale > :not([class*="--hide-until-large"]) + * {
         margin-top: rem( 25px );
       }
     }
@@ -90,13 +113,13 @@ $space: 1.5rem;
         flex: none;
       }
 
-      &.ml-stack--space-rent-sale > * + * {
+      &.ml-stack--space-rent-sale > :not([class*="--hide-until-xlarge"]) + * {
         margin-top: rem( 25px );
       }
     }
 
     .ml-stack.ml-stack--space-panel {
-      & > * + * {
+      & > :not([class*="--hide-until-xlarge"]) + * {
         margin-top: $panel-spacing--desktop;
       }
     }
@@ -115,120 +138,120 @@ $space: 1.5rem;
     }
   }
 
-  .ml-stack.ml-stack--align-left {
-    text-align: left;
+  .ml-stack.ml-stack--align-beginning {
+    align-items: flex-start;
   }
     @include media-breakpoint-up( xsmall ) {
-      .ml-stack.ml-stack--align-left-xsmall {
-        text-align: left;
+      .ml-stack.ml-stack--align-beginning-xsmall {
+        align-items: flex-start;
       }
     }
     @include media-breakpoint-up( small ) {
-      .ml-stack.ml-stack--align-left-small[class*="-xsmall"],
-      .ml-stack.ml-stack--align-left-small {
-        text-align: left;
+      .ml-stack.ml-stack--align-beginning-small[class*="-xsmall"],
+      .ml-stack.ml-stack--align-beginning-small {
+        align-items: flex-start;
       }
     }
     @include media-breakpoint-up( medium ) {
-      .ml-stack.ml-stack--align-left-medium[class*="-xsmall"],
-      .ml-stack.ml-stack--align-left-medium[class*="-small"],
-      .ml-stack.ml-stack--align-left-medium {
-        text-align: left;
+      .ml-stack.ml-stack--align-beginning-medium[class*="-xsmall"],
+      .ml-stack.ml-stack--align-beginning-medium[class*="-small"],
+      .ml-stack.ml-stack--align-beginning-medium {
+        align-items: flex-start;
       }
     }
     @include media-breakpoint-up( large ) {
-      .ml-stack.ml-stack--align-left-large[class*="-xsmall"],
-      .ml-stack.ml-stack--align-left-large[class*="-small"],
-      .ml-stack.ml-stack--align-left-large[class*="-medium"],
-      .ml-stack.ml-stack--align-left-large {
-        text-align: left;
+      .ml-stack.ml-stack--align-beginning-large[class*="-xsmall"],
+      .ml-stack.ml-stack--align-beginning-large[class*="-small"],
+      .ml-stack.ml-stack--align-beginning-large[class*="-medium"],
+      .ml-stack.ml-stack--align-beginning-large {
+        align-items: flex-start;
       }
     }
     @include media-breakpoint-up( xlarge ) {
-      .ml-stack.ml-stack--align-left-xlarge[class*="-xsmall"],
-      .ml-stack.ml-stack--align-left-xlarge[class*="-small"],
-      .ml-stack.ml-stack--align-left-xlarge[class*="-medium"],
-      .ml-stack.ml-stack--align-left-xlarge[class*="-large"],
-      .ml-stack.ml-stack--align-left-xlarge {
-        text-align: left;
+      .ml-stack.ml-stack--align-beginning-xlarge[class*="-xsmall"],
+      .ml-stack.ml-stack--align-beginning-xlarge[class*="-small"],
+      .ml-stack.ml-stack--align-beginning-xlarge[class*="-medium"],
+      .ml-stack.ml-stack--align-beginning-xlarge[class*="-large"],
+      .ml-stack.ml-stack--align-beginning-xlarge {
+        align-items: flex-start;
       }
     }
 
-  .ml-stack.ml-stack--align-center {
-    text-align: center;
+  .ml-stack.ml-stack--align-middle {
+    align-items: center;
   }
     @include media-breakpoint-up( xsmall ) {
-      .ml-stack.ml-stack--align-center-xsmall {
-        text-align: center;
+      .ml-stack.ml-stack--align-middle-xsmall {
+        align-items: center;
       }
     }
     @include media-breakpoint-up( small ) {
-      .ml-stack.ml-stack--align-center-small[class*="-xsmall"],
-      .ml-stack.ml-stack--align-center-small {
-        text-align: center;
+      .ml-stack.ml-stack--align-middle-small[class*="-xsmall"],
+      .ml-stack.ml-stack--align-middle-small {
+        align-items: center;
       }
     }
     @include media-breakpoint-up( medium ) {
-      .ml-stack.ml-stack--align-center-medium[class*="-xsmall"],
-      .ml-stack.ml-stack--align-center-medium[class*="-small"],
-      .ml-stack.ml-stack--align-center-medium {
-        text-align: center;
+      .ml-stack.ml-stack--align-middle-medium[class*="-xsmall"],
+      .ml-stack.ml-stack--align-middle-medium[class*="-small"],
+      .ml-stack.ml-stack--align-middle-medium {
+        align-items: center;
       }
     }
     @include media-breakpoint-up( large ) {
-      .ml-stack.ml-stack--align-center-large[class*="-xsmall"],
-      .ml-stack.ml-stack--align-center-large[class*="-small"],
-      .ml-stack.ml-stack--align-center-large[class*="-medium"],
-      .ml-stack.ml-stack--align-center-large {
-        text-align: center;
+      .ml-stack.ml-stack--align-middle-large[class*="-xsmall"],
+      .ml-stack.ml-stack--align-middle-large[class*="-small"],
+      .ml-stack.ml-stack--align-middle-large[class*="-medium"],
+      .ml-stack.ml-stack--align-middle-large {
+        align-items: center;
       }
     }
     @include media-breakpoint-up( xlarge ) {
-      .ml-stack.ml-stack--align-center-xlarge[class*="-xsmall"],
-      .ml-stack.ml-stack--align-center-xlarge[class*="-small"],
-      .ml-stack.ml-stack--align-center-xlarge[class*="-medium"],
-      .ml-stack.ml-stack--align-center-xlarge[class*="-large"],
-      .ml-stack.ml-stack--align-center-xlarge {
-        text-align: center;
+      .ml-stack.ml-stack--align-middle-xlarge[class*="-xsmall"],
+      .ml-stack.ml-stack--align-middle-xlarge[class*="-small"],
+      .ml-stack.ml-stack--align-middle-xlarge[class*="-medium"],
+      .ml-stack.ml-stack--align-middle-xlarge[class*="-large"],
+      .ml-stack.ml-stack--align-middle-xlarge {
+        align-items: center;
       }
     }
 
-    .ml-stack.ml-stack--align-right {
-      text-align: right;
+    .ml-stack.ml-stack--align-beginning {
+      align-items: flex-end;
     }
       @include media-breakpoint-up( xsmall ) {
-        .ml-stack.ml-stack--align-right-xsmall {
-          text-align: right;
+        .ml-stack.ml-stack--align-end-xsmall {
+          align-items: flex-end;
         }
       }
       @include media-breakpoint-up( small ) {
-        .ml-stack.ml-stack--align-right-small[class*="-xsmall"],
-        .ml-stack.ml-stack--align-right-small {
-          text-align: right;
+        .ml-stack.ml-stack--align-end-small[class*="-xsmall"],
+        .ml-stack.ml-stack--align-end-small {
+          align-items: flex-end;
         }
       }
       @include media-breakpoint-up( medium ) {
-        .ml-stack.ml-stack--align-right-medium[class*="-xsmall"],
-        .ml-stack.ml-stack--align-right-medium[class*="-small"],
-        .ml-stack.ml-stack--align-right-medium {
-          text-align: right;
+        .ml-stack.ml-stack--align-end-medium[class*="-xsmall"],
+        .ml-stack.ml-stack--align-end-medium[class*="-small"],
+        .ml-stack.ml-stack--align-end-medium {
+          align-items: flex-end;
         }
       }
       @include media-breakpoint-up( large ) {
-        .ml-stack.ml-stack--align-right-large[class*="-xsmall"],
-        .ml-stack.ml-stack--align-right-large[class*="-small"],
-        .ml-stack.ml-stack--align-right-large[class*="-medium"],
-        .ml-stack.ml-stack--align-right-large {
-          text-align: right;
+        .ml-stack.ml-stack--align-end-large[class*="-xsmall"],
+        .ml-stack.ml-stack--align-end-large[class*="-small"],
+        .ml-stack.ml-stack--align-end-large[class*="-medium"],
+        .ml-stack.ml-stack--align-end-large {
+          align-items: flex-end;
         }
       }
       @include media-breakpoint-up( xlarge ) {
-        .ml-stack.ml-stack--align-right-xlarge[class*="-xsmall"],
-        .ml-stack.ml-stack--align-right-xlarge[class*="-small"],
-        .ml-stack.ml-stack--align-right-xlarge[class*="-medium"],
-        .ml-stack.ml-stack--align-right-xlarge[class*="-large"],
-        .ml-stack.ml-stack--align-right-xlarge {
-          text-align: right;
+        .ml-stack.ml-stack--align-end-xlarge[class*="-xsmall"],
+        .ml-stack.ml-stack--align-end-xlarge[class*="-small"],
+        .ml-stack.ml-stack--align-end-xlarge[class*="-medium"],
+        .ml-stack.ml-stack--align-end-xlarge[class*="-large"],
+        .ml-stack.ml-stack--align-end-xlarge {
+          align-items: flex-end;
         }
       }
 

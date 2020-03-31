@@ -47,13 +47,13 @@ function renderChoices( { children, subcategoriesOnly } ) {
       }
 
       return (
-        <>
+        <Stack space="subcategories">
           { firstRenderedChoice }
-          <Stack className="ml-checkbox__subcategories" space="panel">
+          <Stack className="ml-checkbox__subcategories" space="1" indent={ firstRenderedChoice ? 'checkbox' : false }>
             { childArray }
             { ( childArray.length > 3 ) && <a className="ml-checkbox__more-link" href="#">more…</a> }
           </Stack>
-        </>
+        </Stack>
       );
     }
 
@@ -63,6 +63,10 @@ function renderChoices( { children, subcategoriesOnly } ) {
 }
 
 function Checkbox( props ) {
+  if ( props.columnWidth ) {
+    console.log( props.children );
+  }
+
   let modifierClasses = '';
 
   if ( props.button ) {
@@ -70,7 +74,10 @@ function Checkbox( props ) {
   }
 
   return (
-    <div className={ `ml-checkbox${modifierClasses}${props.className ? ` ${props.className}` : ''}` }>
+    <div
+      className={ `ml-checkbox${modifierClasses}${props.className ? ` ${props.className}` : ''}` }
+      data-column-width={ props.columnWidth }
+    >
       { renderChoices( props ) }
     </div>
   );
@@ -87,6 +94,7 @@ Checkbox.propTypes = {
   "count": PropTypes.number,
   "criterion": PropTypes.string,
   "subcategoriesOnly": PropTypes.bool,
+  "columnWidth": PropTypes.oneOfType( [PropTypes.string, PropTypes.bool] ),
 };
 
 export default Checkbox;

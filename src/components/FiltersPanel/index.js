@@ -25,25 +25,27 @@ function FiltersPanel( props ) {
           <FilterGroup>
             <FilterGroup.Label>Offer</FilterGroup.Label>
             <Stack space="rent-sale" toppleUntil="large">
-              <Filter type="checkbox-button" criterion="offer" value="rental">For Rent</Filter>
-              <Filter type="checkbox-button" criterion="offer" value="sale">For Sale</Filter>
+              <Filter columnWidth="1/2" type="checkbox-button" criterion="offer" value="rental">For Rent</Filter>
+              <Filter columnWidth="1/2" type="checkbox-button" criterion="offer" value="sale">For Sale</Filter>
             </Stack>
           </FilterGroup>
           <FilterGroup>
             <FilterGroup.Label>Location</FilterGroup.Label>
-            <Filter type="checkbox" criterion="city" value="Boston">
-              <Filter.Label>Boston</Filter.Label>
-              <Filter type="checkbox" criterion="neighborhood" value="south-boston">South Boston</Filter>
-              <Filter type="checkbox" criterion="neighborhood" value="hyde-park">Hyde Park</Filter>
-              <Filter type="checkbox" criterion="neighborhood" value="dorchester">Dorchester</Filter>
-              <Filter type="checkbox" criterion="neighborhood" value="mattapan">Mattapan</Filter>
-            </Filter>
-            <Filter type="checkbox" criterion="city" value="!Boston">
-              <Filter.Label>Beyond Boston</Filter.Label>
-              <Filter type="checkbox">West of Boston</Filter>
-              <Filter type="checkbox">North of Boston</Filter>
-              <Filter type="checkbox">South of Boston</Filter>
-            </Filter>
+            <Stack space="sister-checkboxes">
+              <Filter type="checkbox" criterion="city" value="Boston">
+                <Filter.Label>Boston</Filter.Label>
+                <Filter type="checkbox" criterion="neighborhood" value="south-boston">South Boston</Filter>
+                <Filter type="checkbox" criterion="neighborhood" value="hyde-park">Hyde Park</Filter>
+                <Filter type="checkbox" criterion="neighborhood" value="dorchester">Dorchester</Filter>
+                <Filter type="checkbox" criterion="neighborhood" value="mattapan">Mattapan</Filter>
+              </Filter>
+              <Filter type="checkbox" criterion="city" value="!Boston">
+                <Filter.Label>Beyond Boston</Filter.Label>
+                <Filter type="checkbox">West of Boston</Filter>
+                <Filter type="checkbox">North of Boston</Filter>
+                <Filter type="checkbox">South of Boston</Filter>
+              </Filter>
+            </Stack>
           </FilterGroup>
           <FilterGroup>
             <FilterGroup.Label>Bedrooms</FilterGroup.Label>
@@ -51,21 +53,34 @@ function FiltersPanel( props ) {
           </FilterGroup>
           <FilterGroup>
             <FilterGroup.Label>Income Eligibility (AMI%)</FilterGroup.Label>
+            {/* <Stack space="1"> */}
             <Filter>
-              {/* <Filter.Label>Eligibility (AMI%)</Filter.Label> */}
+              <Filter type="checkbox">40%</Filter>
               <Filter type="checkbox">50%</Filter>
               <Filter type="checkbox">60%</Filter>
               <Filter type="checkbox">70%</Filter>
               <Filter type="checkbox">80%</Filter>
+              <Filter type="checkbox">90%</Filter>
+              <Filter type="checkbox">100%</Filter>
+              <Filter type="checkbox">110%</Filter>
+              <Filter type="checkbox">120%</Filter>
             </Filter>
+            {/* </Stack> */}
           </FilterGroup>
-          <Callout>
-            <Icon icon="wallet" width="67" />
-            <Callout.Heading>Search for housing based on your income</Callout.Heading>
-            <Callout.Text>
+          <Callout as="a" href="#">
+            <Callout.Icon className="--hide-until-large">
+              <Icon icon="wallet" width="67" />
+            </Callout.Icon>
+            <Callout.Heading>Find housing based on your income</Callout.Heading>
+            <Callout.Text className="--hide-until-large">
               <p>Enter basic information to help determine your eligibility for income-restricted housing.</p>
-              <a className="btn btn--700 btn--metrolist" style={ { "width": "100%" } } href="#">Search</a>
             </Callout.Text>
+            <Callout.CTA className="--hide-at-large">
+              <Icon use="#icon-mobile-link-marker" />
+            </Callout.CTA>
+            <Callout.CTA className="--hide-until-large">
+              <span className="btn btn--700 btn--metrolist --full-width" href="#">Search</span>
+            </Callout.CTA>
           </Callout>
         </Stack>
       </div>

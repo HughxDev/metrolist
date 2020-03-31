@@ -1,0 +1,17 @@
+$font-size-filter-label: rem( 12px );
+$font-size-filter-label--desktop: rem( 30px );
+$font-size-filter-label--desktop-small: rem( 21px );
+
+$checkbox-dimensions__pixels: 33px;
+$checkbox-dimensions: rem( $checkbox-dimensions__pixels );
+
+$checkbox-dimensions__pixels--desktop: 35px;
+$checkbox-dimensions--desktop: rem( $checkbox-dimensions__pixels--desktop );
+
+$checkbox-checked-box__dimensions-pixels--desktop: 23px;
+$checkbox-checked-box__dimensions--desktop: rem( $checkbox-checked-box__dimensions-pixels--desktop );
+
+$checkbox-dimensions-shrink-factor: ( $checkbox-dimensions__pixels / $checkbox-dimensions__pixels--desktop );
+
+$checkbox-checked-box__dimensions-pixels: ( $checkbox-dimensions__pixels - 12 );
+$checkbox-checked-box__dimensions: rem( $checkbox-checked-box__dimensions-pixels );
