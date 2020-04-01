@@ -12,9 +12,7 @@
 }
   @include media-breakpoint-up( large ) {
     .ml-callout {
-      flex-direction: column;
       // border: 2px solid $color-filters-callout-border;
-      text-align: center;
       padding:
         rem( 26px ) /* t */
         // rem( 26px ) /* r */
@@ -22,21 +20,17 @@
         // rem( 29px ) /* l */
       ;
     }
-
-    [class*="ml-callout__"] {
-      width: 100%;
-    }
   }
   .ml-callout__heading {
     font-style: italic;
-    color: $color-optimistic-blue;
+    // color: $color-optimistic-blue;
     // color: #00A5EB;
     font-size: rem( 18px );
   }
   @include media-breakpoint-up( large ) {
     .ml-callout__heading {
       line-height: rem( 33px );
-      color: $color-optimistic-blue;
+      // color: $color-optimistic-blue;
       font-size: rem( 28px );
     }
   }

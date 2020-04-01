@@ -68,19 +68,10 @@ function FiltersPanel( props ) {
             {/* </Stack> */}
           </FilterGroup>
           <Callout as="a" href="#">
-            <Callout.Icon className="--hide-until-large">
-              <Icon icon="wallet" width="67" />
-            </Callout.Icon>
-            <Callout.Heading>Find housing based on your income</Callout.Heading>
-            <Callout.Text className="--hide-until-large">
-              <p>Enter basic information to help determine your eligibility for income-restricted housing.</p>
-            </Callout.Text>
-            <Callout.CTA className="--hide-at-large">
+            <Callout.Heading as="span">Use our AMI Estimator to find homes that match your income</Callout.Heading>
+            <Callout.Icon>
               <Icon use="#icon-mobile-link-marker" />
-            </Callout.CTA>
-            <Callout.CTA className="--hide-until-large">
-              <span className="btn btn--700 btn--metrolist --full-width" href="#">Search</span>
-            </Callout.CTA>
+            </Callout.Icon>
           </Callout>
         </Stack>
       </div>

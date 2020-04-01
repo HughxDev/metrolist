@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Stack from '@components/Stack';
-
 import './Callout.scss';
 
 function Callout( props ) {
@@ -23,9 +21,7 @@ function Callout( props ) {
         ...attributes,
         "className": ( `ml-callout${props.className ? ` ${props.className}` : ''}` ),
       },
-      <Stack space="panel" toppleUntil="large" align={ ['middle'] } alignAt={ ['xsmall'] }>
-        { props.children }
-      </Stack>,
+      props.children,
     )
   );
 }
@@ -43,10 +39,32 @@ Callout.Icon.propTypes = {
   "children": PropTypes.node,
 };
 
-Callout.Heading = ( { className, children } ) => ( <h3 className={ `ml-callout__heading${className ? ` ${className}` : ''}` }>{ children }</h3> );
+Callout.Heading = ( props ) => {
+  let elementName;
+  const attributes = { ...props };
+
+  if ( props.as ) {
+    delete attributes.as;
+    elementName = props.as;
+  } else {
+    elementName = 'h3';
+  }
+
+  return (
+    React.createElement(
+      elementName,
+      {
+        ...attributes,
+        "className": ( `ml-callout__heading${props.className ? ` ${props.className}` : ''}` ),
+      },
+      props.children,
+    )
+  );
+};
 Callout.Heading.displayName = 'CalloutHeading';
 Callout.Heading.propTypes = {
   "className": PropTypes.string,
+  "as": PropTypes.string,
   "children": PropTypes.node,
 };
 
