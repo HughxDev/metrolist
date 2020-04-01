@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import Home from '@components/Home';
 import Stack from '@components/Stack';
+import Inset from '@components/Inset';
 
 import './ResultsPanel.scss';
 
@@ -22,13 +23,15 @@ function ResultsPanel( props ) {
   return (
     <article className={ `ml-results-panel${className ? ` ${className}` : ''}` }{ ...attributes }>
       <h3 className="sr-only">Results</h3>
-      <Stack space="panel">
-      {
-        homes.length
-          ? homes.map( ( home, index ) => <Home key={ index } home={ home } /> )
-          : <p>No homes match the selected filters.</p>
-      }
-      </Stack>
+      <Inset until="large">
+        <Stack space="panel">
+        {
+          homes.length
+            ? homes.map( ( home, index ) => <Home key={ index } home={ home } /> )
+            : <p>No homes match the selected filters.</p>
+        }
+        </Stack>
+      </Inset>
     </article>
   );
 }

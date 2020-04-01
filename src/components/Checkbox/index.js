@@ -63,10 +63,6 @@ function renderChoices( { children, subcategoriesOnly } ) {
 }
 
 function Checkbox( props ) {
-  if ( props.columnWidth ) {
-    console.log( props.children );
-  }
-
   let modifierClasses = '';
 
   if ( props.button ) {

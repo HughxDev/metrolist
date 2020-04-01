@@ -1,14 +1,46 @@
 // <FiltersPanel />
 @import '@globals';
+@import '@globals/typography/filters';
 
-.ml-filters-panel {
-  
-}
-  @include media-breakpoint-down( md ) {
-    .ml-filters-panel {
-      
+// .ml-filters-panel {}
+  .ml-filters-panel.ml-filters-panel--expanded {
+    
+  }
+
+  .ml-filters-panel__heading {
+    cursor: default;
+    background-color: $color-optimistic-blue;
+    color: $color-white;
+    // padding: rem( 22px ) rem( 10px ); // mockup
+    padding: 0 $filter-group-padding-left-right;
+    height: $filter-group-label-height;
+    // width: 100vw;
+    // margin-bottom: .5rem;
+    // font-size: rem( 12px ); // mockup
+    font-size: rem( 16px );
+    font-family: $font-family-montserrat;
+    text-transform: uppercase;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .ml-filters-panel__heading-icon {
+    transform: rotate( 0deg );
+    transition: transform .125s ease;
+
+    .ml-filters-panel.ml-filters-panel--expanded & {
+      transform: rotate( -180deg );
     }
   }
-  .ml-filters__content {
+
+  .ml-filters-panel__content {
     // background-color: $color-white;
+    transition: height .125s ease, min-height .125s ease, max-height .125s ease;
+    overflow: hidden;
+    // height: 100%;
+  }
+
+  .ml-filters-panel__content:not(.ml-filters-panel__content--expanded) {
+    height: 0 !important;
   }

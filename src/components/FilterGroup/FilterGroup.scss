@@ -1,16 +1,6 @@
 // <FilterGroup />
 @import '@globals';
-
-$filter-group-label-height: 40px;
-// $filter-group-label-padding-top-bottom: 17px;
-
-$filter-group-padding-top-bottom: 16px;
-$filter-group-padding-left-right: 21px;
-$filter-group-padding: ( $filter-group-padding-top-bottom + $filter-group-label-height ) $filter-group-padding-left-right $filter-group-padding-top-bottom;
-
-$filter-group-padding-top-bottom--desktop: 27px;
-$filter-group-padding-left-right--desktop: 20px;
-$filter-group-padding--desktop: ( $filter-group-padding-top-bottom--desktop + $filter-group-label-height ) $filter-group-padding-left-right--desktop $filter-group-padding-top-bottom--desktop;
+@import '@globals/typography/filters';
 
 .ml-filter-group {
   // border: 1px solid rgba( 40, 180, 40, 0.5 );

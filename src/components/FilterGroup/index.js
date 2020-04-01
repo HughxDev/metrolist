@@ -74,7 +74,7 @@ FilterGroup.propTypes = {
   "className": PropTypes.string,
 };
 FilterGroup.defaultProps = {
-  "isExpanded": true,
+  "isExpanded": false,
 };
 
 FilterGroup.Label = function FilterGroupLabel( props ) {

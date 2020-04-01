@@ -2,6 +2,17 @@ $font-size-filter-label: rem( 12px );
 $font-size-filter-label--desktop: rem( 30px );
 $font-size-filter-label--desktop-small: rem( 21px );
 
+$filter-group-label-height: 40px;
+// $filter-group-label-padding-top-bottom: 17px;
+
+$filter-group-padding-top-bottom: 16px;
+$filter-group-padding-left-right: 21px;
+$filter-group-padding: ( $filter-group-padding-top-bottom + $filter-group-label-height ) $filter-group-padding-left-right $filter-group-padding-top-bottom;
+
+$filter-group-padding-top-bottom--desktop: 27px;
+$filter-group-padding-left-right--desktop: 20px;
+$filter-group-padding--desktop: ( $filter-group-padding-top-bottom--desktop + $filter-group-label-height ) $filter-group-padding-left-right--desktop $filter-group-padding-top-bottom--desktop;
+
 $checkbox-dimensions__pixels: 33px;
 $checkbox-dimensions: rem( $checkbox-dimensions__pixels );
 
