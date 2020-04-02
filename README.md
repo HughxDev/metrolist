@@ -11,7 +11,7 @@ Prefer readability for other developers over less typing for yourself.
 ##### HTML/CSS:
 ```html
 <h2 class="sh">Section Header</h2><!-- Bad -->
-Good: <h2 class="section-header">Section Header</h2><!-- Good -->
+<h2 class="section-header">Section Header</h2><!-- Good -->
 ```
 
 ##### JavaScript:
@@ -33,7 +33,7 @@ Vanilla BEM (Block-Element-Modifier):
 - Elements: two underscores appended to block (`block__element`)
 - Modifiers: two dashes appended to block or element (`block--modifier`, `block__element--modifier`).
 
-When writing modifiers, ensure that the base class is also present; should not mean anything on its own.
+When writing modifiers, ensure the base class is also present; modifiers should not mean anything on their own. This also gives modifiers higher specificity than regular classes, which helps ensure that they actually get applied.
 ```scss
 .block--modifier {} // Bad
 .block.block--modifier {} // Good
@@ -41,8 +41,13 @@ When writing modifiers, ensure that the base class is also present; should not m
 
 An exception to this would be for mixin classes that are intended to be used broadly. In that case, start the class name with two dashes to indicate detactedness:
 ```scss
-.--inline-block {
-  display: inline-block;
+.--hide-until-large {
+  display: none;
+}
+@media screen and (min-width: $large) {
+  .--hide-until-large {
+    display: unset;
+  }
 }
 ```
 
@@ -54,7 +59,7 @@ Don’t reflect the expected DOM structure in class names, as this is this expec
 
 #### BEM within Sass
 
-Don’t use parent selectors to construct BEM classes. This allows the full selector to be searchable in IDEs.
+Avoid parent selectors when constructing BEM classes. This allows the full selector to be searchable in IDEs. (Though there is a VS Code extension, [CSS Navigation](https://marketplace.visualstudio.com/items?itemName=pucelle.vscode-css-navigation), that solves this problem, we can’t assume everyone will have it or VS Code installed.)
 ```scss
 .ml-block {
   &__element {} // Bad
