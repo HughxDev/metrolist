@@ -214,3 +214,9 @@ From Jim:
   - Desktop: Square
   - Mobile: Checkmark
 - Details arrows don’t match [Drawer arrows](https://patterns.boston.gov/components/detail/drawers--default.html) in Fleet
+
+## Row vs. Stack: redundant or useful?
+
+- Only redundant in the sense of `stackUntil`, `toppleUntil`, etc.
+- Distinction should be: Stack is only for vertical stacking with `margin-top`. Rows can have columns stacked until a certain breakpoint.
+- `toppleUntil` is hard to conceptualize.
