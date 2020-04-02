@@ -5,6 +5,12 @@
   width: ( $nominal-width-mobile-listings__content / $nominal-width-mobile ) * 100%;
   margin: 0 auto;
 }
+  @include media-breakpoint-up( large ) {
+    .ml-inset {
+      width: ( $nominal-width-desktop-listings__content / $nominal-width-desktop ) * 100%;
+    }
+  }
+
   @include media-breakpoint-up( xsmall ) {
     .ml-inset.ml-inset--until-xsmall {
       width: 100%;

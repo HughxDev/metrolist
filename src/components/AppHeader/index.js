@@ -1,15 +1,15 @@
 import React from 'react';
 
-import Column from '../../_deferred-components/Column';
-import Logo from '../Logo';
-import Tagline from '../Tagline';
+import Inset from '@components/Inset';
+import Logo from '@components/Logo';
+import Tagline from '@components/Tagline';
 
 import './AppHeader.scss';
 
 function AppHeader() {
   return (
     <header className="ml-app-header">
-      <Column>
+      <Inset>
         <hgroup className="ml-app-header__heading-container">
           <h1 className="ml-app-header__heading">
             <Logo width="145" />
@@ -18,7 +18,7 @@ function AppHeader() {
             <Tagline />
           </h2>
         </hgroup>
-      </Column>
+      </Inset>
     </header>
   );
 }
