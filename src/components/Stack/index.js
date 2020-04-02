@@ -5,25 +5,15 @@ import './Stack.scss';
 
 const Stack = forwardRef( ( props, ref ) => {
   const {
-    className, space, indent, toppleAt, toppleUntil, children, align, alignAt,
+    className, space, indent, reverseAt, children, align, alignAt,
   } = props;
   const attributes = { ...props };
   let stackClasses = '';
-
-  delete attributes.toppleAt;
-  delete attributes.toppleUntil;
   delete attributes.indent;
 
   if ( space ) {
     delete attributes.space;
     stackClasses += ` ml-stack--space-${space.replace( '.', '_' )}`;
-  }
-
-  if ( toppleAt ) {
-    delete attributes.toppleAt;
-    stackClasses += ` ml-stack--topple-at ml-stack--topple-at-${toppleAt}`;
-  } else if ( toppleUntil ) {
-    stackClasses += ` ml-stack--topple-until ml-stack--topple-until-${toppleUntil}`;
   }
 
   if ( indent ) {
@@ -37,6 +27,11 @@ const Stack = forwardRef( ( props, ref ) => {
     align.forEach( ( alignment, index ) => {
       stackClasses += ` ml-stack--align-${alignment}-${alignAt[index]}`;
     } );
+  }
+
+  if ( reverseAt ) {
+    delete attributes.reverseAt;
+    stackClasses += ` ml-stack--reverse-${reverseAt}`;
   }
 
   return (
@@ -53,10 +48,9 @@ Stack.propTypes = {
   "className": PropTypes.string,
   "space": PropTypes.string,
   "indent": PropTypes.oneOfType( [PropTypes.string, PropTypes.bool] ),
-  "toppleAt": PropTypes.string,
-  "toppleUntil": PropTypes.string,
   "alignAt": PropTypes.arrayOf( PropTypes.oneOf( ['xsmall', 'small', 'medium', 'large', 'xlarge'] ) ),
   "align": PropTypes.arrayOf( PropTypes.oneOf( ['beginning', 'middle', 'end'] ) ),
+  "reverseAt": PropTypes.oneOf( ['xsmall', 'small', 'medium', 'large', 'xlarge'] ),
 };
 
 export default Stack;

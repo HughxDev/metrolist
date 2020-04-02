@@ -2,9 +2,42 @@
 @import '@globals';
 @import '@globals/typography/filters';
 
-// .ml-filters-panel {}
-  .ml-filters-panel.ml-filters-panel--expanded {
-    
+.ml-filters-panel {
+  // border: 1px solid rgba( 0, 125, 80, 0.9 );
+  // position: relative;
+  // border: 1px solid rgba( 125, 0, 80, 0.9 );
+  // overflow: visible;
+  height: calc( 100% - 9.5rem );
+  min-height: 100vh;
+  z-index: 49;
+  position: absolute;
+  width: 100%;
+  top: 9.5rem;
+  pointer-events: none;
+}
+  @include media-breakpoint-up( large ) {
+    .ml-filters-panel {
+      position: static;
+      // width: 12rem;
+      // height: initial;
+      // min-height: initial;
+      // width: initial;
+    }
+  }
+  // .ml-filters-panel.ml-filters-panel--expanded {}
+
+  .ml-filters-panel__menu {
+    // border: 1px solid rgba( 0, 80, 125, 0.59 );
+    position: sticky;
+    top: 4rem;
+    // z-index: 50;
+    pointer-events: all;
+    background-color: $color-metrolist-text-blue;
+  }
+  @include media-breakpoint-up( large ) {
+    .ml-filters-panel__menu {
+      
+    }
   }
 
   .ml-filters-panel__heading {
@@ -44,3 +77,9 @@
   .ml-filters-panel__content:not(.ml-filters-panel__content--expanded) {
     height: 0 !important;
   }
+
+  // @include media-breakpoint-up( large ) {
+  //   .filters-panel__callout-container {
+  //     order: -1;
+  //   }
+  // }

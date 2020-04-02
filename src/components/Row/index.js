@@ -18,6 +18,11 @@ function Row( props ) {
     className += ` ml-row--stack-until ml-row--stack-until-${props.stackUntil}`;
   }
 
+  if ( props.stackAt ) {
+    delete targetProps.stackAt;
+    className += ` ml-row--stack-at-${props.stackAt}`;
+  }
+
   if ( props.space ) {
     delete targetProps.space;
     className += ` ml-row--space-${props.space}`;
@@ -40,7 +45,8 @@ function Row( props ) {
 Row.propTypes = {
   "as": PropTypes.oneOfType( [PropTypes.string, PropTypes.node] ),
   "align": PropTypes.oneOf( ['beginning', 'middle', 'end'] ),
-  "stackUntil": PropTypes.string,
+  "stackUntil": PropTypes.oneOf( ['xsmall', 'small', 'medium', 'large', 'xlarge'] ),
+  "stackAt": PropTypes.oneOf( ['xsmall', 'small', 'medium', 'large', 'xlarge'] ),
   "space": PropTypes.string,
   "children": PropTypes.node,
 };

@@ -64,10 +64,11 @@ $padding-home-horizontal--large: rem( 26px );
     }
   }
   .ml-home__footer {
-    
+    // padding-top: rem( 31px );
   }
   @include media-breakpoint-up( home-info--two-column ) {
     .ml-home__footer {
+      padding-top: rem( 44px );
       display: flex;
       align-items: flex-end;
       justify-content: space-between;

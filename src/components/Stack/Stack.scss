@@ -1,5 +1,6 @@
 // <Stack />
 @import '@globals';
+@import '@globals/typography/filters';
 
 // Reference: https://absolutely.every-layout.dev/layouts/stack/
 
@@ -30,16 +31,23 @@ $space: 1rem;
       margin-top: ( $space * 2 );
     }
   }
-  .ml-stack.ml-stack--topple-until {
-    flex-direction: row;
-  }
-  .ml-stack.ml-stack--topple-until > [data-column-width="1/2"] {
-    flex: 1;
-  }
 
   .ml-stack.ml-stack--space-panel {
     & > :not([class*="--hide-until-"]) + * {
       margin-top: $panel-spacing;
+    }
+  }
+
+  .ml-stack.ml-stack--space-below-filters {
+    & > :not([class*="--hide-until-"]) + * {
+      margin-top: rem( $filter-group-label-height ) + $panel-spacing;
+    }
+  }
+  @include media-breakpoint-up( large ) {
+    .ml-stack.ml-stack--space-below-filters {
+      & > :not([class*="--hide-until-"]) + * {
+        margin-top: $panel-spacing;
+      }
     }
   }
 
@@ -65,75 +73,10 @@ $space: 1rem;
   .ml-stack.ml-stack--indent-checkbox {
     margin-left: rem( 35px );
   }
-
-  @include media-breakpoint-up( xsmall ) {
-    .ml-stack.ml-stack--topple-until.ml-stack--topple-until-xsmall {
-      flex-direction: column;
-
-      & > * {
-        flex: none;
-      }
-
-      &.ml-stack--space-rent-sale > :not([class*="--hide-until-small"]) + * {
-        margin-top: rem( 25px );
-      }
-    }
-  }
-  @include media-breakpoint-up( small ) {
-    .ml-stack.ml-stack--topple-until.ml-stack--topple-until-small {
-      flex-direction: column;
-
-      & > * {
-        flex: none;
-      }
-
-      &.ml-stack--space-rent-sale > :not([class*="--hide-until-medium"]) + * {
-        margin-top: rem( 25px );
-      }
-    }
-  }
-  @include media-breakpoint-up( medium ) {
-    .ml-stack.ml-stack--topple-until.ml-stack--topple-until-medium {
-      flex-direction: column;
-
-      & > * {
-        flex: none;
-      }
-
-      &.ml-stack--space-rent-sale > :not([class*="--hide-until-large"]) + * {
-        margin-top: rem( 25px );
-      }
-    }
-  }
   @include media-breakpoint-up( large ) {
-    .ml-stack.ml-stack--topple-until.ml-stack--topple-until-large {
-      flex-direction: column;
-
-      & > * {
-        flex: none;
-      }
-
-      &.ml-stack--space-rent-sale > :not([class*="--hide-until-xlarge"]) + * {
-        margin-top: rem( 25px );
-      }
-    }
-
     .ml-stack.ml-stack--space-panel {
       & > :not([class*="--hide-until-xlarge"]) + * {
         margin-top: $panel-spacing--desktop;
-      }
-    }
-  }
-  @include media-breakpoint-up( xlarge ) {
-    .ml-stack.ml-stack--topple-until.ml-stack--topple-until-xlarge {
-      flex-direction: column;
-
-      & > * {
-        flex: none;
-      }
-
-      &.ml-stack--space-rent-sale > * + * {
-        margin-top: rem( 25px );
       }
     }
   }
@@ -258,4 +201,21 @@ $space: 1rem;
 .ml-stack > * {
   margin-top: 0;
   margin-bottom: 0;
+}
+
+@include media-breakpoint-up( large ) {
+  .ml-stack.ml-stack--reverse-large {
+    flex-direction: column-reverse;
+
+    &.ml-stack--space-below-filters,
+    &.ml-stack--space-panel {
+      & > :not([class*="--hide-until-xlarge"]) + * {
+        margin-top: 0;
+      }
+    }
+
+    & > :not([class*="--hide-until-xlarge"]) + * {
+      margin-bottom: $panel-spacing;
+    }
+  }
 }
