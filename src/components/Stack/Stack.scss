@@ -45,7 +45,7 @@ $space: 1rem;
   }
   @include media-breakpoint-up( large ) {
     .ml-stack.ml-stack--space-below-filters {
-      & > :not([class*="--hide-until-"]) + * {
+      & > :not([class*="--hide-until-xlarge"]) + * {
         margin-top: $panel-spacing;
       }
     }
@@ -66,6 +66,19 @@ $space: 1rem;
     .ml-stack.ml-stack--space-subcategories {
       & > :not([class*="--hide-until-xlarge"]) + * {
         margin-top: rem( 21px );
+      }
+    }
+  }
+
+  .ml-stack.ml-stack--space-home-header {
+    & > :not([class*="--hide-until-"]) + * {
+      margin-top: rem( 10px );
+    }
+  }
+  @include media-breakpoint-up( large ) {
+    .ml-stack.ml-stack--space-home-header {
+      & > :not([class*="--hide-until-xlarge"]) + * {
+        margin-top: rem( 24px );
       }
     }
   }

@@ -55,16 +55,17 @@ $padding-home-horizontal--large: rem( 26px );
     letter-spacing: 0;
     // line-height: rem( 24px );
     line-height: .8;
-    margin: rem( 10px 0 );
+    // margin: rem( 10px 0 );
   }
   @include media-breakpoint-up( large ) {
     .ml-home__byline {
       font-size: rem( 21px );
-      margin: rem( 24px 0 );
+      // margin: rem( 24px 0 );
     }
   }
   .ml-home__footer {
-    // padding-top: rem( 31px );
+    padding-top: rem( 31px );
+    // padding-bottom: rem( 7.75px );
   }
   @include media-breakpoint-up( home-info--two-column ) {
     .ml-home__footer {

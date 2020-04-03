@@ -5,6 +5,7 @@ import moment from 'moment';
 import UnitGroup from '@components/UnitGroup';
 import HomeInfo from '@components/HomeInfo';
 import Button from '@components/Button';
+import Stack from '@components/Stack';
 
 import { capitalize } from '@util/strings';
 import { date, dateTime } from '@util/datetime';
@@ -39,12 +40,16 @@ function Home( { home } ) {
   return (
     <article className="ml-home">
       <div className="ml-home__content">
-        <header className="ml-home__header">
-          <h2 className="ml-home__title">{ title }</h2>
-          <p className="ml-home__byline">{ [city, neighborhood, capitalize( type )].join( ' – ' ) }</p>
-          { renderJustListed( listingDate ) }
-        </header>
-        <UnitGroup units={ units } />
+        <Stack space="home-header">
+          <header className="ml-home__header">
+            <Stack space="home-header">
+              <h2 className="ml-home__title">{ title }</h2>
+              <p className="ml-home__byline">{ [city, neighborhood, capitalize( type )].join( ' – ' ) }</p>
+              { renderJustListed( listingDate ) }
+            </Stack>
+          </header>
+          <UnitGroup units={ units } />
+        </Stack>
         <footer className="ml-home__footer">
           <HomeInfo
             className="ml-home-footer__home-info"
