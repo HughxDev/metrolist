@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import Row from '@components/Row';
 import Stack from '@components/Stack';
+import Reveal from '@components/Reveal';
 
 import './Checkbox.scss';
 
@@ -49,10 +50,12 @@ function renderChoices( { children, subcategoriesOnly } ) {
       return (
         <Stack space="subcategories">
           { firstRenderedChoice }
-          <Stack className="ml-checkbox__subcategories" space="1" indent={ firstRenderedChoice ? 'checkbox' : false }>
+          <Reveal
+            className="ml-checkbox__subcategories"
+            stack={ { "space": "1", "indent": ( firstRenderedChoice ? 'checkbox' : false ) } }
+          >
             { childArray }
-            { ( childArray.length > 3 ) && <a className="ml-checkbox__more-link" href="#">more…</a> }
-          </Stack>
+          </Reveal>
         </Stack>
       );
     }

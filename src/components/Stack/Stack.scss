@@ -11,6 +11,16 @@ $space: 1rem;
   flex-direction: column;
   justify-content: flex-start;
 }
+  .ml-stack.ml-stack--space-0_25 {
+    & > :not([class*="--hide-until-"]) + * {
+      margin-top: ( $space * 0.25 );
+    }
+  }
+  .ml-stack.ml-stack--space-0_5 {
+    & > :not([class*="--hide-until-"]) + * {
+      margin-top: ( $space * 0.5 );
+    }
+  }
   .ml-stack.ml-stack--space-1 {
     & > :not([class*="--hide-until-"]) + * {
       margin-top: $space;

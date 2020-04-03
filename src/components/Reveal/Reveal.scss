@@ -1,0 +1,27 @@
+// <Reveal />
+@import '@globals';
+
+// .ml-reveal {}
+  .ml-reveal__content {
+    overflow: hidden;
+    transition: max-height .125s ease;
+    max-height: ( rem( 47px ) * 3 ); // 3 = number of children to show at first
+  }
+  .ml-reveal__more-button {
+    font-family: inherit;
+    font-size: rem( 21px );
+    font-style: italic;
+    color: inherit;
+    background-color: transparent;
+    text-decoration: underline;
+    border: 0;
+    appearance: none;
+    text-align: left;
+    width: 5rem;
+    padding: 0;
+
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
+  }

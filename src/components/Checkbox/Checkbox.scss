@@ -129,14 +129,3 @@
   .ml-checkbox__form-control:checked ~ .ml-checkbox__form-control-ui {
     background-color: $color-optimistic-blue;
   }
-  .ml-checkbox__more-link {
-    font-size: rem( 21px );
-    font-style: italic;
-    color: inherit;
-    text-decoration: underline;
-    
-    &:hover,
-    &:focus {
-      text-decoration: none;
-    }
-  }
