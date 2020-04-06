@@ -4,8 +4,9 @@ import PropTypes from 'prop-types';
 import './Stack.scss';
 
 const Stack = forwardRef( ( props, ref ) => {
+  let StackElement;
   const {
-    className, space, indent, reverseAt, children, align, alignAt,
+    as, className, space, indent, reverseAt, children, align, alignAt,
   } = props;
   const attributes = { ...props };
   let stackClasses = '';
@@ -34,6 +35,31 @@ const Stack = forwardRef( ( props, ref ) => {
     stackClasses += ` ml-stack--reverse-${reverseAt}`;
   }
 
+  if ( as ) {
+    delete attributes.as;
+    StackElement = React.createElement(
+      as,
+      {
+        ...attributes,
+        ref,
+        "className": `ml-stack${stackClasses}${className ? ` ${className}` : ''}`,
+      },
+      children,
+    );
+  } else {
+    StackElement = React.createElement(
+      'div',
+      {
+        ...attributes,
+        ref,
+        "className": `ml-stack${stackClasses}${className ? ` ${className}` : ''}`,
+      },
+      children,
+    );
+  }
+
+  return StackElement;
+
   return (
     <div ref={ ref } { ...attributes } className={ `ml-stack${stackClasses}${className ? ` ${className}` : ''}` }>
       { children }
@@ -44,6 +70,7 @@ const Stack = forwardRef( ( props, ref ) => {
 Stack.displayName = 'Stack';
 
 Stack.propTypes = {
+  "as": PropTypes.oneOfType( [PropTypes.string, PropTypes.node] ),
   "children": PropTypes.node,
   "className": PropTypes.string,
   "space": PropTypes.string,

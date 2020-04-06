@@ -19,13 +19,14 @@ function Button( props ) {
 
   delete attributes.as;
   delete attributes.children;
+  delete attributes.variant;
 
   return (
     React.createElement(
       htmlElement,
       {
         ...attributes,
-        "className": `btn btn--metrolist${props.className ? ` ${props.className}` : ''}`,
+        "className": `btn btn--metrolist-${props.variant}${props.className ? ` ${props.className}` : ''}`,
       },
       props.children,
     )
@@ -34,9 +35,13 @@ function Button( props ) {
 
 Button.propTypes = {
   "as": PropTypes.string,
+  "variant": PropTypes.oneOf( ['primary', 'secondary'] ),
   "href": PropTypes.string,
   "children": PropTypes.node,
   "className": PropTypes.string,
+};
+Button.defaultProps = {
+  "variant": "secondary",
 };
 
 export default Button;

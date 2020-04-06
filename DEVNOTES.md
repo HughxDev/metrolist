@@ -225,4 +225,14 @@ From Jim:
 
 - Introducing the calculator creates a second React view, which means we need to route between the two. However since this entire React app will live inside of Drupal, need to make sure the two will play nice since typically routing in SPAs is achieved by sending every HTTP request to index.html.
   - [Embedding a React App in a Drupal 8 Site](https://redfinsolutions.com/blog/embedding-react-app-drupal-8-site)
-  
+
+### Design
+
+- Are we including the headers? Missing in mockup.
+- Background for AMI Calculator is white; for Search it’s gray.
+- Series of numbered checkboxes seems to replicate the Scale component I created. Can we just swap that one in?
+- Wording: Back vs. Next. Should this be Previous vs. Next?
+- Back button is light gray on white; is this enough contrast?
+  - Also need to know hover state as this is a new button treatment
+- Error state of checkboxes is color-only, which is an accessibility concern. Can we add text indicating errors?
+- What does the “Exit” link at the bottom do? Is this meant to be a modal window?

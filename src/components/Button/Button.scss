@@ -2,8 +2,7 @@
 @import '@globals';
 
 // Not using `ml-button`; extends standard button
-.btn.btn--metrolist {
-  background-color: $color-optimistic-blue;
+.btn[class*="btn--metrolist"] {
   font-size: rem( 14px );
   width: 100%;
   // padding: rem( 13px 21px ); // mockup
@@ -11,15 +10,33 @@
   letter-spacing: rem( 0.01px );
   text-align: center;
 }
+
+// Primary Color Scheme
+.btn.btn--metrolist-primary {
+  background-color: $color-optimistic-blue;
+}
+
 @include media-breakpoint-up( small ) {
-  .btn.btn--metrolist {
+  .btn.btn--metrolist-primary {
     min-width: rem( 125px );
     width: ( 125 / $nominal-width-home ) * 100%;
   }
 }
 @include media-breakpoint-up( large ) {
-  .btn.btn--metrolist {
+  .btn.btn--metrolist-primary {
     min-width: rem( 220px );
     width: ( 220 / $nominal-width-home-desktop ) * 100%;
   }
+}
+
+// Secondary Color Scheme
+.btn.btn--metrolist-secondary {
+  background-color: transparent;
+  color: $color-metrolist-ami-calculator-button-secondary-text;
+  border: 1px solid $color-metrolist-ami-calculator-button-secondary-text;
+}
+
+.btn[class*="btn--metrolist"][disabled] {
+  border: 0;
+  color: $color-white;
 }

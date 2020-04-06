@@ -93,6 +93,45 @@ $space: 1rem;
     }
   }
 
+  .ml-stack.ml-stack--space-ami-calculator {
+    & > :not([class*="--hide-until-"]) + * {
+      
+    }
+  }
+  @include media-breakpoint-up( large ) {
+    .ml-stack.ml-stack--space-ami-calculator {
+      & > :not([class*="--hide-until-"]) + * {
+        margin-top: rem( 72px );
+      }
+    }
+  }
+
+  .ml-stack.ml-stack--space-ami-calculator-navigation {
+    & > :not([class*="--hide-until-"]) + * {
+      
+    }
+  }
+  @include media-breakpoint-up( large ) {
+    .ml-stack.ml-stack--space-ami-calculator-navigation {
+      & > :not([class*="--hide-until-"]) + * {
+        margin-top: rem( 149px );
+      }
+    }
+  }
+
+  .ml-stack.ml-stack--space-ami-calculator-footer {
+    & > :not([class*="--hide-until-"]) + * {
+      
+    }
+  }
+  @include media-breakpoint-up( large ) {
+    .ml-stack.ml-stack--space-ami-calculator-footer {
+      & > :not([class*="--hide-until-"]) + * {
+        margin-top: rem( 49px );
+      }
+    }
+  }
+
   .ml-stack.ml-stack--indent-checkbox {
     margin-left: rem( 35px );
   }

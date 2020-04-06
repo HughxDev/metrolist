@@ -1,4 +1,93 @@
 // <AmiCalculator />
 @import '@globals';
 
-.ml-ami-calculator {}
+.ml-ami-calculator {
+  width: ( $nominal-width-ami-calculator-desktop / $nominal-width-desktop ) * 100%;
+  // margin: rem( 93px ) auto 0;
+  margin: 0 auto;
+  color: $color-black;
+}
+  .ml-ami-calculator__heading,
+  .sh-title.ml-ami-calculator__heading {
+    font-family: $font-family-heading;
+    font-size: rem( 30px );
+    color: $color-metrolist-text-blue;
+    letter-spacing: rem( 1px );
+    // line-height: rem( 35px );
+    margin: 0;
+    padding: 0;
+  }
+  .ml-ami-calculator__prompt {
+    margin: 0;
+    // margin-inline-end: 0;
+    // margin-inline-start: 0;
+    padding: 0;
+    // padding-inline-start: 0;
+    // padding-inline-end: 0;
+    border: 0;
+    text-align: center;
+  }
+  .ml-ami-calculator__prompt-question {
+    font-size: rem( 24px );
+    text-align: left;
+    width: 100%;
+    font-weight: bold;
+    margin: 0;
+    // margin-inline-end: 0;
+    // margin-inline-start: 0;
+    padding: 0;
+    padding-bottom: rem( 8px );
+    // padding-inline-start: 0;
+    // padding-inline-end: 0;
+    // border: 0;
+    border-bottom: rem( 4px ) solid $color-black;
+  }
+  .ml-ami-calculator__prompt-answer {
+    line-height: 0;
+  }
+  // .ml-ami-calculator__prompt-answer-icon {}
+  .ml-ami-calculator__prompt--answer-input {
+    color: $color-metrolist-text-blue;
+  }
+  .ml-ami-calculator__navigation {
+    justify-content: space-between;
+  }
+  .ml-ami-calculator__navigation.ml-ami-calculator__navigation--step-1 {
+    justify-content: flex-end;
+  }
+  .ml-ami-calculator__button,
+  .btn[class*="btn--metrolist"].ml-ami-calculator__button {
+    width: rem( 252px );
+    height: rem( 64px );
+  }
+  .ml-ami-calculator__button[disabled],
+  .btn[class*="btn--metrolist"].ml-ami-calculator__button[disabled] {
+    background-color: #D8D8D8;
+  }
+  .ml-ami-calculator__footer {
+    text-align: center;
+    color: $color-metrolist-ami-calculator-footer-text;
+  }
+  .ml-ami-calculator__exit-link {
+    color: $color-charles-blue;
+    text-decoration: underline;
+    text-transform: uppercase;
+    font-size: rem( 14px );
+    font-family: $font-family-heading;
+    font-weight: bold;
+    
+    &:hover {
+      text-decoration: none;
+    }
+  }
+  .ml-ami-calculator__email-link {
+    color: $color-metrolist-ami-calculator-footer-text;
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+  .ml-ami-calculator__email-link-email-address {
+    color: $color-metrolist-ami-calculator-footer-link;
+  }
