@@ -220,3 +220,9 @@ From Jim:
 - Only redundant in the sense of `stackUntil`, `toppleUntil`, etc.
 - Distinction should be: Stack is only for vertical stacking with `margin-top`. Rows can have columns stacked until a certain breakpoint.
 - `toppleUntil` is hard to conceptualize.
+
+## AMI Calculator
+
+- Introducing the calculator creates a second React view, which means we need to route between the two. However since this entire React app will live inside of Drupal, need to make sure the two will play nice since typically routing in SPAs is achieved by sending every HTTP request to index.html.
+  - [Embedding a React App in a Drupal 8 Site](https://redfinsolutions.com/blog/embedding-react-app-drupal-8-site)
+  

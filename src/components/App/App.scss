@@ -3,6 +3,29 @@
 
 .ml-app {
   background-color: $color-supporting-gray;
-  background-color: $color-supporting-gray-darker;
+  // background-color: $color-supporting-gray-darker;
   padding-bottom: rem( 80px );
+}
+
+// TODO: For demo purposes only - remove
+.hro {
+  background-image: url(https://patterns.boston.gov/assets/images/fleet/boston-header3.jpg);
+}
+
+@media screen and (min-width: 768px) {
+  .hro {
+    background-image: url(https://patterns.boston.gov/assets/images/fleet/boston-header3.jpg);
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .hro {
+    background-image: url(https://patterns.boston.gov/assets/images/fleet/boston-header3.jpg);
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .hro {
+    background-image: url(https://patterns.boston.gov/assets/images/fleet/boston-header3.jpg);
+  }
 }

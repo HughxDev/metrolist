@@ -58,6 +58,9 @@ module.exports = {
     ],
   },
   "mode": "development",
+  "devServer": {
+    "historyApiFallback": true,
+  },
   "optimization": {
     "nodeEnv": false,
   },
