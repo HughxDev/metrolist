@@ -25,7 +25,6 @@
     // padding-inline-start: 0;
     // padding-inline-end: 0;
     border: 0;
-    text-align: center;
   }
   .ml-ami-calculator__prompt-question {
     font-size: rem( 24px );
@@ -45,7 +44,10 @@
   .ml-ami-calculator__prompt-answer {
     line-height: 0;
   }
-  // .ml-ami-calculator__prompt-answer-icon {}
+  .ml-ami-calculator__prompt-answer-icon {
+    display: block;
+    margin: 0 auto;
+  }
   .ml-ami-calculator__prompt--answer-input {
     color: $color-metrolist-text-blue;
   }
@@ -90,4 +92,23 @@
   }
   .ml-ami-calculator__email-link-email-address {
     color: $color-metrolist-ami-calculator-footer-link;
+  }
+  .ml-ami-calculator__prompt-answer-error {
+    transition: opacity .125s linear, height .125s linear;
+    opacity: 0;
+    height: 0;
+
+    &[hidden] {
+      display: inherit;
+      visibility: hidden;
+    }
+
+    // &:focus {
+    //   border: 12px solid greenyellow;
+    // }
+
+    &.--visible {
+      opacity: 1;
+      height: rem( 23px );
+    }
   }

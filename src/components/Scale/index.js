@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { propTypeErrorMessage } from '@util/errors';
@@ -19,25 +19,23 @@ import './Scale.scss';
 }</datalist>
 */
 
-function Scale( props ) {
-  return (
-    <div className={ `ml-scale${props.className ? ` ${props.className}` : ''}` }>
-      {/* <legend className="ml-scale__heading">{ props.children }</legend> */}
-      <div className="ml-scale__inputs">{
-        props.value.split( ',' )
-          .map( ( value, index ) => (
-            <label key={ index } className="ml-scale__label">
-              <input className="ml-scale__form-control" name={ props.criterion } type="radio" />
-              <span className="ml-scale__text">{ value }</span>
-            </label>
-          ) )
-      }</div>
-    </div>
-  );
-}
+const Scale = forwardRef( ( props, ref ) => (
+  <div className={ `ml-scale${props.className ? ` ${props.className}` : ''}` }>{
+    props.value.split( ',' )
+      .map( ( value, index ) => (
+        <label key={ index } className="ml-scale__label">
+          <input ref={ ( index === 0 ) ? ref : null } className="ml-scale__form-control" name={ props.criterion } type="radio" required={ props.required } />
+          <span className="ml-scale__text">{ value }</span>
+        </label>
+      ) )
+  }</div>
+) );
+
+Scale.displayName = 'Scale';
 
 Scale.propTypes = {
   "children": PropTypes.node,
+  "required": PropTypes.bool,
   "className": PropTypes.string,
   "criterion": PropTypes.string,
   "value": function commaDelimited( props, propName, componentName ) {

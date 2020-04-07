@@ -3,16 +3,18 @@
 @import '@globals/typography/filters';
 
 .ml-scale {
-  border: 0;
   padding: 0;
   margin: 0;
-}
-  .ml-scale__inputs {
-    border: 2px solid $color-filters-scale-border;
-    height: rem( 43px );
-    font-family: $font-family-montserrat;
-    display: flex;
+  border: 2px solid $color-filters-scale-border;
+  height: rem( 43px );
+  font-family: $font-family-montserrat;
+  display: flex;
+  transition: .125s border-color linear;
+
+  &.--invalid {
+    border-color: #d22d23;
   }
+}
   .ml-scale__heading {
     line-height: 1;
     font-style: italic;
@@ -36,10 +38,6 @@
     .ml-scale__label + .ml-scale__label {
       border-left: 1px solid $color-filters-scale-border;
     }
-  .ml-scale__form-control,
-  .ml-scale__text {
-
-  }
   .ml-scale__form-control {
     position: absolute;
     margin: 0;
