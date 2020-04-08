@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
+import { hasOwnProperty } from '@util/objects';
+
 import Icon from '@components/Icon';
 import Scale from '@components/Scale';
 import Button from '@components/Button';
@@ -15,26 +17,51 @@ function AmiCalculator( props ) {
   const [step, setStep] = useState( 1 );
   const [formIsDirty, setFormDirtiness] = useState( false );
   const [formIsValid, setFormValidity] = useState( false );
-  const [formControls, updateFormControls] = useState( {
-    "$form": {
-      "errorRef": useRef(),
-    },
-    "$familySize": {
+
+  const noErrors = {
+    "alert": {
+      "message": "",
       "ref": useRef(),
-      "errorRef": useRef(),
-      "isInvalid": false,
-      "errorMessage": null,
     },
-  } );
+    "familySize": {
+      "message": "",
+      "ref": useRef(),
+    },
+  };
+  const [errors, setErrors] = useState( noErrors );
+  // const [formControls, updateFormControls] = useState( {
+  //   "$familySize": {
+  //     "ref": useRef(),
+  //     "errorRef": useRef(),
+  //     "isInvalid": false,
+  //     "errorMessage": null,
+  //   },
+  // } );
+
+  const formRef = useRef();
+  const formAlertRef = useRef();
+
   const totalSteps = 4;
+
   const hideErrorMessage = ( $errorMessage ) => {
+    if ( hasOwnProperty( $errorMessage, 'current' ) ) {
+      $errorMessage = $errorMessage.current;
+    }
+
     $errorMessage.classList.remove( '--visible' );
+
     setTimeout( () => {
       $errorMessage.hidden = true;
     }, 62.5 );
   };
+
   const showErrorMessage = ( $errorMessage, index ) => {
+    if ( hasOwnProperty( $errorMessage, 'current' ) ) {
+      $errorMessage = $errorMessage.current;
+    }
+
     $errorMessage.hidden = false;
+
     setTimeout( () => {
       $errorMessage.classList.add( '--visible' );
 
@@ -43,24 +70,6 @@ function AmiCalculator( props ) {
       }
     }, 62.5 );
   };
-  const showHideValidationErrors = () => {
-    Object.keys( formControls ).forEach( ( formControlName, index ) => {
-      const formControl = formControls[formControlName];
-
-      if ( formControl.isInvalid ) {
-        // const $formControl = formControl.ref.current;
-        const $errorMessage = formControl.errorRef.current;
-
-        showErrorMessage( $errorMessage, index );
-      } else {
-        const $errorMessage = formControl.errorRef.current;
-
-        hideErrorMessage( $errorMessage );
-      }
-    } );
-  };
-
-  useEffect( showHideValidationErrors );
 
   const reportMissingValidityProperty = ( $formControl ) => (
     console.error(
@@ -73,83 +82,97 @@ function AmiCalculator( props ) {
     )
   );
 
-  const updateFormControlsBasedOnValidityState = ( formControlName, validityName, isInvalid ) => {
-    const updatedFormControls = { ...formControls };
+  const handleBubbledChange = ( event ) => {
+    console.log( 'handleBubbledChange' );
+    // event.preventDefault();
+  };
 
-    // https://developer.mozilla.org/en-US/docs/Web/API/ValidityState
-    switch ( validityName ) {
-      case 'valueMissing':
-        updatedFormControls[formControlName] = {
-          ...formControls[formControlName],
-          isInvalid,
-          "errorMessage": ( isInvalid ? 'Please fill out this field.' : '' ),
-        };
+  const handleBubbledClick = ( event ) => {
+    console.log( 'handleBubbledClick' );
+    // event.preventDefault();
+  };
 
-        if ( isInvalid ) {
-          setFormValidity( !isInvalid );
+  const handleSubmit = ( event ) => {
+    console.log( 'handleSubmit' );
+    event.preventDefault();
+  };
+
+  const handleFamilySizeChange = ( event ) => {
+    console.log( 'handleFamilySizeChange' );
+    // event.preventDefault();
+  };
+
+  const getErrors = () => {
+    const $form = formRef.current;
+    const formValidity = $form.checkValidity();
+    const newErrors = { ...errors };
+    let numberOfErrors = 0;
+
+    if ( !formValidity ) {
+      const $elements = $form.elements;
+      const radioButtons = {};
+
+      newErrors.alert = {
+        ...errors.alert,
+        "message": "There were errors in your submission.",
+      };
+
+      for ( let index = 0; index < $elements.length; index++ ) {
+        const $element = $elements[index];
+        const { name } = $element;
+
+        if ( hasOwnProperty( radioButtons, $element.name ) ) {
+          break;
         }
 
-        updateFormControls( updatedFormControls );
-        break;
+        if ( 'validity' in $element ) {
+          const { validity } = $element;
 
-      // case 'badInput':
-      // case 'customError':
-      // case 'patternMismatch':
-      // case 'rangeOverflow':
-      // case 'rangeUnderflow':
-      // case 'stepMismatch':
-      // case 'tooLong':
-      // case 'tooShort':
-      // case 'typeMismatch':
-      // case 'valid':
-      default:
+          if ( validity.valueMissing === true ) {
+            if ( $element.type === 'radio' ) {
+              radioButtons[name] = true;
+            }
+
+            newErrors[name] = {
+              ...newErrors[name],
+              "message": "Please fill out this field.",
+            };
+
+            numberOfErrors++;
+          }
+        } else {
+          reportMissingValidityProperty( $element );
+        } // if validity in $element
+      } // for
     }
+
+    return [newErrors, numberOfErrors];
   };
 
   const handleFormInteraction = ( event ) => {
-    const { type } = event;
-    const $form = event.currentTarget;
-    const $clicked = event.target;
-    const isNavigationButton = $clicked.hasAttribute( 'data-is-navigation-button' );
-    const isChangeEvent = ( type === 'change' );
-    const formValidity = $form.checkValidity();
+    console.log( 'handleFormInteraction' );
 
-    setFormDirtiness( true );
-    setFormValidity( formValidity );
+    const [newErrors, numberOfErrors] = getErrors();
+    const newErrorList = Object.keys( newErrors );
 
-    if ( isChangeEvent || isNavigationButton ) {
-      const formControlNames = Object.keys( formControls );
-
-      formControlNames.forEach( ( formControlName ) => {
-        const formControlEntry = formControls[formControlName];
-        const $formElementOrControl = ( formControlEntry.ref ? formControlEntry.ref.current : false );
-
-        if ( $formElementOrControl ) {
-          // console.log( '$formControl', $formControl );
-
-          if ( 'validity' in $formElementOrControl ) {
-            // Form Control
-            const { validity } = $formElementOrControl;
-
-            for ( const validityName in validity ) { // eslint-disable-line no-restricted-syntax,guard-for-in
-              const isInvalid = validity[validityName];
-
-              if ( isInvalid ) {
-                updateFormControlsBasedOnValidityState( formControlName, validityName, isInvalid );
-                break;
-              }
-            }
-          } else {
-            // Nada
-            reportMissingValidityProperty( $formElementOrControl );
-          }
-        } // if $formControl
+    if ( numberOfErrors ) {
+      newErrorList.forEach( ( newError ) => {
+        showErrorMessage( newErrors[newError].ref.current );
       } );
 
-      if ( isNavigationButton ) {
-        event.preventDefault();
-      }
+      console.log( 'Form is invalid' );
+      setErrors( newErrors );
+      event.preventDefault();
+    } else {
+      newErrorList.forEach( ( newError ) => {
+        hideErrorMessage( newErrors[newError].ref.current );
+      } );
+
+      console.log( 'Form is valid' );
+      setErrors( noErrors );
     }
+
+    console.log( '---' );
   };
 
   return (
@@ -161,37 +184,40 @@ function AmiCalculator( props ) {
       </Stack>
       <Alert
         id="ami-calculator-form-errors"
-        ref={ formControls.$form.errorRef }
-        className="ml-ami-calculator__error-alert"
+        ref={ errors.alert.ref }
+        className={ `ml-ami-calculator__error-alert` }
         variant="danger"
-        hidden
       >
-        { ( formIsDirty && !formIsValid ) && <p>There were errors</p> }
+        { errors.alert.message }
       </Alert>
-      <form ref={ formControls.$form.ref } className="ami-calculator__form" onClick={ handleFormInteraction } onChange={ handleFormInteraction } onSubmit={ ( e ) => e.preventDefault() }>
+      <form
+        ref={ formRef }
+        className="ami-calculator__form"
+        onSubmit={ handleSubmit }
+        onChange={ handleFormInteraction }
+        // onClick={ handleFormInteraction }
+      >
         <Stack space="ami-calculator-navigation">
           <fieldset className="ml-ami-calculator__prompt">
             <legend className="ml-ami-calculator__prompt-question">How many people live in your household of any age?</legend>
             <div className="ml-ami-calculator__prompt-answer">
               <Icon className="ml-ami-calculator__prompt-answer-icon" icon="family2" width="227" />
               <Scale
-                ref={ formControls.$familySize.ref }
-                className={ `ml-ami-calculator__prompt--answer-input${formControls.$familySize.isInvalid ? ' --invalid' : ''}` }
+                className={ `ml-ami-calculator__prompt--answer-input` }
                 criterion="familySize"
                 value="1,2,3,4,5,6+"
                 aria-describedby="ami-calculator-form-errors ami-calculator-family-size-error"
                 required
               />
               <div
+                ref={ errors.familySize.ref }
                 id="ami-calculator-family-size-error"
-                ref={ formControls.$familySize.errorRef }
-                className="t--subinfo t--err m-t100 ml-ami-calculator__prompt-answer-error"
+                className={ `t--subinfo t--err m-t100 ml-ami-calculator__prompt-answer-error` }
                 aria-live="polite"
-                hidden
-              >{ formControls.$familySize.errorMessage }</div>
+              >{ errors.familySize.message }</div>
             </div>
           </fieldset>
-          <Row as="nav" className={ `ml-ami-calculator__navigation ml-ami-calculator__navigation--step-${step}` }>
+          <Row as="nav" className={ `ml-ami-calculator__navigation ml-ami-calculator__navigation--step-${step}` } onClick={ handleFormInteraction }>
             { ( step > 1 ) && <Button className="ml-ami-calculator__button" data-is-navigation-button>Back</Button> }
             <Button className="ml-ami-calculator__button" variant="primary" disabled={ ( step === totalSteps ) } data-is-navigation-button>Next</Button>
           </Row>

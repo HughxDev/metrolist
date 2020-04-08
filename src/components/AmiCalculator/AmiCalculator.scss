@@ -94,7 +94,7 @@
     color: $color-metrolist-ami-calculator-footer-link;
   }
   .ml-ami-calculator__prompt-answer-error {
-    transition: opacity .125s linear, height .125s linear;
+    transition: opacity .125s linear, height .125s linear, padding-top .125s linear, padding-bottom .125s linear;
     opacity: 0;
     height: 0;
 
@@ -109,6 +109,6 @@
 
     &.--visible {
       opacity: 1;
-      height: rem( 23px );
+      height: unset;
     }
   }
