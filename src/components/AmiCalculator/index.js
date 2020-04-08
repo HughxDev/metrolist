@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { hasOwnProperty } from '@util/objects';
@@ -15,9 +15,6 @@ import './AmiCalculator.scss';
 
 function AmiCalculator( props ) {
   const [step, setStep] = useState( 1 );
-  const [formIsDirty, setFormDirtiness] = useState( false );
-  const [formIsValid, setFormValidity] = useState( false );
-
   const noErrors = {
     "alert": {
       "message": "",
@@ -29,18 +26,7 @@ function AmiCalculator( props ) {
     },
   };
   const [errors, setErrors] = useState( noErrors );
-  // const [formControls, updateFormControls] = useState( {
-  //   "$familySize": {
-  //     "ref": useRef(),
-  //     "errorRef": useRef(),
-  //     "isInvalid": false,
-  //     "errorMessage": null,
-  //   },
-  // } );
-
   const formRef = useRef();
-  const formAlertRef = useRef();
-
   const totalSteps = 4;
 
   const hideErrorMessage = ( $errorMessage ) => {
@@ -82,30 +68,14 @@ function AmiCalculator( props ) {
     )
   );
 
-  const handleBubbledChange = ( event ) => {
-    console.log( 'handleBubbledChange' );
-    // event.preventDefault();
-  };
-
-  const handleBubbledClick = ( event ) => {
-    console.log( 'handleBubbledClick' );
-    // event.preventDefault();
-  };
-
   const handleSubmit = ( event ) => {
-    console.log( 'handleSubmit' );
     event.preventDefault();
-  };
-
-  const handleFamilySizeChange = ( event ) => {
-    console.log( 'handleFamilySizeChange' );
-    // event.preventDefault();
   };
 
   const getErrors = () => {
     const $form = formRef.current;
     const formValidity = $form.checkValidity();
-    const newErrors = { ...errors };
+    const newErrors = { ...errors };
     let numberOfErrors = 0;
 
     if ( !formValidity ) {
@@ -150,8 +120,6 @@ function AmiCalculator( props ) {
   };
 
   const handleFormInteraction = ( event ) => {
-    console.log( 'handleFormInteraction' );
-
     const [newErrors, numberOfErrors] = getErrors();
     const newErrorList = Object.keys( newErrors );
 
@@ -160,7 +128,6 @@ function AmiCalculator( props ) {
         showErrorMessage( newErrors[newError].ref.current );
       } );
 
-      console.log( 'Form is invalid' );
       setErrors( newErrors );
       event.preventDefault();
     } else {
@@ -168,11 +135,8 @@ function AmiCalculator( props ) {
         hideErrorMessage( newErrors[newError].ref.current );
       } );
 
-      console.log( 'Form is valid' );
       setErrors( noErrors );
     }
-
-    console.log( '---' );
   };
 
   return (
