@@ -59,7 +59,16 @@ function addComponent( componentName, subcomponentName, recursionLevel = 1 ) {
   return (
     Promise.resolve()
       .then( () => {
-        if ( fs.existsSync( targetDirectory ) ) {
+        let targetDirectoryExists;
+
+        try {
+          fs.accessSync( targetDirectory );
+          targetDirectoryExists = true;
+        } catch ( error ) {
+          targetDirectoryExists = false;
+        }
+
+        if ( targetDirectoryExists && ( recursionLevel === 1 ) ) {
           if ( hasSubcomponent ) {
             return addComponent( componentName, subcomponentName, 2 );
           }
@@ -75,6 +84,7 @@ function addComponent( componentName, subcomponentName, recursionLevel = 1 ) {
           targetDirectory,
           // Options
           {
+            "clobber": false,
             "rename": function rename( target ) {
               const pathInfo = path.parse( target );
               const filename = pathInfo.base.replace( replaceOptions.from[0], replaceOptions.to[0] );
@@ -86,7 +96,7 @@ function addComponent( componentName, subcomponentName, recursionLevel = 1 ) {
           // Callback
           ( ncpError ) => {
             if ( ncpError ) {
-              rimraf.sync( targetDirectory );
+              // rimraf.sync( targetDirectory );
               console.error( `ncp failed:` );
               reject( ncpError );
             }
@@ -100,10 +110,10 @@ function addComponent( componentName, subcomponentName, recursionLevel = 1 ) {
                 return true;
               } )
               .then( () => {
-                resolve( `Component created: ${isSubcomponent ? subcomponentFullName : componentName} @ ${targetDirectory}/` );
+                resolve( `Component created: ${( isSubcomponent || hasSubcomponent ) ? subcomponentFullName : componentName} @ ${targetDirectory}/` );
               } )
               .catch( ( replacementError ) => {
-                rimraf.sync( targetDirectory );
+                // rimraf.sync( targetDirectory );
                 console.error( `replace-in-file failed:` );
                 reject( replacementError );
               } );
