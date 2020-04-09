@@ -1,26 +1,41 @@
 import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
+import {
+  Switch, Route, Link, useRouteMatch, useLocation, withRouter,
+} from 'react-router-dom';
+import {
+  TransitionGroup,
+  CSSTransition,
+} from "react-transition-group";
 
 import { hasOwnProperty } from '@util/objects';
 
-import Icon from '@components/Icon';
-import Scale from '@components/Scale';
 import Button from '@components/Button';
 import ProgressBar from '@components/ProgressBar';
 import Row from '@components/Row';
 import Stack from '@components/Stack';
 import Alert from '@components/Alert';
 
+import HouseholdSize from './_AmiCalculatorHouseholdSize';
+import HouseholdIncome from './_AmiCalculatorHouseholdIncome';
+
 import './AmiCalculator.scss';
 
 function AmiCalculator( props ) {
+  // const { match, location, history } = props;
+  const { path, url } = useRouteMatch();
+  const location = useLocation();
   const [step, setStep] = useState( 1 );
   const noErrors = {
     "alert": {
       "message": "",
       "ref": useRef(),
     },
-    "familySize": {
+    "householdSize": {
+      "message": "",
+      "ref": useRef(),
+    },
+    "householdIncome": {
       "message": "",
       "ref": useRef(),
     },
@@ -28,33 +43,57 @@ function AmiCalculator( props ) {
   const [errors, setErrors] = useState( noErrors );
   const formRef = useRef();
   const totalSteps = 4;
+  const badErrorMessageElementError = ( showHide = 'show/hide' ) => (
+    console.error(
+      `Can’t ${showHide} UI error message: the value passed to \`${showHide}ErrorMessage\` is “${typeof $errorMessage}”;`
+      + ` should be a DOM element or a React ref pointing to a DOM element.`,
+    )
+  );
 
   const hideErrorMessage = ( $errorMessage ) => {
-    if ( hasOwnProperty( $errorMessage, 'current' ) ) {
-      $errorMessage = $errorMessage.current;
+    if ( $errorMessage ) {
+      if ( hasOwnProperty( $errorMessage, 'current' ) ) {
+        $errorMessage = $errorMessage.current;
+      }
+
+      if ( !$errorMessage ) {
+        badErrorMessageElementError( 'hide' );
+        return;
+      }
+
+      $errorMessage.classList.remove( '--visible' );
+
+      setTimeout( () => {
+        $errorMessage.hidden = true;
+      }, 62.5 );
+    } else {
+      badErrorMessageElementError( 'hide' );
     }
-
-    $errorMessage.classList.remove( '--visible' );
-
-    setTimeout( () => {
-      $errorMessage.hidden = true;
-    }, 62.5 );
   };
 
   const showErrorMessage = ( $errorMessage, index ) => {
-    if ( hasOwnProperty( $errorMessage, 'current' ) ) {
-      $errorMessage = $errorMessage.current;
-    }
-
-    $errorMessage.hidden = false;
-
-    setTimeout( () => {
-      $errorMessage.classList.add( '--visible' );
-
-      if ( index === 0 ) {
-        $errorMessage.focus();
+    if ( $errorMessage ) {
+      if ( hasOwnProperty( $errorMessage, 'current' ) ) {
+        $errorMessage = $errorMessage.current;
       }
-    }, 62.5 );
+
+      if ( !$errorMessage ) {
+        badErrorMessageElementError( 'show' );
+        return;
+      }
+
+      $errorMessage.hidden = false;
+
+      setTimeout( () => {
+        $errorMessage.classList.add( '--visible' );
+
+        if ( index === 0 ) {
+          $errorMessage.focus();
+        }
+      }, 62.5 );
+    } else {
+      badErrorMessageElementError( 'show' );
+    }
   };
 
   const reportMissingValidityProperty = ( $formControl ) => (
@@ -69,6 +108,8 @@ function AmiCalculator( props ) {
   );
 
   const handleSubmit = ( event ) => {
+    setStep( step + 1 );
+    props.history.push( `${path}/household-income` );
     event.preventDefault();
   };
 
@@ -125,14 +166,14 @@ function AmiCalculator( props ) {
 
     if ( numberOfErrors ) {
       newErrorList.forEach( ( newError ) => {
-        showErrorMessage( newErrors[newError].ref.current );
+        showErrorMessage( newErrors[newError].ref );
       } );
 
       setErrors( newErrors );
       event.preventDefault();
     } else {
       newErrorList.forEach( ( newError ) => {
-        hideErrorMessage( newErrors[newError].ref.current );
+        hideErrorMessage( newErrors[newError].ref );
       } );
 
       setErrors( noErrors );
@@ -161,26 +202,33 @@ function AmiCalculator( props ) {
         onChange={ handleFormInteraction }
         // onClick={ handleFormInteraction }
       >
-        <Stack space="ami-calculator-navigation">
-          <fieldset className="ml-ami-calculator__prompt">
-            <legend className="ml-ami-calculator__prompt-question">How many people live in your household of any age?</legend>
-            <div className="ml-ami-calculator__prompt-answer">
-              <Icon className="ml-ami-calculator__prompt-answer-icon" icon="family2" width="227" />
-              <Scale
-                className={ `ml-ami-calculator__prompt--answer-input` }
-                criterion="familySize"
-                value="1,2,3,4,5,6+"
-                aria-describedby="ami-calculator-form-errors ami-calculator-family-size-error"
-                required
-              />
-              <div
-                ref={ errors.familySize.ref }
-                id="ami-calculator-family-size-error"
-                className={ `t--subinfo t--err m-t100 ml-ami-calculator__prompt-answer-error` }
-                aria-live="polite"
-              >{ errors.familySize.message }</div>
-            </div>
-          </fieldset>
+        <Stack space="1">{/* ami-calculator-navigation */}
+          <nav>
+            <Link to={`${path}`}>Step 1</Link><br/>
+            <Link to={`${path}/household-income`}>Step 2</Link>
+          </nav>
+          <TransitionGroup className="step">
+            {/*
+              This is no different than other usage of
+              <CSSTransition>, just make sure to pass
+              `location` to `Switch` so it can match
+              the old location as it animates out.
+            */}
+            <CSSTransition
+              key={location.key}
+              classNames="fade"
+              timeout={450}
+            >
+              <Switch location={location}>
+                <Route exact path={ path }>
+                  <HouseholdSize error={ errors.householdSize } />
+                </Route>
+                <Route path={ `${path}/household-income` }>
+                  <HouseholdIncome error={ errors.householdIncome } />
+                </Route>
+              </Switch>
+            </CSSTransition>
+          </TransitionGroup>
           <Row as="nav" className={ `ml-ami-calculator__navigation ml-ami-calculator__navigation--step-${step}` } onClick={ handleFormInteraction }>
             { ( step > 1 ) && <Button className="ml-ami-calculator__button" data-is-navigation-button>Back</Button> }
             <Button className="ml-ami-calculator__button" variant="primary" disabled={ ( step === totalSteps ) } data-is-navigation-button>Next</Button>
@@ -198,6 +246,10 @@ function AmiCalculator( props ) {
 AmiCalculator.propTypes = {
   "children": PropTypes.node,
   "className": PropTypes.string,
+  // "match": PropTypes.object.isRequired,
+  // "location": PropTypes.object.isRequired,
+  "history": PropTypes.object.isRequired,
 };
 
-export default AmiCalculator;
+export default withRouter( AmiCalculator );
+// export default AmiCalculator;

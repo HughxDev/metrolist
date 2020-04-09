@@ -1,0 +1,36 @@
+// <AmiCalculatorHouseholdIncome />
+@import '@globals';
+
+.ml-ami-calculator__household-income {}
+
+.wallet {
+  position: relative;
+  height: 10rem;
+}
+
+.money {
+  z-index: 1;
+}
+
+.money-formatted {
+  z-index: 2;
+  pointer-events: none;
+}
+
+.money, .money-formatted {
+  height: 60px;
+  position: absolute;
+  font-size: rem( 45px );
+  font-family: $font-family-heading;
+  font-weight: bold;
+  border: 0;
+  border-bottom: rem( 3px ) solid black;
+  text-align: right;
+  width: rem( 299px );
+  display: block;
+  margin: 0 auto;
+}
+
+.money {
+  color: transparent;
+}

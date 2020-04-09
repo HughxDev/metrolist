@@ -14,11 +14,16 @@ import './App.scss';
 
 function App() {
   const location = useLocation();
+  let rootPathSlug;
 
-  console.log( location );
+  if ( location.pathname.lastIndexOf( '/' ) === 0 ) {
+    rootPathSlug = slugify( location.pathname );
+  } else {
+    rootPathSlug = slugify( location.pathname.substring( 0, location.pathname.lastIndexOf( '/' ) ) );
+  }
 
   return (
-    <Layout className={ `ml-app${location.pathname ? ` ml-app--${slugify( location.pathname )}` : ''}` }>
+    <Layout className={ `ml-app${location.pathname ? ` ml-app--${rootPathSlug}` : ''}` }>
       <AppHeader />
       <Switch>
         <Route path="/listings">
