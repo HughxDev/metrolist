@@ -57,7 +57,7 @@
     "whatwg-fetch": "^3.0.0"
   },
   "scripts": {
-    "start": "webpack-dev-server --open",
+    "start": "[ -z \"$(ipconfig getifaddr en6)\" ] && export LAN_IP_ADDRESS=\"$(ipconfig getifaddr en0)\" || export LAN_IP_ADDRESS=\"$(ipconfig getifaddr en6)\"; webpack-dev-server --host $LAN_IP_ADDRESS --open",
     "build": "webpack",
     "test": "echo 'not set up'",
     "eject": "echo 'not CRA'",
