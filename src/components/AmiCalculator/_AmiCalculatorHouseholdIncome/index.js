@@ -18,27 +18,40 @@ function AmiCalculatorHouseholdIncome( props ) {
     return s;
   }
 
-  const format = ( string ) => {
-    const sanitized = string.trim().replace( /[^0-9]+/g, '' );
-    // const float = parseFloat( sanitized );
-
-    // if ( !Number.isNaN( float ) ) {
-    //   // Via: https://blog.abelotech.com/posts/number-currency-formatting-javascript/
-    //   const formatted = float.toString().replace( /(\d)(?=(\d{3})+(?!\d))/g, '$1,' );
-    //   const currency = `$${formatted}`;
-    //   return currency;
-    // }
-
-    return sanitized;
-  };
   const handleMoneyChange = ( event ) => {
-    const formatted = format( event.target.value );
+    // Sanitize input
+    const amount = event.target.value.trim().replace( /[^0-9]+/g, '' );
+    let formatted;
 
-    if ( formatted.length <= 2 ) {
-      setMoney( `$0.${pad( formatted, 2 )}` );
+    // If less than or equal to two digits long, attribute the digits to cents
+    if ( amount.length <= 2 ) {
+      formatted = `$0.${pad( amount, 2 )}`;
+    // If greater than two digits long, attribute the remaining digits to dollars
     } else {
-      setMoney( `${formatted.substring( 0, formatted.length - 2 )}.${formatted.substr( -2 )}` );
+      const dollars = amount.substring( 0, amount.length - 2 );
+      const dollarAmount = parseInt( dollars, 10 );
+      let formattedDollars;
+
+      if ( dollarAmount >= 1000 ) {
+        // Add thousands separators
+        // Via: https://blog.abelotech.com/posts/number-currency-formatting-javascript/
+        formattedDollars = dollarAmount.toString().replace( /(\d)(?=(\d{3})+(?!\d))/g, '$1,' );
+      } else {
+        formattedDollars = dollarAmount.toString();
+      }
+
+      const cents = amount.substr( -2 );
+
+      formatted = `$${formattedDollars}.${cents}`;
     }
+
+    if ( formatted === '$0.00' ) {
+      setMoney( '' );
+      event.target.value = '';
+    } else {
+      setMoney( formatted );
+    }
+
     event.stopPropagation();
   };
 
@@ -47,8 +60,8 @@ function AmiCalculatorHouseholdIncome( props ) {
       <legend className="ml-ami-calculator__prompt-question">What is the total combined income all 3 people who live in your household before taxes?</legend>
       <Icon className="ml-ami-calculator__prompt-answer-icon" icon="deposit check" width="212" />
       <Stack space="ami-calculator-income-rate">
-        <div className="ml-ami-calculator__income">
-          <input className="money" type="text" pattern="[0-9]+" placeholder="$0.00" onChange={ handleMoneyChange } />
+        <div className="ml-ami-calculator__income">{/* style={ { "width": `${money.length ? `${money.length}rem` : ''}` } } */}
+          <input className="money" type="number" pattern="[0-9]*" placeholder="$0.00" onChange={ handleMoneyChange } />
           <output className="money-formatted">{ money }</output>
         </div>
         <Row className="ml-ami-calculator__income-rate">
