@@ -5,12 +5,13 @@
 .ml-checkbox {
   font-family: $font-family-montserrat;
   font-size: $font-size-filter-label;
+  // font-weight: bold;
   // white-space: nowrap;
   // font-size: responsive $font-size-filter-label $font-size-filter-label--desktop;
 }
   @include media-breakpoint-up( large ) {
     .ml-checkbox {
-      font-family: inherit;
+      // font-family: inherit;
       font-size: $font-size-filter-label--desktop;
       // font-size: responsive rem( 19.9px ) $font-size-filter-label--desktop;
     }
@@ -77,7 +78,7 @@
   }
     @include media-breakpoint-up( large ) {
       .ml-checkbox__text {
-        font-style: italic;
+        // font-style: italic;
       }
     }
     .ml-checkbox__form-control-container + .ml-checkbox__text {

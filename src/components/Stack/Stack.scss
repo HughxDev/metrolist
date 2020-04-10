@@ -132,6 +132,19 @@ $space: 1rem;
     }
   }
 
+  .ml-stack.ml-stack--space-ami-calculator-income-rate {
+    & > :not([class*="--hide-until-"]) + * {
+      
+    }
+  }
+  @include media-breakpoint-up( large ) {
+    .ml-stack.ml-stack--space-ami-calculator-income-rate {
+      & > :not([class*="--hide-until-"]) + * {
+        margin-top: rem( 67px );
+      }
+    }
+  }
+
   .ml-stack.ml-stack--indent-checkbox {
     margin-left: rem( 35px );
   }

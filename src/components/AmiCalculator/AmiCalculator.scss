@@ -2,7 +2,9 @@
 @import '@globals';
 
 .ml-ami-calculator {
-  width: ( $nominal-width-ami-calculator-desktop / $nominal-width-desktop ) * 100%;
+  // width: ( $nominal-width-ami-calculator-desktop / $nominal-width-desktop ) * 100%; // mockup
+  width: 90%;
+  max-width: 39rem;
   // margin: rem( 93px ) auto 0;
   margin: 0 auto;
   color: $color-black;
@@ -116,13 +118,18 @@
 
 .step {
   position: relative;
-  height: 24rem;
+  height: ( 28rem + rem( 87px / 2 ) );
+  overflow: hidden;
+  width: 100%;
+  // max-width: 39rem;
+  // margin: 0 auto;
 }
 
 .ml-ami-calculator__prompt {
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%;
 }
 
 // Animations

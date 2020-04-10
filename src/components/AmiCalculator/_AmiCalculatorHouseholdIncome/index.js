@@ -5,6 +5,7 @@ import Icon from '@components/Icon';
 import Checkbox from '@components/Checkbox';
 import Row from '@components/Row';
 // import Column from '@components/Column';
+import Stack from '@components/Stack';
 
 import './AmiCalculatorHouseholdIncome.scss';
 
@@ -45,14 +46,16 @@ function AmiCalculatorHouseholdIncome( props ) {
     <fieldset className={ `ml-ami-calculator__household-income ml-ami-calculator__prompt` }>
       <legend className="ml-ami-calculator__prompt-question">What is the total combined income all 3 people who live in your household before taxes?</legend>
       <Icon className="ml-ami-calculator__prompt-answer-icon" icon="deposit check" width="212" />
-      <div className="wallet">
-        <input className="money" type="text" pattern="[0-9]+" placeholder="$0.00" onChange={ handleMoneyChange } />
-        <output className="money-formatted">{ money }</output>
-      </div>
-      <Row>
-        <Checkbox>Yearly</Checkbox>
-        <Checkbox>Monthly</Checkbox>
-      </Row>
+      <Stack space="ami-calculator-income-rate">
+        <div className="ml-ami-calculator__income">
+          <input className="money" type="text" pattern="[0-9]+" placeholder="$0.00" onChange={ handleMoneyChange } />
+          <output className="money-formatted">{ money }</output>
+        </div>
+        <Row className="ml-ami-calculator__income-rate">
+          <Checkbox className="ml-ami-calculator__income-rate-option" columnWidth="1/2">Yearly</Checkbox>
+          <Checkbox className="ml-ami-calculator__income-rate-option" columnWidth="1/2">Monthly</Checkbox>
+        </Row>
+      </Stack>
     </fieldset>
   );
 }
