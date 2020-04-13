@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   Switch, Route, Link, useRouteMatch, useLocation, withRouter,
@@ -7,8 +7,10 @@ import {
   TransitionGroup,
   CSSTransition,
 } from "react-transition-group";
+// import { pascalCase } from 'change-case';
 
 import { hasOwnProperty } from '@util/objects';
+import { slugify, uncapitalize, componentCase } from '@util/strings';
 
 import Button from '@components/Button';
 import ProgressBar from '@components/ProgressBar';
@@ -25,24 +27,30 @@ function AmiCalculator( props ) {
   // const { match, location, history } = props;
   const { path, url } = useRouteMatch();
   const location = useLocation();
-  const [step, setStep] = useState( 1 );
+
   const noErrors = {
     "alert": {
-      "message": "",
-      "ref": useRef(),
+      "page": "all",
+      "errorMessage": "",
+      "errorRef": useRef(),
     },
     "householdSize": {
-      "message": "",
-      "ref": useRef(),
+      "page": 1,
+      "errorMessage": "",
+      "value": 0,
+      "errorRef": useRef(),
     },
     "householdIncome": {
-      "message": "",
-      "ref": useRef(),
+      "page": 2,
+      "errorMessage": "",
+      "value": 0,
+      "errorRef": useRef(),
     },
   };
-  const [errors, setErrors] = useState( noErrors );
+  const [formData, setFormData] = useState( noErrors );
+
   const formRef = useRef();
-  const totalSteps = 4;
+  const totalSteps = props.steps.length;
   const badErrorMessageElementError = ( showHide = 'show/hide' ) => (
     console.error(
       `Can’t ${showHide} UI error message: the value passed to \`${showHide}ErrorMessage\` is “${typeof $errorMessage}”;`
@@ -96,27 +104,120 @@ function AmiCalculator( props ) {
     }
   };
 
-  const reportMissingValidityProperty = ( $formControl ) => (
-    console.error(
+  const reportMissingValidityProperty = ( $formControl ) => {
+    throw new Error(
       `Form control `
         + `\`${$formControl.nodeName.toLowerCase()}`
         + `${$formControl.id && `#${$formControl.id}`}`
         + `${$formControl.className && `.${$formControl.className}`}\``
       + ` does not have the \`validity\` or \`checkValidity\` properties.`
       + ` This means either the current browser does not support HTML5 forms, or the React ref is misconfigured.`,
-    )
-  );
+    );
+  };
+
+  const reportMissingDisplayNameProperty = ( index ) => {
+    throw new Error(
+      `AMI Calculator step definition is incomplete:`
+      + ` the object at \`AmiCalculator.steps[${index}]\` either needs a \`relativePath\` property,`
+      + ` or its constituent component needs to specify React’s \`displayName\` property.`,
+    );
+  };
+
+  const getStepNumberFromPath = () => {
+    const currentRelativePath = location.pathname.replace( path, '/' ).replace( '//', '/' );
+
+    for ( let index = 0; index < props.steps.length; index++ ) {
+      const currentStep = props.steps[index];
+      let relativePath;
+
+      if ( hasOwnProperty( currentStep, 'relativePath' ) ) {
+        relativePath = currentStep.relativePath;
+      } else if ( hasOwnProperty( currentStep.Component, 'displayName' ) ) {
+        relativePath = `/${slugify( currentStep.Component )}`;
+      } else {
+        reportMissingDisplayNameProperty( index );
+      }
+
+      if ( relativePath === currentRelativePath ) {
+        return ( index + 1 );
+      }
+    }
+
+    throw new Error( `Cannot find step number for ${location.pathname}; please check the \`AmiCalculator.steps\` array.` );
+  };
+
+  const [step, setStep] = useState( getStepNumberFromPath() );
+
+  useEffect( () => {
+    console.log( 'location', location );
+    console.log( 'step', step );
+  }, [] );
+
+  const getNextStepPath = () => {
+    const nextStep = ( step + 1 );
+    const stepDefinition = props.steps[nextStep - 1];
+
+    console.log( 'stepDefinition', stepDefinition );
+
+    if ( nextStep <= props.steps.length ) {
+      if ( stepDefinition === props.steps[0] ) {
+        return path;
+      }
+
+      return `${path}/${slugify( stepDefinition.Component.displayName )}`;
+    }
+
+    return null;
+  };
+
+  const getPreviousStepPath = () => {
+    const previousStep = ( step - 1 );
+    const stepDefinition = props.steps[previousStep - 1];
+
+    console.log( 'stepDefinition', stepDefinition );
+
+    if ( previousStep >= 0 ) {
+      if ( stepDefinition === props.steps[0] ) {
+        return path;
+      }
+
+      return `${path}/${slugify( stepDefinition.Component.displayName )}`;
+    }
+
+    return null;
+  };
+
+  const navigateForward = () => {
+    const nextStepPath = getNextStepPath();
+
+    if ( nextStepPath !== null ) {
+      props.history.push( nextStepPath );
+    } else {
+      console.error( 'Can’t navigate forward' );
+    }
+  };
+
+  const navigateBackward = () => {
+    const previousStepPath = getPreviousStepPath();
+
+    // console.log( 'step')
+    console.log( 'previousStepPath', previousStepPath );
+
+    if ( previousStepPath !== null ) {
+      props.history.push( previousStepPath );
+    } else {
+      console.error( 'Can’t navigate backward' );
+    }
+  };
 
   const handleSubmit = ( event ) => {
-    setStep( step + 1 );
-    props.history.push( `${path}/household-income` );
     event.preventDefault();
   };
 
   const getErrors = () => {
     const $form = formRef.current;
     const formValidity = $form.checkValidity();
-    const newErrors = { ...errors };
+    const newErrors = { ...formData };
     let numberOfErrors = 0;
 
     if ( !formValidity ) {
@@ -124,8 +225,8 @@ function AmiCalculator( props ) {
       const radioButtons = {};
 
       newErrors.alert = {
-        ...errors.alert,
-        "message": "There were errors in your submission.",
+        ...formData.alert,
+        "errorMessage": "There were errors in your submission.",
       };
 
       for ( let index = 0; index < $elements.length; index++ ) {
@@ -146,7 +247,7 @@ function AmiCalculator( props ) {
 
             newErrors[name] = {
               ...newErrors[name],
-              "message": "Please fill out this field.",
+              "errorMessage": "Please fill out this field.",
             };
 
             numberOfErrors++;
@@ -155,6 +256,10 @@ function AmiCalculator( props ) {
           reportMissingValidityProperty( $element );
         } // if validity in $element
       } // for
+    } else {
+      Object.keys( formData ).forEach( ( errorName ) => {
+        newErrors[errorName].errorMessage = '';
+      } );
     }
 
     return [newErrors, numberOfErrors];
@@ -162,22 +267,49 @@ function AmiCalculator( props ) {
 
   const handleFormInteraction = ( event ) => {
     const [newErrors, numberOfErrors] = getErrors();
-    const newErrorList = Object.keys( newErrors );
+    const newErrorList = Object.keys( newErrors ).filter( ( formControlDataKey ) => (
+      ( newErrors[formControlDataKey].page === step )
+        || ( newErrors[formControlDataKey].page === 'all' )
+    ) );
+
+    const navigatePrevious = event.target.hasAttribute( 'data-navigate-previous' );
+    const navigateNext = event.target.hasAttribute( 'data-navigate-next' );
+
+    // console.log( 'newErrors', newErrors );
+    console.log( 'numberOfErrors', numberOfErrors );
+    console.log( 'newErrorList', newErrorList );
 
     if ( numberOfErrors ) {
       newErrorList.forEach( ( newError ) => {
-        showErrorMessage( newErrors[newError].ref );
+        showErrorMessage( newErrors[newError].errorRef );
       } );
 
-      setErrors( newErrors );
-      event.preventDefault();
+      setFormData( newErrors );
+
+      if ( navigatePrevious ) {
+        navigateBackward();
+      }
     } else {
       newErrorList.forEach( ( newError ) => {
-        hideErrorMessage( newErrors[newError].ref );
+        hideErrorMessage( newErrors[newError].errorRef );
       } );
 
-      setErrors( noErrors );
+      setFormData( noErrors );
+
+      if ( navigateNext ) {
+        console.log( 'Navigate Next' );
+        navigateForward();
+      } else if ( navigatePrevious ) {
+        console.log( 'Navigate Prev' );
+        navigateBackward();
+      }
     }
+
+    if ( navigateNext || navigatePrevious ) {
+      event.preventDefault();
+    }
+
+    console.log( '---' );
   };
 
   return (
@@ -188,12 +320,12 @@ function AmiCalculator( props ) {
         <ProgressBar current={ step } total={ totalSteps } />
       </Stack>
       <Alert
-        id="ami-calculator-form-errors"
-        ref={ errors.alert.ref }
+        id="ami-calculator-form-formData"
+        ref={ formData.alert.errorRef }
         className={ `ml-ami-calculator__error-alert` }
         variant="danger"
       >
-        { errors.alert.message }
+        { formData.alert.errorMessage }
       </Alert>
       <form
         ref={ formRef }
@@ -220,18 +352,49 @@ function AmiCalculator( props ) {
               timeout={450}
             >
               <Switch location={location}>
-                <Route exact path={ path }>
-                  <HouseholdSize error={ errors.householdSize } />
-                </Route>
-                <Route path={ `${path}/household-income` }>
-                  <HouseholdIncome error={ errors.householdIncome } />
-                </Route>
+                {
+                  props.steps.map( ( currentStep, index ) => {
+                    const isFirstStep = ( index === 0 );
+                    let displayName;
+
+                    if ( hasOwnProperty( currentStep, 'relativePath' ) && currentStep.relativePath !== '/' ) {
+                      displayName = componentCase( currentStep.relativePath );
+                    } else if ( hasOwnProperty( currentStep.Component, 'displayName' ) ) {
+                      displayName = currentStep.Component.displayName;
+                    } else {
+                      reportMissingDisplayNameProperty( index );
+                    }
+
+                    const formControlDataKey = uncapitalize( displayName );
+                    // const Step = React.createElement( currentStep, { setStep, "formControlData": formData[formControlDataKey] }, null );
+                    const routePath = ( isFirstStep ? path : `${path}/${slugify( displayName )}` );
+
+                    return (
+                      <Route key={ index } exact={ isFirstStep } path={ routePath }>
+                        <currentStep.Component step={ index + 1 } setStep={ setStep } formControlData={ formData[formControlDataKey] } />
+                      </Route>
+                    );
+                  } )
+                }
               </Switch>
             </CSSTransition>
           </TransitionGroup>
           <Row as="nav" className={ `ml-ami-calculator__navigation ml-ami-calculator__navigation--step-${step}` } onClick={ handleFormInteraction }>
-            { ( step > 1 ) && <Button className="ml-ami-calculator__button" data-is-navigation-button>Back</Button> }
-            <Button className="ml-ami-calculator__button" variant="primary" disabled={ ( step === totalSteps ) } data-is-navigation-button>Next</Button>
+            <Button
+              className="ml-ami-calculator__button"
+              type="button"
+              disabled={ ( step === 1 ) }
+              data-is-navigation-button
+              data-navigate-previous
+            >Back</Button>
+            <Button
+              className="ml-ami-calculator__button"
+              type="button"
+              variant="primary"
+              disabled={ ( step === totalSteps ) }
+              data-is-navigation-button
+              data-navigate-next
+            >Next</Button>
           </Row>
         </Stack>
       </form>
@@ -249,6 +412,24 @@ AmiCalculator.propTypes = {
   // "match": PropTypes.object.isRequired,
   // "location": PropTypes.object.isRequired,
   "history": PropTypes.object.isRequired,
+  "steps": PropTypes.arrayOf(
+    PropTypes.shape( {
+      "relativePath": PropTypes.string,
+      "Component": PropTypes.func.isRequired,
+    } ),
+  ).isRequired,
+};
+
+AmiCalculator.defaultProps = {
+  "steps": [
+    {
+      "relativePath": "/",
+      "Component": HouseholdSize,
+    }, {
+      "relativePath": "/household-income",
+      "Component": HouseholdIncome,
+    },
+  ], // "Disclosure", "Result"],
 };
 
 export default withRouter( AmiCalculator );

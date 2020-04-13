@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Icon from '@components/Icon';
@@ -56,6 +56,8 @@ function AmiCalculatorHouseholdIncome( props ) {
     event.stopPropagation();
   };
 
+  useEffect( () => props.setStep( props.step ), [] );
+
   return (
     <fieldset className={ `ml-ami-calculator__household-income ml-ami-calculator__prompt` }>
       <legend className="ml-ami-calculator__prompt-question">What is the total combined income all 3 people who live in your household before taxes?</legend>
@@ -76,8 +78,13 @@ function AmiCalculatorHouseholdIncome( props ) {
 }
 
 AmiCalculatorHouseholdIncome.propTypes = {
+  "step": PropTypes.number,
+  "setStep": PropTypes.func,
   "children": PropTypes.node,
   "className": PropTypes.string,
+  "formControlData": PropTypes.object,
 };
+
+AmiCalculatorHouseholdIncome.displayName = "HouseholdIncome";
 
 export default AmiCalculatorHouseholdIncome;

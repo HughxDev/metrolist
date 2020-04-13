@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Icon from '@components/Icon';
@@ -7,6 +7,8 @@ import Scale from '@components/Scale';
 import './AmiCalculatorHouseholdSize.scss';
 
 function AmiCalculatorHouseholdSize( props ) {
+  useEffect( () => props.setStep( props.step ), [] );
+
   return (
     <fieldset className="ml-ami-calculator__household-size ml-ami-calculator__prompt">
       <legend className="ml-ami-calculator__prompt-question">How many people live in your household of any age?</legend>
@@ -20,20 +22,24 @@ function AmiCalculatorHouseholdSize( props ) {
           required
         />
         <div
-          ref={ props.error.ref }
+          ref={ props.formControlData.errorRef }
           id="ami-calculator-household-size-error"
           className={ `t--subinfo t--err m-t100 ml-ami-calculator__prompt-answer-error` }
           aria-live="polite"
-        >{ props.error.message }</div>
+        >{ props.formControlData.errorMessage }</div>
       </div>
     </fieldset>
   );
 }
 
 AmiCalculatorHouseholdSize.propTypes = {
+  "step": PropTypes.number,
+  "setStep": PropTypes.func,
   "children": PropTypes.node,
   "className": PropTypes.string,
-  "error": PropTypes.object,
+  "formControlData": PropTypes.object,
 };
+
+AmiCalculatorHouseholdSize.displayName = "HouseholdSize";
 
 export default AmiCalculatorHouseholdSize;

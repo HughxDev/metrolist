@@ -56,9 +56,9 @@
   .ml-ami-calculator__navigation {
     justify-content: space-between;
   }
-  .ml-ami-calculator__navigation.ml-ami-calculator__navigation--step-1 {
-    justify-content: flex-end;
-  }
+  // .ml-ami-calculator__navigation.ml-ami-calculator__navigation--step-1 {
+  //   justify-content: flex-end;
+  // }
   .ml-ami-calculator__button,
   .btn[class*="btn--metrolist"].ml-ami-calculator__button {
     width: rem( 252px );
