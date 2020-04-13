@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Icon from '@components/Icon';
-import Checkbox from '@components/Checkbox';
-import Row from '@components/Row';
+// import Checkbox from '@components/Checkbox';
+import Scale from '@components/Scale';
+// import Row from '@components/Row';
 // import Column from '@components/Column';
 import Stack from '@components/Stack';
 
@@ -64,10 +65,11 @@ function AmiCalculatorHouseholdIncome( props ) {
           <input className="money" type="number" pattern="[0-9]*" placeholder="$0.00" onChange={ handleMoneyChange } />
           <output className="money-formatted">{ money }</output>
         </div>
-        <Row className="ml-ami-calculator__income-rate">
+        {/* <Row className="ml-ami-calculator__income-rate">
           <Checkbox className="ml-ami-calculator__income-rate-option" columnWidth="1/2">Yearly</Checkbox>
           <Checkbox className="ml-ami-calculator__income-rate-option" columnWidth="1/2">Monthly</Checkbox>
-        </Row>
+        </Row> */}
+        <Scale criterion="incomeRate" value="Yearly,Monthly" defaultValue="Monthly" />
       </Stack>
     </fieldset>
   );

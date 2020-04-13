@@ -24,7 +24,7 @@ const Scale = forwardRef( ( props, ref ) => (
     props.value.split( ',' )
       .map( ( value, index ) => (
         <label key={ index } className="ml-scale__label">
-          <input ref={ ( index === 0 ) ? ref : null } className="ml-scale__form-control" name={ props.criterion } type="radio" required={ props.required } />
+          <input ref={ ( index === 0 ) ? ref : null } className="ml-scale__form-control" name={ props.criterion } type="radio" required={ props.required } defaultChecked={ value === props.defaultValue } />
           <span className="ml-scale__text">{ value }</span>
         </label>
       ) )
@@ -53,6 +53,7 @@ Scale.propTypes = {
 
     return null;
   },
+  "defaultValue": PropTypes.string,
 };
 
 export default Scale;
