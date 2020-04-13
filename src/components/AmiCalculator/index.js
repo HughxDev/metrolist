@@ -20,6 +20,7 @@ import Alert from '@components/Alert';
 
 import HouseholdSize from './_AmiCalculatorHouseholdSize';
 import HouseholdIncome from './_AmiCalculatorHouseholdIncome';
+import Disclosure from './_AmiCalculatorDisclosure';
 
 import './AmiCalculator.scss';
 
@@ -42,6 +43,12 @@ function AmiCalculator( props ) {
     },
     "householdIncome": {
       "page": 2,
+      "errorMessage": "",
+      "value": 0,
+      "errorRef": useRef(),
+    },
+    "disclosure": {
+      "page": 3,
       "errorMessage": "",
       "value": 0,
       "errorRef": useRef(),
@@ -119,7 +126,7 @@ function AmiCalculator( props ) {
     throw new Error(
       `AMI Calculator step definition is incomplete:`
       + ` the object at \`AmiCalculator.steps[${index}]\` either needs a \`relativePath\` property,`
-      + ` or its constituent component needs to specify React’s \`displayName\` property.`,
+      + ` or its constituent ami-calculator needs to specify React’s \`displayName\` property.`,
     );
   };
 
@@ -164,7 +171,17 @@ function AmiCalculator( props ) {
         return path;
       }
 
-      return `${path}/${slugify( stepDefinition.Component.displayName )}`;
+      let relativePath = '';
+
+      if ( hasOwnProperty( stepDefinition, 'relativePath' ) ) {
+        relativePath = stepDefinition.relativePath;
+      } else if ( hasOwnProperty( stepDefinition.Component, 'displayName' ) ) {
+        relativePath = `/${slugify( stepDefinition.Component.displayName )}`;
+      } else {
+        reportMissingDisplayNameProperty( nextStep - 1 );
+      }
+
+      return `${path}${relativePath}`;
     }
 
     return null;
@@ -337,7 +354,8 @@ function AmiCalculator( props ) {
         <Stack space="1">{/* ami-calculator-navigation */}
           <nav>
             <Link to={`${path}`}>Step 1</Link><br/>
-            <Link to={`${path}/household-income`}>Step 2</Link>
+            <Link to={`${path}/household-income`}>Step 2</Link><br/>
+            <Link to={`${path}/disclosure`}>Step 3</Link>
           </nav>
           <TransitionGroup className="step">
             {/*
@@ -357,7 +375,7 @@ function AmiCalculator( props ) {
                     const isFirstStep = ( index === 0 );
                     let displayName;
 
-                    if ( hasOwnProperty( currentStep, 'relativePath' ) && currentStep.relativePath !== '/' ) {
+                    if ( hasOwnProperty( currentStep, 'relativePath' ) && ( currentStep.relativePath !== '/' ) ) {
                       displayName = componentCase( currentStep.relativePath );
                     } else if ( hasOwnProperty( currentStep.Component, 'displayName' ) ) {
                       displayName = currentStep.Component.displayName;
@@ -425,9 +443,14 @@ AmiCalculator.defaultProps = {
     {
       "relativePath": "/",
       "Component": HouseholdSize,
-    }, {
+    },
+    {
       "relativePath": "/household-income",
       "Component": HouseholdIncome,
+    },
+    {
+      "relativePath": "/disclosure",
+      "Component": Disclosure,
     },
   ], // "Disclosure", "Result"],
 };

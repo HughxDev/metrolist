@@ -11,7 +11,9 @@ function renderText( text ) {
   return <span className="ml-checkbox__text">{ text }</span>;
 }
 
-function renderLabel( children, subcategoriesOnly ) {
+function renderLabel( children, props ) {
+  const { subcategoriesOnly } = props;
+
   if ( subcategoriesOnly ) {
     return (
       <span className="ml-checkbox__label">
@@ -24,7 +26,7 @@ function renderLabel( children, subcategoriesOnly ) {
     <label className="ml-checkbox__label">
       <Row className="ml-checkbox__label-content" space="panel" align="middle">
         <span className="ml-checkbox__form-control-container">
-          <input className="ml-checkbox__form-control" type="checkbox" />
+          <input className="ml-checkbox__form-control" name={ props.criterion } type="checkbox" required={ props.required } />
           <span className="ml-checkbox__form-control-ui"></span>
         </span>
         { renderText( children ) }
@@ -33,10 +35,12 @@ function renderLabel( children, subcategoriesOnly ) {
   );
 }
 
-function renderChoices( { children, subcategoriesOnly } ) {
+function renderChoices( props ) {
+  const { children, subcategoriesOnly, required } = props;
+
   switch ( typeof children ) {
     case 'string':
-      return renderLabel( children, subcategoriesOnly );
+      return renderLabel( children, props );
 
     case 'object': {
       let firstRenderedChoice;
@@ -44,7 +48,7 @@ function renderChoices( { children, subcategoriesOnly } ) {
       const firstChild = childArray.shift();
 
       if ( firstChild.type.displayName === 'FilterLabel' ) {
-        firstRenderedChoice = renderLabel( firstChild, subcategoriesOnly );
+        firstRenderedChoice = renderLabel( firstChild, props );
       }
 
       return (
@@ -94,6 +98,11 @@ Checkbox.propTypes = {
   "criterion": PropTypes.string,
   "subcategoriesOnly": PropTypes.bool,
   "columnWidth": PropTypes.oneOfType( [PropTypes.string, PropTypes.bool] ),
+  "required": PropTypes.bool,
+};
+
+Checkbox.defaultProps = {
+  "required": false,
 };
 
 export default Checkbox;
