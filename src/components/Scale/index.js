@@ -21,10 +21,18 @@ import './Scale.scss';
 
 const Scale = forwardRef( ( props, ref ) => (
   <div className={ `ml-scale${props.className ? ` ${props.className}` : ''}` }>{
-    props.value.split( ',' )
+    props.values.split( ',' )
       .map( ( value, index ) => (
         <label key={ index } className="ml-scale__label">
-          <input ref={ ( index === 0 ) ? ref : null } className="ml-scale__form-control" name={ props.criterion } type="radio" required={ props.required } defaultChecked={ value === props.defaultValue } />
+          <input
+            ref={ ( index === 0 ) ? ref : null }
+            className="ml-scale__form-control"
+            name={ props.criterion }
+            value={ value }
+            type="radio"
+            required={ props.required }
+            defaultChecked={ value === props.value }
+          />
           <span className="ml-scale__text">{ value }</span>
         </label>
       ) )
@@ -38,7 +46,7 @@ Scale.propTypes = {
   "required": PropTypes.bool,
   "className": PropTypes.string,
   "criterion": PropTypes.string,
-  "value": function commaDelimited( props, propName, componentName ) {
+  "values": function commaDelimited( props, propName, componentName ) {
     const prop = props[propName];
 
     if ( prop.indexOf( ',' ) === -1 ) {
@@ -53,7 +61,7 @@ Scale.propTypes = {
 
     return null;
   },
-  "defaultValue": PropTypes.string,
+  "value": PropTypes.string,
 };
 
 export default Scale;

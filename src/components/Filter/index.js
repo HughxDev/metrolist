@@ -30,6 +30,7 @@ Filter.propTypes = {
   "type": PropTypes.oneOf( ['checkbox', 'checkbox-button', 'scale'] ),
   "criterion": PropTypes.string,
   "value": PropTypes.string,
+  "values": PropTypes.string,
 };
 
 Filter.Label = ( props ) => <>{ props.children }</>;

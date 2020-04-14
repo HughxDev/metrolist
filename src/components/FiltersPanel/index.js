@@ -137,7 +137,7 @@ function FiltersPanel( props ) {
           </FilterGroup>
           <FilterGroup>
             <FilterGroup.Label>Bedrooms</FilterGroup.Label>
-            <Filter type="scale" criterion="bedrooms" value="0,1,2,3,4+">Bedrooms</Filter>
+            <Filter type="scale" criterion="bedrooms" values="0,1,2,3,4+">Bedrooms</Filter>
           </FilterGroup>
           <FilterGroup>
             <FilterGroup.Label>Income Eligibility (AMI%)</FilterGroup.Label>

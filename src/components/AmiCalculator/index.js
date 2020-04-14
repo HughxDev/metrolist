@@ -1,4 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {
+  useState, useRef, useEffect, useMemo,
+} from 'react';
 import PropTypes from 'prop-types';
 import {
   Switch, Route, Link, useRouteMatch, useLocation, withRouter,
@@ -26,44 +28,51 @@ import './AmiCalculator.scss';
 
 function AmiCalculator( props ) {
   // const { match, location, history } = props;
-  const { path, url } = useRouteMatch();
+  const { path } = useRouteMatch();
   const location = useLocation();
 
   const noErrors = {
+    "steps": [...props.steps],
     "alert": {
       "page": "all",
+      "value": "",
       "errorMessage": "",
       "errorRef": useRef(),
     },
     "householdSize": {
       "page": 1,
+      "value": "",
       "errorMessage": "",
-      "value": 0,
       "errorRef": useRef(),
     },
     "householdIncome": {
       "page": 2,
+      "value": "",
       "errorMessage": "",
-      "value": 0,
+      "errorRef": useRef(),
+    },
+    "incomeRate": {
+      "page": 2,
+      "value": "",
+      "errorMessage": "",
       "errorRef": useRef(),
     },
     "disclosure": {
       "page": 3,
+      "value": "",
       "errorMessage": "",
-      "value": 0,
       "errorRef": useRef(),
     },
   };
   const [formData, setFormData] = useState( noErrors );
-
   const formRef = useRef();
   const totalSteps = props.steps.length;
-  const badErrorMessageElementError = ( showHide = 'show/hide' ) => (
-    console.error(
+  const badErrorMessageElementError = ( showHide = 'show/hide' ) => {
+    throw new Error(
       `Can’t ${showHide} UI error message: the value passed to \`${showHide}ErrorMessage\` is “${typeof $errorMessage}”;`
-      + ` should be a DOM element or a React ref pointing to a DOM element.`,
-    )
-  );
+      + ` should be a DOM element or a React ref pointing to a DOM element. Check the state object and make sure your input has an \`errorRef\` property.`,
+    );
+  };
 
   const hideErrorMessage = ( $errorMessage ) => {
     if ( $errorMessage ) {
@@ -164,7 +173,8 @@ function AmiCalculator( props ) {
     const nextStep = ( step + 1 );
     const stepDefinition = props.steps[nextStep - 1];
 
-    console.log( 'stepDefinition', stepDefinition );
+    console.log( `Going from step ${step} to step ${nextStep}` );
+    console.log( `props.steps[${nextStep - 1}]`, stepDefinition );
 
     if ( nextStep <= props.steps.length ) {
       if ( stepDefinition === props.steps[0] ) {
@@ -191,7 +201,8 @@ function AmiCalculator( props ) {
     const previousStep = ( step - 1 );
     const stepDefinition = props.steps[previousStep - 1];
 
-    console.log( 'stepDefinition', stepDefinition );
+    console.log( `Going from step ${step} to step ${previousStep}` );
+    console.log( `props.steps[${previousStep - 1}]`, stepDefinition );
 
     if ( previousStep >= 0 ) {
       if ( stepDefinition === props.steps[0] ) {
@@ -283,10 +294,10 @@ function AmiCalculator( props ) {
   };
 
   const handleFormInteraction = ( event ) => {
-    const [newErrors, numberOfErrors] = getErrors();
-    const newErrorList = Object.keys( newErrors ).filter( ( formControlDataKey ) => (
-      ( newErrors[formControlDataKey].page === step )
-        || ( newErrors[formControlDataKey].page === 'all' )
+    const [newFormData, numberOfErrors] = getErrors();
+    const newErrorList = Object.keys( newFormData ).filter( ( formControlDataKey ) => (
+      ( newFormData[formControlDataKey].page === step )
+        || ( newFormData[formControlDataKey].page === 'all' )
     ) );
 
     const navigatePrevious = event.target.hasAttribute( 'data-navigate-previous' );
@@ -296,22 +307,45 @@ function AmiCalculator( props ) {
     console.log( 'numberOfErrors', numberOfErrors );
     console.log( 'newErrorList', newErrorList );
 
+    if ( event.type === 'change' ) {
+      const { name } = event.target;
+
+      if ( hasOwnProperty( newFormData, name ) ) {
+        newFormData[name].value = event.target.value;
+      } else {
+        console.error( new Error( `Can’t update state: the state object for AmiCalculator is missing a key named \`${name}\`.` ) );
+      }
+
+      console.log( 'value changed' );
+      console.log( 'formData', formData );
+    }
+
     if ( numberOfErrors ) {
       newErrorList.forEach( ( newError ) => {
-        showErrorMessage( newErrors[newError].errorRef );
+        try {
+          showErrorMessage( newFormData[newError].errorRef );
+        } catch ( exception ) {
+          console.error( exception );
+          console.log( 'newError', newError, newFormData[newError] );
+        }
       } );
 
-      setFormData( newErrors );
+      setFormData( newFormData );
 
       if ( navigatePrevious ) {
         navigateBackward();
       }
     } else {
       newErrorList.forEach( ( newError ) => {
-        hideErrorMessage( newErrors[newError].errorRef );
+        try {
+          hideErrorMessage( newFormData[newError].errorRef );
+        } catch ( exception ) {
+          console.error( exception );
+          console.log( 'newError', newError, newFormData[newError] );
+        }
       } );
 
-      setFormData( noErrors );
+      setFormData( newFormData );
 
       if ( navigateNext ) {
         console.log( 'Navigate Next' );
@@ -356,6 +390,7 @@ function AmiCalculator( props ) {
             <Link to={`${path}`}>Step 1</Link><br/>
             <Link to={`${path}/household-income`}>Step 2</Link><br/>
             <Link to={`${path}/disclosure`}>Step 3</Link>
+            {/* <Link to={`${path}/results`}>Step 4</Link> */}
           </nav>
           <TransitionGroup className="step">
             {/*
@@ -388,8 +423,9 @@ function AmiCalculator( props ) {
                     const routePath = ( isFirstStep ? path : `${path}/${slugify( displayName )}` );
 
                     return (
-                      <Route key={ index } exact={ isFirstStep } path={ routePath }>
-                        <currentStep.Component step={ index + 1 } setStep={ setStep } formControlData={ formData[formControlDataKey] } />
+                      <Route key={ formControlDataKey } exact={ isFirstStep } path={ routePath } render={ () => (
+                        <currentStep.Component step={ index + 1 } setStep={ setStep } formControlData={ formData } />
+                      ) }>
                       </Route>
                     );
                   } )

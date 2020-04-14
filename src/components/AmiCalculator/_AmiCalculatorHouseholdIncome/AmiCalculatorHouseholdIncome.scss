@@ -12,17 +12,18 @@
 }
 
 .money {
-  z-index: 1;
+  z-index: 2;
 }
 
 .money-formatted {
-  z-index: 2;
+  z-index: 1;
   pointer-events: none;
 }
 
 .money, .money-formatted {
   width: 100%;
   height: 100%;
+  // height: 60px;
   position: absolute;
   font-size: rem( 45px );
   font-family: $font-family-heading;
@@ -35,8 +36,19 @@
   overflow: hidden;
 }
 
+.money-formatted.money-formatted--zero {
+  color: rgba( 0, 0, 0, .5 );
+}
+
 .money {
-  color: transparent;
+  // color: crimson;
+  background-color: transparent;
+}
+
+.money::-webkit-inner-spin-button, 
+.money::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
 }
 
 // .ml-ami-calculator__income-rate {}

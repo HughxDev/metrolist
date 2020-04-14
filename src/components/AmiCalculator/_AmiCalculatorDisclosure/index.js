@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Row from '@components/Row';
@@ -9,6 +9,8 @@ import Checkbox from '@components/Checkbox';
 import './AmiCalculatorDisclosure.scss';
 
 function AmiCalculatorDisclosure( props ) {
+  useEffect( () => props.setStep( props.step ), [] );
+
   return (
     <div className={ `ml-ami-calculator__disclosure${props.className ? ` ${props.className}` : ''}` }>
       <Row>
@@ -25,17 +27,19 @@ function AmiCalculatorDisclosure( props ) {
         <p>The above information will be combined to estimate your eligibility for income-restricted housing.  Eligibility is officially and finally determined during the application process.</p>
         <Checkbox criterion="disclosure" aria-describedby="ami-calculator-disclosure-accept-error" required>I have read and understand the above statement.</Checkbox>
         <div
-          ref={ props.formControlData.errorRef }
+          ref={ props.formControlData.disclosure.errorRef }
           id="ami-calculator-disclosure-accept-error"
           className={ `t--subinfo t--err m-t100 ml-ami-calculator__prompt-answer-error` }
           aria-live="polite"
-        >{ props.formControlData.errorMessage }</div>
+        >{ props.formControlData.disclosure.errorMessage }</div>
       </Stack>
     </div>
   );
 }
 
 AmiCalculatorDisclosure.propTypes = {
+  "step": PropTypes.number,
+  "setStep": PropTypes.func,
   "children": PropTypes.node,
   "className": PropTypes.string,
   "formControlData": PropTypes.object,

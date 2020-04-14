@@ -7,7 +7,10 @@ import Scale from '@components/Scale';
 import './AmiCalculatorHouseholdSize.scss';
 
 function AmiCalculatorHouseholdSize( props ) {
-  useEffect( () => props.setStep( props.step ), [] );
+  useEffect( () => {
+    props.setStep( props.step );
+    console.log( 'props.formControlData', props.formControlData );
+  }, [] );
 
   return (
     <fieldset className="ml-ami-calculator__household-size ml-ami-calculator__prompt">
@@ -17,16 +20,17 @@ function AmiCalculatorHouseholdSize( props ) {
         <Scale
           className={ `ml-ami-calculator__prompt--answer-input` }
           criterion="householdSize"
-          value="1,2,3,4,5,6+"
+          values="1,2,3,4,5,6+"
+          value={ props.formControlData.householdSize.value }
           aria-describedby="ami-calculator-form-errors ami-calculator-household-size-error"
           required
         />
         <div
-          ref={ props.formControlData.errorRef }
+          ref={ props.formControlData.householdSize.errorRef }
           id="ami-calculator-household-size-error"
           className={ `t--subinfo t--err m-t100 ml-ami-calculator__prompt-answer-error` }
           aria-live="polite"
-        >{ props.formControlData.errorMessage }</div>
+        >{ props.formControlData.householdSize.errorMessage }</div>
       </div>
     </fieldset>
   );
