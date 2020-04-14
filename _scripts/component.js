@@ -56,18 +56,28 @@ function addComponent( componentName, subcomponentName, recursionLevel = 1 ) {
     replaceOptions.to = [componentName, `${slugify( componentName )}`];
   }
 
+  let targetDirectoryBaseExists;
+  let targetDirectoryExists;
+
+  try {
+    fs.statSync( targetDirectoryBase );
+    targetDirectoryBaseExists = true;
+  } catch ( error ) {
+    // console.error( error );
+    targetDirectoryBaseExists = false;
+  }
+
+  try {
+    fs.statSync( targetDirectory );
+    targetDirectoryExists = true;
+  } catch ( error ) {
+    // console.error( error );
+    targetDirectoryExists = false;
+  }
+
   return (
     Promise.resolve()
       .then( () => {
-        let targetDirectoryExists;
-
-        try {
-          fs.accessSync( targetDirectory );
-          targetDirectoryExists = true;
-        } catch ( error ) {
-          targetDirectoryExists = false;
-        }
-
         if ( targetDirectoryExists && ( recursionLevel === 1 ) ) {
           if ( hasSubcomponent ) {
             return addComponent( componentName, subcomponentName, 2 );
@@ -77,48 +87,52 @@ function addComponent( componentName, subcomponentName, recursionLevel = 1 ) {
         }
       } )
       .then( () => new Promise( ( resolve, reject ) => {
-        ncp(
-          // Source
-          `${templateDirectory}/Component`,
-          // Destination
-          targetDirectory,
-          // Options
-          {
-            "clobber": false,
-            "rename": function rename( target ) {
-              const pathInfo = path.parse( target );
-              const filename = pathInfo.base.replace( replaceOptions.from[0], replaceOptions.to[0] );
-              const resolution = path.resolve( targetDirectory, filename );
+        if ( !targetDirectoryExists ) {
+          ncp(
+            // Source
+            `${templateDirectory}/Component`,
+            // Destination
+            targetDirectory,
+            // Options
+            {
+              "clobber": false,
+              "rename": function rename( target ) {
+                const pathInfo = path.parse( target );
+                const filename = pathInfo.base.replace( replaceOptions.from[0], replaceOptions.to[0] );
+                const resolution = path.resolve( targetDirectory, filename );
 
-              return resolution;
+                return resolution;
+              },
             },
-          },
-          // Callback
-          ( ncpError ) => {
-            if ( ncpError ) {
-              // rimraf.sync( targetDirectory );
-              console.error( `ncp failed:` );
-              reject( ncpError );
-            }
-
-            replace( replaceOptions )
-              .then( () => {
-                if ( hasSubcomponent ) {
-                  return addComponent( componentName, subcomponentName, 2 );
-                }
-
-                return true;
-              } )
-              .then( () => {
-                resolve( `Component created: ${( isSubcomponent || hasSubcomponent ) ? subcomponentFullName : componentName} @ ${targetDirectory}/` );
-              } )
-              .catch( ( replacementError ) => {
+            // Callback
+            ( ncpError ) => {
+              if ( ncpError ) {
                 // rimraf.sync( targetDirectory );
-                console.error( `replace-in-file failed:` );
-                reject( replacementError );
-              } );
-          }, // ncp callback
-        ); // ncp
+                console.error( `ncp failed:` );
+                reject( ncpError );
+              }
+
+              const successMessage = `Component created: ${( isSubcomponent || hasSubcomponent ) ? subcomponentFullName : componentName} @ ${targetDirectory}/`;
+
+              replace( replaceOptions )
+                .then( () => {
+                  if ( hasSubcomponent ) {
+                    return addComponent( componentName, subcomponentName, 2 );
+                  }
+
+                  return true;
+                } )
+                .then( () => {
+                  resolve( successMessage );
+                } )
+                .catch( ( replacementError ) => {
+                  // rimraf.sync( targetDirectory );
+                  console.error( `replace-in-file failed:` );
+                  reject( replacementError );
+                } );
+            }, // ncp callback
+          ); // ncp
+        }
       } ) ) // then
   ); // return
 }
@@ -305,12 +319,10 @@ switch ( action ) {
   case 'add':
     addComponent()
       .then( ( successMessage ) => {
-        console.log( 'switch success' );
         console.log( successMessage );
         process.exit( 0 );
       } )
       .catch( ( error ) => {
-        console.log( 'switch error' );
         console.error( error );
         process.exit( 1 );
       } );
