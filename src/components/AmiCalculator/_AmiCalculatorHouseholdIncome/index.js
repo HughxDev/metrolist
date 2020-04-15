@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import Icon from '@components/Icon';
@@ -12,7 +12,6 @@ import FormErrorMessage from '@components/FormErrorMessage';
 import './AmiCalculatorHouseholdIncome.scss';
 
 function AmiCalculatorHouseholdIncome( props ) {
-  const [money, setMoney] = useState( '' );
   const moneyInputRef = useRef();
 
   function pad( num, size ) {
@@ -93,10 +92,8 @@ function AmiCalculatorHouseholdIncome( props ) {
             placeholder="$0.00"
             aria-describedby="ami-calculator-form-errors ami-calculator-household-income-error"
             onChange={ handleMoneyChange }
-            // onKeyDown={ handleMoneyChange }
             required
           />
-          {/* <output className={ `money-formatted${( !money || ( money === '$0.00' ) ) ? ' money-formatted--zero' : ''}` }>{ money || '$0.00' }</output> */}
         </div>
         <FormErrorMessage
           ref={ props.formControlData.householdIncome.errorRef }

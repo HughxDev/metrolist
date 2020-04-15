@@ -2,22 +2,8 @@ import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { propTypeErrorMessage } from '@util/errors';
-import { pascalCase } from 'change-case';
 
 import './Scale.scss';
-
-/*
-<label className="ml-scale__label">
-  <span className="ml-scale__text">{ props.children }</span>
-  <input className="ml-scale__form-control" type="range" list="tickmarks" />
-</label>
-<datalist id="tickmarks">{
-  props.value.split( ',' )
-    .map( ( value, index, array ) => (
-      <option key={ index } value={ Math.round( ( index / ( array.length - 1 ) ) * 100 ) } label={ value }></option>
-    ) )
-}</datalist>
-*/
 
 const Scale = forwardRef( ( props, ref ) => (
   <div className={ `ml-scale${props.className ? ` ${props.className}` : ''}` } onChange={ props.onChange }>{
