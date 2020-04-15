@@ -149,7 +149,7 @@ function AmiCalculator( props ) {
       if ( hasOwnProperty( currentStep, 'relativePath' ) ) {
         relativePath = currentStep.relativePath;
       } else if ( hasOwnProperty( currentStep.component, 'displayName' ) ) {
-        relativePath = `/${slugify( currentStep.component )}`;
+        relativePath = `/${slugify( currentStep.component.displayName )}`;
       } else {
         reportMissingDisplayNameProperty( index );
       }
