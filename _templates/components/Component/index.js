@@ -11,6 +11,8 @@ function Component( props ) {
   );
 }
 
+Component.displayName = 'Component';
+
 Component.propTypes = {
   "children": PropTypes.node,
   "className": PropTypes.string,
