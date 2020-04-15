@@ -9,28 +9,3 @@
   font: inherit;
   margin: 0 auto;
 }
-
-.ml-ami-calculator__input-review {
-  margin: 0;
-
-  & > div {
-    flex: 1;
-    text-align: center;
-    font-family: $font-family-heading;
-    font-size: rem( 30px );
-    color: $color-metrolist-text-blue;
-  }
-
-  dt {
-    @extend %dt-inline;
-    font-weight: bold;
-
-    &::after {
-      content: ' ';
-    }
-  }
-
-  dd {
-    @extend %dd-inline;
-  }
-}

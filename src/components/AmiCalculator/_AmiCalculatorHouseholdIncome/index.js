@@ -74,6 +74,8 @@ function AmiCalculatorHouseholdIncome( props ) {
 
       setMoneyInput( formattedInitialAmount );
     }
+
+    console.log( 'props.formData', props.formData );
   }, [] );
 
   return (
