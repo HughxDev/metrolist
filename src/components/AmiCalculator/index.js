@@ -148,8 +148,8 @@ function AmiCalculator( props ) {
 
       if ( hasOwnProperty( currentStep, 'relativePath' ) ) {
         relativePath = currentStep.relativePath;
-      } else if ( hasOwnProperty( currentStep.Component, 'displayName' ) ) {
-        relativePath = `/${slugify( currentStep.Component )}`;
+      } else if ( hasOwnProperty( currentStep.component, 'displayName' ) ) {
+        relativePath = `/${slugify( currentStep.component )}`;
       } else {
         reportMissingDisplayNameProperty( index );
       }
@@ -185,8 +185,8 @@ function AmiCalculator( props ) {
 
       if ( hasOwnProperty( stepDefinition, 'relativePath' ) ) {
         relativePath = stepDefinition.relativePath;
-      } else if ( hasOwnProperty( stepDefinition.Component, 'displayName' ) ) {
-        relativePath = `/${slugify( stepDefinition.Component.displayName )}`;
+      } else if ( hasOwnProperty( stepDefinition.component, 'displayName' ) ) {
+        relativePath = `/${slugify( stepDefinition.component.displayName )}`;
       } else {
         reportMissingDisplayNameProperty( nextStep - 1 );
       }
@@ -209,7 +209,7 @@ function AmiCalculator( props ) {
         return path;
       }
 
-      return `${path}/${slugify( stepDefinition.Component.displayName )}`;
+      return `${path}/${slugify( stepDefinition.component.displayName )}`;
     }
 
     return null;
@@ -423,8 +423,8 @@ function AmiCalculator( props ) {
 
                     if ( hasOwnProperty( currentStep, 'relativePath' ) && ( currentStep.relativePath !== '/' ) ) {
                       displayName = componentCase( currentStep.relativePath );
-                    } else if ( hasOwnProperty( currentStep.Component, 'displayName' ) ) {
-                      displayName = currentStep.Component.displayName;
+                    } else if ( hasOwnProperty( currentStep.component, 'displayName' ) ) {
+                      displayName = currentStep.component.displayName;
                     } else {
                       reportMissingDisplayNameProperty( index );
                     }
@@ -435,7 +435,7 @@ function AmiCalculator( props ) {
 
                     return (
                       <Route key={ formControlDataKey } exact={ isFirstStep } path={ routePath } render={ () => (
-                        <currentStep.Component step={ index + 1 } setStep={ setStep } formControlData={ formData } />
+                        <currentStep.component step={ index + 1 } setStep={ setStep } formControlData={ formData } />
                       ) }>
                       </Route>
                     );
@@ -480,7 +480,7 @@ AmiCalculator.propTypes = {
   "steps": PropTypes.arrayOf(
     PropTypes.shape( {
       "relativePath": PropTypes.string,
-      "Component": PropTypes.func.isRequired,
+      "component": PropTypes.func.isRequired,
     } ),
   ).isRequired,
 };
@@ -489,15 +489,15 @@ AmiCalculator.defaultProps = {
   "steps": [
     {
       "relativePath": "/",
-      "Component": HouseholdSize,
+      "component": HouseholdSize,
     },
     {
       "relativePath": "/household-income",
-      "Component": HouseholdIncome,
+      "component": HouseholdIncome,
     },
     {
       "relativePath": "/disclosure",
-      "Component": Disclosure,
+      "component": Disclosure,
     },
   ], // "Disclosure", "Result"],
 };
