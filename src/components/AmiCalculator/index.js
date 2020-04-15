@@ -343,7 +343,10 @@ function AmiCalculator( props ) {
             || ( newFormData[formControlDataKey].page === 'all' )
         ) );
 
-      if ( event.type === 'change' ) {
+      if (
+        ( event.type === 'change' )
+        || ( event.type === 'keydown' )
+      ) {
         const { name } = event.target;
 
         if ( hasOwnProperty( newFormData, name ) ) {
@@ -351,9 +354,6 @@ function AmiCalculator( props ) {
         } else {
           console.error( new Error( `Can’t update state: the state object for AmiCalculator is missing a key named \`${name}\`.` ) );
         }
-
-        console.log( 'value changed' );
-        console.log( 'formData', formData );
       } // if change event
 
       if ( numberOfErrors > 0 ) {
@@ -395,6 +395,7 @@ function AmiCalculator( props ) {
         className="ami-calculator__form"
         onSubmit={ handleSubmit }
         onChange={ handleFormInteraction }
+        // onKeyDown={ handleFormInteraction }
         // onClick={ handleFormInteraction }
       >
         <Stack space="1">{/* ami-calculator-navigation */}

@@ -22,6 +22,7 @@ function AmiCalculatorHouseholdIncome( props ) {
   }
 
   function formatMoney( amount ) {
+    // Sanitize input
     amount = amount.trim().replace( /[^0-9]+/g, '' );
     let formatted;
 
@@ -50,40 +51,18 @@ function AmiCalculatorHouseholdIncome( props ) {
     return formatted;
   }
 
-  // function setMoneyIfGreaterThanZero( formattedAmount, $input ) {
-  //   if ( formattedAmount === '$0.00' ) {
-  //     setMoney( '$0.00' );
-
-  //     // if ( $input ) {
-  //     //   $input.value = '';
-  //     // } else {
-  //     //   moneyInputRef.current.value = '';
-  //     // }
-  //   } else {
-  //     setMoney( formattedAmount );
-  //   }
-  // }
-
   function setMoneyInput( newValue ) {
-    // let formattedNewValue = '';
-
-    // if ( newValue.length > 2 ) {
-    //   formattedNewValue = `${newValue.substring( 0, newValue.length - 2 )}.${newValue.substring( newValue.length - 2 )}`;
-    // } else {
-    //   formattedNewValue = newValue.replace( /\./g, '' );
-    // }
-
-    moneyInputRef.current.value = formatMoney( newValue );
+    if ( newValue === '$0.00' ) {
+      moneyInputRef.current.value = '';
+    } else {
+      moneyInputRef.current.value = formatMoney( newValue );
+    }
   }
 
   const handleMoneyChange = ( event ) => {
-    // Sanitize input
-    // const amount = event.target.value;
     const formattedAmount = formatMoney( event.target.value );
 
-    // setMoney( formattedAmount );
     setMoneyInput( formattedAmount );
-    // setMoneyInput( amount );
   };
 
   useEffect( () => {
@@ -94,9 +73,7 @@ function AmiCalculatorHouseholdIncome( props ) {
     if ( initialAmount.length ) {
       const formattedInitialAmount = formatMoney( initialAmount );
 
-      // setMoney( formattedInitialAmount );
       setMoneyInput( formattedInitialAmount );
-      // setMoneyInput( initialAmount );
     }
   }, [] );
 
@@ -126,10 +103,6 @@ function AmiCalculatorHouseholdIncome( props ) {
           id="ami-calculator-household-income-error"
           className="ml-ami-calculator__prompt-answer-error"
         >{ props.formControlData.householdIncome.errorMessage }</FormErrorMessage>
-        {/* <Row className="ml-ami-calculator__income-rate">
-          <Checkbox className="ml-ami-calculator__income-rate-option" columnWidth="1/2">Yearly</Checkbox>
-          <Checkbox className="ml-ami-calculator__income-rate-option" columnWidth="1/2">Monthly</Checkbox>
-        </Row> */}
         <Scale
           criterion="incomeRate"
           values="Yearly,Monthly"
