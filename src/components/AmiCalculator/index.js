@@ -23,6 +23,7 @@ import Alert from '@components/Alert';
 import HouseholdSize from './_AmiCalculatorHouseholdSize';
 import HouseholdIncome from './_AmiCalculatorHouseholdIncome';
 import Disclosure from './_AmiCalculatorDisclosure';
+import Result from './_AmiCalculatorResult';
 
 import './AmiCalculator.scss';
 
@@ -62,6 +63,12 @@ function AmiCalculator( props ) {
       "value": "",
       "errorMessage": "",
       "errorRef": useRef(),
+    },
+    "amiEstimation": {
+      "page": 4,
+      "value": "",
+      // "errorMessage": "",
+      // "errorRef": useRef(),
     },
   };
   const [formData, setFormData] = useState( noErrors );
@@ -397,12 +404,12 @@ function AmiCalculator( props ) {
         // onClick={ handleFormInteraction }
       >
         <Stack space="1">{/* ami-calculator-navigation */}
-          <nav>
+          {/* <nav>
             <Link to={`${path}`}>Step 1</Link><br/>
             <Link to={`${path}/household-income`}>Step 2</Link><br/>
             <Link to={`${path}/disclosure`}>Step 3</Link>
-            {/* <Link to={`${path}/results`}>Step 4</Link> */}
-          </nav>
+            <Link to={`${path}/results`}>Step 4</Link>
+          </nav> */}
           <TransitionGroup className="step">
             {/*
               This is no different than other usage of
@@ -499,7 +506,11 @@ AmiCalculator.defaultProps = {
       "relativePath": "/disclosure",
       "component": Disclosure,
     },
-  ], // "Disclosure", "Result"],
+    {
+      "relativePath": "/result",
+      "component": Result,
+    },
+  ],
 };
 
 export default withRouter( AmiCalculator );

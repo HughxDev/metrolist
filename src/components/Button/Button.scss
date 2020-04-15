@@ -19,13 +19,13 @@
 @include media-breakpoint-up( small ) {
   .btn.btn--metrolist-primary {
     min-width: rem( 125px );
-    width: ( 125 / $nominal-width-home ) * 100%;
+    // width: ( 125 / $nominal-width-home ) * 100%;
   }
 }
 @include media-breakpoint-up( large ) {
   .btn.btn--metrolist-primary {
     min-width: rem( 220px );
-    width: ( 220 / $nominal-width-home-desktop ) * 100%;
+    // width: ( 220 / $nominal-width-home-desktop ) * 100%;
   }
 }
 
