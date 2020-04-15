@@ -20,7 +20,7 @@ import './Scale.scss';
 */
 
 const Scale = forwardRef( ( props, ref ) => (
-  <div className={ `ml-scale${props.className ? ` ${props.className}` : ''}` }>{
+  <div className={ `ml-scale${props.className ? ` ${props.className}` : ''}` } onChange={ props.onChange }>{
     props.values.split( ',' )
       .map( ( value, index ) => (
         <label key={ index } className="ml-scale__label">
@@ -62,6 +62,7 @@ Scale.propTypes = {
     return null;
   },
   "value": PropTypes.string,
+  "onChange": PropTypes.func,
 };
 
 export default Scale;

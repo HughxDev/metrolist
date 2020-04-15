@@ -108,6 +108,7 @@ function AmiCalculatorHouseholdIncome( props ) {
           values="Yearly,Monthly"
           value={ props.formControlData.incomeRate.value || 'Monthly' }
           required
+          onChange={ ( event ) => event.stopPropagation() }
         />
         <FormErrorMessage
           ref={ props.formControlData.incomeRate.errorRef }
