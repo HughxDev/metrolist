@@ -371,8 +371,6 @@ function AmiCalculator( props ) {
         event.preventDefault();
       }
     }
-
-    console.log( '---' );
   };
 
   return (
