@@ -5,6 +5,7 @@ import Row from '@components/Row';
 import Stack from '@components/Stack';
 import Icon from '@components/Icon';
 import Checkbox from '@components/Checkbox';
+import FormErrorMessage from '@components/FormErrorMessage';
 
 import './AmiCalculatorDisclosure.scss';
 
@@ -26,12 +27,11 @@ function AmiCalculatorDisclosure( props ) {
       <Stack space="1">
         <p>The above information will be combined to estimate your eligibility for income-restricted housing.  Eligibility is officially and finally determined during the application process.</p>
         <Checkbox criterion="disclosure" aria-describedby="ami-calculator-disclosure-accept-error" required>I have read and understand the above statement.</Checkbox>
-        <div
+        <FormErrorMessage
           ref={ props.formControlData.disclosure.errorRef }
           id="ami-calculator-disclosure-accept-error"
-          className={ `t--subinfo t--err m-t100 ml-ami-calculator__prompt-answer-error` }
-          aria-live="polite"
-        >{ props.formControlData.disclosure.errorMessage }</div>
+          className="ml-ami-calculator__prompt-answer-error"
+        >{ props.formControlData.disclosure.errorMessage }</FormErrorMessage>
       </Stack>
     </div>
   );

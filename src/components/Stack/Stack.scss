@@ -12,44 +12,44 @@ $space: 1rem;
   justify-content: flex-start;
 }
   .ml-stack.ml-stack--space-0_25 {
-    & > :not([class*="--hide-until-"]) + * {
+    & > :not([class*="--hide-until-"]) + :not([hidden]) {
       margin-top: ( $space * 0.25 );
     }
   }
   .ml-stack.ml-stack--space-0_5 {
-    & > :not([class*="--hide-until-"]) + * {
+    & > :not([class*="--hide-until-"]) + :not([hidden]) {
       margin-top: ( $space * 0.5 );
     }
   }
   .ml-stack.ml-stack--space-1 {
-    & > :not([class*="--hide-until-"]) + * {
+    & > :not([class*="--hide-until-"]) + :not([hidden]) {
       margin-top: $space;
     }
   }
   .ml-stack.ml-stack--space-1_25 {
-    & > :not([class*="--hide-until-"]) + * {
+    & > :not([class*="--hide-until-"]) + :not([hidden]) {
       margin-top: ( $space * 1.25 );
     }
   }
   .ml-stack.ml-stack--space-1_5 {
-    & > :not([class*="--hide-until-"]) + * {
+    & > :not([class*="--hide-until-"]) + :not([hidden]) {
       margin-top: ( $space * 1.5 );
     }
   }
   .ml-stack.ml-stack--space-2 {
-    & > :not([class*="--hide-until-"]) + * {
+    & > :not([class*="--hide-until-"]) + :not([hidden]) {
       margin-top: ( $space * 2 );
     }
   }
 
   .ml-stack.ml-stack--space-panel {
-    & > :not([class*="--hide-until-"]) + * {
+    & > :not([class*="--hide-until-"]) + :not([hidden]) {
       margin-top: $panel-spacing;
     }
   }
 
   .ml-stack.ml-stack--space-below-filters {
-    & > :not([class*="--hide-until-"]) + * {
+    & > :not([class*="--hide-until-"]) + :not([hidden]) {
       margin-top: rem( $filter-group-label-height ) + $panel-spacing;
     }
   }
@@ -62,13 +62,13 @@ $space: 1rem;
   }
 
   .ml-stack.ml-stack--space-sister-checkboxes {
-    & > :not([class*="--hide-until-"]) + * {
+    & > :not([class*="--hide-until-"]) + :not([hidden]) {
       margin-top: rem( 38px );
     }
   }
 
   .ml-stack.ml-stack--space-subcategories {
-    & > :not([class*="--hide-until-"]) + * {
+    & > :not([class*="--hide-until-"]) + :not([hidden]) {
       margin-top: $panel-spacing;
     }
   }
@@ -81,7 +81,7 @@ $space: 1rem;
   }
 
   .ml-stack.ml-stack--space-home-header {
-    & > :not([class*="--hide-until-"]) + * {
+    & > :not([class*="--hide-until-"]) + :not([hidden]) {
       margin-top: rem( 10px );
     }
   }
@@ -94,52 +94,52 @@ $space: 1rem;
   }
 
   .ml-stack.ml-stack--space-ami-calculator {
-    & > :not([class*="--hide-until-"]) + * {
+    & > :not([class*="--hide-until-"]) + :not([hidden]) {
       
     }
   }
   @include media-breakpoint-up( large ) {
     .ml-stack.ml-stack--space-ami-calculator {
-      & > :not([class*="--hide-until-"]) + * {
+      & > :not([class*="--hide-until-"]) + :not([hidden]) {
         margin-top: rem( 72px );
       }
     }
   }
 
   .ml-stack.ml-stack--space-ami-calculator-navigation {
-    & > :not([class*="--hide-until-"]) + * {
+    & > :not([class*="--hide-until-"]) + :not([hidden]) {
       
     }
   }
   @include media-breakpoint-up( large ) {
     .ml-stack.ml-stack--space-ami-calculator-navigation {
-      & > :not([class*="--hide-until-"]) + * {
+      & > :not([class*="--hide-until-"]) + :not([hidden]) {
         margin-top: rem( 149px );
       }
     }
   }
 
   .ml-stack.ml-stack--space-ami-calculator-footer {
-    & > :not([class*="--hide-until-"]) + * {
+    & > :not([class*="--hide-until-"]) + :not([hidden]) {
       
     }
   }
   @include media-breakpoint-up( large ) {
     .ml-stack.ml-stack--space-ami-calculator-footer {
-      & > :not([class*="--hide-until-"]) + * {
+      & > :not([class*="--hide-until-"]) + :not([hidden]) {
         margin-top: rem( 49px );
       }
     }
   }
 
   .ml-stack.ml-stack--space-ami-calculator-income-rate {
-    & > :not([class*="--hide-until-"]) + * {
+    & > :not([class*="--hide-until-"]) + :not([hidden]) {
       
     }
   }
   @include media-breakpoint-up( large ) {
     .ml-stack.ml-stack--space-ami-calculator-income-rate {
-      & > :not([class*="--hide-until-"]) + * {
+      & > :not([class*="--hide-until-"]) + :not([hidden]) {
         margin-top: rem( 67px );
       }
     }

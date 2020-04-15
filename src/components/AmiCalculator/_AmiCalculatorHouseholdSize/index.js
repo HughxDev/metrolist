@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import Icon from '@components/Icon';
 import Scale from '@components/Scale';
+import FormErrorMessage from '@components/FormErrorMessage';
 
 import './AmiCalculatorHouseholdSize.scss';
 
@@ -25,12 +26,11 @@ function AmiCalculatorHouseholdSize( props ) {
           aria-describedby="ami-calculator-form-errors ami-calculator-household-size-error"
           required
         />
-        <div
+        <FormErrorMessage
           ref={ props.formControlData.householdSize.errorRef }
           id="ami-calculator-household-size-error"
-          className={ `t--subinfo t--err m-t100 ml-ami-calculator__prompt-answer-error` }
-          aria-live="polite"
-        >{ props.formControlData.householdSize.errorMessage }</div>
+          className="ml-ami-calculator__prompt-answer-error"
+        >{ props.formControlData.householdSize.errorMessage }</FormErrorMessage>
       </div>
     </fieldset>
   );

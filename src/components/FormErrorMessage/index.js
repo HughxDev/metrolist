@@ -7,8 +7,10 @@ const FormErrorMessage = forwardRef( ( props, ref ) => (
     <div
       ref={ ref }
       id={ props.id }
+      { ...props }
       className={ `t--subinfo t--err m-t100${props.className ? ` ${props.className}` : ''}` }
       aria-live="polite"
+      hidden
     >{ props.children }</div>
 ) );
 
