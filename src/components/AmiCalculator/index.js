@@ -252,11 +252,6 @@ function AmiCalculator( props ) {
       const $elements = $form.elements;
       const radioButtons = {};
 
-      newErrors.alert = {
-        ...formData.alert,
-        "errorMessage": "There were errors in your submission.",
-      };
-
       for ( let index = 0; index < $elements.length; index++ ) {
         const $element = $elements[index];
         const { name } = $element;
@@ -284,6 +279,15 @@ function AmiCalculator( props ) {
           reportMissingValidityProperty( $element );
         } // if validity in $element
       } // for
+
+      if ( numberOfErrors ) {
+        console.log( 'newErrors', newErrors );
+
+        newErrors.alert = {
+          ...formData.alert,
+          "errorMessage": "There were errors in your submission.",
+        };
+      }
     } else {
       Object.keys( formData ).forEach( ( errorName ) => {
         newErrors[errorName].errorMessage = '';
@@ -293,71 +297,79 @@ function AmiCalculator( props ) {
     return [newErrors, numberOfErrors];
   };
 
-  const handleFormInteraction = ( event ) => {
-    const [newFormData, numberOfErrors] = getErrors();
-    const newErrorList = Object.keys( newFormData ).filter( ( formControlDataKey ) => (
-      ( newFormData[formControlDataKey].page === step )
-        || ( newFormData[formControlDataKey].page === 'all' )
-    ) );
+  const clearErrors = ( errorNameList, newFormData = formData ) => {
+    errorNameList.forEach( ( errorName ) => {
+      try {
+        hideErrorMessage( newFormData[errorName].errorRef );
+      } catch ( exception ) {
+        console.error( exception );
+      }
+    } );
 
+    setFormData( newFormData );
+  };
+
+  const populateErrors = ( errorNameList, newFormData = formData ) => {
+    errorNameList.forEach( ( errorName ) => {
+      try {
+        showErrorMessage( newFormData[errorName].errorRef );
+      } catch ( exception ) {
+        console.error( exception );
+      }
+    } );
+
+    setFormData( newFormData );
+  };
+
+  const clearAlert = ( newFormData = formData ) => {
+    hideErrorMessage( newFormData.alert.errorRef );
+    newFormData.alert.errorMessage = '';
+    setFormData( newFormData );
+  };
+
+  const handleFormInteraction = ( event ) => {
     const navigatePrevious = event.target.hasAttribute( 'data-navigate-previous' );
     const navigateNext = event.target.hasAttribute( 'data-navigate-next' );
 
-    // console.log( 'newErrors', newErrors );
-    console.log( 'numberOfErrors', numberOfErrors );
-    console.log( 'newErrorList', newErrorList );
-
-    if ( event.type === 'change' ) {
-      const { name } = event.target;
-
-      if ( hasOwnProperty( newFormData, name ) ) {
-        newFormData[name].value = event.target.value;
-      } else {
-        console.error( new Error( `Can’t update state: the state object for AmiCalculator is missing a key named \`${name}\`.` ) );
-      }
-
-      console.log( 'value changed' );
-      console.log( 'formData', formData );
-    }
-
-    if ( numberOfErrors ) {
-      newErrorList.forEach( ( newError ) => {
-        try {
-          showErrorMessage( newFormData[newError].errorRef );
-        } catch ( exception ) {
-          console.error( exception );
-          console.log( 'newError', newError, newFormData[newError] );
-        }
-      } );
-
-      setFormData( newFormData );
-
-      if ( navigatePrevious ) {
-        navigateBackward();
-      }
+    if ( navigatePrevious ) {
+      console.log( 'Navigate Previous' );
+      clearAlert();
+      navigateBackward();
     } else {
-      newErrorList.forEach( ( newError ) => {
-        try {
-          hideErrorMessage( newFormData[newError].errorRef );
-        } catch ( exception ) {
-          console.error( exception );
-          console.log( 'newError', newError, newFormData[newError] );
+      const [newFormData, numberOfErrors] = getErrors();
+      const errorNameList = Object.keys( newFormData )
+        .filter( ( formControlDataKey ) => (
+          ( newFormData[formControlDataKey].page === step )
+            || ( newFormData[formControlDataKey].page === 'all' )
+        ) );
+
+      if ( event.type === 'change' ) {
+        const { name } = event.target;
+
+        if ( hasOwnProperty( newFormData, name ) ) {
+          newFormData[name].value = event.target.value;
+        } else {
+          console.error( new Error( `Can’t update state: the state object for AmiCalculator is missing a key named \`${name}\`.` ) );
         }
-      } );
 
-      setFormData( newFormData );
+        console.log( 'value changed' );
+        console.log( 'formData', formData );
+      } // if change event
 
-      if ( navigateNext ) {
-        console.log( 'Navigate Next' );
-        navigateForward();
-      } else if ( navigatePrevious ) {
-        console.log( 'Navigate Prev' );
-        navigateBackward();
+      if ( numberOfErrors > 0 ) {
+        populateErrors( errorNameList, newFormData );
+      } else {
+        clearErrors( errorNameList, newFormData );
+
+        if ( navigateNext ) {
+          console.log( 'Navigate Next' );
+          navigateForward();
+        }
       }
-    }
 
-    if ( navigateNext || navigatePrevious ) {
-      event.preventDefault();
+      if ( navigateNext || navigatePrevious ) {
+        event.preventDefault();
+      }
     }
 
     console.log( '---' );
