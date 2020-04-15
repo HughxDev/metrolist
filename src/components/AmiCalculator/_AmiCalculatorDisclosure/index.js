@@ -13,27 +13,33 @@ function AmiCalculatorDisclosure( props ) {
   useEffect( () => props.setStep( props.step ), [] );
 
   return (
-    <div className={ `ml-ami-calculator__disclosure${props.className ? ` ${props.className}` : ''}` }>
-      <Row>
+    <Stack space="2" className={ `ml-ami-calculator__disclosure${props.className ? ` ${props.className}` : ''}` }>
+      <Row as="dl" className="ml-ami-calculator__input-review">
         <div>
-          <Icon className="ml-ami-calculator__prompt-answer-icon" icon="family2" width="227" />
-          <span><b>Household:</b> X</span>
+          <dt>
+            <Icon className="ml-ami-calculator__prompt-answer-icon" icon="family2" width="227" />
+            Household:
+          </dt>
+          <dd>{ props.formData.householdSize.value || '0' }</dd>
         </div>
         <div>
-          <Icon className="ml-ami-calculator__prompt-answer-icon" icon="deposit check" width="227" />
-          <span><b>Income:</b> $Y/mo</span>
+          <dt>
+            <Icon className="ml-ami-calculator__prompt-answer-icon" icon="deposit check" width="227" />
+            Income:
+          </dt>
+          <dd>{ props.formData.householdIncome.value || '$0.00' }/{ props.formData.incomeRate.value ? props.formData.incomeRate.value.substring( 0, props.formData.incomeRate.value.length - 2 ) : 'month' }</dd>
         </div>
       </Row>
+      <p>The above information will be combined to estimate your eligibility for income-restricted housing.  Eligibility is officially and finally determined during the application process.</p>
       <Stack space="1">
-        <p>The above information will be combined to estimate your eligibility for income-restricted housing.  Eligibility is officially and finally determined during the application process.</p>
-        <Checkbox criterion="disclosure" aria-describedby="ami-calculator-disclosure-accept-error" required>I have read and understand the above statement.</Checkbox>
+        <Checkbox className="ml-ami-calculator__disclosure-accept" criterion="disclosure" aria-describedby="ami-calculator-disclosure-accept-error" required>I have read and understand the above statement.</Checkbox>
         <FormErrorMessage
           ref={ props.formData.disclosure.errorRef }
           id="ami-calculator-disclosure-accept-error"
           className="ml-ami-calculator__prompt-answer-error"
         >{ props.formData.disclosure.errorMessage }</FormErrorMessage>
       </Stack>
-    </div>
+    </Stack>
   );
 }
 
