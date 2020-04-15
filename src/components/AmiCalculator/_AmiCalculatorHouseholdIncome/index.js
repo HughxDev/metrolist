@@ -67,7 +67,7 @@ function AmiCalculatorHouseholdIncome( props ) {
   useEffect( () => {
     props.setStep( props.step );
 
-    const initialAmount = props.formControlData.householdIncome.value;
+    const initialAmount = props.formData.householdIncome.value;
 
     if ( initialAmount.length ) {
       const formattedInitialAmount = formatMoney( initialAmount );
@@ -86,7 +86,7 @@ function AmiCalculatorHouseholdIncome( props ) {
             ref={ moneyInputRef }
             className="money"
             name="householdIncome"
-            value={ ( props.formControlData.householdIncome.value === '$0.00' ) ? '' : props.formControlData.householdIncome.value }
+            value={ ( props.formData.householdIncome.value === '$0.00' ) ? '' : props.formData.householdIncome.value }
             type="text"
             pattern="[0-9]*"
             placeholder="$0.00"
@@ -96,22 +96,22 @@ function AmiCalculatorHouseholdIncome( props ) {
           />
         </div>
         <FormErrorMessage
-          ref={ props.formControlData.householdIncome.errorRef }
+          ref={ props.formData.householdIncome.errorRef }
           id="ami-calculator-household-income-error"
           className="ml-ami-calculator__prompt-answer-error"
-        >{ props.formControlData.householdIncome.errorMessage }</FormErrorMessage>
+        >{ props.formData.householdIncome.errorMessage }</FormErrorMessage>
         <Scale
           criterion="incomeRate"
           values="Yearly,Monthly"
-          value={ props.formControlData.incomeRate.value || 'Monthly' }
+          value={ props.formData.incomeRate.value || 'Monthly' }
           required
           onChange={ ( event ) => event.stopPropagation() }
         />
         <FormErrorMessage
-          ref={ props.formControlData.incomeRate.errorRef }
+          ref={ props.formData.incomeRate.errorRef }
           id="ami-calculator-household-income-error"
           className="ml-ami-calculator__prompt-answer-error"
-        >{ props.formControlData.incomeRate.errorMessage }</FormErrorMessage>
+        >{ props.formData.incomeRate.errorMessage }</FormErrorMessage>
       </Stack>
     </fieldset>
   );
@@ -122,7 +122,7 @@ AmiCalculatorHouseholdIncome.propTypes = {
   "setStep": PropTypes.func,
   "children": PropTypes.node,
   "className": PropTypes.string,
-  "formControlData": PropTypes.object,
+  "formData": PropTypes.object,
 };
 
 AmiCalculatorHouseholdIncome.displayName = "HouseholdIncome";

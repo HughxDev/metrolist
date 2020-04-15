@@ -28,10 +28,10 @@ function AmiCalculatorDisclosure( props ) {
         <p>The above information will be combined to estimate your eligibility for income-restricted housing.  Eligibility is officially and finally determined during the application process.</p>
         <Checkbox criterion="disclosure" aria-describedby="ami-calculator-disclosure-accept-error" required>I have read and understand the above statement.</Checkbox>
         <FormErrorMessage
-          ref={ props.formControlData.disclosure.errorRef }
+          ref={ props.formData.disclosure.errorRef }
           id="ami-calculator-disclosure-accept-error"
           className="ml-ami-calculator__prompt-answer-error"
-        >{ props.formControlData.disclosure.errorMessage }</FormErrorMessage>
+        >{ props.formData.disclosure.errorMessage }</FormErrorMessage>
       </Stack>
     </div>
   );
@@ -42,7 +42,7 @@ AmiCalculatorDisclosure.propTypes = {
   "setStep": PropTypes.func,
   "children": PropTypes.node,
   "className": PropTypes.string,
-  "formControlData": PropTypes.object,
+  "formData": PropTypes.object,
 };
 
 // AmiCalculatorDisclosure.

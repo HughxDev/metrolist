@@ -10,7 +10,7 @@ import './AmiCalculatorHouseholdSize.scss';
 function AmiCalculatorHouseholdSize( props ) {
   useEffect( () => {
     props.setStep( props.step );
-    console.log( 'props.formControlData', props.formControlData );
+    console.log( 'props.formData', props.formData );
   }, [] );
 
   return (
@@ -22,15 +22,15 @@ function AmiCalculatorHouseholdSize( props ) {
           className={ `ml-ami-calculator__prompt--answer-input` }
           criterion="householdSize"
           values="1,2,3,4,5,6+"
-          value={ props.formControlData.householdSize.value }
+          value={ props.formData.householdSize.value }
           aria-describedby="ami-calculator-form-errors ami-calculator-household-size-error"
           required
         />
         <FormErrorMessage
-          ref={ props.formControlData.householdSize.errorRef }
+          ref={ props.formData.householdSize.errorRef }
           id="ami-calculator-household-size-error"
           className="ml-ami-calculator__prompt-answer-error"
-        >{ props.formControlData.householdSize.errorMessage }</FormErrorMessage>
+        >{ props.formData.householdSize.errorMessage }</FormErrorMessage>
       </div>
     </fieldset>
   );
@@ -41,7 +41,7 @@ AmiCalculatorHouseholdSize.propTypes = {
   "setStep": PropTypes.func,
   "children": PropTypes.node,
   "className": PropTypes.string,
-  "formControlData": PropTypes.object,
+  "formData": PropTypes.object,
 };
 
 AmiCalculatorHouseholdSize.displayName = "HouseholdSize";

@@ -338,9 +338,9 @@ function AmiCalculator( props ) {
     } else {
       const [newFormData, numberOfErrors] = getErrors();
       const errorNameList = Object.keys( newFormData )
-        .filter( ( formControlDataKey ) => (
-          ( newFormData[formControlDataKey].page === step )
-            || ( newFormData[formControlDataKey].page === 'all' )
+        .filter( ( formDataKey ) => (
+          ( newFormData[formDataKey].page === step )
+            || ( newFormData[formDataKey].page === 'all' )
         ) );
 
       if (
@@ -429,13 +429,13 @@ function AmiCalculator( props ) {
                       reportMissingDisplayNameProperty( index );
                     }
 
-                    const formControlDataKey = uncapitalize( displayName );
-                    // const Step = React.createElement( currentStep, { setStep, "formControlData": formData[formControlDataKey] }, null );
+                    const formDataKey = uncapitalize( displayName );
+                    // const Step = React.createElement( currentStep, { setStep, "formData": formData[formDataKey] }, null );
                     const routePath = ( isFirstStep ? path : `${path}/${slugify( displayName )}` );
 
                     return (
-                      <Route key={ formControlDataKey } exact={ isFirstStep } path={ routePath } render={ () => (
-                        <currentStep.component step={ index + 1 } setStep={ setStep } formControlData={ formData } />
+                      <Route key={ formDataKey } exact={ isFirstStep } path={ routePath } render={ () => (
+                        <currentStep.component step={ index + 1 } setStep={ setStep } formData={ formData } />
                       ) }>
                       </Route>
                     );
