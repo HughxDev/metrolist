@@ -7,6 +7,7 @@ module.exports = {
   "extends": [
     "hughx/react",
   ],
+  "parser": "babel-eslint",
   "parserOptions": {
     "ecmaVersion": 2020,
   },
