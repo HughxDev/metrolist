@@ -1,5 +1,5 @@
 import React, {
-  useState, useRef, useEffect,
+  useState, useRef, useEffect, useLayoutEffect,
 } from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -73,6 +73,7 @@ function AmiCalculator( props ) {
   };
   const [formData, setFormData] = useState( noErrors );
   const formRef = useRef();
+  const stepRef = useRef();
   const totalSteps = props.steps.length;
   const badErrorMessageElementError = ( showHide = 'show/hide' ) => {
     throw new Error(
@@ -171,10 +172,20 @@ function AmiCalculator( props ) {
 
   const [step, setStep] = useState( getStepNumberFromPath() );
 
+  // const adjustStepSize = () => {
+  //   setTimeout( () => {
+  //     if ( stepRef.current ) {
+  //       stepRef.current.parentNode.style.height = getComputedStyle( stepRef.current ).getPropertyValue( 'height' );
+  //     }
+  //   }, 1000 );
+  // };
+
   useEffect( () => {
     console.log( 'location', location );
     console.log( 'step', step );
   }, [] );
+
+  // useEffect( adjustStepSize, [step] );
 
   const getNextStepPath = () => {
     const nextStep = ( step + 1 );
@@ -378,6 +389,8 @@ function AmiCalculator( props ) {
         event.preventDefault();
       }
     }
+
+    // adjustStepSize();
   };
 
   return (
@@ -418,11 +431,15 @@ function AmiCalculator( props ) {
               the old location as it animates out.
             */}
             <CSSTransition
-              key={location.key}
+              key={ location.key }
               classNames="fade"
-              timeout={450}
+              // classNames="pageSlider"
+              // mountOnEnter={ false }
+              // unmountOnExit={ false }
+              timeout={ 450 }
+              // timeout={ { "enter": 80000, "exit": 40000 } }
             >
-              <Switch location={location}>
+              <Switch location={ location }>
                 {
                   props.steps.map( ( currentStep, index ) => {
                     const isFirstStep = ( index === 0 );
@@ -442,7 +459,7 @@ function AmiCalculator( props ) {
 
                     return (
                       <Route key={ formDataKey } exact={ isFirstStep } path={ routePath } render={ () => (
-                        <currentStep.component step={ index + 1 } setStep={ setStep } formData={ formData } />
+                        <currentStep.component ref={ stepRef } step={ index + 1 } setStep={ setStep } formData={ formData } />
                       ) }>
                       </Route>
                     );
@@ -487,7 +504,7 @@ AmiCalculator.propTypes = {
   "steps": PropTypes.arrayOf(
     PropTypes.shape( {
       "relativePath": PropTypes.string,
-      "component": PropTypes.func.isRequired,
+      "component": PropTypes.oneOfType( [PropTypes.func, PropTypes.object] ).isRequired,
     } ),
   ).isRequired,
 };
@@ -512,6 +529,8 @@ AmiCalculator.defaultProps = {
     },
   ],
 };
+
+console.log( 'HouseholdSize', HouseholdSize );
 
 export default withRouter( AmiCalculator );
 // export default AmiCalculator;

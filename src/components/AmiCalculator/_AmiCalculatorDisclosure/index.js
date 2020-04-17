@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, forwardRef } from 'react';
 import PropTypes from 'prop-types';
 
 import Stack from '@components/Stack';
@@ -8,14 +8,14 @@ import InputSummary from '../_AmiCalculatorInputSummary';
 
 import './AmiCalculatorDisclosure.scss';
 
-function AmiCalculatorDisclosure( props ) {
+const AmiCalculatorDisclosure = forwardRef( ( props, ref ) => {
   useEffect( () => {
     props.setStep( props.step );
     console.log( 'props.formData', props.formData );
   }, [] );
 
   return (
-    <Stack space="2" className={ `ml-ami-calculator__disclosure${props.className ? ` ${props.className}` : ''}` }>
+    <Stack ref={ ref } space="2" className={ `ml-ami-calculator__disclosure ml-ami-calculator__prompt${props.className ? ` ${props.className}` : ''}` }>
       <InputSummary formData={ props.formData } />
       <p>The above information will be combined to estimate your eligibility for income-restricted housing.  Eligibility is officially and finally determined during the application process.</p>
       <Stack space="1">
@@ -28,7 +28,7 @@ function AmiCalculatorDisclosure( props ) {
       </Stack>
     </Stack>
   );
-}
+} );
 
 AmiCalculatorDisclosure.displayName = 'Disclosure';
 

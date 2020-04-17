@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, forwardRef } from 'react';
 import PropTypes from 'prop-types';
 
 import Icon from '@components/Icon';
@@ -11,7 +11,7 @@ import FormErrorMessage from '@components/FormErrorMessage';
 
 import './AmiCalculatorHouseholdIncome.scss';
 
-function AmiCalculatorHouseholdIncome( props ) {
+const AmiCalculatorHouseholdIncome = forwardRef( ( props, ref ) => {
   const moneyInputRef = useRef();
 
   function pad( num, size ) {
@@ -79,7 +79,7 @@ function AmiCalculatorHouseholdIncome( props ) {
   }, [] );
 
   return (
-    <fieldset className={ `ml-ami-calculator__household-income ml-ami-calculator__prompt` }>
+    <fieldset ref={ ref } className={ `ml-ami-calculator__household-income ml-ami-calculator__prompt` }>
       <legend className="ml-ami-calculator__prompt-question">What is the total combined income all 3 people who live in your household before taxes?</legend>
       <Icon className="ml-ami-calculator__prompt-answer-icon" icon="deposit check" width="212" />
       <Stack space="1">{/* ami-calculator-income-rate */}
@@ -117,7 +117,7 @@ function AmiCalculatorHouseholdIncome( props ) {
       </Stack>
     </fieldset>
   );
-}
+} );
 
 AmiCalculatorHouseholdIncome.propTypes = {
   "step": PropTypes.number,

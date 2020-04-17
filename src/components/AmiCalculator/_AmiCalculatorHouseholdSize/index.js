@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, forwardRef } from 'react';
 import PropTypes from 'prop-types';
 
 import Icon from '@components/Icon';
@@ -7,14 +7,14 @@ import FormErrorMessage from '@components/FormErrorMessage';
 
 import './AmiCalculatorHouseholdSize.scss';
 
-function AmiCalculatorHouseholdSize( props ) {
+const AmiCalculatorHouseholdSize = forwardRef( ( props, ref ) => {
   useEffect( () => {
     props.setStep( props.step );
     console.log( 'props.formData', props.formData );
   }, [] );
 
   return (
-    <fieldset className="ml-ami-calculator__household-size ml-ami-calculator__prompt">
+    <fieldset ref={ ref } className="ml-ami-calculator__household-size ml-ami-calculator__prompt">
       <legend className="ml-ami-calculator__prompt-question">How many people live in your household of any age?</legend>
       <div className="ml-ami-calculator__prompt-answer">
         <Icon className="ml-ami-calculator__prompt-answer-icon" icon="family2" width="227" />
@@ -34,7 +34,7 @@ function AmiCalculatorHouseholdSize( props ) {
       </div>
     </fieldset>
   );
-}
+} );
 
 AmiCalculatorHouseholdSize.propTypes = {
   "step": PropTypes.number,
