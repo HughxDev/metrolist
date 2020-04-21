@@ -49,6 +49,8 @@ function renderChoices( props ) {
 
       if ( firstChild.type.displayName === 'FilterLabel' ) {
         firstRenderedChoice = renderLabel( firstChild, props );
+      } else {
+        childArray.unshift( firstChild );
       }
 
       return (
