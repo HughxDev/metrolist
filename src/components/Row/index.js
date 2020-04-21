@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 
 import './Row.scss';
 
-function Row( props ) {
+const Row = forwardRef( ( props, ref ) => {
   let RowElement;
   const targetProps = { ...props };
   let className = `ml-row`;
@@ -34,13 +34,15 @@ function Row( props ) {
 
   if ( props.as ) {
     delete targetProps.as;
-    RowElement = React.createElement( props.as, { ...targetProps, className }, props.children );
+    RowElement = React.createElement( props.as, { ...targetProps, className, ref }, props.children );
   } else {
-    RowElement = React.createElement( 'div', { ...targetProps, className }, props.children );
+    RowElement = React.createElement( 'div', { ...targetProps, className, ref }, props.children );
   }
 
   return RowElement;
-}
+} );
+
+Row.displayName = 'Row';
 
 Row.propTypes = {
   "as": PropTypes.oneOfType( [PropTypes.string, PropTypes.node] ),

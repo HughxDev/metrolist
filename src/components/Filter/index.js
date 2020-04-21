@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import Checkbox from '@components/Checkbox';
 import Scale from '@components/Scale';
+import Range from '@components/Range';
 
 import './Filter.scss';
 
@@ -15,6 +16,8 @@ function renderFormControl( props ) {
       return <Checkbox { ...props } />;
     case 'checkbox-button':
       return <Checkbox button { ...props } />;
+    case 'range':
+      return <Range { ...props } />;
     default:
       return <Checkbox subcategoriesOnly { ...props } />;
   }
@@ -27,7 +30,7 @@ function Filter( props ) {
 Filter.propTypes = {
   "className": PropTypes.string,
   "columnWidth": PropTypes.oneOfType( [PropTypes.string, PropTypes.bool] ),
-  "type": PropTypes.oneOf( ['checkbox', 'checkbox-button', 'scale'] ),
+  "type": PropTypes.oneOf( ['checkbox', 'checkbox-button', 'scale', 'range'] ),
   "criterion": PropTypes.string,
   "value": PropTypes.string,
   "values": PropTypes.string,

@@ -144,15 +144,7 @@ function FiltersPanel( props ) {
           </FilterGroup>
           <FilterGroup>
             <FilterGroup.Label>Income Eligibility (AMI%)</FilterGroup.Label>
-            <Filter type="checkbox">40%</Filter>
-            <Filter type="checkbox">50%</Filter>
-            <Filter type="checkbox">60%</Filter>
-            <Filter type="checkbox">70%</Filter>
-            <Filter type="checkbox">80%</Filter>
-            <Filter type="checkbox">90%</Filter>
-            <Filter type="checkbox">100%</Filter>
-            <Filter type="checkbox">110%</Filter>
-            <Filter type="checkbox">120%</Filter>
+            <Filter type="range" min="0" max="100" />
           </FilterGroup>
         </div>
       </div>{/* filters-panel__menu */}
