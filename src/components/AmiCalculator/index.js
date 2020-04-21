@@ -172,20 +172,30 @@ function AmiCalculator( props ) {
 
   const [step, setStep] = useState( getStepNumberFromPath() );
 
-  // const adjustStepSize = () => {
-  //   setTimeout( () => {
-  //     if ( stepRef.current ) {
-  //       stepRef.current.parentNode.style.height = getComputedStyle( stepRef.current ).getPropertyValue( 'height' );
-  //     }
-  //   }, 1000 );
-  // };
+  const adjustStepSize = ( stepRef ) => {
+    console.log( 'adjust step size' );
+
+    setTimeout( () => {
+      console.log( 'timeout' );
+
+      if ( stepRef.current ) {
+        console.log( 'stepref is set', stepRef, stepRef.current );
+        stepRef.current.parentNode.style.height = getComputedStyle( stepRef.current ).getPropertyValue( 'height' );
+      } else {
+        console.log( 'stepref isn’t set', stepRef, stepRef.current );
+      }
+    }, 500 );
+  };
 
   useEffect( () => {
     console.log( 'location', location );
     console.log( 'step', step );
   }, [] );
 
-  // useEffect( adjustStepSize, [step] );
+  useEffect( () => {
+    adjustStepSize( stepRef );
+    console.log( 'step changed:', step );
+  }, [step] );
 
   const getNextStepPath = () => {
     const nextStep = ( step + 1 );
@@ -390,7 +400,7 @@ function AmiCalculator( props ) {
       }
     }
 
-    // adjustStepSize();
+    adjustStepSize( stepRef );
   };
 
   return (
@@ -459,7 +469,7 @@ function AmiCalculator( props ) {
 
                     return (
                       <Route key={ formDataKey } exact={ isFirstStep } path={ routePath } render={ () => (
-                        <currentStep.component ref={ stepRef } step={ index + 1 } setStep={ setStep } formData={ formData } />
+                        <currentStep.component stepRef={ stepRef } step={ index + 1 } setStep={ setStep } formData={ formData } />
                       ) }>
                       </Route>
                     );

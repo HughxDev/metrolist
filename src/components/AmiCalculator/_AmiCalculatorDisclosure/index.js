@@ -15,7 +15,7 @@ const AmiCalculatorDisclosure = forwardRef( ( props, ref ) => {
   }, [] );
 
   return (
-    <Stack ref={ ref } space="2" className={ `ml-ami-calculator__disclosure ml-ami-calculator__prompt${props.className ? ` ${props.className}` : ''}` }>
+    <Stack ref={ props.stepRef } space="2" className={ `ml-ami-calculator__disclosure ml-ami-calculator__prompt${props.className ? ` ${props.className}` : ''}` }>
       <InputSummary formData={ props.formData } />
       <p>The above information will be combined to estimate your eligibility for income-restricted housing.  Eligibility is officially and finally determined during the application process.</p>
       <Stack space="1">
@@ -33,6 +33,7 @@ const AmiCalculatorDisclosure = forwardRef( ( props, ref ) => {
 AmiCalculatorDisclosure.displayName = 'Disclosure';
 
 AmiCalculatorDisclosure.propTypes = {
+  "stepRef": PropTypes.object,
   "step": PropTypes.number,
   "setStep": PropTypes.func,
   "children": PropTypes.node,

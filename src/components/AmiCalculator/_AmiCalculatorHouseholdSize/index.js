@@ -14,7 +14,7 @@ const AmiCalculatorHouseholdSize = forwardRef( ( props, ref ) => {
   }, [] );
 
   return (
-    <fieldset ref={ ref } className="ml-ami-calculator__household-size ml-ami-calculator__prompt">
+    <fieldset ref={ props.stepRef } className="ml-ami-calculator__household-size ml-ami-calculator__prompt">
       <legend className="ml-ami-calculator__prompt-question">How many people live in your household of any age?</legend>
       <div className="ml-ami-calculator__prompt-answer">
         <Icon className="ml-ami-calculator__prompt-answer-icon" icon="family2" width="227" />
@@ -37,6 +37,7 @@ const AmiCalculatorHouseholdSize = forwardRef( ( props, ref ) => {
 } );
 
 AmiCalculatorHouseholdSize.propTypes = {
+  "stepRef": PropTypes.object,
   "step": PropTypes.number,
   "setStep": PropTypes.func,
   "children": PropTypes.node,

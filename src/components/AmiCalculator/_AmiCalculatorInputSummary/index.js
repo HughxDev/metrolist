@@ -7,7 +7,7 @@ import Icon from '@components/Icon';
 import './AmiCalculatorInputSummary.scss';
 
 const AmiCalculatorInputSummary = forwardRef( ( props, ref ) => (
-    <Row ref={ ref } as="dl" className="ml-ami-calculator__input-summary">
+    <Row ref={ props.stepRef } as="dl" className="ml-ami-calculator__input-summary">
       <div>
         <dt>
           <Icon className="ml-ami-calculator__prompt-answer-icon" icon="family2" width="227" />
@@ -28,6 +28,7 @@ const AmiCalculatorInputSummary = forwardRef( ( props, ref ) => (
 AmiCalculatorInputSummary.displayName = 'InputSummary';
 
 AmiCalculatorInputSummary.propTypes = {
+  "stepRef": PropTypes.object,
   "children": PropTypes.node,
   "className": PropTypes.string,
   "formData": PropTypes.object,

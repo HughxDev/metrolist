@@ -45,7 +45,7 @@ const AmiCalculatorResult = forwardRef( ( props, ref ) => {
   console.log( props.formData );
 
   return (
-    <Stack ref={ ref } space="2" className={ `ml-ami-calculator__result ml-ami-calculator__prompt${props.className ? ` ${props.className}` : ''}` }>
+    <Stack ref={ props.stepRef } space="2" className={ `ml-ami-calculator__result ml-ami-calculator__prompt${props.className ? ` ${props.className}` : ''}` }>
       <InputSummary formData={ props.formData } />
       <Stack space="1">
         <p><span className="ml-all-caps">Estimated Eligibility:</span> <dfn className="ml-ami">{ amiEstimation }% AMI</dfn> (Area Median Income)</p>
@@ -61,6 +61,7 @@ const AmiCalculatorResult = forwardRef( ( props, ref ) => {
 AmiCalculatorResult.displayName = 'Result';
 
 AmiCalculatorResult.propTypes = {
+  "stepRef": PropTypes.object,
   "children": PropTypes.node,
   "className": PropTypes.string,
   "step": PropTypes.number,
