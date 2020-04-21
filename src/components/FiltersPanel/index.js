@@ -135,28 +135,24 @@ function FiltersPanel( props ) {
               </Filter>
             </Stack>
           </FilterGroup>
-          <FilterGroup>
+          <FilterGroup orientation="horizontal">
             <FilterGroup.Label>Bedrooms</FilterGroup.Label>
-            <Filter>
-              <Filter type="checkbox">1</Filter>
-              <Filter type="checkbox">2</Filter>
-              <Filter type="checkbox">3</Filter>
-              <Filter type="checkbox">4+</Filter>
-            </Filter>
+            <Filter type="checkbox">1</Filter>
+            <Filter type="checkbox">2</Filter>
+            <Filter type="checkbox">3</Filter>
+            <Filter type="checkbox">4+</Filter>
           </FilterGroup>
           <FilterGroup>
             <FilterGroup.Label>Income Eligibility (AMI%)</FilterGroup.Label>
-            <Filter>
-              <Filter type="checkbox">40%</Filter>
-              <Filter type="checkbox">50%</Filter>
-              <Filter type="checkbox">60%</Filter>
-              <Filter type="checkbox">70%</Filter>
-              <Filter type="checkbox">80%</Filter>
-              <Filter type="checkbox">90%</Filter>
-              <Filter type="checkbox">100%</Filter>
-              <Filter type="checkbox">110%</Filter>
-              <Filter type="checkbox">120%</Filter>
-            </Filter>
+            <Filter type="checkbox">40%</Filter>
+            <Filter type="checkbox">50%</Filter>
+            <Filter type="checkbox">60%</Filter>
+            <Filter type="checkbox">70%</Filter>
+            <Filter type="checkbox">80%</Filter>
+            <Filter type="checkbox">90%</Filter>
+            <Filter type="checkbox">100%</Filter>
+            <Filter type="checkbox">110%</Filter>
+            <Filter type="checkbox">120%</Filter>
           </FilterGroup>
         </div>
       </div>{/* filters-panel__menu */}

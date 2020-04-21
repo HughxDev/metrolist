@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { slugify } from '@util/strings';
 
 import Icon from '@components/Icon';
+import Row from '@components/Row';
 
 import './FilterGroup.scss';
 
@@ -43,12 +44,22 @@ class FilterGroup extends React.Component {
       );
     }
 
+    let Wrapper;
+    let wrapperSpacing;
+
+    if ( this.props.orientation === 'horizontal' ) {
+      Wrapper = Row;
+      wrapperSpacing = 'equally';
+    } else {
+      Wrapper = 'div';
+    }
+
     return (
       <>
         { label }
-        <div id={ groupId } ref={ this.$filters } className={ `ml-filter-group__filters${this.state.isExpanded ? ' ml-filter-group__filters--expanded' : ''}` }>
+        <Wrapper id={ groupId } ref={ this.$filters } space={ wrapperSpacing } className={ `ml-filter-group__filters${this.state.isExpanded ? ' ml-filter-group__filters--expanded' : ''}` }>
           { childArray }
-        </div>
+        </Wrapper>
       </>
     );
   }
@@ -63,18 +74,22 @@ class FilterGroup extends React.Component {
   render() {
     return (
       <fieldset className={ `ml-filter-group${this.props.className ? ` ${this.props.className}` : ''}${this.state.isExpanded ? ' ml-filter-group--expanded' : ''}` }>
+        {/* <Wrapper> */}
         { this.renderFilters( this.props ) }
+        {/* </Wrapper> */}
       </fieldset>
     );
   }
 }
 FilterGroup.propTypes = {
   "isExpanded": PropTypes.bool,
+  "orientation": PropTypes.oneOf( ['vertical', 'horizontal'] ),
   "children": PropTypes.node,
   "className": PropTypes.string,
 };
 FilterGroup.defaultProps = {
   "isExpanded": window.matchMedia( '(min-width: 992px)' ).matches,
+  "orientation": "vertical",
 };
 
 FilterGroup.Label = function FilterGroupLabel( props ) {
