@@ -32,7 +32,7 @@
     top: 4rem;
     // z-index: 50;
     pointer-events: all;
-    background-color: $color-metrolist-text-blue;
+    // background-color: $color-metrolist-text-blue;
   }
   @include media-breakpoint-up( large ) {
     .ml-filters-panel__menu {
