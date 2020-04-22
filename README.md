@@ -68,6 +68,18 @@ Avoid parent selectors when constructing BEM classes. This allows the full selec
 .ml-block__element {} // Good
 ```
 
+### Sass
+
+Always include parentheses when calling mixins, even if they have no arguments.
+
+```scss
+@mixin mixin() {
+  // …
+}
+@include mixin; // Bad
+@include mixin(); // Good
+```
+
 ### Spacing
 
 Don’t declare margins directly on components, only in wrappers.
