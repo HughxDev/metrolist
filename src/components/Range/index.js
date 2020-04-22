@@ -1,45 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+
+import Stack from '@components/Stack';
 
 import './Range.scss';
 
 function Range( props ) {
-  addEventListener( 'input', ( e ) => {
-    const _t = e.target;
-    _t.parentNode.style.setProperty( `--${_t.id}`, +_t.value );
-  }, false );
+  const min = '0';
+  const max = '100';
+  const [value1, setValue1] = useState( '40' );
+  const [value2, setValue2] = useState( '60' );
+  const handleInput = ( ( event ) => {
+    const $input = event.target;
+
+    switch ( $input.id ) { // eslint-disable-line default-case
+      case 'value-1':
+        setValue1( $input.value );
+        break;
+
+      case 'value-2':
+        setValue2( $input.value );
+        break;
+    }
+
+    $input.parentNode.style.setProperty( `--${$input.id}`, +$input.value );
+  } );
 
   return (
     <div
-      className="wrap" role="group" aria-labelledby="multi-lbl"
+      className="ml-range"
       style={ {
-        "--value-1": "-15",
-        "--value-2": "20",
-        "--min": "-50",
-        "--max": "50",
-        "--fill": `
-          linear-gradient(
-            90deg,
-            red calc( var( --radius ) + ( var( --value-1 ) - var( --min ) ) / var( --min-max-difference ) * var( --useful-width ) ),
-            transparent 0
-          ),
-          linear-gradient(
-            90deg,
-            red calc( var( --radius ) + ( var( --value-2 ) - var( --min ) ) / var( --min-max-difference ) * var( --useful-width ) ),
-            transparent 0
-          )
-        `,
+        "--value-1": value1,
+        "--value-2": value2,
+        "--min": min,
+        "--max": max,
       } }
     >
-      <div id="multi-lbl">Multi thumb slider:</div>
+      <Stack space="1">
+        <p><output className="ml-range__output" htmlFor="value-1">{ `${value1}%` }</output> – <output className="ml-range__output" htmlFor="value-2">{ `${value2}%` }</output> <abbr>AMI</abbr></p>
+        <div role="group">
+          <label className="sr-only" htmlFor="value-1">Minimum</label>
+          <input className="ml-range__input" type="range" id="value-1" min={ min } value={ value1 } max={ max } onChange={ handleInput } />
 
-      <label className="sr-only" htmlFor="v0">Value A</label>
-      <input type="range" id="value-1" min="-50" defaultValue="-15" max="50" />
-      <output htmlFor="v0" style={ { "--value": "var( --value-1 )" } }></output>
-
-      <label className="sr-only" htmlFor="v1">Value B</label>
-      <input type="range" id="value-2" min="-50" defaultValue="20" max="50" />
-      <output htmlFor="v1" style={ { "--value": "var( --value-2 )" } }></output>
+          <label className="sr-only" htmlFor="value-2">Maximum</label>
+          <input className="ml-range__input" type="range" id="value-2" min={ min } value={ value2 } max={ max } onChange={ handleInput } />
+        </div>
+      </Stack>
     </div>
   );
 }
