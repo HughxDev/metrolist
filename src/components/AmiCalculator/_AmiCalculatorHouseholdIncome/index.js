@@ -13,6 +13,7 @@ import './AmiCalculatorHouseholdIncome.scss';
 
 const AmiCalculatorHouseholdIncome = forwardRef( ( props, ref ) => {
   const moneyInputRef = useRef();
+  const defaultIncomeRate = 'Monthly';
 
   function pad( num, size ) {
     let s = `${num}`;
@@ -75,6 +76,22 @@ const AmiCalculatorHouseholdIncome = forwardRef( ( props, ref ) => {
       setMoneyInput( formattedInitialAmount );
     }
 
+    if ( !props.formData.incomeRate.value ) {
+      console.log( 'no incomeRate value' );
+
+      const newFormData = {
+        ...props.formData,
+        "incomeRate": {
+          ...props.formData.incomeRate,
+          "value": defaultIncomeRate,
+        },
+      };
+
+      props.setFormData( newFormData );
+    } else {
+      console.log( 'yes incomeRate value', props.formData.incomeRate.value );
+    }
+
     console.log( 'props.formData', props.formData );
   }, [] );
 
@@ -105,9 +122,12 @@ const AmiCalculatorHouseholdIncome = forwardRef( ( props, ref ) => {
         <Scale
           criterion="incomeRate"
           values="Yearly,Monthly"
-          value={ props.formData.incomeRate.value || 'Monthly' }
+          value={ props.formData.incomeRate.value || defaultIncomeRate }
           required
-          // onChange={ ( event ) => event.stopPropagation() }
+          onChange={ ( event ) => {
+            console.log( 'incomeRate scale changed', event.target.nodeName, event.target.value );
+            // event.stopPropagation();
+          } }
         />
         <FormErrorMessage
           ref={ props.formData.incomeRate.errorRef }
@@ -125,7 +145,8 @@ AmiCalculatorHouseholdIncome.propTypes = {
   "setStep": PropTypes.func,
   "children": PropTypes.node,
   "className": PropTypes.string,
-  "formData": PropTypes.object,
+  "formData": PropTypes.object.isRequired,
+  "setFormData": PropTypes.func.isRequired,
 };
 
 AmiCalculatorHouseholdIncome.displayName = "HouseholdIncome";

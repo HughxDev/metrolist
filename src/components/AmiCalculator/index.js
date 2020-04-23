@@ -180,7 +180,7 @@ function AmiCalculator( props ) {
 
       if ( stepRef.current ) {
         console.log( 'stepref is set', stepRef, stepRef.current );
-        stepRef.current.parentNode.style.height = getComputedStyle( stepRef.current ).getPropertyValue( 'height' );
+        // stepRef.current.parentNode.style.height = getComputedStyle( stepRef.current ).getPropertyValue( 'height' );
       } else {
         console.log( 'stepref isn’t set', stepRef, stepRef.current );
       }
@@ -322,6 +322,8 @@ function AmiCalculator( props ) {
       } );
     }
 
+    console.log( 'formRef.current.elements', formRef.current.elements );
+
     return [newErrors, numberOfErrors];
   };
 
@@ -371,16 +373,42 @@ function AmiCalculator( props ) {
             || ( newFormData[formDataKey].page === 'all' )
         ) );
 
+      console.log( {
+        newFormData,
+        numberOfErrors,
+        event,
+      } );
+
       if (
         ( event.type === 'change' )
         || ( event.type === 'keydown' )
       ) {
-        const { name } = event.target;
+        if ( formRef.current ) {
+          const { name } = event.target;
 
-        if ( hasOwnProperty( newFormData, name ) ) {
-          newFormData[name].value = event.target.value;
+          Array.from( formRef.current.elements ).forEach( ( $element, index ) => {
+            if ( hasOwnProperty( newFormData, name ) ) {
+              newFormData[name].value = event.target.value;
+            } else {
+              const nodeName = $element.nodeName.toLowerCase();
+              const type = $element.getAttribute( 'type' );
+              const { id, className } = $element;
+              const elementName = $element.name;
+              let reason;
+
+              if ( !elementName ) {
+                reason = `The form element \`${nodeName}${type ? `[type="${type}"]` : ''}${id ? `#${id}` : ''}${className ? `.${className.replace( /\s+/g, '.' )}` : ''}\` at \`formRef.current.elements[${index}]\` is missing the \`name\` attribute.`;
+                console.warn( `Skipping state synchronization: ${reason}` );
+              } else {
+                reason = `The state object for AmiCalculator is missing a key named \`${name}\`.`;
+                console.error( `Can’t synchronize React state with form state: ${reason}` );
+              }
+            }
+
+            console.log( '---' );
+          } );
         } else {
-          console.error( new Error( `Can’t update state: the state object for AmiCalculator is missing a key named \`${name}\`.` ) );
+          console.error( new Error( `\`formRef.current\` returned falsy; can’t synchronize React state with form state. As a result, the AMI calculation will either be inaccurate or won’t work at all.` ) );
         }
       } // if change event
 
@@ -467,9 +495,11 @@ function AmiCalculator( props ) {
                     // const Step = React.createElement( currentStep, { setStep, "formData": formData[formDataKey] }, null );
                     const routePath = ( isFirstStep ? path : `${path}/${slugify( displayName )}` );
 
+                    console.log( 'breakpoint here' );
+
                     return (
                       <Route key={ formDataKey } exact={ isFirstStep } path={ routePath } render={ () => (
-                        <currentStep.component stepRef={ stepRef } step={ index + 1 } setStep={ setStep } formData={ formData } />
+                        <currentStep.component stepRef={ stepRef } step={ index + 1 } setStep={ setStep } formData={ formData } setFormData={ setFormData } />
                       ) }>
                       </Route>
                     );

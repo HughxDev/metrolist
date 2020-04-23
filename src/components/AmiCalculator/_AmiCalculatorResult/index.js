@@ -18,21 +18,60 @@ const amiDefinition = {
 };
 
 function estimateAmi( { householdSize, householdIncome, incomeRate } ) {
+  // console.log(
+  //   'input',
+  //   {
+  //     householdSize,
+  //     householdIncome,
+  //     incomeRate,
+  //   },
+  // );
+
+  householdSize = householdSize.value;
+  householdIncome = householdIncome.value;
+  incomeRate = incomeRate.value;
+
   // const parsedHouseholdSize = parseInt( householdSize, 10 );
   // const deformattedHouseholdIncome = householdIncome.replace( /[$,]/g, '' );
-  householdIncome = parseFloat( householdIncome.value.replace( /[$,]/g, '' ) );
-  const maxIncome = amiDefinition[`people_${householdSize.value}`];
+  const parsedHouseholdIncome = parseFloat( householdIncome.replace( /[$,]/g, '' ) );
+  const maxIncome = amiDefinition[`people_${householdSize}`];
+  let annualizedHouseholdIncome = parsedHouseholdIncome;
+  let estimation;
 
-  if ( incomeRate.value === 'Monthly' ) {
-    householdIncome *= 12;
+  if ( incomeRate === 'Monthly' ) {
+    annualizedHouseholdIncome *= 12;
   }
 
-  return Math.floor( ( householdIncome / maxIncome ) * 100 );
+  if (
+    Number.isNaN( annualizedHouseholdIncome )
+    || Number.isNaN( maxIncome )
+  ) {
+    console.error( new Error(
+      `AMI calculation failed: one or both of \`annualizedHouseholdIncome\` and \`maxIncome\` resolved to non-numeric values.`
+      + ` This could be due to \`props.formData\` being incomplete or missing.`,
+    ) );
+    estimation = 0;
+  } else {
+    estimation = Math.floor( ( annualizedHouseholdIncome / maxIncome ) * 100 );
+  }
+
+  // console.log( {
+  //   householdSize,
+  //   householdIncome,
+  //   parsedHouseholdIncome,
+  //   annualizedHouseholdIncome,
+  //   incomeRate,
+  //   maxIncome,
+  //   estimation,
+  //   "math": `Math.floor( ( ${annualizedHouseholdIncome} / ${maxIncome} ) * 100 ) -> ${estimation}`,
+  // } );
+
+  return estimation;
 }
 
 const AmiCalculatorResult = forwardRef( ( props, ref ) => {
-  const data = props.formData.householdSize.value ? props.formData : props.fakeFormData;
-  const [amiEstimation, setAmiEstimation] = useState( estimateAmi( data ) );
+  // const data = props.formData.householdSize.value ? props.formData : props.fakeFormData;
+  const [amiEstimation, setAmiEstimation] = useState( estimateAmi( props.formData ) );
 
   useEffect( () => props.setStep( props.step ), [] );
 
@@ -73,7 +112,7 @@ AmiCalculatorResult.propTypes = {
 AmiCalculatorResult.defaultProps = {
   "fakeFormData": {
     "householdSize": {
-      "value": 4,
+      "value": "4",
     },
     "householdIncome": {
       "value": "$5,000.00",
