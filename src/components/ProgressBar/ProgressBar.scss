@@ -29,6 +29,8 @@
 }
 @mixin progress-indicator {
   background-color: $color-black;
+  background-color: $color-optimistic-blue;
+  transition: width 0.5s;
 }
 
 // Chrome, Safari, etc.

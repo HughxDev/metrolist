@@ -7,7 +7,7 @@
 // https://codepen.io/thebabydino/pen/vYEEara
 
 // $pad: 2rem;
-$highlight-color: #f90;
+$highlight-color: hsl(50, 100%, 45%);
 $transition-duration: .3s;
 $thumb-diameter: ( $checkbox-dimensions--desktop / 2 );
 $thumb-translate-y: ( $thumb-diameter * -.75 );
@@ -46,6 +46,11 @@ $thumb-translate-y: ( $thumb-diameter * -.75 );
 
   border: 8px solid $color-metrolist-text-blue;
 	background-color: #0A1F2F;
+
+	&:active {
+		border-color: $highlight-color;
+		background-color: $highlight-color;
+	}
 }
 
 .ml-range {
@@ -69,12 +74,12 @@ $thumb-translate-y: ( $thumb-diameter * -.75 );
 	--fill:
 		linear-gradient(
 			90deg,
-			red calc( var(--thumb-radius) + ( var(--value-1) - var(--min) ) / var(--min-max-difference) * var(--useful-width) ),
+			red calc( var(--thumb-radius) + ( var(--lower-bound) - var(--min) ) / var(--min-max-difference) * var(--useful-width) ),
 			transparent 0
 		),
 		linear-gradient(
 			90deg,
-			red calc( var(--thumb-radius) + ( var(--value-2) - var(--min) ) / var(--min-max-difference) * var(--useful-width) ),
+			red calc( var(--thumb-radius) + ( var(--upper-bound) - var(--min) ) / var(--min-max-difference) * var(--useful-width) ),
 			transparent 0
 		)
 	;
@@ -85,7 +90,7 @@ $thumb-translate-y: ( $thumb-diameter * -.75 );
 		grid-gap: .625rem;
 		overflow: hidden;
 		position: relative;
-		padding-top: ( $thumb-diameter / 2 );
+		padding-top: 0.25rem; // ( $thumb-diameter / 2 );
 		// margin: 1em .5em - $pad;
 		// padding: 0 $pad;
 		width: var(--track-width);
@@ -162,10 +167,13 @@ $thumb-translate-y: ( $thumb-diameter * -.75 );
 	&::-webkit-slider-thumb {
 		@include thumb();
 	}
-	&:first-of-type::-webkit-slider-thumb {
+	&:first-of-type::-webkit-slider-thumb,
+	&:last-of-type.ml-range__input--inverted::-webkit-slider-thumb {
 		transform: translate( $thumb-position-tweak, $thumb-translate-y ) rotate( -45deg );
 	}
-	&:last-of-type::-webkit-slider-thumb {
+
+	&:last-of-type::-webkit-slider-thumb,
+	&:first-of-type.ml-range__input--inverted::-webkit-slider-thumb {
 		transform: translate( $thumb-position-tweak * -1, $thumb-translate-y ) rotate( -45deg );
 	}
 
@@ -173,24 +181,37 @@ $thumb-translate-y: ( $thumb-diameter * -.75 );
 		@include thumb();
 	}
 	// Firefox’s translate doesn’t calculate in the same way as Chrome’s, so manually adjusting
-	&:first-of-type::-moz-range-thumb {
-		transform: translate( $thumb-position-tweak, $thumb-translate-y * 1.5 ) rotate( -45deg );
-	}
-	&:last-of-type::-moz-range-thumb {
-		transform: translate( $thumb-position-tweak * -1, $thumb-translate-y * 1.5 ) rotate( -45deg );
-	}
+	// &:first-of-type::-moz-range-thumb {
+	// 	transform: translate( $thumb-position-tweak, $thumb-translate-y * 1.5 ) rotate( -45deg );
+	// }
+	// &:last-of-type::-moz-range-thumb {
+	// 	transform: translate( $thumb-position-tweak * -1, $thumb-translate-y * 1.5 ) rotate( -45deg );
+	// }
 
 	&:focus {
+		--highlighted: 1;
 		outline: solid 0 transparent;
-		
-		&, & + .ml-range__output {
-			--highlighted: 1;
-		}
 	}
 
 	&:active {
 		cursor: grabbing;
 	}
+}
+
+// .ml-range__review,
+// .ml-range__review-unit {}
+
+.ml-range__review {
+	display: inline-flex;
+	flex-direction: row;
+	justify-content: flex-start;
+}
+.ml-range__review > .en-dash {
+	margin: 0 .25rem;
+}
+.ml-range__review.ml-range__review--inverted {
+	flex-direction: row-reverse;
+	justify-content: flex-end;
 }
 
 // .ml-range {}

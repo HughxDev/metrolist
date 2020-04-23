@@ -13,10 +13,11 @@ import Column from '@components/Column';
 import './FiltersPanel.scss';
 
 function FiltersPanel( props ) {
-  const isDesktop = window.matchMedia( '(min-width: 992px)' ).matches; // TODO: define breakpoints that line up with the CSS in JS somewhere
+  const isDesktop = true; // window.matchMedia( '(min-width: 992px)' ).matches; // TODO: define breakpoints that line up with the CSS in JS somewhere
   const $drawer = useRef();
   const attributes = { ...props };
   const [isExpanded, setExpanded] = useState( isDesktop );
+  let updatingDrawerHeight = false;
 
   const updateDrawerHeight = ( wait ) => {
     const updateHeight = () => {
@@ -25,6 +26,8 @@ function FiltersPanel( props ) {
       if ( height !== '0px' ) {
         $drawer.current.style.height = height;
       }
+
+      updatingDrawerHeight = false;
     };
 
     if ( wait ) {
@@ -60,8 +63,11 @@ function FiltersPanel( props ) {
     if ( isFiltersPanelClick ) {
       setExpanded( !isExpanded );
     } else {
-      $drawer.current.style.height = '';
-      updateDrawerHeight( 250 );
+      if ( !updatingDrawerHeight ) {
+        updatingDrawerHeight = true;
+        $drawer.current.style.height = '';
+        updateDrawerHeight( 250 );
+      }
     }
   };
 
@@ -142,9 +148,14 @@ function FiltersPanel( props ) {
             <Filter type="checkbox">3</Filter>
             <Filter type="checkbox">4+</Filter>
           </FilterGroup>
-          <FilterGroup>
+          <FilterGroup isExpanded={ true }>
             <FilterGroup.Label>Income Eligibility (AMI%)</FilterGroup.Label>
-            <Filter type="range" min="0" max="100" />
+            <div
+              onClick={ ( event ) => event.stopPropagation() }
+              onChange={ ( event ) => event.stopPropagation() }
+            >
+              <Filter type="range" min="0" max="100" />
+            </div>
           </FilterGroup>
         </div>
       </div>{/* filters-panel__menu */}

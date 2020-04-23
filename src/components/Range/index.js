@@ -6,44 +6,84 @@ import Stack from '@components/Stack';
 import './Range.scss';
 
 function Range( props ) {
-  const min = '0';
-  const max = '100';
-  const [value1, setValue1] = useState( '40' );
-  const [value2, setValue2] = useState( '60' );
+  const min = 0;
+  const max = 100;
+  const [lowerBound, setLowerBound] = useState( 40 );
+  const [upperBound, setUpperBound] = useState( 60 );
+  const [outOfBounds, setOutOfBounds] = useState( false );
   const handleInput = ( ( event ) => {
     const $input = event.target;
 
     switch ( $input.id ) { // eslint-disable-line default-case
-      case 'value-1':
-        setValue1( $input.value );
+      case 'lower-bound':
+        setLowerBound( parseInt( $input.value, 10 ) );
+        $input.parentNode.style.setProperty( `--${$input.id}`, +$input.value );
         break;
 
-      case 'value-2':
-        setValue2( $input.value );
+      case 'upper-bound':
+        setUpperBound( parseInt( $input.value, 10 ) );
+        $input.parentNode.style.setProperty( `--${$input.id}`, +$input.value );
         break;
     }
 
-    $input.parentNode.style.setProperty( `--${$input.id}`, +$input.value );
+    setOutOfBounds( lowerBound > upperBound );
+
+    console.log( {
+      lowerBound,
+      upperBound,
+      outOfBounds,
+    } );
   } );
 
   return (
     <div
       className="ml-range"
       style={ {
-        "--value-1": value1,
-        "--value-2": value2,
+        "--lower-bound": lowerBound,
+        "--upper-bound": upperBound,
         "--min": min,
         "--max": max,
       } }
     >
       <Stack space="1">
-        <p><output className="ml-range__output" htmlFor="value-1">{ `${value1}%` }</output> – <output className="ml-range__output" htmlFor="value-2">{ `${value2}%` }</output> <abbr>AMI</abbr></p>
-        <div role="group">
-          <label className="sr-only" htmlFor="value-1">Minimum</label>
-          <input className="ml-range__input" type="range" id="value-1" min={ min } value={ value1 } max={ max } onChange={ handleInput } />
+        <p>
+          <span className={ `ml-range__review${outOfBounds ? ` ml-range__review--inverted` : ''}` }>
+            <output className="ml-range__output" htmlFor="lower-bound">{ `${lowerBound}%` }</output>
+            <span className="en-dash">–</span>
+            <output className="ml-range__output" htmlFor="upper-bound">{ `${upperBound}%` }</output>
+          </span>
+          &#30;<abbr className="ml-range__review-unit">AMI</abbr></p>
+        <div
+          role="group"
+          // onChange={ handleInput }
+        >
+          <label
+            className="sr-only"
+            htmlFor="lower-bound"
+          >{ outOfBounds ? 'Maximum' : 'Minimum' }</label>
+          <input
+            className={ `ml-range__input${outOfBounds ? ` ml-range__input--inverted` : ''}` }
+            type="range"
+            id="lower-bound"
+            min={ min }
+            defaultValue={ lowerBound }
+            max={ max }
+            onChange={ handleInput }
+          />
 
-          <label className="sr-only" htmlFor="value-2">Maximum</label>
-          <input className="ml-range__input" type="range" id="value-2" min={ min } value={ value2 } max={ max } onChange={ handleInput } />
+          <label
+            className="sr-only"
+            htmlFor="upper-bound"
+          >{ outOfBounds ? 'Minimum' : 'Maximum' }</label>
+          <input
+            className={ `ml-range__input${outOfBounds ? ` ml-range__input--inverted` : ''}` }
+            type="range"
+            id="upper-bound"
+            min={ min }
+            defaultValue={ upperBound }
+            max={ max }
+            onChange={ handleInput }
+          />
         </div>
       </Stack>
     </div>
