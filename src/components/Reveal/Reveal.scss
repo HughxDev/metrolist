@@ -8,9 +8,9 @@
     max-height: ( rem( 47px ) * 3 ); // 3 = number of children to show at first
   }
   .ml-reveal__more-button {
-    font-family: inherit;
-    font-size: rem( 21px );
-    font-style: italic;
+    font: inherit;
+    // font-size: rem( 21px );
+    // font-style: italic;
     color: inherit;
     background-color: transparent;
     text-decoration: underline;

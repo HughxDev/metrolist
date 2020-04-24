@@ -22,17 +22,13 @@
     }
   }
   .ml-callout__heading {
+    // Adapted from Patterns’ Card component (.cd-t @ patterns/stylesheets/components/card/_card.styl)
+    color: $color-optimistic-blue--a11y;
     font-style: italic;
-    // color: $color-optimistic-blue;
-    // color: #00A5EB;
-    font-size: rem( 18px );
-  }
-  @include media-breakpoint-up( large ) {
-    .ml-callout__heading {
-      line-height: rem( 33px );
-      // color: $color-optimistic-blue;
-      font-size: rem( 28px );
-    }
+    font-size: responsive rem( 18px ) rem( 25px );
+    font-range: 480px 1440px; // TODO: make match $grid-breakpoints?
+    line-height: $line-height-200;
+    margin: 0;
   }
   .ml-callout__text {
     font-size: rem( 18px );

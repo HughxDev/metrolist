@@ -99,7 +99,9 @@ $padding-home-horizontal--large: rem( 26px );
     .ml-home-footer__home-info {
       flex: 1;
     }
-  }
-  .ml-home-footer__more-info-link {
-    
+
+    .ml-home-footer__more-info-link,
+    .btn[class*="btn--metrolist"].ml-home-footer__more-info-link {
+      width: auto;
+    }
   }

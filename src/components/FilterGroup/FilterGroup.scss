@@ -4,6 +4,7 @@
 
 .ml-filter-group {
   // border: 1px solid rgba( 40, 180, 40, 0.5 );
+  // font-family: $font-family-montserrat;
   border: 0;
   background-color: $color-white;
   margin-inline-end: 0;
@@ -29,6 +30,7 @@
   }
 }
   .ml-filter-group__label {
+    font-family: $font-family-montserrat;
     cursor: default;
     height: $filter-group-label-height;
     padding: 0 $filter-group-padding-left-right;
@@ -37,7 +39,6 @@
     justify-content: space-between;
     width: 100%;
     background-color: $color-metrolist-text-blue;
-    font-family: $font-family-montserrat;
     font-weight: 500;
     font-size: rem( 16px );
     color: $color-white;

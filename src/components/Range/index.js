@@ -27,12 +27,6 @@ function Range( props ) {
     }
 
     setOutOfBounds( lowerBound > upperBound );
-
-    console.log( {
-      lowerBound,
-      upperBound,
-      outOfBounds,
-    } );
   } );
 
   return (
@@ -54,6 +48,7 @@ function Range( props ) {
           </span>
           &#30;<abbr className="ml-range__review-unit">AMI</abbr></p>
         <div
+          className="ml-range__multi-input"
           role="group"
           // onChange={ handleInput }
         >

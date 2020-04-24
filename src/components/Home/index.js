@@ -6,6 +6,7 @@ import UnitGroup from '@components/UnitGroup';
 import HomeInfo from '@components/HomeInfo';
 import Button from '@components/Button';
 import Stack from '@components/Stack';
+import Row from '@components/Row';
 
 import { capitalize } from '@util/strings';
 import { date, dateTime } from '@util/datetime';
@@ -50,7 +51,7 @@ function Home( { home } ) {
           </header>
           <UnitGroup units={ units } />
         </Stack>
-        <footer className="ml-home__footer">
+        <Row as="footer" className="ml-home__footer" space="panel" stackUntil="small">{/* TODO: Should be home-info--two-column */}
           <HomeInfo
             className="ml-home-footer__home-info"
             info={ {
@@ -59,8 +60,13 @@ function Home( { home } ) {
               assignment,
             } }
           />
-          <Button className="ml-home-footer__more-info-link" as="link" href="#">More info</Button>
-        </footer>
+          <Button
+            as="link"
+            className="ml-home-footer__more-info-link"
+            variant="primary"
+            href="#"
+          >More info</Button>
+        </Row>
       </div>
     </article>
   );

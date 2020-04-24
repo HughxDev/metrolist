@@ -59,12 +59,6 @@ const Stack = forwardRef( ( props, ref ) => {
   }
 
   return StackElement;
-
-  return (
-    <div ref={ ref } { ...attributes } className={ `ml-stack${stackClasses}${className ? ` ${className}` : ''}` }>
-      { children }
-    </div>
-  );
 } );
 
 Stack.displayName = 'Stack';

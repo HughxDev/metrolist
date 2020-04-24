@@ -4,7 +4,8 @@
 .ml-app {
   background-color: $color-supporting-gray;
   // background-color: $color-supporting-gray-darker;
-  padding-bottom: rem( 80px );
+  // padding-bottom: rem( 80px );
+  padding-bottom: rem( 40px );
 }
 .ml-app.ml-app--ami-calculator {
   background-color: $color-white;

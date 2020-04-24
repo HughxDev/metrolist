@@ -3,22 +3,14 @@
 @import '@globals/typography/filters';
 
 .ml-checkbox {
-  font-family: $font-family-montserrat;
+  // font-family: $font-family-montserrat;
   font-size: $font-size-filter-label;
-  // font-weight: bold;
-  // white-space: nowrap;
-  // font-size: responsive $font-size-filter-label $font-size-filter-label--desktop;
 }
   @include media-breakpoint-up( large ) {
     .ml-checkbox {
-      // font-family: inherit;
-      font-size: $font-size-filter-label--desktop;
-      // font-size: responsive rem( 19.9px ) $font-size-filter-label--desktop;
+      font-size: $font-size-filter-label;
     }
   }
-  // .ml-checkbox.ml-checkbox--button {
-  //   border: 2px solid $color-metrolist-text-blue;
-  // }
 
   .ml-checkbox__subcategories {
     display: block;
@@ -34,10 +26,6 @@
         // column-count: 1;
         // margin-left: rem( 35px );
         // margin-top: rem( 21px );
-      }
-
-      .ml-checkbox__subcategories > .ml-checkbox {
-        font-size: $font-size-filter-label--desktop-small;
       }
     }
     .ml-checkbox__subcategories > .ml-checkbox + .ml-checkbox {

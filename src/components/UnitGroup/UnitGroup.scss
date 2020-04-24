@@ -16,13 +16,13 @@
   .ml-unit-group__cell {
     width: 33.333333%;
     padding: $table-cell-spacing;
-  }
-  .ml-unit-group__size {
-    text-align: left;
-  }
-  .ml-unit-group__ami-qualification {
     text-align: center;
-  }
-  .ml-unit-group__price {
-    text-align: right;
+
+    &:first-child {
+      text-align: left;
+    }
+
+    &:last-child {
+      text-align: right;
+    }
   }
