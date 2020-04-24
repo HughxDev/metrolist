@@ -35,12 +35,20 @@ function formatPrice( price, priceRate ) {
       displayType={ 'text' }
       prefix={ '$' }
       thousandSeparator={ true }
-      renderText={ ( value ) => (
-        <>
-          { `${value}/` }
-          <abbr className="ml-unit__price-rate" title={ priceRate.substring( 0, 5 ) }>{ priceRate.substring( 0, 2 )}.</abbr>
-        </>
-      ) }
+      renderText={ ( value ) => {
+        const isForSale = ( priceRate === 'once' );
+
+        if ( isForSale ) {
+          return <>{ value }</>;
+        }
+
+        return (
+          <>
+            { `${value}/` }
+            <abbr className="ml-unit__price-rate" title={ priceRate.substring( 0, 5 ) }>{ priceRate.substring( 0, 2 ) }.</abbr>
+          </>
+        );
+      } }
     />
   );
 }

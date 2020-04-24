@@ -570,7 +570,5 @@ AmiCalculator.defaultProps = {
   ],
 };
 
-console.log( 'HouseholdSize', HouseholdSize );
-
 export default withRouter( AmiCalculator );
 // export default AmiCalculator;

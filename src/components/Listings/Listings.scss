@@ -9,7 +9,8 @@
   @include media-breakpoint-up( large ) {
     .ml-listings {
       width: ( $nominal-width-mobile-listings__content / $nominal-width-mobile ) * 100%;
-      margin-top: rem( 80px );
+      // margin-top: rem( 80px );
+      margin-top: rem( 40px );
     }
 
     .ml-listings__content {

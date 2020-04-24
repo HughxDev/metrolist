@@ -6,74 +6,106 @@ import { capitalize } from '@util/strings';
 
 import './HomeInfo.scss';
 
-function formatKey( key, value ) {
-  let formattedKey;
+function HomeInfo( props ) {
+  const { className, info } = props;
 
-  switch ( key ) {
-    case 'listingDate':
-      formattedKey = 'Posted: ';
-      break;
-    case 'applicationDueDate':
-      formattedKey = 'Application Due: ';
-      break;
-    case 'assignment':
-      if ( value ) {
-        formattedKey = 'Income-restricted – ';
-      } else {
-        formattedKey = 'Open Market';
-      }
-      break;
-    default:
-      formattedKey = capitalize( key );
-      break;
+  function formatKey( key, value ) {
+    let formattedKey;
+
+    switch ( key ) {
+      case 'listingDate':
+        formattedKey = 'Posted: ';
+        break;
+      case 'applicationDueDate':
+        formattedKey = 'Application Due: ';
+        break;
+      case 'assignment':
+        break;
+      case 'incomeRestricted':
+        if ( value === true ) {
+          formattedKey = 'Income-restricted';
+
+          if ( props.info.assignment ) {
+            formattedKey += ' – ';
+          }
+        } else {
+          formattedKey = 'Open Market';
+        }
+        break;
+      default:
+        if ( typeof key === 'string' ) {
+          formattedKey = `${capitalize( key )}: `;
+        } else {
+          formattedKey = `${key}: `;
+        }
+        break;
+    }
+
+    return formattedKey;
   }
 
-  return formattedKey;
-}
+  function formatValue( key, value ) {
+    let formattedValue;
 
-function formatValue( key, value ) {
-  let formattedValue;
+    switch ( key ) {
+      case 'listingDate':
+        formattedValue = moment( value ).format( 'M/D/YY' );
+        break;
+      case 'applicationDueDate':
+        formattedValue = ( value ? moment( value ).format( 'M/D/YY' ) : 'N/A' );
+        break;
+      case 'assignment':
+        break;
+      case 'incomeRestricted':
+        if ( value === true ) {
+          switch ( props.info.assignment ) {
+            case 'lottery':
+              formattedValue = 'Housing Lottery';
+              break;
+            case 'waitlist':
+              formattedValue = 'Open Waitlist';
+              break;
+            default:
+              if ( typeof props.info.assignment === 'string' ) {
+                formattedValue = capitalize( props.info.assignment );
+              } else {
+                formattedValue = `${value}`;
+              }
+          }
+        } else {
+          if ( typeof value === 'string' ) {
+            formattedValue = capitalize( value );
+          } else {
+            formattedValue = `${value}`;
+          }
+        }
+        break;
+      default:
+        if ( typeof key === 'string' ) {
+          formattedValue = capitalize( key );
+        } else {
+          formattedValue = `${value}`;
+        }
+        break;
+    }
 
-  switch ( key ) {
-    case 'listingDate':
-      formattedValue = moment( value ).format( 'M/D/YY' );
-      break;
-    case 'applicationDueDate':
-      formattedValue = moment( value ).format( 'M/D/YY' );
-      break;
-    case 'assignment':
-      switch ( value ) {
-        case 'lottery':
-          formattedValue = 'Housing Lottery';
-          break;
-        case 'waitlist':
-          formattedValue = 'Open Waitlist';
-          break;
-        default:
-          formattedValue = capitalize( value );
-      }
-      break;
-    default:
-      formattedValue = capitalize( key );
-      break;
+    return formattedValue;
   }
 
-  return formattedValue;
-}
-
-function HomeInfo( { className, info } ) {
   return (
     <dl className={ `ml-home-info${className ? ` ${className}` : ''}` }>{
       Object.keys( info )
         .map( ( key, index ) => {
           const value = info[key];
 
-          return (
-            <React.Fragment key={ index }>
-              <dt className="ml-home-info__key">{ formatKey( key, value ) }</dt>
-              { value && <dd className="ml-home-info__value">{ formatValue( key, value ) }</dd> }
-            </React.Fragment>
-          );
+          if ( key !== 'assignment' ) {
+            return (
+              <div key={ index }>
+                <dt className="ml-home-info__key">{ formatKey( key, value ) }</dt>
+                { value && <dd className="ml-home-info__value">{ formatValue( key, value ) }</dd> }
+              </div>
+            );
+          }
         } )
     }</dl>
   );

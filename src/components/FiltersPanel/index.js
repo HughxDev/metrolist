@@ -83,6 +83,10 @@ function FiltersPanel( props ) {
     attributes['data-column-width'] = props.columnWidth;
   }
 
+  if ( props.setFilters ) {
+    delete attributes.setFilters;
+  }
+
   return (
     <section
       className={

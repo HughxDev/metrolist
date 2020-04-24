@@ -53,7 +53,7 @@ function Range( props ) {
           // onChange={ handleInput }
         >
           <label
-            className="sr-only"
+            // className="sr-only"
             htmlFor="lower-bound"
           >{ outOfBounds ? 'Maximum' : 'Minimum' }</label>
           <input
@@ -67,7 +67,7 @@ function Range( props ) {
           />
 
           <label
-            className="sr-only"
+            // className="sr-only"
             htmlFor="upper-bound"
           >{ outOfBounds ? 'Minimum' : 'Maximum' }</label>
           <input

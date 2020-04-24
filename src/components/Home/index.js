@@ -35,7 +35,7 @@ function renderJustListed( listingDate ) {
 
 function Home( { home } ) {
   const {
-    title, listingDate, applicationDueDate, assignment, city, neighborhood, type, units,
+    title, listingDate, incomeRestricted, applicationDueDate, assignment, city, neighborhood, type, units,
   } = home;
 
   return (
@@ -58,6 +58,7 @@ function Home( { home } ) {
               listingDate,
               applicationDueDate,
               assignment,
+              incomeRestricted,
             } }
           />
           <Button
@@ -84,6 +85,7 @@ Home.propTypes = {
       "type": PropTypes.oneOf( ['apartment', 'house'] ),
       "offer": PropTypes.oneOf( ['rental', 'sale'] ),
       "units": PropTypes.arrayOf( PropTypes.object ),
+      "incomeRestricted": PropTypes.bool,
     },
   ),
 };
