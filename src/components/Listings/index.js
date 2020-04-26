@@ -150,12 +150,20 @@ function Listings( props ) {
       delete formattedUnit.posted;
       delete formattedUnit.appDueDate;
       delete formattedUnit.openWaitlist;
+      delete formattedUnit.unitType;
+      delete formattedUnit.development;
+      delete formattedUnit.developmentURI;
+      delete formattedUnit.developmentURL;
 
+      formattedUnit.slug = unit.developmentURI.slice( 1 );
+      formattedUnit.title = unit.development;
+      formattedUnit.type = unit.unitType;
       formattedUnit.assignment = ( ( unit.openWaitlist === true ) ? 'waitlist' : unit.userGuidType.toLowerCase() );
       formattedUnit.listingDate = unit.posted;
       formattedUnit.applicationDueDate = unit.appDueDate;
       formattedUnit.offer = ( ( unit.type === 'Own' ) ? 'sale' : 'rental' );
       formattedUnit.incomeRestricted = ( unit.incomeRestricted == 'true' ); // eslint-disable-line eqeqeq
+      formattedUnit.url = `https://${dev2Domain}/${formattedUnit.slug}`;
 
       if ( !hasOwnProperty( developments, unit.developmentID ) ) {
         developments[unit.developmentID] = formattedUnit;

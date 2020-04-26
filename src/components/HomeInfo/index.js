@@ -52,7 +52,7 @@ function HomeInfo( props ) {
         formattedValue = moment( value ).format( 'M/D/YY' );
         break;
       case 'applicationDueDate':
-        formattedValue = ( value ? moment( value ).format( 'M/D/YY' ) : 'N/A' );
+        formattedValue = ( value ? moment( value ).format( 'M/D/YY' ) : <abbr title="Not Applicable">N/A</abbr> );
         break;
       case 'assignment':
         break;
@@ -98,11 +98,11 @@ function HomeInfo( props ) {
         .map( ( key, index ) => {
           const value = info[key];
 
-          if ( key !== 'assignment' ) {
+          if ( value && ( key !== 'assignment' ) ) {
             return (
               <div key={ index }>
                 <dt className="ml-home-info__key">{ formatKey( key, value ) }</dt>
-                { value && <dd className="ml-home-info__value">{ formatValue( key, value ) }</dd> }
+                <dd className="ml-home-info__value">{ formatValue( key, value ) }</dd>
               </div>
             );
           }

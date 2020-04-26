@@ -36,6 +36,8 @@ $padding-home-horizontal--large: rem( 26px );
     
   }
   .ml-home__title {
+    line-height: rem( 19px );
+    margin-top: -0.3rem;
     font-family: $font-family-heading;
     font-size: rem( 16px );
     font-weight: bold;
@@ -45,7 +47,9 @@ $padding-home-horizontal--large: rem( 26px );
   }
   @include media-breakpoint-up( large ) {
     .ml-home__title {
-      line-height: .8;
+      // line-height: .8;
+      margin-top: -0.4rem;
+      line-height: rem( 35px );
       font-size: rem( 30px );
     }
   }
@@ -76,6 +80,7 @@ $padding-home-horizontal--large: rem( 26px );
     }
   }
   .ml-home__just-listed {
+    text-align: right;
     font-family: $font-family-montserrat;
     font-size: rem( 14px );
     letter-spacing: rem( 0.01px );
@@ -83,16 +88,16 @@ $padding-home-horizontal--large: rem( 26px );
     color: $color-homes-just-listed;
     // line-height: rem( 27px ); // mockup
     line-height: 0.75;
-    position: absolute;
-    top: $padding-home-vertical;
-    right: $padding-home-horizontal;
+    // position: absolute;
+    // top: $padding-home-vertical;
+    // right: $padding-home-horizontal;
   }
   @include media-breakpoint-up( large ) {
     .ml-home__just-listed {
       font-size: rem( 21px );
       letter-spacing: rem( 1.5px );
-      top: $padding-home-vertical--large;
-      right: $padding-home-horizontal--large;
+      // top: $padding-home-vertical--large;
+      // right: $padding-home-horizontal--large;
     }
   }
   @include media-breakpoint-up( home-info--two-column ) {

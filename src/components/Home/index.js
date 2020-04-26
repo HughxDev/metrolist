@@ -14,28 +14,56 @@ import { date, dateTime } from '@util/datetime';
 import './Home.scss';
 
 function wasJustListed( listingDate, unitOfTime = 'days', newnessThreshold = 1 ) {
-  const now = moment();
-  const then = moment( listingDate );
-  const diff = now.diff( then, unitOfTime );
+  // testing:
+  return true;
 
-  if ( diff <= newnessThreshold ) {
-    return true;
-  }
+  // const now = moment();
+  // const then = moment( listingDate );
+  // const diff = now.diff( then, unitOfTime );
 
-  return false;
+  // if ( diff <= newnessThreshold ) {
+  //   return true;
+  // }
+
+  // return false;
 }
 
 function renderJustListed( listingDate ) {
   if ( wasJustListed( listingDate ) ) {
-    return <b className="ml-home__just-listed">Just listed!</b>;
+    return <b className="ml-home__just-listed" data-column-width="1/4">Just listed!</b>;
   }
 
   return null;
 }
 
+function renderOffer( offer ) {
+  offer = offer.toLowerCase();
+
+  switch ( offer ) {
+    case 'rental':
+      return 'For Rent';
+
+    case 'sale':
+      return 'For Sale';
+
+    default:
+      return null;
+  }
+}
+
 function Home( { home } ) {
   const {
-    title, listingDate, incomeRestricted, applicationDueDate, assignment, city, neighborhood, type, units,
+    title,
+    listingDate,
+    incomeRestricted,
+    applicationDueDate,
+    assignment,
+    city,
+    neighborhood,
+    type,
+    units,
+    offer,
+    url,
   } = home;
 
   return (
@@ -44,9 +72,11 @@ function Home( { home } ) {
         <Stack space="home-header">
           <header className="ml-home__header">
             <Stack space="home-header">
-              <h2 className="ml-home__title">{ title }</h2>
-              <p className="ml-home__byline">{ [city, neighborhood, capitalize( type )].join( ' – ' ) }</p>
-              { renderJustListed( listingDate ) }
+              <Row>
+                <h2 className="ml-home__title" data-column-width="3/4">{ title }</h2>
+                { renderJustListed( listingDate ) }
+              </Row>
+              <p className="ml-home__byline">{ [city, neighborhood, renderOffer( offer ), capitalize( type )].filter( ( item ) => !!item ).join( ' – ' ) }</p>
             </Stack>
           </header>
           <UnitGroup units={ units } />
@@ -65,7 +95,7 @@ function Home( { home } ) {
             as="link"
             className="ml-home-footer__more-info-link"
             variant="primary"
-            href="#"
+            href={ url }
           >More info</Button>
         </Row>
       </div>
@@ -86,6 +116,7 @@ Home.propTypes = {
       "offer": PropTypes.oneOf( ['rental', 'sale'] ),
       "units": PropTypes.arrayOf( PropTypes.object ),
       "incomeRestricted": PropTypes.bool,
+      "url": PropTypes.string,
     },
   ),
 };
