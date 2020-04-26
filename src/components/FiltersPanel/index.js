@@ -147,6 +147,7 @@ function FiltersPanel( props ) {
           </FilterGroup>
           <FilterGroup orientation="horizontal">
             <FilterGroup.Label>Bedrooms</FilterGroup.Label>
+            <Filter type="checkbox">0</Filter>
             <Filter type="checkbox">1</Filter>
             <Filter type="checkbox">2</Filter>
             <Filter type="checkbox">3</Filter>
