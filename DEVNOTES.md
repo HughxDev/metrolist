@@ -236,3 +236,166 @@ From Jim:
   - Also need to know hover state as this is a new button treatment
 - Error state of checkboxes is color-only, which is an accessibility concern. Can we add text indicating errors?
 - What does the “Exit” link at the bottom do? Is this meant to be a modal window?
+
+## Integrate with Housing/Development API
+
+- Settle on naming: Development vs Housing vs Homes
+- Prefer units nested under homes vs. flat object
+- Prefer unquoted non-string values, to parse as int/bool automatically
+- Prefer ID-like casing (and abbreviation if widely used) for all non-titular values. This makes a distinction between the data layer and the language layer, which makes branching and translation efforts cleaner. Although sentence-case identifiers aren’t impossible, they feel off. So instead of:
+  ```json
+  {
+    "type": "Rent",
+    "unitType": "Single Room Occupancy",
+    "userGuidType": "Lottery",
+  }
+  ```
+  Could we make it:
+  ```json
+  {
+    "type": "rent",
+    "unitType": "sro",
+    "userGuidType": "lottery"
+  }
+  ```
+  Example - Before:
+  ```jsx
+  const apiResponse = {
+    "unitType": "Single Room Occupancy"
+   };
+
+  render() {
+    return <div>{ apiResponse.unitType }</div>
+  }
+  ```
+  Example - After:
+  ```jsx
+  const localizations = {
+    "en": {
+      "sro": "Single Room Occupancy",
+    },
+    "es": {
+      "sro": "Ocupación de habitación individual"
+    }
+  };
+  const currentLanguage = 'en';
+  const apiResponse = {
+    "unitType": "sro"
+   };
+  
+  render() {
+    return <div>{ localizations[currentLanguage][apiResponse.unitType] }</div>;
+  }
+  ```
+- City and neighborhood are embedded in development name, and repeated:
+  ```json
+  {
+    "development": "2424 Boylston st Boston - Fenway",
+    "region": "Boston",
+    "city": "Boston",
+    "neighborhood": "Fenway"
+  }
+  ```
+  Could we make it:
+  ```json
+  {
+    "development": "2424 Boylston St",
+    "region": "Boston",
+    "city": "Boston",
+    "neighborhood": "Fenway"
+  }
+- In the Mockup, the “For Rent” or “For Sale” designation is specified at the development level, but in the data it is specified at the unit level. This creates inconsistencies such as:
+  ~~~
+  12 MALCOLM X BLVD BOSTON - ROXBURY
+  Boston – Roxbury – For Rent – Apartment
+  ---
+  1 Bedroom |	AMI 60%	| $1,200/mo.
+  2 Bedroom | AMI 80%	| $300,000
+  ~~~
+- The titles overlap with the “Just listed” designation.
+- Field names changes:
+  ```js
+  {
+    // development → title
+    // developmentID → id
+    // We already know we have a development object, and by nesting the units we won’t have clashes for the same key names.
+    "title": "45 Lothrop Street Beverly -",
+    "id": "11566046",
+
+    // developmentURI → slug; remove leading slash
+    //                  OR
+    //                  url; keep leading slash
+    // Avoids confusion between “URL” and “URI”; this can be appended to the base URL to get the permalink.
+    "slug": "45-lothrop-street-beverly",
+
+    // Remove developmentURL
+    // The base URL is the same one we have already connected to in order to make the API request, so we can simply reference the relevant variable in the outer scope. Also, this domain name seems to be the same across all developments, so there is no need to repeat it for each one.
+    // "developmentURL": "https:\/\/d8-dev2.boston.gov\/45-lothrop-street-beverly",
+
+    // region → cardinalDirection; remove “of Boston”; lowercase value
+    // “Region” can have many different meanings depending on context, so this avoids confusion.
+    // Since this field is only used to indicate a city’s relative position to Boston, and takes N/E/S/W values, it can be more accurately described as 
+    // Before: "region": "North of Boston",
+    "cardinalDirection": "north", // or null for ( city === Boston )
+
+    "city": "Beverly",
+
+    // Is it possible for a location in Boston to be outside of any neighborhood?
+    "neighborhood": "", 
+
+    // type → offer; lowercase value
+    // Possible values: rent|own → rent|sale
+    // The word “type” is generic and should be avoided if a more descriptive label can be used.
+    // Also, the language on the site is currently “For Rent” and “For Sale”, so let’s match that.
+    "offer": "rent",
+
+    // unitType → type; lowercase value; Possible values: apt|sro|condo|etc
+    // With “type” freed up from rename to “offer”, we can use it to describe the kind of building we are dealing with.
+    "type": "sro",
+
+    // Move beds, ami, and price to new array field named "units". Convert all to numeric values.
+    // De-duplicate developments while placing all respective units in this array.
+    "units": [
+      {
+        // beds → bedrooms
+        // This maps to the phrasing used on the site.
+        "bedrooms": 0,
+
+        // ami → amiQualification
+        // Just to make it clear that this isn’t referring to any of the other definitions of AMI.
+        "amiQualification": 50,
+
+        "price": 800,
+
+        // Add a "priceRate" field so we know whether it’s recurring or not. Possible values: monthly|once
+        "priceRate": "monthly"
+      }
+    ],
+
+    "incomeRestricted": "true",
+
+    // userGuidType → assignment; lowercase value
+    // The current name is confusing; makes me think every user has a Globally Unique Identifier and there are multiple ways of generating one? Would not expect to find “Lottery” as a value here. 
+    // Possible values: lottery|first|waitlist|etc.
+    "assignment": "lottery",
+    
+    // Remove openWaitlist
+    // Whether the allocation is by open waitlist or not can already be determined by the assignment field. 
+    // "openWaitlist": "false",
+
+    // posted → listingDate
+    // “Posted” sounds like it could be a boolean field. We also want all date fields to be named in the same fashion; posted vs appDueDate don’t match.
+    "listingDate": "2020-04-22T14:38:55-0400",
+    
+    // Remove postedTimeAgo
+    // I am already calculating this in JavaScript based on the time the user accesses the page. If we precalculate it on the backend then the value will likely fall out of date due to caching.
+    // "postedTimeAgo": "1 day ago",
+
+    // appDueDate → applicationDueDate
+    // “App” sounds like a piece of software.
+    "applicationDueDate": "2020-04-30T12:00:00",
+
+    // Remove appDueDateTimeAgo for the same reason as postedTimeAgo
+    // "appDueDateTimeAgo": "in 6 days"
+  }
+  ```
