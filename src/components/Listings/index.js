@@ -13,101 +13,6 @@ import Stack from '@components/Stack';
 import Callout from '@components/Callout';
 import Icon from '@components/Icon';
 
-// const demoHomes = [
-//   {
-//     "title": "Neazor Point",
-//     "listingDate": "2020-04-01T00:00:00",
-//     "applicationDueDate": "2020-05-01",
-//     "assignment": "lottery",
-//     "city": "Boston",
-//     "neighborhood": "West Roxbury",
-//     "type": "apartment",
-//     "offer": "rental",
-//     "units": [
-//       {
-//         "size": "studio",
-//         "bedrooms": 0,
-//         "numberOfIdenticalUnits": 0,
-//         "amiQualification": 60,
-//         "price": 1058,
-//         "priceRate": "monthly",
-//       },
-//       {
-//         "size": "bedrooms",
-//         "bedrooms": 1,
-//         "numberOfIdenticalUnits": 5,
-//         "amiQualification": 80,
-//         "price": 1449,
-//         "priceRate": "monthly",
-//       },
-//     ],
-//   },
-//   {
-//     "title": "The Maltby Building",
-//     "listingDate": "2020-03-01T00:00:00",
-//     "applicationDueDate": "2020-04-01",
-//     "assignment": "waitlist",
-//     "city": "Boston",
-//     "neighborhood": "Hyde Park",
-//     "type": "apartment",
-//     "offer": "rental",
-//     "units": [
-//       {
-//         "size": "bedrooms",
-//         "bedrooms": 2,
-//         "numberOfIdenticalUnits": 0,
-//         "amiQualification": 60,
-//         "price": 1058,
-//         "priceRate": "monthly",
-//       },
-//     ],
-//   },
-//   {
-//     "title": "Carlton Heights Building",
-//     "listingDate": "2020-02-01T00:00:00",
-//     "applicationDueDate": "2020-03-01",
-//     "assignment": null,
-//     "city": "Boston",
-//     "neighborhood": "Hyde Park",
-//     "type": "apartment",
-//     "offer": "rental",
-//     "units": [
-//       {
-//         "size": "studio",
-//         "bedrooms": 0,
-//         "numberOfIdenticalUnits": 0,
-//         "amiQualification": 60,
-//         "price": 1058,
-//         "priceRate": "monthly",
-//       },
-//     ],
-//   },
-// ];
-
-// const units = [
-//   {
-//     "development": "2424 Boylston st Boston - Fenway",
-//     "developmentID": "11566036",
-//     "developmentURI": "\/2424-boylston-st-boston-fenway",
-//     "developmentURL": "https:\/\/d8-dev2.boston.gov\/2424-boylston-st-boston-fenway",
-//     "region": "Boston",
-//     "city": "Boston",
-//     "neighborhood": "Fenway",
-//     "type": "Rent",
-//     "unitType": "",
-//     "beds": "4",
-//     "ami": "80",
-//     "price": "2400",
-//     "incomeRestricted": "true",
-//     "userGuidType": "Waitlist",
-//     "openWaitlist": "true",
-//     "posted": "2020-04-22T14:38:55-0400",
-//     "postedTimeAgo": "1 day ago",
-//     "appDueDate": "",
-//     "appDueDateTimeAgo": "",
-//   },
-// ];
-
 import units from './sample-api-response.json';
 
 const dev2Ip = '54.227.255.2';
@@ -115,7 +20,7 @@ const dev2Domain = 'd8-dev2.boston.gov';
 const dev2Endpoint = `https://${dev2Domain}/metro/api/v1/units?_format=json`;
 
 function Listings( props ) {
-  const [filters, setFilters] = useState( {} );
+  const [filters, setFilters] = useState( props.filters );
   const [homes, setHomes] = useState( [] );
 
   useEffect( () => {
@@ -154,14 +59,32 @@ function Listings( props ) {
       delete formattedUnit.development;
       delete formattedUnit.developmentURI;
       delete formattedUnit.developmentURL;
+      delete formattedUnit.developmentID;
+      delete formattedUnit.userGuidType;
+      delete formattedUnit.appDueDateTimeAgo;
+      delete formattedUnit.postedTimeAgo;
 
+      formattedUnit.id = unit.developmentID;
       formattedUnit.slug = unit.developmentURI.slice( 1 );
       formattedUnit.title = unit.development;
-      formattedUnit.type = unit.unitType;
-      formattedUnit.assignment = ( ( unit.openWaitlist === true ) ? 'waitlist' : unit.userGuidType.toLowerCase() );
-      formattedUnit.listingDate = unit.posted;
-      formattedUnit.applicationDueDate = unit.appDueDate;
-      formattedUnit.offer = ( ( unit.type === 'Own' ) ? 'sale' : 'rental' );
+
+      switch ( unit.unitType.toLowerCase() ) {
+        case 'single room occupancy':
+          formattedUnit.type = 'sro';
+          break;
+
+        case 'apartment':
+          formattedUnit.type = 'apt';
+          break;
+
+        default:
+          formattedUnit.type = unit.unitType.toLowerCase();
+      }
+
+      formattedUnit.assignment = ( ( unit.openWaitlist === true ) ? 'waitlist' : unit.userGuidType.toLowerCase().split( ' ' )[0] );
+      formattedUnit.listingDate = unit.posted.replace( '-0400', 'Z' ); // TODO: not a real conversion to UTC
+      formattedUnit.applicationDueDate = unit.appDueDate.replace( 'T12:00:00', '' ); // TODO: not a real conversion to UTC
+      formattedUnit.offer = ( ( unit.type === 'Own' ) ? 'sale' : 'rent' );
       formattedUnit.incomeRestricted = ( unit.incomeRestricted == 'true' ); // eslint-disable-line eqeqeq
       formattedUnit.url = `https://${dev2Domain}/${formattedUnit.slug}`;
 
@@ -182,8 +105,6 @@ function Listings( props ) {
     // return developments;
     const newHomes = Object.keys( developments ).map( ( developmentID ) => developments[developmentID] );
 
-    console.log( { newHomes } );
-
     setHomes( newHomes );
     // console.log( { homes } );
     // } )
@@ -197,6 +118,11 @@ function Listings( props ) {
     // } );
   }, [] );
 
+  const handleFilterChange = ( event ) => {
+    const $input = event.target;
+    console.log( 'Filter change:', $input.type, $input.name, $input.value, $input.checked );
+  };
+
   return (
     <article className={ `ml-listings${props.className ? ` ${props.className}` : ''}` }>
       <h2 className="sr-only">Search</h2>
@@ -205,7 +131,7 @@ function Listings( props ) {
           <FiltersPanel
             className="ml-listings__filters"
             filters={ filters }
-            setFilters={ setFilters }
+            handleFilterChange={ handleFilterChange }
           />
           <Inset className="filters-panel__callout-container" until="large">
             <Callout className="filters-panel__callout" as="a" href="#">
@@ -229,9 +155,49 @@ function Listings( props ) {
 }
 
 Listings.propTypes = {
-  "amiEstimation": PropTypes.string,
+  "amiEstimation": PropTypes.number,
+  "filters": PropTypes.object,
   // "homes": PropTypes.arrayOf( PropTypes.object ),
   "className": PropTypes.string,
+};
+
+Listings.defaultProps = {
+  "amiEstimation": null,
+  "filters": {
+    "offer": {
+      "rent": true,
+      "sale": false,
+    },
+    "location": {
+      "city": {
+        "boston": true,
+        "!boston": false,
+      },
+      "neighborhood": {
+        "southBoston": true,
+        "hydePark": true,
+        "dorchester": true,
+        "mattapan": true,
+      },
+      "cardinalDirection": {
+        "west": false,
+        "north": false,
+        "south": false,
+        // "east": false,
+      },
+    },
+    "bedrooms": {
+      "0": true,
+      "1": true,
+      "2": false,
+      "3": false,
+      "4+": false,
+    },
+    "amiQualification": {
+      "lowerBound": 30,
+      "upperBound": 150,
+    },
+  },
 };
 
 export default Listings;

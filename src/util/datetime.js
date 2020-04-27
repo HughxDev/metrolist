@@ -12,6 +12,10 @@ export function isDate( dateString ) {
 export function date( props, propName, componentName ) {
   const prop = props[propName];
 
+  if ( !prop ) {
+    return null; // Handle empty/null
+  }
+
   if ( !isDate( prop ) ) {
     return new Error(
       propTypeErrorMessage( {

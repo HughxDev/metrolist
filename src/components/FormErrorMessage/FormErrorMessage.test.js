@@ -2,6 +2,6 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import FormErrorMessage from './index';
 
-test( 'renders', () => {
-
+it( 'renders', () => {
+  throw new Error( 'Test missing' );
 } );

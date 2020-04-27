@@ -13,7 +13,7 @@ import Column from '@components/Column';
 import './FiltersPanel.scss';
 
 function FiltersPanel( props ) {
-  const isDesktop = window.matchMedia( '(min-width: 992px)' ).matches; // TODO: define breakpoints that line up with the CSS in JS somewhere
+  const isDesktop = globalThis.matchMedia( '(min-width: 992px)' ).matches; // TODO: define breakpoints that line up with the CSS in JS somewhere
   const $drawer = useRef();
   const attributes = { ...props };
   const [isExpanded, setExpanded] = useState( isDesktop );
@@ -71,7 +71,6 @@ function FiltersPanel( props ) {
     }
   };
 
-
   useEffect( updateDrawerHeight );
 
   if ( props.className ) {
@@ -83,9 +82,16 @@ function FiltersPanel( props ) {
     attributes['data-column-width'] = props.columnWidth;
   }
 
-  if ( props.setFilters ) {
-    delete attributes.setFilters;
+  if ( props.handleFilterChange ) {
+    delete attributes.handleFilterChange;
   }
+
+  const {
+    offer,
+    location,
+    bedrooms,
+    amiQualification,
+  } = props.filters;
 
   return (
     <section
@@ -100,6 +106,7 @@ function FiltersPanel( props ) {
       }
       { ...attributes }
       onClick={ handleClick }
+      onChange={ props.handleFilterChange }
     >
       <div className="ml-filters-panel__menu">
         <h3
@@ -116,50 +123,89 @@ function FiltersPanel( props ) {
           ref={ $drawer }
           className={ `ml-filters-panel__content${isExpanded ? ' ml-filters-panel__content--expanded' : ''}` }
         >
-          <FilterGroup>
+          <FilterGroup criterion="offer">
             <FilterGroup.Label>Offer</FilterGroup.Label>
             <Row space="rent-sale" stackAt="large">
               <Column width="1/2">
-                <Filter type="checkbox-button" criterion="offer" value="rental">For Rent</Filter>
+                <Filter type="checkbox-button" criterion="offer" value="rent" checked={ offer.rent }>For Rent</Filter>
               </Column>
               <Column width="1/2">
-                <Filter type="checkbox-button" criterion="offer" value="sale">For Sale</Filter>
+                <Filter type="checkbox-button" criterion="offer" value="sale" checked={ offer.sale }>For Sale</Filter>
               </Column>
             </Row>
           </FilterGroup>
-          <FilterGroup>
+          <FilterGroup criterion="location">
             <FilterGroup.Label>Location</FilterGroup.Label>
             <Stack space="sister-checkboxes">
-              <Filter type="checkbox" criterion="city" value="Boston">
+              <Filter type="checkbox" criterion="city" value="boston" checked={ location.city.boston }>
                 <Filter.Label>Boston</Filter.Label>
-                <Filter type="checkbox" criterion="neighborhood" value="south-boston">South Boston</Filter>
-                <Filter type="checkbox" criterion="neighborhood" value="hyde-park">Hyde Park</Filter>
-                <Filter type="checkbox" criterion="neighborhood" value="dorchester">Dorchester</Filter>
-                <Filter type="checkbox" criterion="neighborhood" value="mattapan">Mattapan</Filter>
+                <Filter
+                  type="checkbox"
+                  criterion="neighborhood"
+                  value="southBoston"
+                  checked={ location.neighborhood.southBoston }
+                >South Boston</Filter>
+                <Filter
+                  type="checkbox"
+                  criterion="neighborhood"
+                  value="hydePark"
+                  checked={ location.neighborhood.southBoston }
+                >Hyde Park</Filter>
+                <Filter
+                  type="checkbox"
+                  criterion="neighborhood"
+                  value="dorchester"
+                  checked={ location.neighborhood.dorchester }
+                >Dorchester</Filter>
+                <Filter
+                  type="checkbox"
+                  criterion="neighborhood"
+                  value="mattapan"
+                  checked={ location.neighborhood.mattapan }
+                >Mattapan</Filter>
               </Filter>
-              <Filter type="checkbox" criterion="city" value="!Boston">
+              <Filter type="checkbox" criterion="city" value="!boston">
                 <Filter.Label>Beyond Boston</Filter.Label>
-                <Filter type="checkbox">West of Boston</Filter>
-                <Filter type="checkbox">North of Boston</Filter>
-                <Filter type="checkbox">South of Boston</Filter>
+                <Filter
+                  type="checkbox"
+                  criterion="cardinalDirection"
+                  value="west"
+                  checked={ location.cardinalDirection.west }
+                >West of Boston</Filter>
+                <Filter
+                  type="checkbox"
+                  criterion="cardinalDirection"
+                  value="north"
+                  checked={ location.cardinalDirection.north }>North of Boston</Filter>
+                <Filter
+                  type="checkbox"
+                  criterion="cardinalDirection"
+                  value="south"
+                  checked={ location.cardinalDirection.south }
+                >South of Boston</Filter>
               </Filter>
             </Stack>
           </FilterGroup>
-          <FilterGroup orientation="horizontal">
+          <FilterGroup criterion="bedrooms" orientation="horizontal">
             <FilterGroup.Label>Bedrooms</FilterGroup.Label>
-            <Filter type="checkbox">0</Filter>
-            <Filter type="checkbox">1</Filter>
-            <Filter type="checkbox">2</Filter>
-            <Filter type="checkbox">3</Filter>
-            <Filter type="checkbox">4+</Filter>
+            <Filter type="checkbox" criterion="bedrooms" checked={ bedrooms['0'] }>0</Filter>
+            <Filter type="checkbox" criterion="bedrooms" checked={ bedrooms['1'] }>1</Filter>
+            <Filter type="checkbox" criterion="bedrooms" checked={ bedrooms['2'] }>2</Filter>
+            <Filter type="checkbox" criterion="bedrooms" checked={ bedrooms['3'] }>3</Filter>
+            <Filter type="checkbox" criterion="bedrooms" checked={ bedrooms['4+'] }>4+</Filter>
           </FilterGroup>
-          <FilterGroup isExpanded={ true }>
+          <FilterGroup criterion="amiQualification" isExpanded={ true }>
             <FilterGroup.Label>Income Eligibility (AMI%)</FilterGroup.Label>
             <div
               onClick={ ( event ) => event.stopPropagation() }
-              onChange={ ( event ) => event.stopPropagation() }
+              // onChange={ ( event ) => event.stopPropagation() }
             >
-              <Filter type="range" min="0" max="100" />
+              <Filter
+                type="range"
+                criterion="amiQualification"
+                min={ amiQualification.lowerBound }
+                max={ amiQualification.upperBound }
+              />
             </div>
           </FilterGroup>
         </div>
@@ -171,6 +217,8 @@ function FiltersPanel( props ) {
 FiltersPanel.propTypes = {
   "className": PropTypes.string,
   "columnWidth": PropTypes.string,
+  "filters": PropTypes.object.isRequired,
+  "handleFilterChange": PropTypes.func,
 };
 
 export default FiltersPanel;

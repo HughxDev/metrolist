@@ -88,7 +88,7 @@ FilterGroup.propTypes = {
   "className": PropTypes.string,
 };
 FilterGroup.defaultProps = {
-  "isExpanded": window.matchMedia( '(min-width: 992px)' ).matches,
+  "isExpanded": globalThis.matchMedia( '(min-width: 992px)' ).matches,
   "orientation": "vertical",
 };
 

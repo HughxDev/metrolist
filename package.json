@@ -33,6 +33,7 @@
     "eslint-plugin-react": "^7.19.0",
     "glob": "^7.1.6",
     "html-webpack-plugin": "^3.2.0",
+    "jest": "^25.4.0",
     "moment": "^2.24.0",
     "ncp": "^2.0.0",
     "node-fetch": "^2.6.0",
@@ -61,7 +62,8 @@
   "scripts": {
     "start": "[ -z \"$(ipconfig getifaddr en6)\" ] && export LAN_IP_ADDRESS=\"$(ipconfig getifaddr en0)\" || export LAN_IP_ADDRESS=\"$(ipconfig getifaddr en6)\"; webpack-dev-server --host $LAN_IP_ADDRESS --open",
     "build": "webpack",
-    "test": "echo 'not set up'",
+    "jest": "./node_modules/jest-cli/bin/jest.js",
+    "test": "./node_modules/jest-cli/bin/jest.js src/components/",
     "eject": "echo 'not CRA'",
     "component": "node _scripts/component.js",
     "sync-icons": "node _scripts/sync-icons.js",

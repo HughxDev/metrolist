@@ -51,7 +51,7 @@ An exception to this would be for mixin classes that are intended to be used bro
 }
 ```
 
-Don’t reflect the expected DOM structure in class names, as this is this expectation is likely to break as projects evolve. Only indicate which block owns the element. This allows components to be transposable and avoids extremely long class names.
+Don’t reflect the expected DOM structure in class names, as this expectation is likely to break as projects evolve. Only indicate which block owns the element. This allows components to be transposable and avoids extremely long class names.
 ```scss
 .ml-block__element__subelement {} // Bad
 .ml-block__subelement {} // Good
@@ -92,3 +92,58 @@ Don’t declare margins directly on components, only in wrappers.
 ### Postprocessing
 
 https://www.rucksackcss.org/
+
+## Build Process
+
+### Module Resolution
+
+Aliases exist to avoid long pathnames, e.g. `import '@components/Foo'` instead of `import '../../../components/Foo'`. Any time an alias is added or removed, three configuration files have to be updated: `webpack.config.js` for compilation, `jest.config.js` for testing, and `.eslintrc.js` for linting. Each one has a slightly different syntax but they all boil down to JSON key-value pairs of the form [alias] → [full path]. Here are the same aliases defined across all three configs:
+
+`webpack.config.js`:
+```js
+module.exports = {
+  "resolve": {
+    "alias": {
+      "@patterns": path.resolve( __dirname, 'patterns' ),
+      "@util": path.resolve( __dirname, 'src/util' ),
+      "@globals": path.resolve( __dirname, 'src/globals' ),
+      "@components": path.resolve( __dirname, 'src/components' ),
+      "__mocks__": path.resolve( __dirname, '__mocks__' ),
+    },
+  }
+};
+```
+
+`jest.config.js`:
+```js
+module.exports = {
+  "moduleNameMapper": {
+    "^@patterns/(.*)": "<rootDir>/patterns/$1",
+    "^@util/(.*)": "<rootDir>/src/util/$1",
+    "^@globals/(.*)$": "<rootDir>/src/globals/$1",
+    "^@components/(.*)$": "<rootDir>/src/components/$1",
+    "^__mocks__/(.*)$": "<rootDir>/__mocks__/$1",
+    "\\.(css|s[ca]ss|less|styl)$": "<rootDir>/__mocks__/styleMock.js",
+  },
+};
+```
+
+`.eslintrc.js`:
+```js
+module.exports = {
+  "settings": {
+    "import/resolver": {
+      "alias": {
+        "map": [
+          ["@patterns", "./patterns"],
+          ["@util", "./src/util"],
+          ["@globals", "./src/globals"],
+          ["@components", "./src/components"],
+          ["__mocks__", "./__mocks__"]
+        ],
+        "extensions": [".js", ".scss"],
+      },
+    },
+  },
+};
+```

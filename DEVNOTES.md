@@ -239,10 +239,11 @@ From Jim:
 
 ## Integrate with Housing/Development API
 
-- Settle on naming: Development vs Housing vs Homes
+- Might be a question for Amy, but we need to settle on naming: developments vs homes vs something else.
+  On the frontend I called them “homes” because apparently some “developments” aren’t actually developments.
 - Prefer units nested under homes vs. flat object
 - Prefer unquoted non-string values, to parse as int/bool automatically
-- Prefer ID-like casing (and abbreviation if widely used) for all non-titular values. This makes a distinction between the data layer and the language layer, which makes branching and translation efforts cleaner. Although sentence-case identifiers aren’t impossible, they feel off. So instead of:
+- Prefer “ID style” (camelCase, abbreviations if common) for all non-title values. This makes a distinction between the data layer and the language layer, which makes branching and translation efforts cleaner. Although sentence-case identifiers aren’t impossible, they feel off. I.e. instead of:
   ```json
   {
     "type": "Rent",
@@ -258,17 +259,18 @@ From Jim:
     "userGuidType": "lottery"
   }
   ```
-  Example - Before:
+  Example Use Case - Before:
   ```jsx
-  const apiResponse = {
-    "unitType": "Single Room Occupancy"
-   };
-
-  render() {
-    return <div>{ apiResponse.unitType }</div>
-  }
+  const localizations = {
+    "en": {
+      "Single Room Occupancy": "Single Room Occupancy",
+    },
+    "es": {
+      "Single Room Occupancy": "Ocupación de habitación individual"
+    }
+  };
   ```
-  Example - After:
+  Example Use Case - After:
   ```jsx
   const localizations = {
     "en": {
@@ -278,20 +280,11 @@ From Jim:
       "sro": "Ocupación de habitación individual"
     }
   };
-  const currentLanguage = 'en';
-  const apiResponse = {
-    "unitType": "sro"
-   };
-  
-  render() {
-    return <div>{ localizations[currentLanguage][apiResponse.unitType] }</div>;
-  }
   ```
-- City and neighborhood are embedded in development name, and repeated:
+- City and neighborhood are embedded in development name while being repeated in other fields. Also sometimes have inconsistent capitalization. Instead of:
   ```json
   {
     "development": "2424 Boylston st Boston - Fenway",
-    "region": "Boston",
     "city": "Boston",
     "neighborhood": "Fenway"
   }
@@ -300,47 +293,45 @@ From Jim:
   ```json
   {
     "development": "2424 Boylston St",
-    "region": "Boston",
     "city": "Boston",
     "neighborhood": "Fenway"
   }
-- In the Mockup, the “For Rent” or “For Sale” designation is specified at the development level, but in the data it is specified at the unit level. This creates inconsistencies such as:
-  ~~~
-  12 MALCOLM X BLVD BOSTON - ROXBURY
-  Boston – Roxbury – For Rent – Apartment
-  ---
-  1 Bedroom |	AMI 60%	| $1,200/mo.
-  2 Bedroom | AMI 80%	| $300,000
-  ~~~
-- The titles overlap with the “Just listed” designation.
-- Field names changes:
+- Proposed field/value changes:
   ```js
   {
     // development → title
     // developmentID → id
-    // We already know we have a development object, and by nesting the units we won’t have clashes for the same key names.
+    // We already know we have a development object,
+    // and by nesting the units we won’t have clashes for the same key names.
     "title": "45 Lothrop Street Beverly -",
     "id": "11566046",
 
     // developmentURI → slug; remove leading slash
-    //                  OR
+    //                    OR
     //                  url; keep leading slash
     // Avoids confusion between “URL” and “URI”; this can be appended to the base URL to get the permalink.
     "slug": "45-lothrop-street-beverly",
 
     // Remove developmentURL
-    // The base URL is the same one we have already connected to in order to make the API request, so we can simply reference the relevant variable in the outer scope. Also, this domain name seems to be the same across all developments, so there is no need to repeat it for each one.
+    // The base URL is the same one we have already connected to in order to make the API request,
+    // so we can simply reference the relevant variable in the outer scope.
+    // Also, this domain name seems to be the same across all developments,
+    // so there is no need to repeat it for each one.
     // "developmentURL": "https:\/\/d8-dev2.boston.gov\/45-lothrop-street-beverly",
 
     // region → cardinalDirection; remove “of Boston”; lowercase value
     // “Region” can have many different meanings depending on context, so this avoids confusion.
-    // Since this field is only used to indicate a city’s relative position to Boston, and takes N/E/S/W values, it can be more accurately described as 
+    // Since this field is only used to indicate a city’s relative position to Boston,
+    // and takes N/E/S/W values, it can be more accurately described as a cardinal direction.
     // Before: "region": "North of Boston",
     "cardinalDirection": "north", // or null for ( city === Boston )
 
     "city": "Beverly",
 
     // Is it possible for a location in Boston to be outside of any neighborhood?
+    // Or is this simply a field someone didn’t fill out?
+    // Bringing this in on the UI side created blank spaces.
+    // Can filter empty values but feels odd for neighborhood to be variably specified.
     "neighborhood": "", 
 
     // type → offer; lowercase value
@@ -350,7 +341,8 @@ From Jim:
     "offer": "rent",
 
     // unitType → type; lowercase value; Possible values: apt|sro|condo|etc
-    // With “type” freed up from rename to “offer”, we can use it to describe the kind of building we are dealing with.
+    // With “type” freed up from the rename to “offer”,
+    // we can use it to describe the kind of building we are dealing with.
     "type": "sro",
 
     // Move beds, ami, and price to new array field named "units". Convert all to numeric values.
@@ -367,15 +359,19 @@ From Jim:
 
         "price": 800,
 
-        // Add a "priceRate" field so we know whether it’s recurring or not. Possible values: monthly|once
+        // Add a "priceRate" field so we know whether it’s recurring or not. Possible values: monthly|once.
+        // I realize we can infer this from the type field being an apartment or not but this makes it explicit.
         "priceRate": "monthly"
       }
     ],
 
-    "incomeRestricted": "true",
+    // Convert to boolean
+    "incomeRestricted": true,
 
     // userGuidType → assignment; lowercase value
-    // The current name is confusing; makes me think every user has a Globally Unique Identifier and there are multiple ways of generating one? Would not expect to find “Lottery” as a value here. 
+    // The current name is confusing; makes me think every user has a
+    // Globally Unique Identifier and there are multiple ways of generating one?
+    // Would not expect to find “Lottery” as a value here. 
     // Possible values: lottery|first|waitlist|etc.
     "assignment": "lottery",
     
@@ -384,18 +380,34 @@ From Jim:
     // "openWaitlist": "false",
 
     // posted → listingDate
-    // “Posted” sounds like it could be a boolean field. We also want all date fields to be named in the same fashion; posted vs appDueDate don’t match.
-    "listingDate": "2020-04-22T14:38:55-0400",
+    // “Posted” sounds like it could be a boolean field.
+    // We also want all date fields to be named the same way,
+    // e.g. posted and appDueDate; both date fields but the naming doesn’t match.
+    //
+    // Would also prefer to operate on UTC internally and convert to the user’s time zone
+    // on display, rather than encoding the time zone offset in the data, which might change.
+    // See below for the regex I’m using to validate dateTime.
+    // Before: "listingDate": "2020-04-22T14:38:55-0400",
+    "listingDate": "2020-04-22T14:38:55Z",
     
     // Remove postedTimeAgo
-    // I am already calculating this in JavaScript based on the time the user accesses the page. If we precalculate it on the backend then the value will likely fall out of date due to caching.
+    // I am already calculating this in JavaScript based on the time the user accesses the page.
+    // If we pre-calculate it on the backend then the value will likely fall out of date due to caching.
     // "postedTimeAgo": "1 day ago",
 
-    // appDueDate → applicationDueDate
+    // appDueDate → applicationDueDate; remove time portion
     // “App” sounds like a piece of software.
-    "applicationDueDate": "2020-04-30T12:00:00",
+    // And because the application will always be due at 11:59:59 PM, there’s no need to specify the time.
+    // Before: "applicationDueDate": "2020-04-30T12:00:00",
+    "applicationDueDate": "2020-04-30",
 
     // Remove appDueDateTimeAgo for the same reason as postedTimeAgo
     // "appDueDateTimeAgo": "in 6 days"
   }
+
+  // Follows the XML Schema type definitions, which are ISO 8601–compliant but don’t cover 100% of it.
+  // Regex via: https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch04s07.html
+  const dateRegex = /^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])(Z|[+-](?:2[0-3]|[01][0-9]):[0-5][0-9])?$/;
+  // Not used currently but: const timeRegex = /^(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(\.[0-9]+)?(Z|[+-](?:2[0-3]|[01][0-9]):[0-5][0-9])?$/;
+  const dateTimeRegex = /^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(\.[0-9]+)?(Z|[+-](?:2[0-3]|[01][0-9]):[0-5][0-9])?$/;
   ```

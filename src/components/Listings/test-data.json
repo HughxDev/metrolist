@@ -1,0 +1,126 @@
+[
+  {
+    "region": "Boston",
+    "city": "Boston",
+    "neighborhood": "Fenway",
+    "type": "",
+    "incomeRestricted": true,
+    "id": "11566036",
+    "slug": "2424-boylston-st-boston-fenway",
+    "title": "2424 Boylston st Boston - Fenway",
+    "assignment": "waitlist",
+    "listingDate": "2020-04-22T14:38:55-0400",
+    "applicationDueDate": "",
+    "offer": "rental",
+    "url": "https://d8-dev2.boston.gov/2424-boylston-st-boston-fenway",
+    "units": [
+      {
+        "size": "bedrooms",
+        "bedrooms": 4,
+        "amiQualification": 80,
+        "price": 2400,
+        "priceRate": "monthly"
+      }
+    ]
+  },
+  {
+    "region": "West of Boston",
+    "city": "Cambridge",
+    "neighborhood": "",
+    "type": "",
+    "incomeRestricted": false,
+    "id": "11566041",
+    "slug": "1200-massachusetts-avenue-cambridge",
+    "title": "1200  Massachusetts Avenue Cambridge -",
+    "assignment": "first come, first served",
+    "listingDate": "2020-04-22T14:38:55-0400",
+    "applicationDueDate": "",
+    "offer": "sale",
+    "url": "https://d8-dev2.boston.gov/1200-massachusetts-avenue-cambridge",
+    "units": [
+      {
+        "size": "bedrooms",
+        "bedrooms": 3,
+        "amiQualification": 120,
+        "price": 450000,
+        "priceRate": "once"
+      }
+    ]
+  },
+  {
+    "region": "North of Boston",
+    "city": "Beverly",
+    "neighborhood": "",
+    "type": "Single Room Occupancy",
+    "incomeRestricted": true,
+    "id": "11566046",
+    "slug": "45-lothrop-street-beverly",
+    "title": "45 Lothrop Street Beverly -",
+    "assignment": "lottery",
+    "listingDate": "2020-04-22T14:38:55-0400",
+    "applicationDueDate": "2020-04-30T12:00:00",
+    "offer": "rental",
+    "url": "https://d8-dev2.boston.gov/45-lothrop-street-beverly",
+    "units": [
+      {
+        "size": "studio",
+        "bedrooms": 0,
+        "amiQualification": 50,
+        "price": 800,
+        "priceRate": "monthly"
+      },
+      {
+        "size": "studio",
+        "bedrooms": 0,
+        "amiQualification": 50,
+        "price": 800,
+        "priceRate": "monthly"
+      }
+    ]
+  },
+  {
+    "region": "Boston",
+    "city": "Boston",
+    "neighborhood": "Roxbury",
+    "type": "Apartment",
+    "incomeRestricted": true,
+    "id": "11566051",
+    "slug": "12-malcolm-x-blvd-boston-roxbury",
+    "title": "12 Malcolm X Blvd Boston - Roxbury",
+    "assignment": "first come, first served",
+    "listingDate": "2020-04-22T14:38:55-0400",
+    "applicationDueDate": "",
+    "offer": "rental",
+    "url": "https://d8-dev2.boston.gov/12-malcolm-x-blvd-boston-roxbury",
+    "units": [
+      {
+        "size": "bedrooms",
+        "bedrooms": 1,
+        "amiQualification": 60,
+        "price": 1200,
+        "priceRate": "monthly"
+      },
+      {
+        "size": "bedrooms",
+        "bedrooms": 2,
+        "amiQualification": 80,
+        "price": 300000,
+        "priceRate": "once"
+      },
+      {
+        "size": "bedrooms",
+        "bedrooms": 2,
+        "amiQualification": 80,
+        "price": 1500,
+        "priceRate": "monthly"
+      },
+      {
+        "size": "bedrooms",
+        "bedrooms": 3,
+        "amiQualification": 100,
+        "price": 400000,
+        "priceRate": "once"
+      }
+    ]
+  }
+]

@@ -9,12 +9,22 @@ import iconsManifest from './icons_manifest.json';
 
 class Icon extends React.Component {
   getReferencedSvgDimensions( idSelector ) {
+    if ( !idSelector ) {
+      console.error( new Error( `\`getReferencedSvgDimensions\` is missing the required parameter \`idSelector\`` ) );
+    }
+
     const $svgElement = document.getElementById( idSelector.substring( 1 ) );
     // const nodeName = $svgElement.nodeName.toLowerCase();
     const dimensions = {
       "width": null,
       "height": null,
     };
+
+    if ( !$svgElement ) {
+      // console.warn( `Could not find an element with the id \`${idSelector}\`.` );
+      return dimensions;
+    }
+
     const hasWidth = $svgElement.hasAttribute( 'width' );
     const hasHeight = $svgElement.hasAttribute( 'height' );
     const hasViewBox = $svgElement.hasAttribute( 'viewBox' );

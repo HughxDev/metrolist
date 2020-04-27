@@ -13,6 +13,7 @@ function renderText( text ) {
 
 function renderLabel( children, props ) {
   const { subcategoriesOnly } = props;
+  let { value } = props;
 
   if ( subcategoriesOnly ) {
     return (
@@ -22,11 +23,24 @@ function renderLabel( children, props ) {
     );
   }
 
+  if ( !value ) {
+    if ( typeof children === 'string' ) {
+      value = children.trim();
+    }
+  }
+
   return (
     <label className="ml-checkbox__label">
       <Row className="ml-checkbox__label-content" space="panel" align="middle">
         <span className="ml-checkbox__form-control-container">
-          <input className="ml-checkbox__form-control" name={ props.criterion } type="checkbox" required={ props.required } />
+          <input
+            className="ml-checkbox__form-control"
+            type="checkbox"
+            name={ props.criterion }
+            value={ value }
+            required={ props.required }
+            defaultChecked={ props.checked }
+          />
           <span className="ml-checkbox__form-control-ui"></span>
         </span>
         { renderText( children ) }
@@ -36,7 +50,7 @@ function renderLabel( children, props ) {
 }
 
 function renderChoices( props ) {
-  const { children, subcategoriesOnly, required } = props;
+  const { children, subcategoriesOnly, required } = props; // eslint-disable-line react/prop-types
 
   switch ( typeof children ) {
     case 'string':

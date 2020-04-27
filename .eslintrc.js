@@ -14,6 +14,9 @@ module.exports = {
   // "rules": {
   //   ...a11yOff,
   // },
+  "globals": {
+    "globalThis": false, // means it is not writeable
+  },
   "settings": {
     "import/resolver": {
       /*
@@ -26,7 +29,8 @@ module.exports = {
           ["@patterns", "./patterns"],
           ["@util", "./src/util"],
           ["@globals", "./src/globals"],
-          ["@components", "./src/components"]
+          ["@components", "./src/components"],
+          ["__mocks__", "./__mocks__"]
         ],
         "extensions": [".js", ".scss"],
       },

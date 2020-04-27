@@ -6,10 +6,10 @@ import Stack from '@components/Stack';
 import './Range.scss';
 
 function Range( props ) {
-  const min = 0;
-  const max = 100;
-  const [lowerBound, setLowerBound] = useState( 40 );
-  const [upperBound, setUpperBound] = useState( 60 );
+  const min = ( props.min || 0 );
+  const max = ( props.max || 100 );
+  const [lowerBound, setLowerBound] = useState( props.lowerBound || props.min || ( max / 2 ) );
+  const [upperBound, setUpperBound] = useState( props.upperBound || max );
   const [outOfBounds, setOutOfBounds] = useState( false );
   const handleInput = ( ( event ) => {
     const $input = event.target;
@@ -53,13 +53,14 @@ function Range( props ) {
           // onChange={ handleInput }
         >
           <label
-            // className="sr-only"
+            className="sr-only"
             htmlFor="lower-bound"
           >{ outOfBounds ? 'Maximum' : 'Minimum' }</label>
           <input
             className={ `ml-range__input${outOfBounds ? ` ml-range__input--inverted` : ''}` }
             type="range"
             id="lower-bound"
+            name={ `${props.criterion}LowerBound` }
             min={ min }
             defaultValue={ lowerBound }
             max={ max }
@@ -67,13 +68,14 @@ function Range( props ) {
           />
 
           <label
-            // className="sr-only"
+            className="sr-only"
             htmlFor="upper-bound"
           >{ outOfBounds ? 'Minimum' : 'Maximum' }</label>
           <input
             className={ `ml-range__input${outOfBounds ? ` ml-range__input--inverted` : ''}` }
             type="range"
             id="upper-bound"
+            name={ `${props.criterion}UpperBound` }
             min={ min }
             defaultValue={ upperBound }
             max={ max }
@@ -90,6 +92,11 @@ Range.displayName = 'Range';
 Range.propTypes = {
   "children": PropTypes.node,
   "className": PropTypes.string,
+  "criterion": PropTypes.string,
+  "min": PropTypes.number,
+  "max": PropTypes.number,
+  "lowerBound": PropTypes.number,
+  "upperBound": PropTypes.number,
 };
 
 export default Range;

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Column from '@components/Column';
-import DetailItem from '@components/DetailItem';
+// import DetailItem from '@components/DetailItem';
 
 import './About.scss';
 
