@@ -2,26 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 
-import { capitalize } from '@util/strings';
-
 import './Unit.scss';
 
-function formatSize( size, bedrooms, numberOfIdenticalUnits ) {
+function formatSize( bedrooms, numberOfIdenticalUnits ) {
   let formattedSize = '';
 
-  if ( bedrooms ) {
+  if ( bedrooms > 0 ) {
     formattedSize += `${bedrooms} Bedroom`;
+  } else {
+    formattedSize = 'Studio';
   }
 
   if ( numberOfIdenticalUnits ) {
     formattedSize += ` (×${numberOfIdenticalUnits})`;
   }
 
-  if ( formattedSize.length ) {
-    return formattedSize;
-  }
-
-  return capitalize( size );
+  return formattedSize;
 }
 
 function formatAmiQualification( amiQualification ) {
@@ -55,7 +51,7 @@ function formatPrice( price, priceRate ) {
 
 function Unit( { unit } ) {
   const {
-    size, bedrooms, numberOfIdenticalUnits, amiQualification, price, priceRate,
+    bedrooms, numberOfIdenticalUnits, amiQualification, price, priceRate,
   } = unit;
 
   /*
@@ -66,7 +62,7 @@ function Unit( { unit } ) {
   */
   return (
     <tr className="ml-unit">
-      <td className="ml-unit__cell ml-unit__size">{ formatSize( size, bedrooms, numberOfIdenticalUnits ) }</td>
+      <td className="ml-unit__cell ml-unit__size">{ formatSize( bedrooms, numberOfIdenticalUnits ) }</td>
       <td className="ml-unit__cell ml-unit__ami-qualification">{ formatAmiQualification( amiQualification ) }</td>
       <td className="ml-unit__cell ml-unit__price">{ formatPrice( price, priceRate ) }</td>
     </tr>

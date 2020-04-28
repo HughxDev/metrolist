@@ -15,6 +15,7 @@ class FilterGroup extends React.Component {
       "isExpanded": props.isExpanded,
     };
     this.handleExpandCollapse = this.handleExpandCollapse.bind( this );
+    this.handleChange = this.handleChange.bind( this );
     this.$filters = React.createRef();
   }
 
@@ -57,7 +58,12 @@ class FilterGroup extends React.Component {
     return (
       <>
         { label }
-        <Wrapper id={ groupId } ref={ this.$filters } space={ wrapperSpacing } className={ `ml-filter-group__filters${this.state.isExpanded ? ' ml-filter-group__filters--expanded' : ''}` }>
+        <Wrapper
+          id={ groupId }
+          ref={ this.$filters }
+          space={ wrapperSpacing }
+          className={ `ml-filter-group__filters${this.state.isExpanded ? ' ml-filter-group__filters--expanded' : ''}` }
+        >
           { childArray }
         </Wrapper>
       </>
@@ -71,9 +77,26 @@ class FilterGroup extends React.Component {
     }
   }
 
+  handleChange( event ) {
+    event.persist();
+    event.metrolist = {
+      ...event.metrolist,
+      "parentCriterion": this.props.criterion,
+    };
+  }
+
   render() {
     return (
-      <fieldset className={ `ml-filter-group${this.props.className ? ` ${this.props.className}` : ''}${this.state.isExpanded ? ' ml-filter-group--expanded' : ''}` }>
+      <fieldset
+        className={
+          `ml-filter-group${
+            this.props.className ? ` ${this.props.className}` : ''
+          }${
+            this.state.isExpanded ? ' ml-filter-group--expanded' : ''
+          }`
+        }
+        onChange={ this.handleChange }
+      >
         {/* <Wrapper> */}
         { this.renderFilters( this.props ) }
         {/* </Wrapper> */}
@@ -86,6 +109,7 @@ FilterGroup.propTypes = {
   "orientation": PropTypes.oneOf( ['vertical', 'horizontal'] ),
   "children": PropTypes.node,
   "className": PropTypes.string,
+  "criterion": PropTypes.string,
 };
 FilterGroup.defaultProps = {
   "isExpanded": globalThis.matchMedia( '(min-width: 992px)' ).matches,

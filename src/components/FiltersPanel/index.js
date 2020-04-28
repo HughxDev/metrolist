@@ -21,10 +21,12 @@ function FiltersPanel( props ) {
 
   const updateDrawerHeight = ( wait ) => {
     const updateHeight = () => {
-      const height = getComputedStyle( $drawer.current ).getPropertyValue( 'height' );
+      if ( $drawer.current ) {
+        const height = getComputedStyle( $drawer.current ).getPropertyValue( 'height' );
 
-      if ( height !== '0px' ) {
-        $drawer.current.style.height = height;
+        if ( height !== '0px' ) {
+          $drawer.current.style.height = height;
+        }
       }
 
       updatingDrawerHeight = false;
@@ -95,6 +97,7 @@ function FiltersPanel( props ) {
 
   return (
     <section
+      data-testid="ml-filters-panel"
       className={
         `ml-filters-panel${
           props.className
@@ -203,8 +206,10 @@ function FiltersPanel( props ) {
               <Filter
                 type="range"
                 criterion="amiQualification"
-                min={ amiQualification.lowerBound }
-                max={ amiQualification.upperBound }
+                min={ 30 }
+                max={ 150 }
+                lowerBound={ amiQualification.lowerBound }
+                upperBound={ amiQualification.upperBound }
               />
             </div>
           </FilterGroup>

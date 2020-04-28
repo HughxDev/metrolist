@@ -5,7 +5,7 @@ import './Component.scss';
 
 function Component( props ) {
   return (
-    <div className={ `ml-component${props.className ? ` ${props.className}` : ''}` }>
+    <div data-testid="ml-component" className={ `ml-component${props.className ? ` ${props.className}` : ''}` }>
       { props.children }
     </div>
   );

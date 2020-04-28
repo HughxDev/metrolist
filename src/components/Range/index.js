@@ -60,7 +60,7 @@ function Range( props ) {
             className={ `ml-range__input${outOfBounds ? ` ml-range__input--inverted` : ''}` }
             type="range"
             id="lower-bound"
-            name={ `${props.criterion}LowerBound` }
+            name="lowerBound"
             min={ min }
             defaultValue={ lowerBound }
             max={ max }
@@ -75,7 +75,7 @@ function Range( props ) {
             className={ `ml-range__input${outOfBounds ? ` ml-range__input--inverted` : ''}` }
             type="range"
             id="upper-bound"
-            name={ `${props.criterion}UpperBound` }
+            name="upperBound"
             min={ min }
             defaultValue={ upperBound }
             max={ max }

@@ -32,21 +32,11 @@ import './ResultsPanel.scss';
 */
 
 function ResultsPanel( props ) {
-  const {
-    filters, homes, setHomes, className, columnWidth,
-  } = props;
+  const { homes, className, columnWidth } = props;
   const attributes = { ...props };
-
-  if ( filters ) {
-    delete attributes.filters;
-  }
 
   if ( homes.length > 0 ) {
     delete attributes.homes;
-  }
-
-  if ( setHomes ) {
-    delete attributes.setHomes;
   }
 
   if ( columnWidth ) {
@@ -55,7 +45,11 @@ function ResultsPanel( props ) {
   }
 
   return (
-    <article className={ `ml-results-panel${className ? ` ${className}` : ''}` }{ ...attributes }>
+    <article
+      data-testid="ml-results-panel"
+      className={ `ml-results-panel${className ? ` ${className}` : ''}` }
+      { ...attributes }
+    >
       <h3 className="sr-only">Results</h3>
       <Inset until="large">
         <Stack space="panel">
@@ -74,7 +68,6 @@ ResultsPanel.propTypes = {
   "homes": PropTypes.arrayOf( PropTypes.object ),
   "columnWidth": PropTypes.string,
   "className": PropTypes.string,
-
 };
 
 export default ResultsPanel;

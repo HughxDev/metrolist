@@ -21,106 +21,237 @@ const dev2Endpoint = `https://${dev2Domain}/metro/api/v1/units?_format=json`;
 
 function Listings( props ) {
   const [filters, setFilters] = useState( props.filters );
-  const [homes, setHomes] = useState( [] );
+  const [allHomes, setAllHomes] = useState( props.homes );
+  const [filteredHomes, setFilteredHomes] = useState( props.homes );
 
-  useEffect( () => {
-    // fetch(
-    //   dev2Endpoint,
-    //   {
-    //     "mode": "no-cors",
-    //     "headers": {
-    //       "Content-Type": "application/json",
-    //     },
-    //   },
-    // ) // TODO: CORS
-    //   .then( ( response ) => {
-    //     console.log( {
-    //       "responseBody": response.body,
-    //     } );
-    //     if ( !response.body ) {
-    //       throw new Error( `API returned an invalid response.` );
-    //     }
-    //   } )
-    //   .then( ( response ) => response.json() )
-    //   .then( ( units ) => {
-    const developments = {};
+  const filterHomes = ( filtersToApply, homesToFilter = allHomes, matchOnNoneSelected = true ) => {
+    const matchingHomes = homesToFilter.filter( ( home ) => {
+      let matchesOffer = (
+        (
+          filters.offer.rent
+            && ( home.offer === 'rent' )
+        )
+          || (
+            filters.offer.sale
+            && ( home.offer === 'sale' )
+          )
+      );
+      let matchesBroadLocation = (
+        (
+          filters.location.city.boston
+          && ( home.cardinalDirection === null )
+        )
+        || (
+          filters.location.city['!boston']
+          && ( home.cardinalDirection !== null )
+        )
+      );
+      const unitBedroomSizes = home.units.map( ( unit ) => unit.bedrooms ).sort();
+      let matchesBedrooms = (
+        (
+          filters.bedrooms['0']
+          && ( unitBedroomSizes.indexOf( 0 ) !== -1 )
+        )
+        || (
+          filters.bedrooms['1']
+          && ( unitBedroomSizes.indexOf( 1 ) !== -1 )
+        )
+        || (
+          filters.bedrooms['2']
+          && ( unitBedroomSizes.indexOf( 2 ) !== -1 )
+        )
+        || (
+          filters.bedrooms['3']
+          && ( unitBedroomSizes.indexOf( 3 ) !== -1 )
+        )
+        || (
+          filters.bedrooms['4+']
+          && ( unitBedroomSizes[unitBedroomSizes.length - 1] >= 4 )
+        )
+      );
+      let matchesAmiQualification;
 
-    // units.map( ( unit ) => {} );
-    units.forEach( ( unit ) => {
-      const formattedUnit = { ...unit };
-      delete formattedUnit.beds;
-      delete formattedUnit.ami;
-      delete formattedUnit.price;
-      delete formattedUnit.postedTimeAgo;
-      delete formattedUnit.posted;
-      delete formattedUnit.appDueDate;
-      delete formattedUnit.openWaitlist;
-      delete formattedUnit.unitType;
-      delete formattedUnit.development;
-      delete formattedUnit.developmentURI;
-      delete formattedUnit.developmentURL;
-      delete formattedUnit.developmentID;
-      delete formattedUnit.userGuidType;
-      delete formattedUnit.appDueDateTimeAgo;
-      delete formattedUnit.postedTimeAgo;
+      const unitAmiQualifications = Array.from( new Set( home.units.map( ( unit ) => unit.amiQualification ) ) );
 
-      formattedUnit.id = unit.developmentID;
-      formattedUnit.slug = unit.developmentURI.slice( 1 );
-      formattedUnit.title = unit.development;
-
-      switch ( unit.unitType.toLowerCase() ) {
-        case 'single room occupancy':
-          formattedUnit.type = 'sro';
-          break;
-
-        case 'apartment':
-          formattedUnit.type = 'apt';
-          break;
-
-        default:
-          formattedUnit.type = unit.unitType.toLowerCase();
-      }
-
-      formattedUnit.assignment = ( ( unit.openWaitlist === true ) ? 'waitlist' : unit.userGuidType.toLowerCase().split( ' ' )[0] );
-      formattedUnit.listingDate = unit.posted.replace( '-0400', 'Z' ); // TODO: not a real conversion to UTC
-      formattedUnit.applicationDueDate = unit.appDueDate.replace( 'T12:00:00', '' ); // TODO: not a real conversion to UTC
-      formattedUnit.offer = ( ( unit.type === 'Own' ) ? 'sale' : 'rent' );
-      formattedUnit.incomeRestricted = ( unit.incomeRestricted == 'true' ); // eslint-disable-line eqeqeq
-      formattedUnit.url = `https://${dev2Domain}/${formattedUnit.slug}`;
-
-      if ( !hasOwnProperty( developments, unit.developmentID ) ) {
-        developments[unit.developmentID] = formattedUnit;
-        developments[unit.developmentID].units = [];
-      }
-
-      developments[unit.developmentID].units.push( {
-        "size": ( +unit.beds > 0 ) ? 'bedrooms' : 'studio',
-        "bedrooms": +unit.beds,
-        "amiQualification": +unit.ami,
-        "price": +unit.price,
-        "priceRate": ( ( formattedUnit.offer === 'rental' ) ? 'monthly' : 'once' ),
+      unitAmiQualifications.forEach( ( amiQualification ) => {
+        if ( filters.amiQualification.lowerBound <= filters.amiQualification.upperBound ) {
+          matchesAmiQualification = (
+            ( amiQualification >= filters.amiQualification.lowerBound )
+            && ( amiQualification <= filters.amiQualification.upperBound )
+          );
+        // These values can be switched in the UI causing the names to no longer be semantic
+        } else if ( filters.amiQualification.lowerBound > filters.amiQualification.upperBound ) {
+          matchesAmiQualification = (
+            ( amiQualification >= filters.amiQualification.upperBound )
+            && ( amiQualification <= filters.amiQualification.lowerBound )
+          );
+        }
       } );
+
+      if ( matchOnNoneSelected ) {
+        if ( !filters.offer.rent && !filters.offer.rent ) {
+          matchesOffer = true;
+        }
+
+        if ( !filters.location.city.boston && !filters.location.city['!boston'] ) {
+          matchesBroadLocation = true;
+        }
+
+        if ( !filters.bedrooms['0'] && !filters.bedrooms['1'] && !filters.bedrooms['2'] && !filters.bedrooms['3'] && !filters.bedrooms['4+'] ) {
+          matchesBedrooms = true;
+        }
+      }
+
+      return ( matchesOffer && matchesBroadLocation && matchesBedrooms && matchesAmiQualification );
     } );
 
-    // return developments;
-    const newHomes = Object.keys( developments ).map( ( developmentID ) => developments[developmentID] );
+    return matchingHomes;
+  };
 
-    setHomes( newHomes );
-    // console.log( { homes } );
-    // } )
-    // .then( ( formattedApiResponse ) => {
-    //   setHomes( formattedApiResponse );
-    //   console.log( 'homes', homes );
-    // } )
-    // .catch( ( error ) => {
-    //   console.log( 'dev2Endpoint', dev2Endpoint );
-    //   console.error( error );
-    // } );
+  useEffect( () => {
+    if ( !allHomes.length ) {
+      // fetch(
+      //   dev2Endpoint,
+      //   {
+      //     "mode": "no-cors",
+      //     "headers": {
+      //       "Content-Type": "application/json",
+      //     },
+      //   },
+      // ) // TODO: CORS
+      //   .then( ( response ) => {
+      //     console.log( {
+      //       "responseBody": response.body,
+      //     } );
+      //     if ( !response.body ) {
+      //       throw new Error( `API returned an invalid response.` );
+      //     }
+      //   } )
+      //   .then( ( response ) => response.json() )
+      //   .then( ( units ) => {
+      const developments = {};
+
+      // units.map( ( unit ) => {} );
+      units.forEach( ( unit ) => {
+        const formattedUnit = { ...unit };
+        delete formattedUnit.beds;
+        delete formattedUnit.ami;
+        delete formattedUnit.price;
+        delete formattedUnit.postedTimeAgo;
+        delete formattedUnit.posted;
+        delete formattedUnit.appDueDate;
+        delete formattedUnit.openWaitlist;
+        delete formattedUnit.unitType;
+        delete formattedUnit.development;
+        delete formattedUnit.developmentURI;
+        delete formattedUnit.developmentURL;
+        delete formattedUnit.developmentID;
+        delete formattedUnit.userGuidType;
+        delete formattedUnit.appDueDateTimeAgo;
+        delete formattedUnit.postedTimeAgo;
+        delete formattedUnit.region;
+
+        formattedUnit.cardinalDirection = ( ( unit.region === 'Boston' ) ? null : unit.region.toLowerCase().replace( ' of boston', '' ) );
+        formattedUnit.id = unit.developmentID;
+        formattedUnit.slug = unit.developmentURI.slice( 1 );
+        formattedUnit.title = unit.development;
+        // formattedUnit.city = unit.city.toLowerCase();
+
+        switch ( unit.unitType.toLowerCase() ) {
+          case 'single room occupancy':
+            formattedUnit.type = 'sro';
+            break;
+
+          case 'apartment':
+            formattedUnit.type = 'apt';
+            break;
+
+          default:
+            formattedUnit.type = unit.unitType.toLowerCase();
+        }
+
+        formattedUnit.assignment = ( ( unit.openWaitlist === true ) ? 'waitlist' : unit.userGuidType.toLowerCase().split( ' ' )[0] );
+        formattedUnit.listingDate = unit.posted.replace( '-0400', 'Z' ); // TODO: not a real conversion to UTC
+        formattedUnit.applicationDueDate = unit.appDueDate.replace( 'T12:00:00', '' ); // TODO: not a real conversion to UTC
+        formattedUnit.offer = ( ( unit.type === 'Own' ) ? 'sale' : 'rent' );
+        formattedUnit.incomeRestricted = ( unit.incomeRestricted == 'true' ); // eslint-disable-line eqeqeq
+        formattedUnit.url = `https://${dev2Domain}/${formattedUnit.slug}`;
+
+        if ( !hasOwnProperty( developments, unit.developmentID ) ) {
+          developments[unit.developmentID] = formattedUnit;
+          developments[unit.developmentID].units = [];
+        }
+
+        developments[unit.developmentID].units.push( {
+          // "size": ( +unit.beds > 0 ) ? 'bedrooms' : 'studio',
+          "bedrooms": +unit.beds,
+          "amiQualification": +unit.ami,
+          "price": +unit.price,
+          "priceRate": ( ( formattedUnit.offer === 'rental' ) ? 'monthly' : 'once' ),
+        } );
+      } );
+
+      // return developments;
+      const apiHomes = Object.keys( developments ).map( ( developmentID ) => developments[developmentID] );
+
+      setAllHomes( apiHomes );
+      setFilteredHomes( filterHomes( filters, apiHomes ) );
+      // } )
+      // .then( ( formattedApiResponse ) => {
+      // } )
+      // .catch( ( error ) => {
+      // } );
+    }
   }, [] );
 
   const handleFilterChange = ( event ) => {
     const $input = event.target;
-    console.log( 'Filter change:', $input.type, $input.name, $input.value, $input.checked );
+    let newValue;
+    const newFilters = { ...filters };
+    let valueAsKey = false;
+    let isNumeric = false;
+    let specialCase = false;
+
+    switch ( $input.type ) {
+      case 'checkbox':
+        newValue = $input.checked;
+        valueAsKey = true;
+        break;
+
+      default:
+        newValue = $input.value;
+    }
+
+    if ( hasOwnProperty( event, 'metrolist' ) ) {
+      if ( hasOwnProperty( event.metrolist, 'parentCriterion' ) ) {
+        switch ( event.metrolist.parentCriterion ) { // eslint-disable-line default-case
+          case 'amiQualification':
+            isNumeric = true;
+            break;
+        }
+
+        if ( isNumeric ) {
+          newValue = Number.parseInt( newValue, 10 );
+        }
+
+        if ( event.metrolist.parentCriterion !== $input.name ) {
+          if ( valueAsKey ) {
+            specialCase = true;
+            newFilters[event.metrolist.parentCriterion][$input.name][$input.value] = newValue;
+          } else {
+            specialCase = true;
+            newFilters[event.metrolist.parentCriterion][$input.name] = newValue;
+          }
+        }
+      }
+    }
+
+    if ( !specialCase ) {
+      newFilters[$input.name][$input.value] = newValue;
+    }
+
+    setFilters( newFilters );
+    setFilteredHomes( filterHomes( filters ) );
   };
 
   return (
@@ -146,8 +277,7 @@ function Listings( props ) {
           className="ml-listings__results"
           columnWidth="2/3"
           filters={ filters }
-          homes={ homes }
-          setHomes={ setHomes }
+          homes={ filteredHomes }
         />
       </Row>
     </article>
@@ -157,11 +287,12 @@ function Listings( props ) {
 Listings.propTypes = {
   "amiEstimation": PropTypes.number,
   "filters": PropTypes.object,
-  // "homes": PropTypes.arrayOf( PropTypes.object ),
+  "homes": PropTypes.arrayOf( PropTypes.object ),
   "className": PropTypes.string,
 };
 
 Listings.defaultProps = {
+  "homes": [],
   "amiEstimation": null,
   "filters": {
     "offer": {
