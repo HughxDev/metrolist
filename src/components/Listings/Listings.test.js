@@ -109,25 +109,51 @@ describe( 'Listings', () => {
         "city": "Cambridge",
         "cardinalDirection": "west",
       };
+      let noFiltersApplied;
+
+      beforeEach( () => {
+        noFiltersApplied = {
+          "offer": {
+            "rent": false,
+            "sale": false,
+          },
+          "location": {
+            "city": {
+              "boston": false,
+              "beyondBoston": false,
+            },
+            "neighborhood": {
+              "southBoston": false,
+              "hydePark": false,
+              "dorchester": false,
+              "mattapan": false,
+            },
+            "cardinalDirection": {
+              "west": false,
+              "north": false,
+              "south": false,
+            },
+          },
+          "bedrooms": {
+            "0": false,
+            "1": false,
+            "2": false,
+            "3": false,
+            "4+": false,
+          },
+          "amiQualification": {
+            "lowerBound": 30,
+            "upperBound": 150,
+          },
+        };
+      } );
 
       it( 'Filters results to only homes within Boston', () => {
         const homesToFilter = [homeWithinBoston, homeOutsideBoston];
         const { getByLabelText, queryByText } = render(
           <Listings
             homes={ homesToFilter }
-            filters={
-              {
-                ...Listings.defaultProps.filters,
-                "location": {
-                  ...Listings.defaultProps.filters.location,
-                  "city": {
-                    ...Listings.defaultProps.filters.city,
-                    "boston": false,
-                    "!boston": false,
-                  },
-                },
-              }
-            }
+            filters={ noFiltersApplied }
           />,
         );
         const bostonInput = getByLabelText( 'Boston' );
@@ -143,19 +169,7 @@ describe( 'Listings', () => {
         const { getByLabelText, queryByText } = render(
           <Listings
             homes={ homesToFilter }
-            filters={
-              {
-                ...Listings.defaultProps.filters,
-                "location": {
-                  ...Listings.defaultProps.filters.location,
-                  "city": {
-                    ...Listings.defaultProps.filters.city,
-                    "boston": false,
-                    "!boston": false,
-                  },
-                },
-              }
-            }
+            filters={ noFiltersApplied }
           />,
         );
         const beyondBostonInput = getByLabelText( 'Beyond Boston' );
@@ -165,10 +179,54 @@ describe( 'Listings', () => {
         expect( beyondBostonInput ).toBeChecked();
         expect( homeToBeFilteredOut ).not.toBeInTheDocument();
       } );
+
+      it( 'Sets all subcategory checkboxes appropriately when the top-level checkboxes are toggled', () => {
+        const { getByLabelText } = render( <Listings filters={ noFiltersApplied } /> );
+
+        // Boston
+
+        const bostonInput = getByLabelText( 'Boston' );
+        const dotInput = getByLabelText( 'Dorchester' );
+        const southieInput = getByLabelText( 'South Boston' );
+
+        fireEvent.click( bostonInput );
+
+        expect( bostonInput ).toBeChecked();
+        expect( dotInput ).toBeChecked();
+        expect( southieInput ).toBeChecked();
+
+        fireEvent.click( bostonInput );
+
+        expect( bostonInput ).not.toBeChecked();
+        expect( dotInput ).not.toBeChecked();
+        expect( southieInput ).not.toBeChecked();
+
+        // Beyond Boston
+
+        const beyondBostonInput = getByLabelText( 'Beyond Boston' );
+        const westInput = getByLabelText( 'West of Boston' );
+        const southInput = getByLabelText( 'South of Boston' );
+
+        fireEvent.click( beyondBostonInput );
+
+        expect( beyondBostonInput ).toBeChecked();
+        expect( westInput ).toBeChecked();
+        expect( southInput ).toBeChecked();
+
+        fireEvent.click( beyondBostonInput );
+
+        expect( beyondBostonInput ).not.toBeChecked();
+        expect( westInput ).not.toBeChecked();
+        expect( southInput ).not.toBeChecked();
+      } );
     } );
 
-    describe( 'Bedrooms', () => {
+    // Unit filtering
 
+    describe( 'Bedrooms', () => {
+      it( 'Filters by unit size', () => {
+
+      } );
     } );
 
     describe( 'AMI Qualification', () => {

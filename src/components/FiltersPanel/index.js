@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { capitalCase } from 'change-case';
 
 import FilterGroup from '@components/FilterGroup';
 import Filter from '@components/Filter';
@@ -17,6 +18,7 @@ function FiltersPanel( props ) {
   const $drawer = useRef();
   const attributes = { ...props };
   const [isExpanded, setExpanded] = useState( isDesktop );
+  // const [filters, setFilters] = useState( props.filters );
   let updatingDrawerHeight = false;
 
   const updateDrawerHeight = ( wait ) => {
@@ -142,50 +144,31 @@ function FiltersPanel( props ) {
             <Stack space="sister-checkboxes">
               <Filter type="checkbox" criterion="city" value="boston" checked={ location.city.boston }>
                 <Filter.Label>Boston</Filter.Label>
-                <Filter
-                  type="checkbox"
-                  criterion="neighborhood"
-                  value="southBoston"
-                  checked={ location.neighborhood.southBoston }
-                >South Boston</Filter>
-                <Filter
-                  type="checkbox"
-                  criterion="neighborhood"
-                  value="hydePark"
-                  checked={ location.neighborhood.southBoston }
-                >Hyde Park</Filter>
-                <Filter
-                  type="checkbox"
-                  criterion="neighborhood"
-                  value="dorchester"
-                  checked={ location.neighborhood.dorchester }
-                >Dorchester</Filter>
-                <Filter
-                  type="checkbox"
-                  criterion="neighborhood"
-                  value="mattapan"
-                  checked={ location.neighborhood.mattapan }
-                >Mattapan</Filter>
+                {
+                  Object.keys( location.neighborhood ).map( ( neighborhood ) => (
+                    <Filter
+                      key={ neighborhood }
+                      type="checkbox"
+                      criterion="neighborhood"
+                      value={ neighborhood }
+                      checked={ location.neighborhood[neighborhood] }
+                    >{ capitalCase( neighborhood ) }</Filter>
+                  ) )
+                }
               </Filter>
-              <Filter type="checkbox" criterion="city" value="!boston">
+              <Filter type="checkbox" criterion="city" value="beyondBoston" checked={ location.city.beyondBoston }>
                 <Filter.Label>Beyond Boston</Filter.Label>
-                <Filter
-                  type="checkbox"
-                  criterion="cardinalDirection"
-                  value="west"
-                  checked={ location.cardinalDirection.west }
-                >West of Boston</Filter>
-                <Filter
-                  type="checkbox"
-                  criterion="cardinalDirection"
-                  value="north"
-                  checked={ location.cardinalDirection.north }>North of Boston</Filter>
-                <Filter
-                  type="checkbox"
-                  criterion="cardinalDirection"
-                  value="south"
-                  checked={ location.cardinalDirection.south }
-                >South of Boston</Filter>
+                {
+                  Object.keys( location.cardinalDirection ).map( ( cardinalDirection ) => (
+                    <Filter
+                      key={ cardinalDirection }
+                      type="checkbox"
+                      criterion="cardinalDirection"
+                      value={ cardinalDirection }
+                      checked={ location.cardinalDirection[cardinalDirection] }
+                    >{ `${capitalCase( cardinalDirection )} of Boston` }</Filter>
+                  ) )
+                }
               </Filter>
             </Stack>
           </FilterGroup>

@@ -42,7 +42,7 @@ function Listings( props ) {
           && ( home.cardinalDirection === null )
         )
         || (
-          filters.location.city['!boston']
+          filters.location.city.beyondBoston
           && ( home.cardinalDirection !== null )
         )
       );
@@ -93,7 +93,7 @@ function Listings( props ) {
           matchesOffer = true;
         }
 
-        if ( !filters.location.city.boston && !filters.location.city['!boston'] ) {
+        if ( !filters.location.city.boston && !filters.location.city.beyondBoston ) {
           matchesBroadLocation = true;
         }
 
@@ -211,6 +211,8 @@ function Listings( props ) {
     let valueAsKey = false;
     let isNumeric = false;
     let specialCase = false;
+    let parent;
+    let parentCriterion;
 
     switch ( $input.type ) {
       case 'checkbox':
@@ -224,7 +226,9 @@ function Listings( props ) {
 
     if ( hasOwnProperty( event, 'metrolist' ) ) {
       if ( hasOwnProperty( event.metrolist, 'parentCriterion' ) ) {
-        switch ( event.metrolist.parentCriterion ) { // eslint-disable-line default-case
+        parentCriterion = event.metrolist.parentCriterion;
+
+        switch ( parentCriterion ) { // eslint-disable-line default-case
           case 'amiQualification':
             isNumeric = true;
             break;
@@ -234,21 +238,65 @@ function Listings( props ) {
           newValue = Number.parseInt( newValue, 10 );
         }
 
-        if ( event.metrolist.parentCriterion !== $input.name ) {
+        if ( parentCriterion !== $input.name ) {
           if ( valueAsKey ) {
             specialCase = true;
-            newFilters[event.metrolist.parentCriterion][$input.name][$input.value] = newValue;
+            parent = newFilters[parentCriterion][$input.name];
+            parent[$input.value] = newValue;
           } else {
             specialCase = true;
-            newFilters[event.metrolist.parentCriterion][$input.name] = newValue;
+            parent = newFilters[parentCriterion];
+            parent[$input.name] = newValue;
           }
         }
       }
     }
 
     if ( !specialCase ) {
-      newFilters[$input.name][$input.value] = newValue;
+      parent = newFilters[$input.name];
+      parent[$input.value] = newValue;
     }
+
+    // console.log( '$input.name', $input.name );
+    // console.log( 'filters.location.city', filters.location.city );
+    // console.log( 'newValue', newValue );
+
+    switch ( $input.name ) {
+      case 'neighborhood':
+        if ( newValue && !filters.location.city.boston ) {
+          newFilters.location.city.boston = newValue;
+        }
+        break;
+
+      case 'cardinalDirection':
+        if ( newValue && !filters.location.city.beyondBoston ) {
+          newFilters.location.city.beyondBoston = newValue;
+        }
+        break;
+
+      default:
+    }
+
+    // Selecting Boston or Beyond Boston checks/unchecks all subcategories
+    switch ( $input.value ) {
+      case 'boston':
+        Object.keys( filters.location.neighborhood ).forEach( ( neighborhood ) => {
+          newFilters.location.neighborhood[neighborhood] = newValue;
+        } );
+        break;
+
+      case 'beyondBoston':
+        Object.keys( filters.location.cardinalDirection ).forEach( ( cardinalDirection ) => {
+          newFilters.location.cardinalDirection[cardinalDirection] = newValue;
+        } );
+        break;
+
+        // case ''
+
+      default:
+    }
+
+    // console.log( 'newFilters', newFilters );
 
     setFilters( newFilters );
     setFilteredHomes( filterHomes( filters ) );
@@ -294,7 +342,7 @@ Listings.propTypes = {
     "location": PropTypes.shape( {
       "city": PropTypes.shape( {
         "boston": PropTypes.bool,
-        "!boston": PropTypes.bool,
+        "beyondBoston": PropTypes.bool,
       } ),
       "neighborhood": PropTypes.objectOf( PropTypes.bool ),
       "cardinalDirection": PropTypes.shape( {
@@ -330,7 +378,7 @@ Listings.defaultProps = {
     "location": {
       "city": {
         "boston": true,
-        "!boston": false,
+        "beyondBoston": false,
       },
       "neighborhood": {
         "southBoston": true,
@@ -342,7 +390,6 @@ Listings.defaultProps = {
         "west": false,
         "north": false,
         "south": false,
-        // "east": false,
       },
     },
     "bedrooms": {

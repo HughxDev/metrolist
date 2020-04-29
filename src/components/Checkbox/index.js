@@ -39,7 +39,9 @@ function renderLabel( children, props ) {
             name={ props.criterion }
             value={ value }
             required={ props.required }
-            defaultChecked={ props.checked }
+            // defaultChecked={ props.checked }
+            checked={ props.checked }
+            onChange={ () => {} }
           />
           <span className="ml-checkbox__form-control-ui"></span>
         </span>
