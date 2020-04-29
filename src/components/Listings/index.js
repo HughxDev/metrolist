@@ -286,7 +286,35 @@ function Listings( props ) {
 
 Listings.propTypes = {
   "amiEstimation": PropTypes.number,
-  "filters": PropTypes.object,
+  "filters": PropTypes.shape( {
+    "offer": PropTypes.shape( {
+      "rent": PropTypes.bool,
+      "sale": PropTypes.bool,
+    } ),
+    "location": PropTypes.shape( {
+      "city": PropTypes.shape( {
+        "boston": PropTypes.bool,
+        "!boston": PropTypes.bool,
+      } ),
+      "neighborhood": PropTypes.objectOf( PropTypes.bool ),
+      "cardinalDirection": PropTypes.shape( {
+        "west": PropTypes.bool,
+        "north": PropTypes.bool,
+        "south": PropTypes.bool,
+      } ),
+    } ),
+    "bedrooms": PropTypes.shape( {
+      "0": PropTypes.bool,
+      "1": PropTypes.bool,
+      "2": PropTypes.bool,
+      "3": PropTypes.bool,
+      "4+": PropTypes.bool,
+    } ),
+    "amiQualification": PropTypes.shape( {
+      "lowerBound": PropTypes.number,
+      "upperBound": PropTypes.number,
+    } ),
+  } ),
   "homes": PropTypes.arrayOf( PropTypes.object ),
   "className": PropTypes.string,
 };
