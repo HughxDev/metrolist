@@ -63,6 +63,7 @@ module.exports = {
   "devServer": {
     "historyApiFallback": true,
   },
+  "devtool": "eval-source-map",
   "optimization": {
     "nodeEnv": false,
   },
