@@ -128,7 +128,7 @@ function FiltersPanel( props ) {
           ref={ $drawer }
           className={ `ml-filters-panel__content${isExpanded ? ' ml-filters-panel__content--expanded' : ''}` }
         >
-          <FilterGroup criterion="offer">
+          <FilterGroup criterion="offer" isExpanded={ false }>
             <FilterGroup.Label>Offer</FilterGroup.Label>
             <Row space="rent-sale" stackAt="large">
               <Column width="1/2">
@@ -139,7 +139,7 @@ function FiltersPanel( props ) {
               </Column>
             </Row>
           </FilterGroup>
-          <FilterGroup criterion="location">
+          <FilterGroup criterion="location" isExpanded={ false }>
             <FilterGroup.Label>Location</FilterGroup.Label>
             <Stack space="sister-checkboxes">
               <Filter type="checkbox" criterion="city" value="boston" checked={ location.city.boston }>
@@ -172,7 +172,7 @@ function FiltersPanel( props ) {
               </Filter>
             </Stack>
           </FilterGroup>
-          <FilterGroup criterion="bedrooms" orientation="horizontal">
+          <FilterGroup criterion="bedrooms" orientation="horizontal" isExpanded={ true }>
             <FilterGroup.Label>Bedrooms</FilterGroup.Label>
             <Filter type="checkbox" criterion="bedrooms" checked={ bedrooms['0'] }>0</Filter>
             <Filter type="checkbox" criterion="bedrooms" checked={ bedrooms['1'] }>1</Filter>
@@ -180,7 +180,7 @@ function FiltersPanel( props ) {
             <Filter type="checkbox" criterion="bedrooms" checked={ bedrooms['3'] }>3</Filter>
             <Filter type="checkbox" criterion="bedrooms" checked={ bedrooms['4+'] }>4+</Filter>
           </FilterGroup>
-          <FilterGroup criterion="amiQualification" isExpanded={ true }>
+          <FilterGroup criterion="amiQualification" isExpanded={ false }>
             <FilterGroup.Label>Income Eligibility (AMI%)</FilterGroup.Label>
             <div
               onClick={ ( event ) => event.stopPropagation() }

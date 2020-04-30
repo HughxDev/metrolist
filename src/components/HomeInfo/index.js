@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 
 import { capitalize } from '@util/strings';
+// import { capitalCase } from 'change-case';
 
 import './HomeInfo.scss';
 
@@ -60,10 +61,13 @@ function HomeInfo( props ) {
         if ( value === true ) {
           switch ( props.info.assignment ) {
             case 'lottery':
-              formattedValue = 'Housing Lottery';
+              formattedValue = 'Housing lottery';
               break;
             case 'waitlist':
-              formattedValue = 'Open Waitlist';
+              formattedValue = 'Open waitlist';
+              break;
+            case 'first':
+              formattedValue = 'First come, first served';
               break;
             default:
               if ( typeof props.info.assignment === 'string' ) {

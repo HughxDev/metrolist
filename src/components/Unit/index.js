@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 
+import { unitObjectDefinition } from '@util/validation';
+
 import './Unit.scss';
 
 function formatSize( bedrooms, numberOfIdenticalUnits ) {
@@ -51,7 +53,7 @@ function formatPrice( price, priceRate ) {
 
 function Unit( { unit } ) {
   const {
-    bedrooms, numberOfIdenticalUnits, amiQualification, price, priceRate,
+    id, bedrooms, numberOfIdenticalUnits, amiQualification, price, priceRate,
   } = unit;
 
   /*
@@ -61,23 +63,16 @@ function Unit( { unit } ) {
       3. Price
   */
   return (
-    <tr className="ml-unit">
+    <tr className="ml-unit" data-testid={ id }>
       <td className="ml-unit__cell ml-unit__size">{ formatSize( bedrooms, numberOfIdenticalUnits ) }</td>
       <td className="ml-unit__cell ml-unit__ami-qualification">{ formatAmiQualification( amiQualification ) }</td>
-      <td className="ml-unit__cell ml-unit__price">{ formatPrice( price, priceRate ) }</td>
+      <td className="ml-unit__cell ml-unit__price">{ price && priceRate && formatPrice( price, priceRate ) }</td>
     </tr>
   );
 }
 
 Unit.propTypes = {
-  "unit": PropTypes.shape( {
-    "size": PropTypes.oneOf( ['studio', 'bedrooms'] ),
-    "bedrooms": PropTypes.number,
-    "numberOfIdenticalUnits": PropTypes.number,
-    "amiQualification": PropTypes.number,
-    "price": PropTypes.number,
-    "priceRate": PropTypes.oneOf( ['once', 'monthly'] ),
-  } ),
+  "unit": unitObjectDefinition,
 };
 
 export default Unit;

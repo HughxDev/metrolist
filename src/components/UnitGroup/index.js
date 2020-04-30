@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 import Unit from '@components/Unit';
 
+import { unitObjectDefinition } from '@util/validation';
+
 import './UnitGroup.scss';
 
 function UnitGroup( { units } ) {
@@ -16,14 +18,16 @@ function UnitGroup( { units } ) {
         </tr>
       </thead>
       <tbody>
-        { units.map( ( unit, index ) => <Unit key={ index } unit={ unit } /> ) }
+        {
+          units.map( ( unit ) => <Unit key={ unit.id } unit={ unit } /> )
+        }
       </tbody>
     </table>
   );
 }
 
 UnitGroup.propTypes = {
-  "units": PropTypes.arrayOf( PropTypes.object ),
+  "units": PropTypes.arrayOf( unitObjectDefinition ),
 };
 
 export default UnitGroup;

@@ -5,6 +5,8 @@ import Home from '@components/Home';
 import Stack from '@components/Stack';
 import Inset from '@components/Inset';
 
+import { homeObjectDefinition } from '@util/validation';
+
 import './ResultsPanel.scss';
 
 /*
@@ -55,7 +57,7 @@ function ResultsPanel( props ) {
         <Stack space="panel">
         {
           homes.length
-            ? homes.map( ( home, index ) => <Home key={ index } home={ home } /> )
+            ? homes.map( ( home ) => <Home key={ home.id } home={ home } /> )
             : <p>No homes match the selected filters.</p>
         }
         </Stack>
@@ -65,7 +67,7 @@ function ResultsPanel( props ) {
 }
 
 ResultsPanel.propTypes = {
-  "homes": PropTypes.arrayOf( PropTypes.object ),
+  "homes": PropTypes.arrayOf( homeObjectDefinition ),
   "columnWidth": PropTypes.string,
   "className": PropTypes.string,
 };

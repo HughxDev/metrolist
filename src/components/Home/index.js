@@ -8,10 +8,12 @@ import Button from '@components/Button';
 import Stack from '@components/Stack';
 import Row from '@components/Row';
 
-import { capitalize } from '@util/strings';
+// import { capitalize } from '@util/strings';
 import { date, dateTime } from '@util/datetime';
+import { homeObjectDefinition } from '@util/validation';
 
 import './Home.scss';
+import { capitalCase } from 'change-case';
 
 function wasJustListed( listingDate, unitOfTime = 'days', newnessThreshold = 1 ) {
   // testing:
@@ -51,6 +53,24 @@ function renderOffer( offer ) {
   }
 }
 
+function renderType( type ) {
+  type = type.toLowerCase();
+
+  switch ( type ) {
+    case 'apt':
+      return 'Apartment';
+
+    case 'sro':
+      return 'Single Room Occupancy';
+
+    case 'condo':
+      return 'Condominium';
+
+    default:
+      return capitalCase( type );
+  }
+}
+
 function Home( { home } ) {
   const {
     title,
@@ -76,7 +96,11 @@ function Home( { home } ) {
                 <h2 className="ml-home__title" data-column-width="3/4">{ title }</h2>
                 { renderJustListed( listingDate ) }
               </Row>
-              <p className="ml-home__byline">{ [city, neighborhood, renderOffer( offer ), capitalize( type )].filter( ( item ) => !!item ).join( ' – ' ) }</p>
+              <p className="ml-home__byline">{
+                [city, neighborhood, renderOffer( offer ), renderType( type )]
+                  .filter( ( item ) => !!item )
+                  .join( ' – ' )
+              }</p>
             </Stack>
           </header>
           <UnitGroup units={ units } />
@@ -104,21 +128,7 @@ function Home( { home } ) {
 }
 
 Home.propTypes = {
-  "home": PropTypes.shape(
-    {
-      "title": PropTypes.string,
-      "listingDate": dateTime,
-      "applicationDueDate": date,
-      "assignment": PropTypes.oneOf( [null, '', 'lottery', 'waitlist', 'first'] ),
-      "city": PropTypes.string,
-      "neighborhood": PropTypes.string,
-      "type": PropTypes.oneOf( [null, '', 'apt', 'house', 'sro'] ),
-      "offer": PropTypes.oneOf( ['rent', 'sale'] ),
-      "units": PropTypes.arrayOf( PropTypes.object ),
-      "incomeRestricted": PropTypes.bool,
-      "url": PropTypes.string,
-    },
-  ),
+  "home": homeObjectDefinition,
 };
 
 export default Home;

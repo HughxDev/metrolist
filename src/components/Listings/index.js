@@ -13,196 +13,216 @@ import Stack from '@components/Stack';
 import Callout from '@components/Callout';
 import Icon from '@components/Icon';
 
-import units from './sample-api-response.json';
+import { homeObjectDefinition } from '@util/validation';
+// import units from './sample-api-response.json';
+import { apiHomes } from './test-data';
 
-const dev2Ip = '54.227.255.2';
-const dev2Domain = 'd8-dev2.boston.gov';
-const dev2Endpoint = `https://${dev2Domain}/metro/api/v1/units?_format=json`;
+// const dev2Ip = '54.227.255.2';
+// const dev2Domain = 'd8-dev2.boston.gov';
+// const dev2Endpoint = `https://${dev2Domain}/metro/api/v1/units?_format=json`;
 
 function Listings( props ) {
   const [filters, setFilters] = useState( props.filters );
-  const [allHomes, setAllHomes] = useState( props.homes );
-  const [filteredHomes, setFilteredHomes] = useState( props.homes );
+  const [allHomes, setAllHomes] = useState( Object.freeze( props.homes ) );
+  const [filteredHomes, setFilteredHomes] = useState( Object.freeze( props.homes ) );
 
-  const filterHomes = ( filtersToApply, homesToFilter = allHomes, matchOnNoneSelected = true ) => {
-    const matchingHomes = homesToFilter.filter( ( home ) => {
-      let matchesOffer = (
-        (
-          filters.offer.rent
-            && ( home.offer === 'rent' )
-        )
-          || (
-            filters.offer.sale
-            && ( home.offer === 'sale' )
+  const filterHomes = ( filtersToApply, matchOnNoneSelected = true ) => {
+    const matchingHomes = allHomes
+      .filter( ( home ) => {
+        let matchesOffer = (
+          (
+            filtersToApply.offer.rent
+              && ( home.offer === 'rent' )
           )
-      );
-      let matchesBroadLocation = (
-        (
-          filters.location.city.boston
-          && ( home.cardinalDirection === null )
-        )
-        || (
-          filters.location.city.beyondBoston
-          && ( home.cardinalDirection !== null )
-        )
-      );
-      const unitBedroomSizes = home.units.map( ( unit ) => unit.bedrooms ).sort();
-      let matchesBedrooms = (
-        (
-          filters.bedrooms['0']
-          && ( unitBedroomSizes.indexOf( 0 ) !== -1 )
-        )
-        || (
-          filters.bedrooms['1']
-          && ( unitBedroomSizes.indexOf( 1 ) !== -1 )
-        )
-        || (
-          filters.bedrooms['2']
-          && ( unitBedroomSizes.indexOf( 2 ) !== -1 )
-        )
-        || (
-          filters.bedrooms['3']
-          && ( unitBedroomSizes.indexOf( 3 ) !== -1 )
-        )
-        || (
-          filters.bedrooms['4+']
-          && ( unitBedroomSizes[unitBedroomSizes.length - 1] >= 4 )
-        )
-      );
-      let matchesAmiQualification;
+            || (
+              filtersToApply.offer.sale
+              && ( home.offer === 'sale' )
+            )
+        );
+        let matchesBroadLocation = (
+          (
+            filtersToApply.location.city.boston
+            && ( home.cardinalDirection === null )
+          )
+          || (
+            filtersToApply.location.city.beyondBoston
+            && ( home.cardinalDirection !== null )
+          )
+        );
+        const unitBedroomSizes = home.units.map( ( unit ) => unit.bedrooms ).sort();
+        let matchesBedrooms = (
+          (
+            filtersToApply.bedrooms['0']
+            && ( unitBedroomSizes.indexOf( 0 ) !== -1 )
+          )
+          || (
+            filtersToApply.bedrooms['1']
+            && ( unitBedroomSizes.indexOf( 1 ) !== -1 )
+          )
+          || (
+            filtersToApply.bedrooms['2']
+            && ( unitBedroomSizes.indexOf( 2 ) !== -1 )
+          )
+          || (
+            filtersToApply.bedrooms['3']
+            && ( unitBedroomSizes.indexOf( 3 ) !== -1 )
+          )
+          || (
+            filtersToApply.bedrooms['4+']
+            && ( unitBedroomSizes[unitBedroomSizes.length - 1] >= 4 )
+          )
+        );
+        const dedupedAmi = new Set( home.units.map( ( unit ) => unit.amiQualification ) );
+        const unitAmiQualifications = Array.from( dedupedAmi );
+        let matchesAmiQualification;
 
-      const unitAmiQualifications = Array.from( new Set( home.units.map( ( unit ) => unit.amiQualification ) ) );
+        for ( let index = 0; index < unitAmiQualifications.length; index++ ) {
+          const amiQualification = ( unitAmiQualifications[index] || null );
 
-      unitAmiQualifications.forEach( ( amiQualification ) => {
-        if ( filters.amiQualification.lowerBound <= filters.amiQualification.upperBound ) {
-          matchesAmiQualification = (
-            ( amiQualification >= filters.amiQualification.lowerBound )
-            && ( amiQualification <= filters.amiQualification.upperBound )
-          );
-        // These values can be switched in the UI causing the names to no longer be semantic
-        } else if ( filters.amiQualification.lowerBound > filters.amiQualification.upperBound ) {
-          matchesAmiQualification = (
-            ( amiQualification >= filters.amiQualification.upperBound )
-            && ( amiQualification <= filters.amiQualification.lowerBound )
-          );
+          if ( amiQualification === null ) {
+            matchesAmiQualification = true;
+            break;
+          }
+
+          if ( filtersToApply.amiQualification.lowerBound <= filtersToApply.amiQualification.upperBound ) {
+            matchesAmiQualification = (
+              ( amiQualification >= filtersToApply.amiQualification.lowerBound )
+              && ( amiQualification <= filtersToApply.amiQualification.upperBound )
+            );
+          // These values can be switched in the UI causing the names to no longer be semantic
+          } else if ( filtersToApply.amiQualification.lowerBound > filtersToApply.amiQualification.upperBound ) {
+            matchesAmiQualification = (
+              ( amiQualification >= filtersToApply.amiQualification.upperBound )
+              && ( amiQualification <= filtersToApply.amiQualification.lowerBound )
+            );
+          }
+
+          if ( matchesAmiQualification ) {
+            break;
+          }
         }
+
+        if ( matchOnNoneSelected ) {
+          if ( !filtersToApply.offer.rent && !filtersToApply.offer.rent ) {
+            matchesOffer = true;
+          }
+
+          if ( !filtersToApply.location.city.boston && !filtersToApply.location.city.beyondBoston ) {
+            matchesBroadLocation = true;
+          }
+
+          if ( !filtersToApply.bedrooms['0'] && !filtersToApply.bedrooms['1'] && !filtersToApply.bedrooms['2'] && !filtersToApply.bedrooms['3'] && !filtersToApply.bedrooms['4+'] ) {
+            matchesBedrooms = true;
+          }
+        }
+
+        return ( matchesOffer && matchesBroadLocation && matchesBedrooms && matchesAmiQualification );
+      } )
+      .map( ( home ) => {
+        const newUnits = home.units.filter( ( unit ) => {
+          let unitMatchesBedrooms = (
+            (
+              filtersToApply.bedrooms['0']
+              && ( unit.bedrooms === 0 )
+            )
+            || (
+              filtersToApply.bedrooms['1']
+              && ( unit.bedrooms === 1 )
+            )
+            || (
+              filtersToApply.bedrooms['2']
+              && ( unit.bedrooms === 2 )
+            )
+            || (
+              filtersToApply.bedrooms['3']
+              && ( unit.bedrooms === 3 )
+            )
+            || (
+              filtersToApply.bedrooms['4+']
+              && ( unit.bedrooms >= 4 )
+            )
+          );
+
+          if ( matchOnNoneSelected ) {
+            if (
+              !filtersToApply.bedrooms['0']
+              && !filtersToApply.bedrooms['1']
+              && !filtersToApply.bedrooms['2']
+              && !filtersToApply.bedrooms['3']
+              && !filtersToApply.bedrooms['4+']
+            ) {
+              unitMatchesBedrooms = true;
+            }
+          }
+
+          return unitMatchesBedrooms;
+        } );
+
+        return {
+          ...home,
+          "units": newUnits,
+        };
+      } )
+      .map( ( home ) => {
+        const newUnits = home.units.filter( ( unit ) => {
+          let unitMatchesAmiQualification;
+          const unitAmiQualification = ( unit.amiQualification || null );
+
+          if ( unitAmiQualification === null ) {
+            return true;
+          }
+
+          if ( filters.amiQualification.lowerBound <= filters.amiQualification.upperBound ) {
+            unitMatchesAmiQualification = (
+              ( unitAmiQualification >= filters.amiQualification.lowerBound )
+              && ( unitAmiQualification <= filters.amiQualification.upperBound )
+            );
+          // These values can be switched in the UI causing the names to no longer be semantic
+          } else if ( filters.amiQualification.lowerBound > filters.amiQualification.upperBound ) {
+            unitMatchesAmiQualification = (
+              ( unitAmiQualification >= filters.amiQualification.upperBound )
+              && ( unitAmiQualification <= filters.amiQualification.lowerBound )
+            );
+          }
+
+          return unitMatchesAmiQualification;
+        } );
+
+        return {
+          ...home,
+          "units": newUnits,
+        };
       } );
-
-      if ( matchOnNoneSelected ) {
-        if ( !filters.offer.rent && !filters.offer.rent ) {
-          matchesOffer = true;
-        }
-
-        if ( !filters.location.city.boston && !filters.location.city.beyondBoston ) {
-          matchesBroadLocation = true;
-        }
-
-        if ( !filters.bedrooms['0'] && !filters.bedrooms['1'] && !filters.bedrooms['2'] && !filters.bedrooms['3'] && !filters.bedrooms['4+'] ) {
-          matchesBedrooms = true;
-        }
-      }
-
-      return ( matchesOffer && matchesBroadLocation && matchesBedrooms && matchesAmiQualification );
-    } );
 
     return matchingHomes;
   };
 
   useEffect( () => {
     if ( !allHomes.length ) {
-      // fetch(
-      //   dev2Endpoint,
-      //   {
-      //     "mode": "no-cors",
-      //     "headers": {
-      //       "Content-Type": "application/json",
-      //     },
-      //   },
-      // ) // TODO: CORS
-      //   .then( ( response ) => {
-      //     console.log( {
-      //       "responseBody": response.body,
-      //     } );
-      //     if ( !response.body ) {
-      //       throw new Error( `API returned an invalid response.` );
-      //     }
-      //   } )
-      //   .then( ( response ) => response.json() )
-      //   .then( ( units ) => {
-      const developments = {};
+      setAllHomes( [
+        {
+          "id": "99977759",
+          "title": "Home",
+          // "city": "Boston",
+          "type": "apt",
+          "offer": "rent",
+          "listingDate": "2020-04-29T23:16:26.549Z",
+          "units": [
+            {
+              "id": "studio",
+              // "amiQualification": 50,
+              "bedrooms": 0,
+            },
+          ],
 
-      // units.map( ( unit ) => {} );
-      units.forEach( ( unit ) => {
-        const formattedUnit = { ...unit };
-        delete formattedUnit.beds;
-        delete formattedUnit.ami;
-        delete formattedUnit.price;
-        delete formattedUnit.postedTimeAgo;
-        delete formattedUnit.posted;
-        delete formattedUnit.appDueDate;
-        delete formattedUnit.openWaitlist;
-        delete formattedUnit.unitType;
-        delete formattedUnit.development;
-        delete formattedUnit.developmentURI;
-        delete formattedUnit.developmentURL;
-        delete formattedUnit.developmentID;
-        delete formattedUnit.userGuidType;
-        delete formattedUnit.appDueDateTimeAgo;
-        delete formattedUnit.postedTimeAgo;
-        delete formattedUnit.region;
-
-        formattedUnit.cardinalDirection = ( ( unit.region === 'Boston' ) ? null : unit.region.toLowerCase().replace( ' of boston', '' ) );
-        formattedUnit.id = unit.developmentID;
-        formattedUnit.slug = unit.developmentURI.slice( 1 );
-        formattedUnit.title = unit.development;
-        // formattedUnit.city = unit.city.toLowerCase();
-
-        switch ( unit.unitType.toLowerCase() ) {
-          case 'single room occupancy':
-            formattedUnit.type = 'sro';
-            break;
-
-          case 'apartment':
-            formattedUnit.type = 'apt';
-            break;
-
-          default:
-            formattedUnit.type = unit.unitType.toLowerCase();
-        }
-
-        formattedUnit.assignment = ( ( unit.openWaitlist === true ) ? 'waitlist' : unit.userGuidType.toLowerCase().split( ' ' )[0] );
-        formattedUnit.listingDate = unit.posted.replace( '-0400', 'Z' ); // TODO: not a real conversion to UTC
-        formattedUnit.applicationDueDate = unit.appDueDate.replace( 'T12:00:00', '' ); // TODO: not a real conversion to UTC
-        formattedUnit.offer = ( ( unit.type === 'Own' ) ? 'sale' : 'rent' );
-        formattedUnit.incomeRestricted = ( unit.incomeRestricted == 'true' ); // eslint-disable-line eqeqeq
-        formattedUnit.url = `https://${dev2Domain}/${formattedUnit.slug}`;
-
-        if ( !hasOwnProperty( developments, unit.developmentID ) ) {
-          developments[unit.developmentID] = formattedUnit;
-          developments[unit.developmentID].units = [];
-        }
-
-        developments[unit.developmentID].units.push( {
-          // "size": ( +unit.beds > 0 ) ? 'bedrooms' : 'studio',
-          "bedrooms": +unit.beds,
-          "amiQualification": +unit.ami,
-          "price": +unit.price,
-          "priceRate": ( ( formattedUnit.offer === 'rental' ) ? 'monthly' : 'once' ),
-        } );
-      } );
-
-      // return developments;
-      const apiHomes = Object.keys( developments ).map( ( developmentID ) => developments[developmentID] );
-
-      setAllHomes( apiHomes );
-      setFilteredHomes( filterHomes( filters, apiHomes ) );
-      // } )
-      // .then( ( formattedApiResponse ) => {
-      // } )
-      // .catch( ( error ) => {
-      // } );
+        },
+      ] );
     }
   }, [] );
+
+  useEffect( () => {
+    setFilteredHomes( filterHomes( filters ) );
+  }, [filters, allHomes] );
 
   const handleFilterChange = ( event ) => {
     const $input = event.target;
@@ -257,10 +277,6 @@ function Listings( props ) {
       parent[$input.value] = newValue;
     }
 
-    // console.log( '$input.name', $input.name );
-    // console.log( 'filters.location.city', filters.location.city );
-    // console.log( 'newValue', newValue );
-
     switch ( $input.name ) {
       case 'neighborhood':
         if ( newValue && !filters.location.city.boston ) {
@@ -295,8 +311,6 @@ function Listings( props ) {
 
       default:
     }
-
-    // console.log( 'newFilters', newFilters );
 
     setFilters( newFilters );
     setFilteredHomes( filterHomes( filters ) );
@@ -363,7 +377,7 @@ Listings.propTypes = {
       "upperBound": PropTypes.number,
     } ),
   } ),
-  "homes": PropTypes.arrayOf( PropTypes.object ),
+  "homes": PropTypes.arrayOf( homeObjectDefinition ),
   "className": PropTypes.string,
 };
 
@@ -372,19 +386,19 @@ Listings.defaultProps = {
   "amiEstimation": null,
   "filters": {
     "offer": {
-      "rent": true,
+      "rent": false,
       "sale": false,
     },
     "location": {
       "city": {
-        "boston": true,
+        "boston": false,
         "beyondBoston": false,
       },
       "neighborhood": {
-        "southBoston": true,
-        "hydePark": true,
-        "dorchester": true,
-        "mattapan": true,
+        "southBoston": false,
+        "hydePark": false,
+        "dorchester": false,
+        "mattapan": false,
       },
       "cardinalDirection": {
         "west": false,
@@ -393,8 +407,8 @@ Listings.defaultProps = {
       },
     },
     "bedrooms": {
-      "0": true,
-      "1": true,
+      "0": false,
+      "1": false,
       "2": false,
       "3": false,
       "4+": false,
