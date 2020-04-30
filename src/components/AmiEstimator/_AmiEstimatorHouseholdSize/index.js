@@ -5,38 +5,38 @@ import Icon from '@components/Icon';
 import Scale from '@components/Scale';
 import FormErrorMessage from '@components/FormErrorMessage';
 
-import './AmiCalculatorHouseholdSize.scss';
+import './AmiEstimatorHouseholdSize.scss';
 
-const AmiCalculatorHouseholdSize = forwardRef( ( props, ref ) => {
+const AmiEstimatorHouseholdSize = forwardRef( ( props, ref ) => {
   useEffect( () => {
     props.setStep( props.step );
     console.log( 'props.formData', props.formData );
   }, [] );
 
   return (
-    <fieldset ref={ props.stepRef } className="ml-ami-calculator__household-size ml-ami-calculator__prompt">
-      <legend className="ml-ami-calculator__prompt-question">How many people live in your household of any age?</legend>
-      <div className="ml-ami-calculator__prompt-answer">
-        <Icon className="ml-ami-calculator__prompt-answer-icon" icon="family2" width="227" />
+    <fieldset ref={ props.stepRef } className="ml-ami-estimator__household-size ml-ami-estimator__prompt">
+      <legend className="ml-ami-estimator__prompt-question">How many people live in your household of any age?</legend>
+      <div className="ml-ami-estimator__prompt-answer">
+        <Icon className="ml-ami-estimator__prompt-answer-icon" icon="family2" width="227" />
         <Scale
-          className={ `ml-ami-calculator__prompt--answer-input` }
+          className={ `ml-ami-estimator__prompt--answer-input` }
           criterion="householdSize"
           values="1,2,3,4,5,6+"
           value={ props.formData.householdSize.value }
-          aria-describedby="ami-calculator-form-errors ami-calculator-household-size-error"
+          aria-describedby="ami-estimator-form-errors ami-estimator-household-size-error"
           required
         />
         <FormErrorMessage
           ref={ props.formData.householdSize.errorRef }
-          id="ami-calculator-household-size-error"
-          className="ml-ami-calculator__prompt-answer-error"
+          id="ami-estimator-household-size-error"
+          className="ml-ami-estimator__prompt-answer-error"
         >{ props.formData.householdSize.errorMessage }</FormErrorMessage>
       </div>
     </fieldset>
   );
 } );
 
-AmiCalculatorHouseholdSize.propTypes = {
+AmiEstimatorHouseholdSize.propTypes = {
   "stepRef": PropTypes.object,
   "step": PropTypes.number,
   "setStep": PropTypes.func,
@@ -45,6 +45,6 @@ AmiCalculatorHouseholdSize.propTypes = {
   "formData": PropTypes.object,
 };
 
-AmiCalculatorHouseholdSize.displayName = "HouseholdSize";
+AmiEstimatorHouseholdSize.displayName = "HouseholdSize";
 
-export default AmiCalculatorHouseholdSize;
+export default AmiEstimatorHouseholdSize;

@@ -20,14 +20,14 @@ import Row from '@components/Row';
 import Stack from '@components/Stack';
 import Alert from '@components/Alert';
 
-import HouseholdSize from './_AmiCalculatorHouseholdSize';
-import HouseholdIncome from './_AmiCalculatorHouseholdIncome';
-import Disclosure from './_AmiCalculatorDisclosure';
-import Result from './_AmiCalculatorResult';
+import HouseholdSize from './_AmiEstimatorHouseholdSize';
+import HouseholdIncome from './_AmiEstimatorHouseholdIncome';
+import Disclosure from './_AmiEstimatorDisclosure';
+import Result from './_AmiEstimatorResult';
 
-import './AmiCalculator.scss';
+import './AmiEstimator.scss';
 
-function AmiCalculator( props ) {
+function AmiEstimator( props ) {
   // const { match, location, history } = props;
   const { path } = useRouteMatch();
   const location = useLocation();
@@ -142,8 +142,8 @@ function AmiCalculator( props ) {
   const reportMissingDisplayNameProperty = ( index ) => {
     throw new Error(
       `AMI Calculator step definition is incomplete:`
-      + ` the object at \`AmiCalculator.steps[${index}]\` either needs a \`relativePath\` property,`
-      + ` or its constituent ami-calculator needs to specify React’s \`displayName\` property.`,
+      + ` the object at \`AmiEstimator.steps[${index}]\` either needs a \`relativePath\` property,`
+      + ` or its constituent ami-estimator needs to specify React’s \`displayName\` property.`,
     );
   };
 
@@ -167,7 +167,7 @@ function AmiCalculator( props ) {
       }
     }
 
-    throw new Error( `Cannot find step number for ${location.pathname}; please check the \`AmiCalculator.steps\` array.` );
+    throw new Error( `Cannot find step number for ${location.pathname}; please check the \`AmiEstimator.steps\` array.` );
   };
 
   const [step, setStep] = useState( getStepNumberFromPath() );
@@ -400,7 +400,7 @@ function AmiCalculator( props ) {
                 reason = `The form element \`${nodeName}${type ? `[type="${type}"]` : ''}${id ? `#${id}` : ''}${className ? `.${className.replace( /\s+/g, '.' )}` : ''}\` at \`formRef.current.elements[${index}]\` is missing the \`name\` attribute.`;
                 console.warn( `Skipping state synchronization: ${reason}` );
               } else {
-                reason = `The state object for AmiCalculator is missing a key named \`${name}\`.`;
+                reason = `The state object for AmiEstimator is missing a key named \`${name}\`.`;
                 console.error( `Can’t synchronize React state with form state: ${reason}` );
               }
             }
@@ -432,29 +432,29 @@ function AmiCalculator( props ) {
   };
 
   return (
-    <Stack as="article" className={ `ml-ami-calculator${props.className ? ` ${props.className}` : ''}` } space="2">
+    <Stack as="article" className={ `ml-ami-estimator${props.className ? ` ${props.className}` : ''}` } space="2">
       <h2 className="sr-only">AMI Calculator</h2>
       <Stack as="header" space="2">
-        <h3 className="sh-title ml-ami-calculator__heading">Find Housing Based on Your Income &amp; Household Size…</h3>
+        <h3 className="sh-title ml-ami-estimator__heading">Find Housing Based on Your Income &amp; Household Size…</h3>
         <ProgressBar current={ step } total={ totalSteps } />
       </Stack>
       <Alert
-        id="ami-calculator-form-formData"
+        id="ami-estimator-form-formData"
         ref={ formData.alert.errorRef }
-        className={ `ml-ami-calculator__error-alert` }
+        className={ `ml-ami-estimator__error-alert` }
         variant="danger"
       >
         { formData.alert.errorMessage }
       </Alert>
       <form
         ref={ formRef }
-        className="ami-calculator__form"
+        className="ami-estimator__form"
         onSubmit={ handleSubmit }
         onChange={ handleFormInteraction }
         // onKeyDown={ handleFormInteraction }
         // onClick={ handleFormInteraction }
       >
-        <Stack space="1">{/* ami-calculator-navigation */}
+        <Stack space="1">{/* ami-estimator-navigation */}
           {/* <nav>
             <Link to={`${path}`}>Step 1</Link><br/>
             <Link to={`${path}/household-income`}>Step 2</Link><br/>
@@ -508,16 +508,16 @@ function AmiCalculator( props ) {
               </Switch>
             </CSSTransition>
           </TransitionGroup>
-          <Row as="nav" className={ `ml-ami-calculator__navigation ml-ami-calculator__navigation--step-${step}` } onClick={ handleFormInteraction }>
+          <Row as="nav" className={ `ml-ami-estimator__navigation ml-ami-estimator__navigation--step-${step}` } onClick={ handleFormInteraction }>
             <Button
-              className="ml-ami-calculator__button"
+              className="ml-ami-estimator__button"
               type="button"
               disabled={ ( step === 1 ) }
               data-is-navigation-button
               data-navigate-previous
             >Back</Button>
             <Button
-              className="ml-ami-calculator__button"
+              className="ml-ami-estimator__button"
               type="button"
               variant="primary"
               disabled={ ( step === totalSteps ) }
@@ -527,15 +527,15 @@ function AmiCalculator( props ) {
           </Row>
         </Stack>
       </form>
-      <Stack as="footer" className="ml-ami-calculator__footer" space="ami-calculator-footer">
-        <p><a className="ml-ami-calculator__exit-link" href="#">Exit</a></p>
-        <p><a className="ml-ami-calculator__email-link" href="mailto:metrolist@boston.gov" onClick={ ( e ) => e.preventDefault() }>For questions email <span className="ml-ami-calculator__email-link-email-address">metrolist@boston.gov</span></a></p>
+      <Stack as="footer" className="ml-ami-estimator__footer" space="ami-estimator-footer">
+        <p><a className="ml-ami-estimator__exit-link" href="#">Exit</a></p>
+        <p><a className="ml-ami-estimator__email-link" href="mailto:metrolist@boston.gov" onClick={ ( e ) => e.preventDefault() }>For questions email <span className="ml-ami-estimator__email-link-email-address">metrolist@boston.gov</span></a></p>
       </Stack>
     </Stack>
   );
 }
 
-AmiCalculator.propTypes = {
+AmiEstimator.propTypes = {
   "children": PropTypes.node,
   "className": PropTypes.string,
   // "match": PropTypes.object.isRequired,
@@ -549,7 +549,7 @@ AmiCalculator.propTypes = {
   ).isRequired,
 };
 
-AmiCalculator.defaultProps = {
+AmiEstimator.defaultProps = {
   "steps": [
     {
       "relativePath": "/",
@@ -570,5 +570,5 @@ AmiCalculator.defaultProps = {
   ],
 };
 
-export default withRouter( AmiCalculator );
-// export default AmiCalculator;
+export default withRouter( AmiEstimator );
+// export default AmiEstimator;

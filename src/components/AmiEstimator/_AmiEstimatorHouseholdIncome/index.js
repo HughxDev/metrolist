@@ -9,9 +9,9 @@ import Scale from '@components/Scale';
 import Stack from '@components/Stack';
 import FormErrorMessage from '@components/FormErrorMessage';
 
-import './AmiCalculatorHouseholdIncome.scss';
+import './AmiEstimatorHouseholdIncome.scss';
 
-const AmiCalculatorHouseholdIncome = forwardRef( ( props, ref ) => {
+const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
   const moneyInputRef = useRef();
   const defaultIncomeRate = 'Monthly';
 
@@ -96,11 +96,11 @@ const AmiCalculatorHouseholdIncome = forwardRef( ( props, ref ) => {
   }, [] );
 
   return (
-    <fieldset ref={ props.stepRef } className={ `ml-ami-calculator__household-income ml-ami-calculator__prompt` }>
-      <legend className="ml-ami-calculator__prompt-question">What is the total combined income all 3 people who live in your household before taxes?</legend>
-      <Icon className="ml-ami-calculator__prompt-answer-icon" icon="deposit check" width="212" />
-      <Stack space="1">{/* ami-calculator-income-rate */}
-        <div className="ml-ami-calculator__income">{/* style={ { "width": `${money.length ? `${money.length}rem` : ''}` } } */}
+    <fieldset ref={ props.stepRef } className={ `ml-ami-estimator__household-income ml-ami-estimator__prompt` }>
+      <legend className="ml-ami-estimator__prompt-question">What is the total combined income all 3 people who live in your household before taxes?</legend>
+      <Icon className="ml-ami-estimator__prompt-answer-icon" icon="deposit check" width="212" />
+      <Stack space="1">{/* ami-estimator-income-rate */}
+        <div className="ml-ami-estimator__income">{/* style={ { "width": `${money.length ? `${money.length}rem` : ''}` } } */}
           <input
             ref={ moneyInputRef }
             className="money"
@@ -109,15 +109,15 @@ const AmiCalculatorHouseholdIncome = forwardRef( ( props, ref ) => {
             type="text"
             pattern="[0-9]*"
             placeholder="$0.00"
-            aria-describedby="ami-calculator-form-errors ami-calculator-household-income-error"
+            aria-describedby="ami-estimator-form-errors ami-estimator-household-income-error"
             onChange={ handleMoneyChange }
             required
           />
         </div>
         <FormErrorMessage
           ref={ props.formData.householdIncome.errorRef }
-          id="ami-calculator-household-income-error"
-          className="ml-ami-calculator__prompt-answer-error"
+          id="ami-estimator-household-income-error"
+          className="ml-ami-estimator__prompt-answer-error"
         >{ props.formData.householdIncome.errorMessage }</FormErrorMessage>
         <Scale
           criterion="incomeRate"
@@ -131,15 +131,15 @@ const AmiCalculatorHouseholdIncome = forwardRef( ( props, ref ) => {
         />
         <FormErrorMessage
           ref={ props.formData.incomeRate.errorRef }
-          id="ami-calculator-household-income-error"
-          className="ml-ami-calculator__prompt-answer-error"
+          id="ami-estimator-household-income-error"
+          className="ml-ami-estimator__prompt-answer-error"
         >{ props.formData.incomeRate.errorMessage }</FormErrorMessage>
       </Stack>
     </fieldset>
   );
 } );
 
-AmiCalculatorHouseholdIncome.propTypes = {
+AmiEstimatorHouseholdIncome.propTypes = {
   "stepRef": PropTypes.object,
   "step": PropTypes.number,
   "setStep": PropTypes.func,
@@ -149,6 +149,6 @@ AmiCalculatorHouseholdIncome.propTypes = {
   "setFormData": PropTypes.func.isRequired,
 };
 
-AmiCalculatorHouseholdIncome.displayName = "HouseholdIncome";
+AmiEstimatorHouseholdIncome.displayName = "HouseholdIncome";
 
-export default AmiCalculatorHouseholdIncome;
+export default AmiEstimatorHouseholdIncome;

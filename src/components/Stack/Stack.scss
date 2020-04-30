@@ -93,52 +93,52 @@ $space: 1rem;
     }
   }
 
-  .ml-stack.ml-stack--space-ami-calculator {
+  .ml-stack.ml-stack--space-ami-estimator {
     & > :not([class*="--hide-until-"]) + :not([hidden]) {
       
     }
   }
   @include media-breakpoint-up( large ) {
-    .ml-stack.ml-stack--space-ami-calculator {
+    .ml-stack.ml-stack--space-ami-estimator {
       & > :not([class*="--hide-until-"]) + :not([hidden]) {
         margin-top: rem( 72px );
       }
     }
   }
 
-  .ml-stack.ml-stack--space-ami-calculator-navigation {
+  .ml-stack.ml-stack--space-ami-estimator-navigation {
     & > :not([class*="--hide-until-"]) + :not([hidden]) {
       
     }
   }
   @include media-breakpoint-up( large ) {
-    .ml-stack.ml-stack--space-ami-calculator-navigation {
+    .ml-stack.ml-stack--space-ami-estimator-navigation {
       & > :not([class*="--hide-until-"]) + :not([hidden]) {
         margin-top: rem( 149px );
       }
     }
   }
 
-  .ml-stack.ml-stack--space-ami-calculator-footer {
+  .ml-stack.ml-stack--space-ami-estimator-footer {
     & > :not([class*="--hide-until-"]) + :not([hidden]) {
       
     }
   }
   @include media-breakpoint-up( large ) {
-    .ml-stack.ml-stack--space-ami-calculator-footer {
+    .ml-stack.ml-stack--space-ami-estimator-footer {
       & > :not([class*="--hide-until-"]) + :not([hidden]) {
         margin-top: rem( 49px );
       }
     }
   }
 
-  .ml-stack.ml-stack--space-ami-calculator-income-rate {
+  .ml-stack.ml-stack--space-ami-estimator-income-rate {
     & > :not([class*="--hide-until-"]) + :not([hidden]) {
       
     }
   }
   @include media-breakpoint-up( large ) {
-    .ml-stack.ml-stack--space-ami-calculator-income-rate {
+    .ml-stack.ml-stack--space-ami-estimator-income-rate {
       & > :not([class*="--hide-until-"]) + :not([hidden]) {
         margin-top: rem( 67px );
       }

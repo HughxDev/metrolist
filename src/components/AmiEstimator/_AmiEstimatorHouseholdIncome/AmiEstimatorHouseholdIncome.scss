@@ -1,9 +1,9 @@
-// <AmiCalculatorHouseholdIncome />
+// <AmiEstimatorHouseholdIncome />
 @import '@globals';
 
-.ml-ami-calculator__household-income {}
+.ml-ami-estimator__household-income {}
 
-.ml-ami-calculator__income {
+.ml-ami-estimator__income {
   position: relative;
   height: 10rem;
   margin: 0 auto;
@@ -51,9 +51,9 @@
   margin: 0; 
 }
 
-// .ml-ami-calculator__income-rate {}
+// .ml-ami-estimator__income-rate {}
 
-.ml-ami-calculator__income-rate-option {
+.ml-ami-estimator__income-rate-option {
   display: flex;
   justify-content: center;
 }

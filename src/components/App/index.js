@@ -7,7 +7,7 @@ import { slugify } from '@util/strings';
 import Layout from '@components/Layout';
 import AppHeader from '@components/AppHeader';
 import Listings from '@components/Listings';
-import AmiCalculator from '@components/AmiCalculator';
+import AmiEstimator from '@components/AmiEstimator';
 
 import '@patterns/stylesheets/public.css';
 import './App.scss';
@@ -29,8 +29,8 @@ function App() {
         <Route path="/listings">
           <Listings />
         </Route>
-        <Route path="/ami-calculator">
-          <AmiCalculator />
+        <Route path="/ami-estimator">
+          <AmiEstimator />
         </Route>
         <Route exact path="/">
           <article>

@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 
 import Button from '@components/Button';
 import Stack from '@components/Stack';
-import InputSummary from '../_AmiCalculatorInputSummary';
+import InputSummary from '../_AmiEstimatorInputSummary';
 
-import './AmiCalculatorResult.scss';
+import './AmiEstimatorResult.scss';
 
 // 100% AMI
 const amiDefinition = {
@@ -69,7 +69,7 @@ function estimateAmi( { householdSize, householdIncome, incomeRate } ) {
   return estimation;
 }
 
-const AmiCalculatorResult = forwardRef( ( props, ref ) => {
+const AmiEstimatorResult = forwardRef( ( props, ref ) => {
   // const data = props.formData.householdSize.value ? props.formData : props.fakeFormData;
   const [amiEstimation, setAmiEstimation] = useState( estimateAmi( props.formData ) );
 
@@ -84,7 +84,7 @@ const AmiCalculatorResult = forwardRef( ( props, ref ) => {
   console.log( props.formData );
 
   return (
-    <Stack ref={ props.stepRef } space="2" className={ `ml-ami-calculator__result ml-ami-calculator__prompt${props.className ? ` ${props.className}` : ''}` }>
+    <Stack ref={ props.stepRef } space="2" className={ `ml-ami-estimator__result ml-ami-estimator__prompt${props.className ? ` ${props.className}` : ''}` }>
       <InputSummary formData={ props.formData } />
       <Stack space="1">
         <p><span className="ml-all-caps">Estimated Eligibility:</span> <dfn className="ml-ami">{ amiEstimation }% AMI</dfn> (Area Median Income)</p>
@@ -97,9 +97,9 @@ const AmiCalculatorResult = forwardRef( ( props, ref ) => {
   );
 } );
 
-AmiCalculatorResult.displayName = 'Result';
+AmiEstimatorResult.displayName = 'Result';
 
-AmiCalculatorResult.propTypes = {
+AmiEstimatorResult.propTypes = {
   "stepRef": PropTypes.object,
   "children": PropTypes.node,
   "className": PropTypes.string,
@@ -109,7 +109,7 @@ AmiCalculatorResult.propTypes = {
   "fakeFormData": PropTypes.object,
 };
 
-AmiCalculatorResult.defaultProps = {
+AmiEstimatorResult.defaultProps = {
   "fakeFormData": {
     "householdSize": {
       "value": "4",
@@ -123,4 +123,4 @@ AmiCalculatorResult.defaultProps = {
   },
 };
 
-export default AmiCalculatorResult;
+export default AmiEstimatorResult;
