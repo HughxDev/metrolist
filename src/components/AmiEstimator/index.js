@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Switch, Route, Link, useRouteMatch, useLocation, withRouter,
+  Switch, Route, Link, useRouteMatch, useLocation, useHistory, withRouter,
 } from 'react-router-dom';
 import {
   TransitionGroup,
@@ -31,6 +31,12 @@ function AmiEstimator( props ) {
   // const { match, location, history } = props;
   const { path } = useRouteMatch();
   const location = useLocation();
+  const history = useHistory();
+  const [heights, setHeights] = useState( {} );
+
+  useEffect( () => {
+    console.log( { heights } );
+  }, [heights] );
 
   const noErrors = {
     "steps": [...props.steps],
@@ -73,7 +79,6 @@ function AmiEstimator( props ) {
   };
   const [formData, setFormData] = useState( noErrors );
   const formRef = useRef();
-  const stepRef = useRef();
   const totalSteps = props.steps.length;
   const badErrorMessageElementError = ( showHide = 'show/hide' ) => {
     throw new Error(
@@ -172,37 +177,27 @@ function AmiEstimator( props ) {
 
   const [step, setStep] = useState( getStepNumberFromPath() );
 
-  const adjustStepSize = ( stepRef ) => {
-    console.log( 'adjust step size' );
+  let adjustingStepSize;
 
-    setTimeout( () => {
-      console.log( 'timeout' );
+  const adjustStepSize = () => {
+    const $form = () => ( formRef.current || document.querySelector( 'form' ) );
+    const $step = () => $form().querySelector( '.step' );
+    const $prompt = () => $step().querySelector( '.ml-ami-estimator__prompt' );
 
-      if ( stepRef.current ) {
-        console.log( 'stepref is set', stepRef, stepRef.current );
-        // stepRef.current.parentNode.style.height = getComputedStyle( stepRef.current ).getPropertyValue( 'height' );
-      } else {
-        console.log( 'stepref isn’t set', stepRef, stepRef.current );
-      }
-    }, 500 );
+    console.log( { $form, $step } );
+
+    console.log( { '$prompt()': $prompt() } );
+    console.log( 'getPropertyValue', getComputedStyle( $prompt() ).getPropertyValue( 'height' ) );
+
+    $step().style.height = getComputedStyle( $prompt() ).getPropertyValue( 'height' );
   };
-
-  useEffect( () => {
-    console.log( 'location', location );
-    console.log( 'step', step );
-  }, [] );
-
-  useEffect( () => {
-    adjustStepSize( stepRef );
-    console.log( 'step changed:', step );
-  }, [step] );
 
   const getNextStepPath = () => {
     const nextStep = ( step + 1 );
     const stepDefinition = props.steps[nextStep - 1];
 
-    console.log( `Going from step ${step} to step ${nextStep}` );
-    console.log( `props.steps[${nextStep - 1}]`, stepDefinition );
+    // console.log( `Going from step ${step} to step ${nextStep}` );
+    // console.log( `props.steps[${nextStep - 1}]`, stepDefinition );
 
     if ( nextStep <= props.steps.length ) {
       if ( stepDefinition === props.steps[0] ) {
@@ -229,8 +224,8 @@ function AmiEstimator( props ) {
     const previousStep = ( step - 1 );
     const stepDefinition = props.steps[previousStep - 1];
 
-    console.log( `Going from step ${step} to step ${previousStep}` );
-    console.log( `props.steps[${previousStep - 1}]`, stepDefinition );
+    // console.log( `Going from step ${step} to step ${previousStep}` );
+    // console.log( `props.steps[${previousStep - 1}]`, stepDefinition );
 
     if ( previousStep >= 0 ) {
       if ( stepDefinition === props.steps[0] ) {
@@ -256,9 +251,6 @@ function AmiEstimator( props ) {
   const navigateBackward = () => {
     const previousStepPath = getPreviousStepPath();
 
-    // console.log( 'step')
-    console.log( 'previousStepPath', previousStepPath );
-
     if ( previousStepPath !== null ) {
       props.history.push( previousStepPath );
     } else {
@@ -268,6 +260,34 @@ function AmiEstimator( props ) {
 
   const handleSubmit = ( event ) => {
     event.preventDefault();
+  };
+
+  let interval;
+  const adjustParentHeight = ( selfRef ) => {
+    interval = setInterval( () => {
+      if ( selfRef && selfRef.current ) {
+        let $step = selfRef.current.parentNode;
+
+        while ( !$step.classList.contains( 'step' ) ) {
+          $step = $step.parentNode;
+        }
+
+        if ( !$step.classList.contains( 'step' ) ) {
+          throw new Error( 'Yer fucked' );
+        }
+
+        const stepHeight = getComputedStyle( $step ).getPropertyValue( 'height' );
+        const promptHeight = getComputedStyle( selfRef.current ).getPropertyValue( 'height' );
+
+        if ( stepHeight !== promptHeight ) {
+          console.log( 'no match; setting' );
+          $step.style.height = promptHeight;
+        } else {
+          console.log( 'matched; cleared' );
+          clearInterval( interval );
+        }
+      }
+    }, 1000 );
   };
 
   const getErrors = () => {
@@ -309,8 +329,6 @@ function AmiEstimator( props ) {
       } // for
 
       if ( numberOfErrors ) {
-        console.log( 'newErrors', newErrors );
-
         newErrors.alert = {
           ...formData.alert,
           "errorMessage": "There were errors in your submission.",
@@ -321,8 +339,6 @@ function AmiEstimator( props ) {
         newErrors[errorName].errorMessage = '';
       } );
     }
-
-    console.log( 'formRef.current.elements', formRef.current.elements );
 
     return [newErrors, numberOfErrors];
   };
@@ -362,7 +378,6 @@ function AmiEstimator( props ) {
     const navigateNext = event.target.hasAttribute( 'data-navigate-next' );
 
     if ( navigatePrevious ) {
-      console.log( 'Navigate Previous' );
       clearAlert();
       navigateBackward();
     } else {
@@ -372,12 +387,6 @@ function AmiEstimator( props ) {
           ( newFormData[formDataKey].page === step )
             || ( newFormData[formDataKey].page === 'all' )
         ) );
-
-      console.log( {
-        newFormData,
-        numberOfErrors,
-        event,
-      } );
 
       if (
         ( event.type === 'change' )
@@ -404,8 +413,6 @@ function AmiEstimator( props ) {
                 console.error( `Can’t synchronize React state with form state: ${reason}` );
               }
             }
-
-            console.log( '---' );
           } );
         } else {
           console.error( new Error( `\`formRef.current\` returned falsy; can’t synchronize React state with form state. As a result, the AMI calculation will either be inaccurate or won’t work at all.` ) );
@@ -418,7 +425,6 @@ function AmiEstimator( props ) {
         clearErrors( errorNameList, newFormData );
 
         if ( navigateNext ) {
-          console.log( 'Navigate Next' );
           navigateForward();
         }
       }
@@ -427,8 +433,6 @@ function AmiEstimator( props ) {
         event.preventDefault();
       }
     }
-
-    adjustStepSize( stepRef );
   };
 
   return (
@@ -461,7 +465,7 @@ function AmiEstimator( props ) {
             <Link to={`${path}/disclosure`}>Step 3</Link>
             <Link to={`${path}/results`}>Step 4</Link>
           </nav> */}
-          <TransitionGroup className="step">
+          <TransitionGroup id="step" className="step" style={ Object.keys( heights ).length ? { "height": heights[location.pathname] } : {} }>
             {/*
               This is no different than other usage of
               <CSSTransition>, just make sure to pass
@@ -470,11 +474,13 @@ function AmiEstimator( props ) {
             */}
             <CSSTransition
               key={ location.key }
-              classNames="fade"
+              classNames="slide"
+              in={ true }
+              appear={ false }
               // classNames="pageSlider"
-              // mountOnEnter={ false }
-              // unmountOnExit={ false }
-              timeout={ 450 }
+              mountOnEnter={ false }
+              unmountOnExit={ false }
+              timeout={ 900 }
               // timeout={ { "enter": 80000, "exit": 40000 } }
             >
               <Switch location={ location }>
@@ -495,16 +501,22 @@ function AmiEstimator( props ) {
                     // const Step = React.createElement( currentStep, { setStep, "formData": formData[formDataKey] }, null );
                     const routePath = ( isFirstStep ? path : `${path}/${slugify( displayName )}` );
 
-                    console.log( 'breakpoint here' );
-
                     return (
                       <Route key={ formDataKey } exact={ isFirstStep } path={ routePath } render={ () => (
-                        <currentStep.component stepRef={ stepRef } step={ index + 1 } setStep={ setStep } formData={ formData } setFormData={ setFormData } />
-                      ) }>
-                      </Route>
+                        <currentStep.component
+                          key={ formDataKey }
+                          // adjustParentHeight={ adjustParentHeight }
+                          pathname={ location.pathname }
+                          step={ index + 1 }
+                          setStep={ setStep }
+                          formData={ formData }
+                          setFormData={ setFormData }
+                          heights={ heights }
+                          setHeights={ setHeights }
+                        />
+                      ) } />
                     );
-                  } )
-                }
+                  } ) }
               </Switch>
             </CSSTransition>
           </TransitionGroup>
@@ -526,6 +538,7 @@ function AmiEstimator( props ) {
             >Next</Button>
           </Row>
         </Stack>
+
       </form>
       <Stack as="footer" className="ml-ami-estimator__footer" space="ami-estimator-footer">
         <p><a className="ml-ami-estimator__exit-link" href="#">Exit</a></p>

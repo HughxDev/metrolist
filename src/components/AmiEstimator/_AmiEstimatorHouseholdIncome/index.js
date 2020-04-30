@@ -1,4 +1,6 @@
-import React, { useEffect, useRef, forwardRef } from 'react';
+import React, {
+  useEffect, useState, useRef, forwardRef,
+} from 'react';
 import PropTypes from 'prop-types';
 
 import Icon from '@components/Icon';
@@ -12,8 +14,29 @@ import FormErrorMessage from '@components/FormErrorMessage';
 import './AmiEstimatorHouseholdIncome.scss';
 
 const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
+  const selfRef = useRef();
   const moneyInputRef = useRef();
   const defaultIncomeRate = 'Monthly';
+  const [hasSetHeights, setHasSetHeights] = useState( false );
+
+  // useEffect( () => {
+  //   props.adjustParentHeight( selfRef );
+  // }, [props.step, selfRef.current] );
+
+  useEffect( () => {
+    setTimeout( () => {
+      // if ( !hasSetHeights ) {
+      const newHeights = {
+        ...props.heights,
+      };
+      newHeights[props.pathname] = getComputedStyle( selfRef.current.querySelector( '.ml-ami-estimator__prompt-inner' ) ).getPropertyValue( 'height' );
+
+      props.setHeights( newHeights );
+
+      // setHasSetHeights( true );
+      // }
+    }, 1000 );
+  }, [] );
 
   function pad( num, size ) {
     let s = `${num}`;
@@ -77,8 +100,6 @@ const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
     }
 
     if ( !props.formData.incomeRate.value ) {
-      console.log( 'no incomeRate value' );
-
       const newFormData = {
         ...props.formData,
         "incomeRate": {
@@ -88,54 +109,53 @@ const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
       };
 
       props.setFormData( newFormData );
-    } else {
-      console.log( 'yes incomeRate value', props.formData.incomeRate.value );
     }
-
-    console.log( 'props.formData', props.formData );
   }, [] );
 
   return (
-    <fieldset ref={ props.stepRef } className={ `ml-ami-estimator__household-income ml-ami-estimator__prompt` }>
-      <legend className="ml-ami-estimator__prompt-question">What is the total combined income all 3 people who live in your household before taxes?</legend>
-      <Icon className="ml-ami-estimator__prompt-answer-icon" icon="deposit check" width="212" />
-      <Stack space="1">{/* ami-estimator-income-rate */}
-        <div className="ml-ami-estimator__income">{/* style={ { "width": `${money.length ? `${money.length}rem` : ''}` } } */}
-          <input
-            ref={ moneyInputRef }
-            className="money"
-            name="householdIncome"
-            value={ ( props.formData.householdIncome.value === '$0.00' ) ? '' : props.formData.householdIncome.value }
-            type="text"
-            pattern="[0-9]*"
-            placeholder="$0.00"
-            aria-describedby="ami-estimator-form-errors ami-estimator-household-income-error"
-            onChange={ handleMoneyChange }
+    <div ref={ selfRef } className={ `ml-ami-estimator__household-income ml-ami-estimator__prompt` }>
+      <fieldset className="ml-ami-estimator__prompt-inner">
+        <legend className="ml-ami-estimator__prompt-question">What is the total combined income all 3 people who live in your household before taxes?</legend>
+        <Icon className="ml-ami-estimator__prompt-answer-icon" icon="deposit check" width="212" />
+        <Stack space="1">{/* ami-estimator-income-rate */}
+          <div className="ml-ami-estimator__income">{/* style={ { "width": `${money.length ? `${money.length}rem` : ''}` } } */}
+            <input
+              ref={ moneyInputRef }
+              className="money"
+              name="householdIncome"
+              // value={ ( props.formData.householdIncome.value === '$0.00' ) ? '' : props.formData.householdIncome.value }
+              value={ '$5,000.00' }
+              type="text"
+              pattern="[0-9]*"
+              placeholder="$0.00"
+              aria-describedby="ami-estimator-form-errors ami-estimator-household-income-error"
+              onChange={ handleMoneyChange }
+              required
+            />
+          </div>
+          <FormErrorMessage
+            ref={ props.formData.householdIncome.errorRef }
+            id="ami-estimator-household-income-error"
+            className="ml-ami-estimator__prompt-answer-error"
+          >{ props.formData.householdIncome.errorMessage }</FormErrorMessage>
+          <Scale
+            criterion="incomeRate"
+            values="Yearly,Monthly"
+            value={ props.formData.incomeRate.value || defaultIncomeRate }
             required
+            onChange={ ( event ) => {
+              console.log( 'incomeRate scale changed', event.target.nodeName, event.target.value );
+              // event.stopPropagation();
+            } }
           />
-        </div>
-        <FormErrorMessage
-          ref={ props.formData.householdIncome.errorRef }
-          id="ami-estimator-household-income-error"
-          className="ml-ami-estimator__prompt-answer-error"
-        >{ props.formData.householdIncome.errorMessage }</FormErrorMessage>
-        <Scale
-          criterion="incomeRate"
-          values="Yearly,Monthly"
-          value={ props.formData.incomeRate.value || defaultIncomeRate }
-          required
-          onChange={ ( event ) => {
-            console.log( 'incomeRate scale changed', event.target.nodeName, event.target.value );
-            // event.stopPropagation();
-          } }
-        />
-        <FormErrorMessage
-          ref={ props.formData.incomeRate.errorRef }
-          id="ami-estimator-household-income-error"
-          className="ml-ami-estimator__prompt-answer-error"
-        >{ props.formData.incomeRate.errorMessage }</FormErrorMessage>
-      </Stack>
-    </fieldset>
+          <FormErrorMessage
+            ref={ props.formData.incomeRate.errorRef }
+            id="ami-estimator-household-income-error"
+            className="ml-ami-estimator__prompt-answer-error"
+          >{ props.formData.incomeRate.errorMessage }</FormErrorMessage>
+        </Stack>
+      </fieldset>
+    </div>
   );
 } );
 
@@ -147,6 +167,9 @@ AmiEstimatorHouseholdIncome.propTypes = {
   "className": PropTypes.string,
   "formData": PropTypes.object.isRequired,
   "setFormData": PropTypes.func.isRequired,
+  "heights": PropTypes.object,
+  "setHeights": PropTypes.func,
+  "pathname": PropTypes.string,
 };
 
 AmiEstimatorHouseholdIncome.displayName = "HouseholdIncome";

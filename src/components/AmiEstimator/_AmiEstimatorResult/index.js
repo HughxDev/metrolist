@@ -1,4 +1,6 @@
-import React, { useEffect, useState, forwardRef } from 'react';
+import React, {
+  useEffect, useRef, useState, forwardRef,
+} from 'react';
 import PropTypes from 'prop-types';
 
 import Button from '@components/Button';
@@ -46,10 +48,10 @@ function estimateAmi( { householdSize, householdIncome, incomeRate } ) {
     Number.isNaN( annualizedHouseholdIncome )
     || Number.isNaN( maxIncome )
   ) {
-    console.error( new Error(
+    console.warn(
       `AMI calculation failed: one or both of \`annualizedHouseholdIncome\` and \`maxIncome\` resolved to non-numeric values.`
       + ` This could be due to \`props.formData\` being incomplete or missing.`,
-    ) );
+    );
     estimation = 0;
   } else {
     estimation = Math.floor( ( annualizedHouseholdIncome / maxIncome ) * 100 );
@@ -70,6 +72,8 @@ function estimateAmi( { householdSize, householdIncome, incomeRate } ) {
 }
 
 const AmiEstimatorResult = forwardRef( ( props, ref ) => {
+  const selfRef = useRef();
+  const [hasSetHeights, setHasSetHeights] = useState( false );
   // const data = props.formData.householdSize.value ? props.formData : props.fakeFormData;
   const [amiEstimation, setAmiEstimation] = useState( estimateAmi( props.formData ) );
 
@@ -81,19 +85,40 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
   //   "incomeRate": props.formData.incomeRate.value,
   // } ) ), [props.formData] );
 
+  // useEffect( () => {
+  //   props.adjustParentHeight( selfRef );
+  // }, [props.step, selfRef.current] );
+
+  useEffect( () => {
+    setTimeout( () => {
+      // if ( !hasSetHeights ) {
+      const newHeights = {
+        ...props.heights,
+      };
+      newHeights[props.pathname] = getComputedStyle( selfRef.current.querySelector( '.ml-ami-estimator__prompt-inner' ) ).getPropertyValue( 'height' );
+
+      props.setHeights( newHeights );
+
+      // setHasSetHeights( true );
+      // }
+    }, 1000 );
+  }, [] );
+
   console.log( props.formData );
 
   return (
-    <Stack ref={ props.stepRef } space="2" className={ `ml-ami-estimator__result ml-ami-estimator__prompt${props.className ? ` ${props.className}` : ''}` }>
-      <InputSummary formData={ props.formData } />
-      <Stack space="1">
-        <p><span className="ml-all-caps">Estimated Eligibility:</span> <dfn className="ml-ami">{ amiEstimation }% AMI</dfn> (Area Median Income)</p>
+    <div ref={ selfRef } className={ `ml-ami-estimator__result ml-ami-estimator__prompt${props.className ? ` ${props.className}` : ''}` }>
+      <Stack space="2" className="ml-ami-estimator__prompt-inner">
+        <InputSummary formData={ props.formData } />
+        <Stack space="1">
+          <p><span className="ml-all-caps">Estimated Eligibility:</span> <dfn className="ml-ami">{ amiEstimation }% AMI</dfn> (Area Median Income)</p>
+        </Stack>
+        <Stack as="nav" space="1">
+          <Button as="a" variant="primary">See homes that match your eligibility</Button>
+          <Button as="a">Exit the calculator</Button>
+        </Stack>
       </Stack>
-      <Stack as="nav" space="1">
-        <Button as="a" variant="primary">See homes that match your eligibility</Button>
-        <Button as="a">Exit the calculator</Button>
-      </Stack>
-    </Stack>
+    </div>
   );
 } );
 
