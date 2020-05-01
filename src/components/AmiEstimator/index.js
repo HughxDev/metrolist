@@ -33,10 +33,6 @@ function AmiEstimator( props ) {
   const [heights, setHeights] = useState( {} );
   const [isNavigatingBackward, setIsNavigatingBackward] = useState( false );
 
-  useEffect( () => {
-    console.log( { heights } );
-  }, [heights] );
-
   const noErrors = {
     "steps": [...props.steps],
     "alert": {
@@ -389,6 +385,7 @@ function AmiEstimator( props ) {
 
   const adjustContainerHeight = ( stepRef ) => {
     setTimeout( () => {
+      // if ( stepRef && stepRef.current ) {
       const newHeights = {
         ...heights,
       };
@@ -397,11 +394,12 @@ function AmiEstimator( props ) {
       newHeights[location.pathname] = getComputedStyle( $stepContent ).getPropertyValue( 'height' );
 
       setHeights( newHeights );
+      // }
     }, 1000 );
   };
 
   return (
-    <Stack as="article" className={ `ml-ami-estimator${props.className ? ` ${props.className}` : ''}` } space="2">
+    <Stack as="article" className={ `ml-ami-estimator${props.className ? ` ${props.className}` : ''}` } space="2" data-testid="ml-ami-estimator">
       <h2 className="sr-only">AMI Calculator</h2>
       <Stack as="header" space="2">
         <h3 className="sh-title ml-ami-estimator__heading">Find Housing Based on Your Income &amp; Household Size…</h3>

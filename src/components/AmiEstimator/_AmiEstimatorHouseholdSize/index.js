@@ -14,7 +14,7 @@ const AmiEstimatorHouseholdSize = ( props ) => {
 
   useEffect( () => {
     props.setStep( props.step );
-    props.adjustContainerHeight();
+    props.adjustContainerHeight( selfRef );
   }, [] );
 
   return (
