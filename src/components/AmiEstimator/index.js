@@ -33,6 +33,8 @@ function AmiEstimator( props ) {
   const location = useLocation();
   const history = useHistory();
   const [heights, setHeights] = useState( {} );
+  const [isNavigatingForward, setIsNavigatingForward] = useState( false );
+  const [isNavigatingBackward, setIsNavigatingBackward] = useState( false );
 
   useEffect( () => {
     console.log( { heights } );
@@ -177,21 +179,6 @@ function AmiEstimator( props ) {
 
   const [step, setStep] = useState( getStepNumberFromPath() );
 
-  let adjustingStepSize;
-
-  const adjustStepSize = () => {
-    const $form = () => ( formRef.current || document.querySelector( 'form' ) );
-    const $step = () => $form().querySelector( '.step' );
-    const $prompt = () => $step().querySelector( '.ml-ami-estimator__prompt' );
-
-    console.log( { $form, $step } );
-
-    console.log( { '$prompt()': $prompt() } );
-    console.log( 'getPropertyValue', getComputedStyle( $prompt() ).getPropertyValue( 'height' ) );
-
-    $step().style.height = getComputedStyle( $prompt() ).getPropertyValue( 'height' );
-  };
-
   const getNextStepPath = () => {
     const nextStep = ( step + 1 );
     const stepDefinition = props.steps[nextStep - 1];
@@ -239,20 +226,28 @@ function AmiEstimator( props ) {
   };
 
   const navigateForward = () => {
+    setIsNavigatingForward( true );
     const nextStepPath = getNextStepPath();
 
     if ( nextStepPath !== null ) {
       props.history.push( nextStepPath );
+      setTimeout( () => {
+        setIsNavigatingForward( false );
+      }, 1000 );
     } else {
       console.error( 'Can’t navigate forward' );
     }
   };
 
   const navigateBackward = () => {
+    setIsNavigatingBackward( true );
     const previousStepPath = getPreviousStepPath();
 
     if ( previousStepPath !== null ) {
       props.history.push( previousStepPath );
+      setTimeout( () => {
+        setIsNavigatingBackward( false );
+      }, 1000 );
     } else {
       console.error( 'Can’t navigate backward' );
     }
@@ -260,34 +255,6 @@ function AmiEstimator( props ) {
 
   const handleSubmit = ( event ) => {
     event.preventDefault();
-  };
-
-  let interval;
-  const adjustParentHeight = ( selfRef ) => {
-    interval = setInterval( () => {
-      if ( selfRef && selfRef.current ) {
-        let $step = selfRef.current.parentNode;
-
-        while ( !$step.classList.contains( 'step' ) ) {
-          $step = $step.parentNode;
-        }
-
-        if ( !$step.classList.contains( 'step' ) ) {
-          throw new Error( 'Yer fucked' );
-        }
-
-        const stepHeight = getComputedStyle( $step ).getPropertyValue( 'height' );
-        const promptHeight = getComputedStyle( selfRef.current ).getPropertyValue( 'height' );
-
-        if ( stepHeight !== promptHeight ) {
-          console.log( 'no match; setting' );
-          $step.style.height = promptHeight;
-        } else {
-          console.log( 'matched; cleared' );
-          clearInterval( interval );
-        }
-      }
-    }, 1000 );
   };
 
   const getErrors = () => {
@@ -474,7 +441,7 @@ function AmiEstimator( props ) {
             */}
             <CSSTransition
               key={ location.key }
-              classNames="slide"
+              classNames={ isNavigatingForward ? 'slide-left' : ( isNavigatingBackward ? 'slide-right' : 'slide' ) }
               in={ true }
               appear={ false }
               // classNames="pageSlider"

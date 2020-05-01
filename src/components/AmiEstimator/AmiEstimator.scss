@@ -19,7 +19,7 @@
     margin: 0;
     padding: 0;
   }
-  .ml-ami-estimator__prompt {
+  .ml-ami-estimator__prompt-inner {
     margin: 0;
     // margin-inline-end: 0;
     // margin-inline-start: 0;
@@ -115,56 +115,128 @@
     }
   }
 
+// Transitions
+
+$prompt-width: 90vw;
+$prompt-width--tablet: 50vw;
+$prompt-width--desktop: 33.3333vw;
+
+.ml-ami-estimator,
+.step,
+.ml-ami-estimator__prompt {
+  width: $prompt-width;
+}
+
 .step {
   display: grid;
   overflow: hidden;
   margin: 0 auto;
-  width: 39rem;
   margin: 0 auto;
   transition: height .125s ease;
-  border: 3px solid black;
-  /* display: flex; */
-  /* flex-direction: row; */
-  width: 39rem;
 }
 
 .ml-ami-estimator__prompt {
-  // max-width: 39rem;
   grid-row: 1;
-  // grid-column: 1;
-  width: 39rem;
-  // margin: 0 auto;
-  // position: absolute;
-  // top: 0;
-  // left: 0;
-  // width: 100%;
-  // transition: 15s linear translateX;
-  // flex: 1;
-
 }
 
-.slide-enter {
-  transform: translateX(78rem);
-  opacity: 0;
-  // position: absolute;
-}
+@mixin bidirectional-slide-transition( $width, $property: 'all', $duration: 300, $easing: 'linear', $delay: 300 ) {
+  // Enter
 
-/* Declare transition properties */
-.slide-enter.slide-enter-active {
-  transform: translateX(0);
-  opacity: 1;
-  transition: all 300ms linear 300ms;
-}
-
-/* EXIT TRANSITION */
-.slide-exit {
-  transform: translateX(0);
-  opacity: 1;
+  .slide-left-enter,
+  .slide-right-enter {
+    width: $width;
+    opacity: 0;
+  }
   
+  .slide-left-enter {
+    transform: translateX( $width * 2 );
+  }
+  
+  .slide-right-enter {
+    transform: translateX( $width * -2 );
+  }
+  
+  .slide-left-enter.slide-left-enter-active,
+  .slide-right-enter.slide-right-enter-active  {
+    opacity: 1;
+    transition: #{$property} #{$duration}ms #{$easing} #{$delay}ms;
+    transform: translateX( 0 );
+  }
+  
+  // Exit
+  
+  .slide-left-exit,
+  .slide-right-exit {
+    width: $width;
+    opacity: 1;
+    transform: translateX( 0 );
+  }
+  
+  .slide-left-exit.slide-left-exit-active,
+  .slide-right-exit.slide-right-exit-active {
+    opacity: 0;
+    transition: #{$property} #{$duration} #{$easing};
+  }
+  
+  .slide-left-exit.slide-left-exit-active {
+    transform: translateX( $width * -2 );
+  }
+  
+  .slide-right-exit.slide-right-exit-active {
+    transform: translateX( $width * 2 );
+  }
 }
 
-.slide-exit.slide-exit-active {
-  transform: translateX(-78rem);
-  opacity: 0;
-  transition: all 300ms linear
+@mixin bidirectional-slide-transition-override( $width ) {
+  // Enter
+
+  .slide-left-enter,
+  .slide-right-enter {
+    width: $width;
+  }
+  
+  .slide-left-enter {
+    transform: translateX( $width * 2 );
+  }
+  
+  .slide-right-enter {
+    transform: translateX( $width * -2 );
+  }
+  
+  // Exit
+
+  .slide-left-exit,
+  .slide-right-exit {
+    width: $width;
+  }
+  
+  .slide-left-exit.slide-left-exit-active {
+    transform: translateX( $width * -2 );
+  }
+  
+  .slide-right-exit.slide-right-exit-active {
+    transform: translateX( $width * 2 );
+  }
+}
+
+@include bidirectional-slide-transition( $prompt-width );
+
+@include media-breakpoint-up( medium ) {
+  .ml-ami-estimator,
+  .step,
+  .ml-ami-estimator__prompt {
+    width: $prompt-width--tablet;
+  }
+
+  @include bidirectional-slide-transition-override( $prompt-width--tablet );
+}
+
+@include media-breakpoint-up( xlarge ) {
+  .ml-ami-estimator,
+  .step,
+  .ml-ami-estimator__prompt {
+    width: $prompt-width--desktop;
+  }
+
+  @include bidirectional-slide-transition-override( $prompt-width--desktop );
 }

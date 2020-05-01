@@ -12,7 +12,6 @@ import './AmiEstimatorDisclosure.scss';
 
 const AmiEstimatorDisclosure = forwardRef( ( props, ref ) => {
   const selfRef = useRef();
-  const [hasSetHeights, setHasSetHeights] = useState( false );
 
   useEffect( () => {
     props.setStep( props.step );
