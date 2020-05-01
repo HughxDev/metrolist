@@ -1,9 +1,9 @@
 import React, {
-  useState, useRef, useEffect, useLayoutEffect,
+  useState, useRef, useEffect,
 } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Switch, Route, Link, useRouteMatch, useLocation, useHistory, withRouter,
+  Switch, Route, useRouteMatch, useLocation, withRouter,
 } from 'react-router-dom';
 import {
   TransitionGroup,
@@ -28,12 +28,9 @@ import Result from './_AmiEstimatorResult';
 import './AmiEstimator.scss';
 
 function AmiEstimator( props ) {
-  // const { match, location, history } = props;
   const { path } = useRouteMatch();
   const location = useLocation();
-  const history = useHistory();
   const [heights, setHeights] = useState( {} );
-  const [isNavigatingForward, setIsNavigatingForward] = useState( false );
   const [isNavigatingBackward, setIsNavigatingBackward] = useState( false );
 
   useEffect( () => {
@@ -75,8 +72,6 @@ function AmiEstimator( props ) {
     "amiEstimation": {
       "page": 4,
       "value": "",
-      // "errorMessage": "",
-      // "errorRef": useRef(),
     },
   };
   const [formData, setFormData] = useState( noErrors );
@@ -183,9 +178,6 @@ function AmiEstimator( props ) {
     const nextStep = ( step + 1 );
     const stepDefinition = props.steps[nextStep - 1];
 
-    // console.log( `Going from step ${step} to step ${nextStep}` );
-    // console.log( `props.steps[${nextStep - 1}]`, stepDefinition );
-
     if ( nextStep <= props.steps.length ) {
       if ( stepDefinition === props.steps[0] ) {
         return path;
@@ -211,9 +203,6 @@ function AmiEstimator( props ) {
     const previousStep = ( step - 1 );
     const stepDefinition = props.steps[previousStep - 1];
 
-    // console.log( `Going from step ${step} to step ${previousStep}` );
-    // console.log( `props.steps[${previousStep - 1}]`, stepDefinition );
-
     if ( previousStep >= 0 ) {
       if ( stepDefinition === props.steps[0] ) {
         return path;
@@ -226,14 +215,10 @@ function AmiEstimator( props ) {
   };
 
   const navigateForward = () => {
-    setIsNavigatingForward( true );
     const nextStepPath = getNextStepPath();
 
     if ( nextStepPath !== null ) {
       props.history.push( nextStepPath );
-      setTimeout( () => {
-        setIsNavigatingForward( false );
-      }, 1000 );
     } else {
       console.error( 'Can’t navigate forward' );
     }
@@ -402,6 +387,19 @@ function AmiEstimator( props ) {
     }
   };
 
+  const adjustContainerHeight = ( stepRef ) => {
+    setTimeout( () => {
+      const newHeights = {
+        ...heights,
+      };
+      const $stepContent = stepRef.current.querySelector( '.ml-ami-estimator__prompt-inner' );
+
+      newHeights[location.pathname] = getComputedStyle( $stepContent ).getPropertyValue( 'height' );
+
+      setHeights( newHeights );
+    }, 1000 );
+  };
+
   return (
     <Stack as="article" className={ `ml-ami-estimator${props.className ? ` ${props.className}` : ''}` } space="2">
       <h2 className="sr-only">AMI Calculator</h2>
@@ -422,16 +420,8 @@ function AmiEstimator( props ) {
         className="ami-estimator__form"
         onSubmit={ handleSubmit }
         onChange={ handleFormInteraction }
-        // onKeyDown={ handleFormInteraction }
-        // onClick={ handleFormInteraction }
       >
-        <Stack space="1">{/* ami-estimator-navigation */}
-          {/* <nav>
-            <Link to={`${path}`}>Step 1</Link><br/>
-            <Link to={`${path}/household-income`}>Step 2</Link><br/>
-            <Link to={`${path}/disclosure`}>Step 3</Link>
-            <Link to={`${path}/results`}>Step 4</Link>
-          </nav> */}
+        <Stack space="1">
           <TransitionGroup id="step" className="step" style={ Object.keys( heights ).length ? { "height": heights[location.pathname] } : {} }>
             {/*
               This is no different than other usage of
@@ -441,14 +431,12 @@ function AmiEstimator( props ) {
             */}
             <CSSTransition
               key={ location.key }
-              classNames={ isNavigatingForward ? 'slide-left' : ( isNavigatingBackward ? 'slide-right' : 'slide' ) }
+              classNames={ isNavigatingBackward ? 'slide-right' : 'slide-left' }
               in={ true }
               appear={ false }
-              // classNames="pageSlider"
               mountOnEnter={ false }
               unmountOnExit={ false }
               timeout={ 900 }
-              // timeout={ { "enter": 80000, "exit": 40000 } }
             >
               <Switch location={ location }>
                 {
@@ -465,21 +453,18 @@ function AmiEstimator( props ) {
                     }
 
                     const formDataKey = uncapitalize( displayName );
-                    // const Step = React.createElement( currentStep, { setStep, "formData": formData[formDataKey] }, null );
                     const routePath = ( isFirstStep ? path : `${path}/${slugify( displayName )}` );
 
                     return (
                       <Route key={ formDataKey } exact={ isFirstStep } path={ routePath } render={ () => (
                         <currentStep.component
                           key={ formDataKey }
-                          // adjustParentHeight={ adjustParentHeight }
                           pathname={ location.pathname }
                           step={ index + 1 }
                           setStep={ setStep }
                           formData={ formData }
                           setFormData={ setFormData }
-                          heights={ heights }
-                          setHeights={ setHeights }
+                          adjustContainerHeight={ adjustContainerHeight }
                         />
                       ) } />
                     );
@@ -508,8 +493,15 @@ function AmiEstimator( props ) {
 
       </form>
       <Stack as="footer" className="ml-ami-estimator__footer" space="ami-estimator-footer">
-        <p><a className="ml-ami-estimator__exit-link" href="#">Exit</a></p>
-        <p><a className="ml-ami-estimator__email-link" href="mailto:metrolist@boston.gov" onClick={ ( e ) => e.preventDefault() }>For questions email <span className="ml-ami-estimator__email-link-email-address">metrolist@boston.gov</span></a></p>
+        <p>
+          <a
+            className="ml-ami-estimator__email-link"
+            href="mailto:metrolist@boston.gov"
+            onClick={ ( e ) => e.preventDefault() }
+          >
+            For questions email <span className="ml-ami-estimator__email-link-email-address">metrolist@boston.gov</span>
+          </a>
+        </p>
       </Stack>
     </Stack>
   );
@@ -518,8 +510,6 @@ function AmiEstimator( props ) {
 AmiEstimator.propTypes = {
   "children": PropTypes.node,
   "className": PropTypes.string,
-  // "match": PropTypes.object.isRequired,
-  // "location": PropTypes.object.isRequired,
   "history": PropTypes.object.isRequired,
   "steps": PropTypes.arrayOf(
     PropTypes.shape( {
@@ -551,4 +541,3 @@ AmiEstimator.defaultProps = {
 };
 
 export default withRouter( AmiEstimator );
-// export default AmiEstimator;

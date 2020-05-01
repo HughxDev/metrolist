@@ -199,24 +199,25 @@ function Listings( props ) {
 
   useEffect( () => {
     if ( !allHomes.length ) {
-      setAllHomes( [
-        {
-          "id": "99977759",
-          "title": "Home",
-          // "city": "Boston",
-          "type": "apt",
-          "offer": "rent",
-          "listingDate": "2020-04-29T23:16:26.549Z",
-          "units": [
-            {
-              "id": "studio",
-              // "amiQualification": 50,
-              "bedrooms": 0,
-            },
-          ],
+      setAllHomes( apiHomes );
+      // setAllHomes( [
+      //   {
+      //     "id": "99977759",
+      //     "title": "Home",
+      //     // "city": "Boston",
+      //     "type": "apt",
+      //     "offer": "rent",
+      //     "listingDate": "2020-04-29T23:16:26.549Z",
+      //     "units": [
+      //       {
+      //         "id": "studio",
+      //         // "amiQualification": 50,
+      //         "bedrooms": 0,
+      //       },
+      //     ],
 
-        },
-      ] );
+      //   },
+      // ] );
     }
   }, [] );
 

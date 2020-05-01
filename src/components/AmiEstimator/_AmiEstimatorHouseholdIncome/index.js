@@ -1,5 +1,5 @@
 import React, {
-  useEffect, useState, useRef, forwardRef,
+  useEffect, useRef,
 } from 'react';
 import PropTypes from 'prop-types';
 
@@ -13,30 +13,10 @@ import FormErrorMessage from '@components/FormErrorMessage';
 
 import './AmiEstimatorHouseholdIncome.scss';
 
-const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
+const AmiEstimatorHouseholdIncome = ( props ) => {
   const selfRef = useRef();
   const moneyInputRef = useRef();
   const defaultIncomeRate = 'Monthly';
-  const [hasSetHeights, setHasSetHeights] = useState( false );
-
-  // useEffect( () => {
-  //   props.adjustParentHeight( selfRef );
-  // }, [props.step, selfRef.current] );
-
-  useEffect( () => {
-    setTimeout( () => {
-      // if ( !hasSetHeights ) {
-      const newHeights = {
-        ...props.heights,
-      };
-      newHeights[props.pathname] = getComputedStyle( selfRef.current.querySelector( '.ml-ami-estimator__prompt-inner' ) ).getPropertyValue( 'height' );
-
-      props.setHeights( newHeights );
-
-      // setHasSetHeights( true );
-      // }
-    }, 1000 );
-  }, [] );
 
   function pad( num, size ) {
     let s = `${num}`;
@@ -90,6 +70,7 @@ const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
 
   useEffect( () => {
     props.setStep( props.step );
+    props.adjustContainerHeight( selfRef );
 
     const initialAmount = props.formData.householdIncome.value;
 
@@ -123,8 +104,7 @@ const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
               ref={ moneyInputRef }
               className="money"
               name="householdIncome"
-              // value={ ( props.formData.householdIncome.value === '$0.00' ) ? '' : props.formData.householdIncome.value }
-              value={ '$5,000.00' }
+              value={ ( props.formData.householdIncome.value === '$0.00' ) ? '' : props.formData.householdIncome.value }
               type="text"
               pattern="[0-9]*"
               placeholder="$0.00"
@@ -157,7 +137,7 @@ const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
       </fieldset>
     </div>
   );
-} );
+};
 
 AmiEstimatorHouseholdIncome.propTypes = {
   "stepRef": PropTypes.object,
@@ -167,9 +147,8 @@ AmiEstimatorHouseholdIncome.propTypes = {
   "className": PropTypes.string,
   "formData": PropTypes.object.isRequired,
   "setFormData": PropTypes.func.isRequired,
-  "heights": PropTypes.object,
-  "setHeights": PropTypes.func,
   "pathname": PropTypes.string,
+  "adjustContainerHeight": PropTypes.func,
 };
 
 AmiEstimatorHouseholdIncome.displayName = "HouseholdIncome";

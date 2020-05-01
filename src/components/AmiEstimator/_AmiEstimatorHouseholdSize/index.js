@@ -1,5 +1,5 @@
 import React, {
-  useEffect, useState, useRef, forwardRef,
+  useEffect, useRef,
 } from 'react';
 import PropTypes from 'prop-types';
 
@@ -9,31 +9,12 @@ import FormErrorMessage from '@components/FormErrorMessage';
 
 import './AmiEstimatorHouseholdSize.scss';
 
-const AmiEstimatorHouseholdSize = forwardRef( ( props, ref ) => {
+const AmiEstimatorHouseholdSize = ( props ) => {
   const selfRef = useRef();
-  const [hasSetHeights, setHasSetHeights] = useState( false );
 
   useEffect( () => {
     props.setStep( props.step );
-  }, [] );
-
-  // useEffect( () => {
-  //   props.adjustParentHeight( selfRef );
-  // }, [props.step, selfRef.current] );
-
-  useEffect( () => {
-    setTimeout( () => {
-      // if ( !hasSetHeights ) {
-      const newHeights = {
-        ...props.heights,
-      };
-      newHeights[props.pathname] = getComputedStyle( selfRef.current.querySelector( '.ml-ami-estimator__prompt-inner' ) ).getPropertyValue( 'height' );
-
-      props.setHeights( newHeights );
-
-      // setHasSetHeights( true );
-      // }
-    }, 1000 );
+    props.adjustContainerHeight();
   }, [] );
 
   return (
@@ -46,8 +27,7 @@ const AmiEstimatorHouseholdSize = forwardRef( ( props, ref ) => {
             className={ `ml-ami-estimator__prompt--answer-input` }
             criterion="householdSize"
             values="1,2,3,4,5,6+"
-            // value={ props.formData.householdSize.value }
-            value={ '4' }
+            value={ props.formData.householdSize.value }
             aria-describedby="ami-estimator-form-errors ami-estimator-household-size-error"
             required
           />
@@ -60,15 +40,15 @@ const AmiEstimatorHouseholdSize = forwardRef( ( props, ref ) => {
       </fieldset>
     </div>
   );
-} );
+};
 
 AmiEstimatorHouseholdSize.propTypes = {
-  "stepRef": PropTypes.object,
   "step": PropTypes.number,
   "setStep": PropTypes.func,
   "children": PropTypes.node,
   "className": PropTypes.string,
   "formData": PropTypes.object,
+  "adjustContainerHeight": PropTypes.func,
 };
 
 AmiEstimatorHouseholdSize.displayName = "HouseholdSize";

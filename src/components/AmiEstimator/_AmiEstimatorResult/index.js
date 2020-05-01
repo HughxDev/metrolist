@@ -1,5 +1,5 @@
 import React, {
-  useEffect, useRef, useState, forwardRef,
+  useEffect, useRef, useState,
 } from 'react';
 import PropTypes from 'prop-types';
 
@@ -20,21 +20,10 @@ const amiDefinition = {
 };
 
 function estimateAmi( { householdSize, householdIncome, incomeRate } ) {
-  // console.log(
-  //   'input',
-  //   {
-  //     householdSize,
-  //     householdIncome,
-  //     incomeRate,
-  //   },
-  // );
-
   householdSize = householdSize.value;
   householdIncome = householdIncome.value;
   incomeRate = incomeRate.value;
 
-  // const parsedHouseholdSize = parseInt( householdSize, 10 );
-  // const deformattedHouseholdIncome = householdIncome.replace( /[$,]/g, '' );
   const parsedHouseholdIncome = parseFloat( householdIncome.replace( /[$,]/g, '' ) );
   const maxIncome = amiDefinition[`people_${householdSize}`];
   let annualizedHouseholdIncome = parsedHouseholdIncome;
@@ -57,81 +46,48 @@ function estimateAmi( { householdSize, householdIncome, incomeRate } ) {
     estimation = Math.floor( ( annualizedHouseholdIncome / maxIncome ) * 100 );
   }
 
-  // console.log( {
-  //   householdSize,
-  //   householdIncome,
-  //   parsedHouseholdIncome,
-  //   annualizedHouseholdIncome,
-  //   incomeRate,
-  //   maxIncome,
-  //   estimation,
-  //   "math": `Math.floor( ( ${annualizedHouseholdIncome} / ${maxIncome} ) * 100 ) -> ${estimation}`,
-  // } );
-
   return estimation;
 }
 
-const AmiEstimatorResult = forwardRef( ( props, ref ) => {
+function getFuzzyAmiRecommendation( amiEstimation ) {
+  return ( Math.ceil( amiEstimation / 10 ) * 10 );
+}
+
+const AmiEstimatorResult = ( props ) => {
   const selfRef = useRef();
-  const [hasSetHeights, setHasSetHeights] = useState( false );
-  // const data = props.formData.householdSize.value ? props.formData : props.fakeFormData;
-  const [amiEstimation, setAmiEstimation] = useState( estimateAmi( props.formData ) );
-
-  useEffect( () => props.setStep( props.step ), [] );
-
-  // useEffect( () => setAmiEstimation( estimateAmi( {
-  //   "householdSize": props.formData.householdSize.value,
-  //   "householdIncome": props.formData.householdIncome.value,
-  //   "incomeRate": props.formData.incomeRate.value,
-  // } ) ), [props.formData] );
-
-  // useEffect( () => {
-  //   props.adjustParentHeight( selfRef );
-  // }, [props.step, selfRef.current] );
+  const [amiEstimation] = useState( estimateAmi( props.formData ) );
 
   useEffect( () => {
-    setTimeout( () => {
-      // if ( !hasSetHeights ) {
-      const newHeights = {
-        ...props.heights,
-      };
-      newHeights[props.pathname] = getComputedStyle( selfRef.current.querySelector( '.ml-ami-estimator__prompt-inner' ) ).getPropertyValue( 'height' );
-
-      props.setHeights( newHeights );
-
-      // setHasSetHeights( true );
-      // }
-    }, 1000 );
+    props.setStep( props.step );
+    props.adjustContainerHeight( selfRef );
   }, [] );
-
-  console.log( props.formData );
 
   return (
     <div ref={ selfRef } className={ `ml-ami-estimator__result ml-ami-estimator__prompt${props.className ? ` ${props.className}` : ''}` }>
       <Stack space="2" className="ml-ami-estimator__prompt-inner">
         <InputSummary formData={ props.formData } />
         <Stack space="1">
-          <p><span className="ml-all-caps">Estimated Eligibility:</span> <dfn className="ml-ami">{ amiEstimation }% AMI</dfn> (Area Median Income)</p>
+          <p>Estimated Eligibility: <dfn className="ml-ami">{ amiEstimation }% AMI</dfn> (Area Median Income)</p>
+          <p>We recommend searching for homes listed at <b className="ml-ami">{ getFuzzyAmiRecommendation( amiEstimation ) }% AMI</b> and above.</p>
         </Stack>
         <Stack as="nav" space="1">
-          <Button as="a" variant="primary">See homes that match your eligibility</Button>
-          <Button as="a">Exit the calculator</Button>
+          <Button as="a" variant="primary">See homes that match this eligibility range</Button>
         </Stack>
       </Stack>
     </div>
   );
-} );
+};
 
 AmiEstimatorResult.displayName = 'Result';
 
 AmiEstimatorResult.propTypes = {
-  "stepRef": PropTypes.object,
   "children": PropTypes.node,
   "className": PropTypes.string,
   "step": PropTypes.number,
   "setStep": PropTypes.func,
   "formData": PropTypes.object,
   "fakeFormData": PropTypes.object,
+  "adjustContainerHeight": PropTypes.func,
 };
 
 AmiEstimatorResult.defaultProps = {

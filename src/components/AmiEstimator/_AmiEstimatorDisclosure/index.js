@@ -1,5 +1,5 @@
 import React, {
-  useEffect, useState, useRef, forwardRef,
+  useEffect, useRef,
 } from 'react';
 import PropTypes from 'prop-types';
 
@@ -10,31 +10,12 @@ import InputSummary from '../_AmiEstimatorInputSummary';
 
 import './AmiEstimatorDisclosure.scss';
 
-const AmiEstimatorDisclosure = forwardRef( ( props, ref ) => {
+const AmiEstimatorDisclosure = ( props ) => {
   const selfRef = useRef();
 
   useEffect( () => {
     props.setStep( props.step );
-    console.log( 'props.formData', props.formData );
-  }, [] );
-
-  // useEffect( () => {
-  //   props.adjustParentHeight( selfRef );
-  // }, [props.step, selfRef.current] );
-
-  useEffect( () => {
-    setTimeout( () => {
-      // if ( !hasSetHeights ) {
-      const newHeights = {
-        ...props.heights,
-      };
-      newHeights[props.pathname] = getComputedStyle( selfRef.current.querySelector( '.ml-ami-estimator__prompt-inner' ) ).getPropertyValue( 'height' );
-
-      props.setHeights( newHeights );
-
-      // setHasSetHeights( true );
-      // }
-    }, 1000 );
+    props.adjustContainerHeight( selfRef );
   }, [] );
 
   return (
@@ -59,17 +40,17 @@ const AmiEstimatorDisclosure = forwardRef( ( props, ref ) => {
       </Stack>
     </div>
   );
-} );
+};
 
 AmiEstimatorDisclosure.displayName = 'Disclosure';
 
 AmiEstimatorDisclosure.propTypes = {
-  "stepRef": PropTypes.object,
   "step": PropTypes.number,
   "setStep": PropTypes.func,
   "children": PropTypes.node,
   "className": PropTypes.string,
   "formData": PropTypes.object,
+  "adjustContainerHeight": PropTypes.func,
 };
 
 // AmiEstimatorDisclosure.

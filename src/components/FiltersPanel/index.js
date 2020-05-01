@@ -128,7 +128,7 @@ function FiltersPanel( props ) {
           ref={ $drawer }
           className={ `ml-filters-panel__content${isExpanded ? ' ml-filters-panel__content--expanded' : ''}` }
         >
-          <FilterGroup criterion="offer" isExpanded={ false }>
+          <FilterGroup criterion="offer">
             <FilterGroup.Label>Offer</FilterGroup.Label>
             <Row space="rent-sale" stackAt="large">
               <Column width="1/2">
@@ -139,7 +139,7 @@ function FiltersPanel( props ) {
               </Column>
             </Row>
           </FilterGroup>
-          <FilterGroup criterion="location" isExpanded={ false }>
+          <FilterGroup criterion="location">
             <FilterGroup.Label>Location</FilterGroup.Label>
             <Stack space="sister-checkboxes">
               <Filter type="checkbox" criterion="city" value="boston" checked={ location.city.boston }>
@@ -180,7 +180,7 @@ function FiltersPanel( props ) {
             <Filter type="checkbox" criterion="bedrooms" checked={ bedrooms['3'] }>3</Filter>
             <Filter type="checkbox" criterion="bedrooms" checked={ bedrooms['4+'] }>4+</Filter>
           </FilterGroup>
-          <FilterGroup criterion="amiQualification" isExpanded={ false }>
+          <FilterGroup criterion="amiQualification">
             <FilterGroup.Label>Income Eligibility (AMI%)</FilterGroup.Label>
             <div
               onClick={ ( event ) => event.stopPropagation() }
