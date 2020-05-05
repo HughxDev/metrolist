@@ -8,10 +8,10 @@ import * as serviceWorker from './serviceWorker';
 import '@globals/util.scss';
 
 ReactDOM.render(
-  <Router>
+  <Router basename="/metrolist">
     <App />
   </Router>,
-  document.getElementById( 'root' ),
+  document.getElementById( 'web-app' ),
 );
 
 // If you want your app to work offline and load faster, you can change

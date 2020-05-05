@@ -5,7 +5,7 @@ import Layout from '@components/Layout';
 import AppHeader from '@components/AppHeader';
 import Routes from '@components/Routes';
 
-import '@patterns/stylesheets/public.css';
+// import '@patterns/stylesheets/public.css';
 import './App.scss';
 
 function App() {
