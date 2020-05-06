@@ -1,7 +1,7 @@
 import '__mocks__/matchMedia';
 import React from 'react';
 import {
-  render, fireEvent, getByPlaceholderText, queryByPlaceholderText, queryByLabelText,
+  render, act, fireEvent,
 } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
@@ -9,7 +9,17 @@ import { MemoryRouter } from 'react-router-dom';
 import AmiEstimator from './index';
 import Routes from '../Routes';
 
+// jest.useFakeTimers();
+
 describe( 'AmiEstimator', () => {
+  beforeAll( () => {
+    jest.useFakeTimers();
+  } );
+
+  afterAll( () => {
+    jest.useRealTimers();
+  } );
+
   const steps = AmiEstimator.WrappedComponent.defaultProps.steps.map( ( step ) => step.component.displayName );
 
   it( 'Renders', () => {
@@ -30,63 +40,78 @@ describe( 'AmiEstimator', () => {
     const nextButton = getByText( 'Next' );
     const errorMessage = getByRole( 'alert' );
 
-    fireEvent.click( nextButton );
+    act( () => {
+      fireEvent.click( nextButton );
+    } );
 
     expect( errorMessage ).toHaveTextContent( 'There were errors in your submission.' );
   } );
 
-  it( 'Navigates between steps', () => {
+  it( 'Navigates between steps', async () => {
     const {
-      getByText, getByRole, getByLabelText, queryByPlaceholderText, queryByLabelText,
+      getByText, getByLabelText, queryByTestId, getByPlaceholderText,
     } = render(
       <MemoryRouter initialEntries={['/ami-estimator']} initialIndex={0}>
         <Routes />
       </MemoryRouter>,
     );
     const nextButton = getByText( 'Next' );
+    const previousButton = getByText( 'Back' );
+    let firstStep;
     let firstStepInput;
-    let secondStepInput;
 
     switch ( steps[0] ) {
       case 'HouseholdSize':
+        firstStep = () => queryByTestId( 'ml-ami-estimator__household-size' );
         firstStepInput = getByLabelText( '4' );
         break;
 
       case 'HouseholdIncome':
+        firstStep = () => queryByTestId( 'ml-ami-estimator__household-income' );
         firstStepInput = getByPlaceholderText( '$0.00' );
         break;
 
       case 'Disclosure':
+        firstStep = () => queryByTestId( 'ml-ami-estimator__disclosure' );
         firstStepInput = getByLabelText( 'I have read and understand the above statement.' );
         break;
 
       default:
     }
 
-    fireEvent.click( firstStepInput );
-    fireEvent.click( nextButton );
+    act( () => {
+      fireEvent.click( firstStepInput );
+      fireEvent.click( nextButton );
+      jest.advanceTimersByTime( 1000 );
+    } );
+
+    let secondStep;
 
     switch ( steps[1] ) {
       case 'HouseholdSize':
-        secondStepInput = queryByLabelText( '4' );
+        secondStep = () => queryByTestId( 'ml-ami-estimator__household-size' );
         break;
 
       case 'HouseholdIncome':
-        secondStepInput = queryByPlaceholderText( '$0.00' );
+        secondStep = () => queryByTestId( 'ml-ami-estimator__household-income' );
         break;
 
       case 'Disclosure':
-        secondStepInput = queryByLabelText( 'I have read and understand the above statement.' );
+        secondStep = () => queryByTestId( 'ml-ami-estimator__disclosure' );
         break;
 
       default:
     }
 
-    expect( secondStepInput ).toBeVisible();
-    expect( queryByLabelText( '4' ) ).not.toBeInTheDocument();
+    expect( firstStep() ).not.toBeInTheDocument();
+    expect( secondStep() ).toBeInTheDocument();
+
+    act( () => {
+      fireEvent.click( previousButton );
+      jest.advanceTimersByTime( 1000 );
+    } );
+
+    expect( firstStep() ).toBeInTheDocument();
+    expect( secondStep() ).not.toBeInTheDocument();
   } );
-
-  // it( 'Returns to the previous step', () => {
-
-  // } );
 } );
