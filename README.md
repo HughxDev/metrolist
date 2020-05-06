@@ -1,5 +1,19 @@
 # Boston.gov Metrolist v2
 
+## Installing
+
+```shell
+yarn install
+yarn sync-icons
+yarn start
+```
+
+`yarn start` runs:
+  1. `ipconfig getifaddr en6` (or `ipconfig getifaddr en0` if `en6` isn’t found), which determines which LAN IP to bind to. This allows testing on mobile devices connected to the same network.
+  2. `webpack-dev-server`. This compiles the ES6+ JavaScript and starts an HTTP server on port 8080 at the address found in the previous step.
+
+Note: The `ipconfig` command has only been tested on a Mac, and it also may not work if your connection isn’t located at `en6` or `en0`.
+
 ## General Naming Conventions
 
 ### DAMP (Descriptive And Meaningful Phrases).
@@ -9,12 +23,14 @@ Prefer readability for other developers over less typing for yourself.
 #### Examples
 
 ##### HTML/CSS:
+
 ```html
 <h2 class="sh">Section Header</h2><!-- Bad -->
 <h2 class="section-header">Section Header</h2><!-- Good -->
 ```
 
 ##### JavaScript:
+
 ```js
 const newElCmpShrtNm = 'Header'; // Bad
 const newElementComponentShortName = 'Header'; // Good
