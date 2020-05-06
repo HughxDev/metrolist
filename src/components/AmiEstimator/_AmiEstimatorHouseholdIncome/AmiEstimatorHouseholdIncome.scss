@@ -21,6 +21,10 @@
   background-color: transparent;
 }
 
+.ml-ami-estimator__household-income-input::-webkit-input-placeholder {
+  font-style: normal;
+}
+
 .ml-ami-estimator__household-income-input::-webkit-inner-spin-button, 
 .ml-ami-estimator__household-income-input::-webkit-outer-spin-button { 
   -webkit-appearance: none; 

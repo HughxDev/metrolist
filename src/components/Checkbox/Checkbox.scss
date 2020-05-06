@@ -6,12 +6,6 @@
   // font-family: $font-family-montserrat;
   font-size: $font-size-filter-label;
 }
-  @include media-breakpoint-up( large ) {
-    .ml-checkbox {
-      font-size: $font-size-filter-label;
-    }
-  }
-
   .ml-checkbox__subcategories {
     display: block;
     // column-count: 2;
@@ -41,6 +35,11 @@
     line-height: 0;
     // white-space: nowrap;
     height: $checkbox-dimensions;
+    text-transform: none;
+    font: inherit;
+    font-size: inherit;
+    color: inherit;
+    letter-spacing: normal;
 
     // & > * + * {
     //   margin-left: 1rem;
@@ -64,6 +63,7 @@
   .ml-checkbox__text {
     line-height: 1;
     flex: 1;
+    // font-size: 1rem;
   }
     @include media-breakpoint-up( large ) {
       .ml-checkbox__text {

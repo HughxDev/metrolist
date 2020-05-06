@@ -1,7 +1,8 @@
 $font-family-sans-serif: Helvetica, Arial, sans-serif;
 $font-family-montserrat: Montserrat, $font-family-sans-serif;
 $font-family-heading: $font-family-montserrat;
-// Lora is the default font defined by the global site CSS so no need to opt in to it
+$font-family-lora: Lora, Georgia, serif;
+$font-family-body-text: $font-family-lora;
 
 $max-line-length: 39em;
 

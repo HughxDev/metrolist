@@ -31,6 +31,7 @@
   background-color: $color-black;
   background-color: $color-optimistic-blue;
   transition: width 0.5s;
+  height: 100%;
 }
 
 // Chrome, Safari, etc.
@@ -39,6 +40,7 @@
 }
 .ml-progress-bar__progress::-webkit-progress-value {
   @include progress-indicator();
+  height: 103%;
 } // Bar
 
 // Firefox
