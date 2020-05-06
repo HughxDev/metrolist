@@ -51,6 +51,7 @@ Row.propTypes = {
   "stackAt": PropTypes.oneOf( ['xsmall', 'small', 'medium', 'large', 'xlarge'] ),
   "space": PropTypes.string,
   "children": PropTypes.node,
+  "className": PropTypes.string,
 };
 
 export default Row;
