@@ -8,20 +8,25 @@
     flex: 1;
     text-align: center;
     font-family: $font-family-heading;
-    font-size: rem( 30px );
     color: $color-metrolist-text-blue;
   }
 
-  dt {
-    @extend %dt-inline;
-    font-weight: bold;
-
-    &::after {
-      content: ' ';
-    }
+  dt, dd {
+    margin: 0;
+    padding: 0;
   }
 
-  dd {
-    @extend %dd-inline;
+  dt {
+    font-weight: bold;
+  }
+}
+
+@include media-breakpoint-up( medium ) {
+  .ml-ami-estimator__input-summary > div {
+    font-size: rem( 30px );
+  }
+
+  .ml-ami-estimator__prompt-answer-icon {
+    width: rem( 227px );
   }
 }

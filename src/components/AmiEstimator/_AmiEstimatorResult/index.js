@@ -1,5 +1,5 @@
 import React, {
-  useEffect, useRef, useState,
+  useEffect, useRef, useState, forwardRef,
 } from 'react';
 import PropTypes from 'prop-types';
 
@@ -53,8 +53,8 @@ function getFuzzyAmiRecommendation( amiEstimation ) {
   return ( Math.ceil( amiEstimation / 10 ) * 10 );
 }
 
-const AmiEstimatorResult = ( props ) => {
-  const selfRef = useRef();
+const AmiEstimatorResult = forwardRef( ( props, ref ) => {
+  const selfRef = ( ref || useRef() );
   const [amiEstimation] = useState( estimateAmi( props.formData ) );
 
   useEffect( () => {
@@ -63,7 +63,7 @@ const AmiEstimatorResult = ( props ) => {
   }, [] );
 
   return (
-    <div ref={ selfRef } className={ `ml-ami-estimator__result ml-ami-estimator__prompt${props.className ? ` ${props.className}` : ''}` }>
+    <div ref={ selfRef } className={ `ml-ami-estimator__result ml-ami-estimator__prompt${props.className ? ` ${props.className}` : ''}` } data-testid="ml-ami-estimator__result">
       <Stack space="2" className="ml-ami-estimator__prompt-inner">
         <InputSummary formData={ props.formData } />
         <Stack space="1">
@@ -76,7 +76,7 @@ const AmiEstimatorResult = ( props ) => {
       </Stack>
     </div>
   );
-};
+} );
 
 AmiEstimatorResult.displayName = 'Result';
 

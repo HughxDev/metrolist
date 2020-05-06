@@ -49,6 +49,7 @@
   .ml-ami-estimator__prompt-answer-icon {
     display: block;
     margin: 0 auto;
+    max-width: 100%;
   }
   .ml-ami-estimator__prompt--answer-input {
     color: $color-metrolist-text-blue;
@@ -118,8 +119,8 @@
 // Transitions
 
 $prompt-width: 90vw;
-$prompt-width--tablet: 50vw;
-$prompt-width--desktop: 33.3333vw;
+$prompt-width--tablet: 39rem; // 50vw;
+// $prompt-width--desktop: 33.3333vw;
 
 .ml-ami-estimator,
 .step,
@@ -132,7 +133,7 @@ $prompt-width--desktop: 33.3333vw;
   overflow: hidden;
   margin: 0 auto;
   margin: 0 auto;
-  transition: height .125s ease;
+  transition: height .125s ease, min-height .125s ease, max-height .125s ease;
 }
 
 .ml-ami-estimator__prompt {
@@ -221,7 +222,7 @@ $prompt-width--desktop: 33.3333vw;
 
 @include bidirectional-slide-transition( $prompt-width );
 
-@include media-breakpoint-up( medium ) {
+@include media-breakpoint-up( large ) {
   .ml-ami-estimator,
   .step,
   .ml-ami-estimator__prompt {
@@ -229,14 +230,4 @@ $prompt-width--desktop: 33.3333vw;
   }
 
   @include bidirectional-slide-transition-override( $prompt-width--tablet );
-}
-
-@include media-breakpoint-up( xlarge ) {
-  .ml-ami-estimator,
-  .step,
-  .ml-ami-estimator__prompt {
-    width: $prompt-width--desktop;
-  }
-
-  @include bidirectional-slide-transition-override( $prompt-width--desktop );
 }

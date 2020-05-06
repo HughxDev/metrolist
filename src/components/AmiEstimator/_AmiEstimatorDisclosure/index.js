@@ -1,5 +1,5 @@
 import React, {
-  useEffect, useRef,
+  useEffect, useRef, forwardRef,
 } from 'react';
 import PropTypes from 'prop-types';
 
@@ -10,8 +10,8 @@ import InputSummary from '../_AmiEstimatorInputSummary';
 
 import './AmiEstimatorDisclosure.scss';
 
-const AmiEstimatorDisclosure = ( props ) => {
-  const selfRef = useRef();
+const AmiEstimatorDisclosure = forwardRef( ( props, ref ) => {
+  const selfRef = ( ref || useRef() );
 
   useEffect( () => {
     props.setStep( props.step );
@@ -19,7 +19,7 @@ const AmiEstimatorDisclosure = ( props ) => {
   }, [] );
 
   return (
-    <div ref={ selfRef } className={ `ml-ami-estimator__disclosure ml-ami-estimator__prompt${props.className ? ` ${props.className}` : ''}` }>
+    <div ref={ selfRef } className={ `ml-ami-estimator__disclosure ml-ami-estimator__prompt${props.className ? ` ${props.className}` : ''}` } data-testid="ml-ami-estimator__disclosure">
       <Stack space="2" className="ml-ami-estimator__prompt-inner">
         <InputSummary formData={ props.formData } />
         <p>The above information will be combined to estimate your eligibility for income-restricted housing.  Eligibility is officially and finally determined during the application process.</p>
@@ -28,7 +28,7 @@ const AmiEstimatorDisclosure = ( props ) => {
             className="ml-ami-estimator__disclosure-accept"
             criterion="disclosure"
             aria-describedby="ami-estimator-disclosure-accept-error"
-            checked={ true }
+            checked={ props.formData.disclosure.value }
             required
           >I have read and understand the above statement.</Checkbox>
           <FormErrorMessage
@@ -40,7 +40,7 @@ const AmiEstimatorDisclosure = ( props ) => {
       </Stack>
     </div>
   );
-};
+} );
 
 AmiEstimatorDisclosure.displayName = 'Disclosure';
 

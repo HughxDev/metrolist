@@ -1,5 +1,5 @@
 import React, {
-  useEffect, useRef,
+  useEffect, useRef, forwardRef,
 } from 'react';
 import PropTypes from 'prop-types';
 
@@ -13,9 +13,9 @@ import FormErrorMessage from '@components/FormErrorMessage';
 
 import './AmiEstimatorHouseholdIncome.scss';
 
-const AmiEstimatorHouseholdIncome = ( props ) => {
-  const selfRef = useRef();
-  const moneyInputRef = useRef();
+const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
+  const selfRef = ( ref || useRef() );
+  const incomeInputRef = useRef();
   const defaultIncomeRate = 'Monthly';
 
   function pad( num, size ) {
@@ -24,7 +24,7 @@ const AmiEstimatorHouseholdIncome = ( props ) => {
     return s;
   }
 
-  function formatMoney( amount ) {
+  function formatIncome( amount ) {
     // Sanitize input
     amount = amount.trim().replace( /[^0-9]+/g, '' );
     let formatted;
@@ -54,18 +54,18 @@ const AmiEstimatorHouseholdIncome = ( props ) => {
     return formatted;
   }
 
-  function setMoneyInput( newValue ) {
+  function setIncomeInput( newValue ) {
     if ( newValue === '$0.00' ) {
-      moneyInputRef.current.value = '';
+      incomeInputRef.current.value = '';
     } else {
-      moneyInputRef.current.value = formatMoney( newValue );
+      incomeInputRef.current.value = formatIncome( newValue );
     }
   }
 
-  const handleMoneyChange = ( event ) => {
-    const formattedAmount = formatMoney( event.target.value );
+  const handleIncomeChange = ( event ) => {
+    const formattedAmount = formatIncome( event.target.value );
 
-    setMoneyInput( formattedAmount );
+    setIncomeInput( formattedAmount );
   };
 
   useEffect( () => {
@@ -75,9 +75,9 @@ const AmiEstimatorHouseholdIncome = ( props ) => {
     const initialAmount = props.formData.householdIncome.value;
 
     if ( initialAmount.length ) {
-      const formattedInitialAmount = formatMoney( initialAmount );
+      const formattedInitialAmount = formatIncome( initialAmount );
 
-      setMoneyInput( formattedInitialAmount );
+      setIncomeInput( formattedInitialAmount );
     }
 
     if ( !props.formData.incomeRate.value ) {
@@ -94,25 +94,23 @@ const AmiEstimatorHouseholdIncome = ( props ) => {
   }, [] );
 
   return (
-    <div ref={ selfRef } className={ `ml-ami-estimator__household-income ml-ami-estimator__prompt` }>
+    <div ref={ selfRef } className={ `ml-ami-estimator__household-income ml-ami-estimator__prompt` } data-testid="ml-ami-estimator__household-income">
       <fieldset className="ml-ami-estimator__prompt-inner">
-        <legend className="ml-ami-estimator__prompt-question">What is the total combined income all 3 people who live in your household before taxes?</legend>
+        <legend className="ml-ami-estimator__prompt-question">What is the total combined income of all { props.formData.householdSize.value ? `${props.formData.householdSize.value} people` : 'people' } who live in your household before taxes?</legend>
         <Icon className="ml-ami-estimator__prompt-answer-icon" icon="deposit check" width="212" />
         <Stack space="1">{/* ami-estimator-income-rate */}
-          <div className="ml-ami-estimator__income">{/* style={ { "width": `${money.length ? `${money.length}rem` : ''}` } } */}
-            <input
-              ref={ moneyInputRef }
-              className="money"
-              name="householdIncome"
-              value={ ( props.formData.householdIncome.value === '$0.00' ) ? '' : props.formData.householdIncome.value }
-              type="text"
-              pattern="[0-9]*"
-              placeholder="$0.00"
-              aria-describedby="ami-estimator-form-errors ami-estimator-household-income-error"
-              onChange={ handleMoneyChange }
-              required
-            />
-          </div>
+          <input
+            ref={ incomeInputRef }
+            className="ml-ami-estimator__household-income-input"
+            name="householdIncome"
+            value={ ( props.formData.householdIncome.value === '$0.00' ) ? '' : props.formData.householdIncome.value }
+            type="text"
+            pattern="[0-9]*"
+            placeholder="$0.00"
+            aria-describedby="ami-estimator-form-errors ami-estimator-household-income-error"
+            onChange={ handleIncomeChange }
+            required
+          />
           <FormErrorMessage
             ref={ props.formData.householdIncome.errorRef }
             id="ami-estimator-household-income-error"
@@ -137,7 +135,7 @@ const AmiEstimatorHouseholdIncome = ( props ) => {
       </fieldset>
     </div>
   );
-};
+} );
 
 AmiEstimatorHouseholdIncome.propTypes = {
   "stepRef": PropTypes.object,

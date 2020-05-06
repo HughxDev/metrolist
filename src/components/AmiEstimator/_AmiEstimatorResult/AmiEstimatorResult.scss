@@ -2,8 +2,6 @@
 @import '@globals';
 
 .ml-ami-estimator__result {
-  font-size: rem( 30px );
-
   .btn[class*="btn--metrolist"] {
     height: rem( 66px );
     display: flex;
@@ -22,3 +20,8 @@
   text-transform: uppercase;
 }
 
+@include media-breakpoint-up( large ) {
+  .ml-ami-estimator__result {
+    font-size: rem( 30px );
+  }
+}
