@@ -72,6 +72,7 @@ function AmiEstimator( props ) {
   };
   const [formData, setFormData] = useState( noErrors );
   const formRef = useRef();
+  const currentStepRef = useRef();
   const totalSteps = props.steps.length;
   const badErrorMessageElementError = ( showHide = 'show/hide' ) => {
     throw new Error(
@@ -345,7 +346,11 @@ function AmiEstimator( props ) {
 
           Array.from( formRef.current.elements ).forEach( ( $element, index ) => {
             if ( hasOwnProperty( newFormData, name ) ) {
-              newFormData[name].value = event.target.value;
+              if ( event.target.type === 'checkbox' ) {
+                newFormData[name].value = event.target.checked;
+              } else {
+                newFormData[name].value = event.target.value;
+              }
             } else {
               const nodeName = $element.nodeName.toLowerCase();
               const type = $element.getAttribute( 'type' );
@@ -383,20 +388,84 @@ function AmiEstimator( props ) {
     }
   };
 
-  const adjustContainerHeight = ( stepRef ) => {
-    setTimeout( () => {
-      // if ( stepRef && stepRef.current ) {
-      const newHeights = {
-        ...heights,
-      };
-      const $stepContent = stepRef.current.querySelector( '.ml-ami-estimator__prompt-inner' );
+  // let newHeights;
+  let adjustContainerHeightInterval;
+  let intervals = 0;
+  const adjustContainerHeight = ( stepRef, timing = 1000 ) => {
+    const breakIntervals = ( interval ) => {
+      clearInterval( interval );
+      intervals = 0;
+    };
 
-      newHeights[location.pathname] = getComputedStyle( $stepContent ).getPropertyValue( 'height' );
+    adjustContainerHeightInterval = ( adjustContainerHeightInterval || setInterval( () => {
+      stepRef = document.querySelector( '.step' );
+      intervals++;
 
-      setHeights( newHeights );
-      // }
-    }, 1000 );
+      if ( intervals >= 60 ) {
+        breakIntervals( adjustContainerHeightInterval );
+        return;
+      }
+
+      if ( stepRef ) {
+        breakIntervals( adjustContainerHeightInterval );
+
+        const $stepContent = stepRef.querySelector( '.ml-ami-estimator__prompt-inner' );
+        const computedStyle = getComputedStyle( $stepContent ).getPropertyValue( 'height' );
+
+        if ( computedStyle && ( computedStyle !== '0px' ) ) {
+          const newHeights = {
+            ...heights,
+          };
+
+          newHeights[location.pathname] = computedStyle;
+
+          setHeights( newHeights );
+        }
+      }
+    }, timing ) );
   };
+
+  // const adjustContainerHeight = ( stepRef, timing = 1000 ) => {
+  //   setTimeout( () => {
+  //     if ( stepRef && stepRef.current ) {
+  //       const newHeights = {
+  //         ...heights,
+  //       };
+  //       const $stepContent = stepRef.current.querySelector( '.ml-ami-estimator__prompt-inner' );
+
+  //       newHeights[location.pathname] = getComputedStyle( $stepContent ).getPropertyValue( 'height' );
+
+  //       setHeights( newHeights );
+  //       console.log( 'new heights:', newHeights );
+  //     }
+  //   }, timing );
+  // };
+
+  useEffect( () => {
+    // console.log( 'useeffect', currentStepRef );
+    adjustContainerHeight( currentStepRef, 62.5 );
+  }, [formData] );
+
+  // useEffect( () => {
+  //   console.log( 'step changed', step );
+  //   adjustContainerHeight( currentStepRef, 1000 );
+  // }, [step] );
+
+  window.addEventListener( 'resize', () => {
+    adjustContainerHeight( currentStepRef, 62.5 );
+  } );
+
+  // const getStepHeight = () => {
+  //   if ( Object.keys( heights ).length ) {
+  //     return {
+  //       "height": heights[location.pathname],
+  //     };
+  //   }
+
+  //   return {
+  //     "height": "auto",
+  //   };
+  // };
 
   return (
     <Stack as="article" className={ `ml-ami-estimator${props.className ? ` ${props.className}` : ''}` } space="2" data-testid="ml-ami-estimator">
@@ -406,7 +475,7 @@ function AmiEstimator( props ) {
         <ProgressBar current={ step } total={ totalSteps } />
       </Stack>
       <Alert
-        id="ami-estimator-form-formData"
+        id="ami-estimator-form-alert"
         ref={ formData.alert.errorRef }
         className={ `ml-ami-estimator__error-alert` }
         variant="danger"
@@ -420,7 +489,13 @@ function AmiEstimator( props ) {
         onChange={ handleFormInteraction }
       >
         <Stack space="1">
-          <TransitionGroup id="step" className="step" style={ Object.keys( heights ).length ? { "height": heights[location.pathname] } : {} }>
+          <TransitionGroup
+            id="step"
+            className="step"
+            style={ {
+              "height": heights[location.pathname],
+            } }
+          >
             {/*
               This is no different than other usage of
               <CSSTransition>, just make sure to pass
@@ -456,6 +531,7 @@ function AmiEstimator( props ) {
                     return (
                       <Route key={ formDataKey } exact={ isFirstStep } path={ routePath } render={ () => (
                         <currentStep.component
+                          ref={ currentStepRef }
                           key={ formDataKey }
                           pathname={ location.pathname }
                           step={ index + 1 }
