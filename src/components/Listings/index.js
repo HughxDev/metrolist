@@ -29,6 +29,10 @@ function Listings( props ) {
   const filterHomes = ( filtersToApply, matchOnNoneSelected = true ) => {
     const matchingHomes = allHomes
       .filter( ( home ) => {
+        if ( !home.incomeRestricted ) {
+          return true;
+        }
+
         let matchesOffer = (
           (
             filtersToApply.offer.rent
@@ -321,7 +325,7 @@ function Listings( props ) {
     <article className={ `ml-listings${props.className ? ` ${props.className}` : ''}` }>
       <h2 className="sr-only">Search</h2>
       <Row space="panel" stackUntil="medium">
-        <Stack data-column-width="1/3" space="below-filters" reverseAt="large">
+        <Stack data-column-width="1/3" space="panel" reverseAt="large">
           <FiltersPanel
             className="ml-listings__filters"
             filters={ filters }
@@ -415,8 +419,8 @@ Listings.defaultProps = {
       "4+": false,
     },
     "amiQualification": {
-      "lowerBound": 30,
-      "upperBound": 150,
+      "lowerBound": 0,
+      "upperBound": 200,
     },
   },
 };

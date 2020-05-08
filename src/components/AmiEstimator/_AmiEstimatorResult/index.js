@@ -49,18 +49,37 @@ function estimateAmi( { householdSize, householdIncome, incomeRate } ) {
   return estimation;
 }
 
-function getFuzzyAmiRecommendation( amiEstimation ) {
-  return ( Math.ceil( amiEstimation / 10 ) * 10 );
+function recommendAmi( amiEstimation ) {
+  if ( amiEstimation < 0 ) {
+    return 0;
+  }
+
+  if ( amiEstimation ) {
+    return ( Math.ceil( amiEstimation / 5 ) * 5 );
+  }
+
+  return amiEstimation;
+}
+
+function isAboveUpperBound( amiEstimation ) {
+  return ( amiEstimation > 200 );
 }
 
 const AmiEstimatorResult = forwardRef( ( props, ref ) => {
   const selfRef = ( ref || useRef() );
   const [amiEstimation] = useState( estimateAmi( props.formData ) );
+  let amiRecommendation = recommendAmi( amiEstimation );
+  localStorage.setItem( 'amiRecommendation', amiRecommendation );
 
   useEffect( () => {
     props.setStep( props.step );
     props.adjustContainerHeight( selfRef );
   }, [] );
+
+  useEffect( () => {
+    amiRecommendation = recommendAmi( amiEstimation );
+    localStorage.setItem( 'amiRecommendation', amiRecommendation );
+  }, [amiEstimation] );
 
   return (
     <div ref={ selfRef } className={ `ml-ami-estimator__result ml-ami-estimator__prompt${props.className ? ` ${props.className}` : ''}` } data-testid="ml-ami-estimator__result">
@@ -68,10 +87,11 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
         <InputSummary formData={ props.formData } />
         <Stack space="1">
           <p>Estimated Eligibility: <dfn className="ml-ami">{ amiEstimation }% AMI</dfn> (Area Median Income)</p>
-          <p>We recommend searching for homes listed at <b className="ml-ami">{ getFuzzyAmiRecommendation( amiEstimation ) }% AMI</b> and above.</p>
+          { isAboveUpperBound( amiEstimation ) && <p>Given your income level, you are unlikely to qualify for units marketed on Metrolist.</p> }
+          { !isAboveUpperBound( amiEstimation ) && <p>We recommend searching for homes listed at <b className="ml-ami">{ amiRecommendation }% AMI</b> and above.</p> }
         </Stack>
         <Stack as="nav" space="1">
-          <Button as="a" variant="primary">See homes that match this eligibility range</Button>
+          <Button as="a" variant="primary" href="/metrolist/listings">See homes that match this eligibility range</Button>
         </Stack>
       </Stack>
     </div>

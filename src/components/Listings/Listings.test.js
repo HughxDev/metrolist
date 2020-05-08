@@ -44,8 +44,8 @@ function getNoFiltersApplied() {
       "4+": false,
     },
     "amiQualification": {
-      "lowerBound": 30,
-      "upperBound": 150,
+      "lowerBound": 0,
+      "upperBound": 200,
     },
   };
 }

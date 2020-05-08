@@ -189,8 +189,8 @@ function FiltersPanel( props ) {
               <Filter
                 type="range"
                 criterion="amiQualification"
-                min={ 30 }
-                max={ 150 }
+                min={ 0 }
+                max={ 200 }
                 lowerBound={ amiQualification.lowerBound }
                 upperBound={ amiQualification.upperBound }
               />
