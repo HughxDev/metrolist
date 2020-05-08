@@ -12,7 +12,7 @@
   z-index: 49;
   position: absolute;
   width: 100%;
-  top: 9.5rem;
+  top: 5.1rem;
   pointer-events: none;
 }
   @include media-breakpoint-up( large ) {
@@ -29,7 +29,7 @@
   .ml-filters-panel__menu {
     // border: 1px solid rgba( 0, 80, 125, 0.59 );
     position: sticky;
-    top: 4rem;
+    top: 0rem;
     // z-index: 50;
     pointer-events: all;
     // background-color: $color-metrolist-text-blue;
@@ -57,12 +57,14 @@
     // margin-bottom: .5rem;
     // font-size: rem( 12px ); // mockup
     font-size: rem( 16px );
+    font-style: normal;
     font-family: $font-family-montserrat;
     text-transform: uppercase;
     font-weight: 500;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin: 0;
   }
   .ml-filters-panel__heading-icon {
     transform: rotate( 0deg );

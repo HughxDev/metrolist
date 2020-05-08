@@ -4,13 +4,14 @@
     width: 100%;
     // margin: rem( 10px ) auto 0;
     margin: 0 auto;
+    margin-top: rem( 39.6px );
   }
 
   @include media-breakpoint-up( large ) {
     .ml-listings {
       width: ( $nominal-width-mobile-listings__content / $nominal-width-mobile ) * 100%;
       // margin-top: rem( 80px );
-      margin-top: rem( 40px );
+      // margin-top: rem( 40px );
     }
 
     .ml-listings__content {

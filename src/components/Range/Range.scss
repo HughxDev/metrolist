@@ -148,6 +148,10 @@ $thumb-translate-y: ( $thumb-diameter * -.75 );
     -webkit-appearance: none
   }
 
+  padding: 0;
+  height: auto;
+  color: inherit;
+  border: none;
   grid-column: 1;
   grid-row: 2;
   z-index: calc( 1 + var( --highlighted) );

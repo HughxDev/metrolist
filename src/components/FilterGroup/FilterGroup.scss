@@ -16,7 +16,7 @@
   transition: padding-top .125s linear, padding-bottom .125s linear;
 }
 .ml-filter-group:not(.ml-filter-group--expanded) {
-  padding-top: rem( $filter-group-label-height );
+  padding-top: 2.2rem;
   padding-bottom: 0 !important;
 }
 
@@ -50,6 +50,7 @@
     left: 0;
     // margin-left: rem( $filter-group-padding-left-right * -1 );
     // margin-right: rem( $filter-group-padding-left-right * -1 );
+    margin: 0;
   }
   .ml-filter-group__label-text {
     flex: 1;

@@ -48,18 +48,18 @@ $space: 1rem;
     }
   }
 
-  .ml-stack.ml-stack--space-below-filters {
-    & > :not([class*="--hide-until-"]) + :not([hidden]) {
-      margin-top: rem( $filter-group-label-height ) + $panel-spacing;
-    }
-  }
-  @include media-breakpoint-up( large ) {
-    .ml-stack.ml-stack--space-below-filters {
-      & > :not([class*="--hide-until-xlarge"]) + * {
-        margin-top: $panel-spacing;
-      }
-    }
-  }
+  // .ml-stack.ml-stack--space-below-filters {
+  //   & > :not([class*="--hide-until-"]) + :not([hidden]) {
+  //     margin-top: rem( $filter-group-label-height ) + $panel-spacing;
+  //   }
+  // }
+  // @include media-breakpoint-up( large ) {
+  //   .ml-stack.ml-stack--space-below-filters {
+  //     & > :not([class*="--hide-until-xlarge"]) + * {
+  //       margin-top: $panel-spacing;
+  //     }
+  //   }
+  // }
 
   .ml-stack.ml-stack--space-sister-checkboxes {
     & > :not([class*="--hide-until-"]) + :not([hidden]) {
@@ -282,7 +282,7 @@ $space: 1rem;
   .ml-stack.ml-stack--reverse-large {
     flex-direction: column-reverse;
 
-    &.ml-stack--space-below-filters,
+    // &.ml-stack--space-below-filters,
     &.ml-stack--space-panel {
       & > :not([class*="--hide-until-xlarge"]) + * {
         margin-top: 0;

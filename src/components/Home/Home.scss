@@ -38,6 +38,7 @@ $padding-home-horizontal--large: rem( 26px );
   .ml-home__title {
     line-height: rem( 19px );
     margin-top: -0.3rem;
+    margin-bottom: 0;
     font-family: $font-family-heading;
     font-size: rem( 16px );
     font-weight: bold;
