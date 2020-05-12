@@ -324,7 +324,7 @@ function Listings( props ) {
   return (
     <article className={ `ml-listings${props.className ? ` ${props.className}` : ''}` }>
       <h2 className="sr-only">Search</h2>
-      <Row space="panel" stackUntil="medium">
+      <Row space="panel" stackUntil="large">
         <Stack data-column-width="1/3" space="panel" reverseAt="large">
           <FiltersPanel
             className="ml-listings__filters"

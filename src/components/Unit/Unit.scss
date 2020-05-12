@@ -30,6 +30,8 @@
   .ml-unit__price {
     text-align: right;
   }
-  .ml-unit__price-rate {
+  .ml-unit__price-rate,
+  .ml-unit__price-rate[title] {
     text-decoration: none;
+    border-bottom: none;
   }

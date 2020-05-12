@@ -46,6 +46,10 @@ function ResultsPanel( props ) {
     attributes['data-column-width'] = columnWidth;
   }
 
+  if ( attributes.filters ) {
+    delete attributes.filters;
+  }
+
   return (
     <article
       data-testid="ml-results-panel"

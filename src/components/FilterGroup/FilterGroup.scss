@@ -68,8 +68,19 @@
   }
 
   .ml-filter-group__filters {
+    $grid-gap: .75rem;
+
     transition: height .125s ease;
     overflow: hidden;
+    flex-wrap: wrap;
+    margin-bottom: ( $grid-gap * -1 );
+
+    & > * {
+      margin-bottom: $grid-gap;
+      flex-shrink: 0;
+      flex-grow: 1;
+      flex-basis: 25%;
+    }
   }
   .ml-filter-group__filters:not(.ml-filter-group__filters--expanded) {
     height: 0 !important;

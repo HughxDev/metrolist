@@ -19,6 +19,7 @@ function FiltersPanel( props ) {
   const attributes = { ...props };
   const [isExpanded, setExpanded] = useState( isDesktop );
   // const [filters, setFilters] = useState( props.filters );
+  const $self = useRef();
   let updatingDrawerHeight = false;
 
   const updateDrawerHeight = ( wait ) => {
@@ -39,6 +40,13 @@ function FiltersPanel( props ) {
     } else {
       updateHeight();
     }
+  };
+
+  const updateOwnHeight = () => {
+    const bodyHeight = getComputedStyle( document.body ).getPropertyValue( 'height' ).replace( 'px', '' );
+    const topOffset = getComputedStyle( $self.current ).getPropertyValue( 'top' ).replace( 'px', '' );
+
+    $self.current.style.height = `${bodyHeight - topOffset}px`;
   };
 
   const handleDoubleClick = ( event ) => {
@@ -73,9 +81,12 @@ function FiltersPanel( props ) {
         updateDrawerHeight( 250 );
       }
     }
+
+    updateOwnHeight();
   };
 
   useEffect( updateDrawerHeight );
+  useEffect( updateOwnHeight );
 
   if ( props.className ) {
     delete attributes.className;
@@ -84,6 +95,10 @@ function FiltersPanel( props ) {
   if ( props.columnWidth ) {
     delete attributes.columnWidth;
     attributes['data-column-width'] = props.columnWidth;
+  }
+
+  if ( props.filters ) {
+    delete attributes.filters;
   }
 
   if ( props.handleFilterChange ) {
@@ -100,6 +115,7 @@ function FiltersPanel( props ) {
   return (
     <section
       data-testid="ml-filters-panel"
+      ref={ $self }
       className={
         `ml-filters-panel${
           props.className
@@ -111,7 +127,10 @@ function FiltersPanel( props ) {
       }
       { ...attributes }
       onClick={ handleClick }
-      onChange={ props.handleFilterChange }
+      onChange={ () => {
+        props.handleFilterChange();
+        updateOwnHeight();
+      } }
     >
       <div className="ml-filters-panel__menu">
         <h3
@@ -172,7 +191,7 @@ function FiltersPanel( props ) {
               </Filter>
             </Stack>
           </FilterGroup>
-          <FilterGroup criterion="bedrooms" orientation="horizontal" isExpanded={ true }>
+          <FilterGroup criterion="bedrooms" orientation="horizontal">
             <FilterGroup.Label>Bedrooms</FilterGroup.Label>
             <Filter type="checkbox" criterion="bedrooms" checked={ bedrooms['0'] }>0</Filter>
             <Filter type="checkbox" criterion="bedrooms" checked={ bedrooms['1'] }>1</Filter>
@@ -181,7 +200,7 @@ function FiltersPanel( props ) {
             <Filter type="checkbox" criterion="bedrooms" checked={ bedrooms['4+'] }>4+</Filter>
           </FilterGroup>
           <FilterGroup criterion="amiQualification">
-            <FilterGroup.Label>Income Eligibility (AMI%)</FilterGroup.Label>
+            <FilterGroup.Label>Income Eligibility</FilterGroup.Label>
             <div
               onClick={ ( event ) => event.stopPropagation() }
               // onChange={ ( event ) => event.stopPropagation() }

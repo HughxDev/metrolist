@@ -88,17 +88,23 @@ $padding-home-horizontal--large: rem( 26px );
     text-transform: uppercase;
     color: $color-homes-just-listed;
     // line-height: rem( 27px ); // mockup
-    line-height: 0.75;
+    line-height: 1;
+    // line-height: 1.125;
     // position: absolute;
     // top: $padding-home-vertical;
     // right: $padding-home-horizontal;
   }
   @include media-breakpoint-up( large ) {
     .ml-home__just-listed {
-      font-size: rem( 21px );
+      font-size: 1rem;
       letter-spacing: rem( 1.5px );
       // top: $padding-home-vertical--large;
       // right: $padding-home-horizontal--large;
+    }
+  }
+  @include media-breakpoint-up( xlarge ) {
+    .ml-home__just-listed {
+      font-size: rem( 21px );
     }
   }
   @include media-breakpoint-up( home-info--two-column ) {

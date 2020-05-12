@@ -7,14 +7,20 @@
   // position: relative;
   // border: 1px solid rgba( 125, 0, 80, 0.9 );
   // overflow: visible;
-  height: calc( 100% - 9.5rem );
+  height: calc( 100% - #{$filters-panel-top-offset} );
   min-height: 100vh;
   z-index: 49;
   position: absolute;
   width: 100%;
-  top: 5.1rem;
+  top: $filters-panel-top-offset;
   pointer-events: none;
+  // border-bottom: 3px solid maroon;
 }
+  // @include media-breakpoint-up( medium ) {
+  //   .ml-filters-panel {
+  //     top: $filters-panel-top-offset:
+  //   }
+  // }
   @include media-breakpoint-up( large ) {
     .ml-filters-panel {
       position: static;
