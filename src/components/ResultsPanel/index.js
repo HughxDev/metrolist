@@ -34,7 +34,9 @@ import './ResultsPanel.scss';
 */
 
 function ResultsPanel( props ) {
-  const { homes, className, columnWidth } = props;
+  const {
+    homes, className, columnWidth, filters,
+  } = props;
   const attributes = { ...props };
 
   if ( homes.length > 0 ) {
@@ -46,7 +48,7 @@ function ResultsPanel( props ) {
     attributes['data-column-width'] = columnWidth;
   }
 
-  if ( attributes.filters ) {
+  if ( filters ) {
     delete attributes.filters;
   }
 
@@ -61,7 +63,7 @@ function ResultsPanel( props ) {
         <Stack space="panel">
         {
           homes.length
-            ? homes.map( ( home ) => <Home key={ home.id } home={ home } /> )
+            ? homes.map( ( home ) => <Home key={ home.id } home={ home } filters={ filters } /> )
             : <p>No homes match the selected filters.</p>
         }
         </Stack>
@@ -74,6 +76,7 @@ ResultsPanel.propTypes = {
   "homes": PropTypes.arrayOf( homeObjectDefinition ),
   "columnWidth": PropTypes.string,
   "className": PropTypes.string,
+  "filters": PropTypes.object,
 };
 
 export default ResultsPanel;

@@ -71,7 +71,28 @@ function renderType( type ) {
   }
 }
 
-function Home( { home } ) {
+// function serializeFiltersToUrlParams( filters ) {
+//   // /metrolist/search/listing/275-roxbury-street?ami=30-120&bedrooms=1+2&type=rent
+//   const params = [];
+//   const {
+//     amiQualification, bedrooms, location, offer,
+//   } = filters;
+
+//   if ( amiQualification ) {
+//     let amiParam = 'ami=';
+
+//     if ( amiQualification.lowerBound ) {
+//       amiParam += amiQualification.lowerBound;
+//     }
+
+//     if ( amiQualification.upperBound ) {
+//       amiParam += amiQualification.upperBound;
+//     }
+//   }
+// }
+
+function Home( props ) {
+  const { home } = props;
   const {
     title,
     listingDate,
@@ -83,8 +104,12 @@ function Home( { home } ) {
     type,
     units,
     offer,
-    url,
+    slug,
+    // id,
+    // url,
   } = home;
+
+  console.log( 'props.filters', props.filters );
 
   return (
     <article className="ml-home">
@@ -119,7 +144,7 @@ function Home( { home } ) {
             as="link"
             className="ml-home-footer__more-info-link"
             variant="primary"
-            href={ url }
+            data-href={ `listing/${slug}` }
           >More info</Button>
         </Row>
       </div>
@@ -129,6 +154,7 @@ function Home( { home } ) {
 
 Home.propTypes = {
   "home": homeObjectDefinition,
+  "filters": PropTypes.object,
 };
 
 export default Home;
