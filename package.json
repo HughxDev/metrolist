@@ -66,7 +66,7 @@
     "build:stage": "yarn build && yarn build:copy",
     "jest": "./node_modules/jest-cli/bin/jest.js",
     "test": "./node_modules/jest-cli/bin/jest.js --verbose --collect-coverage",
-    "test:watch": "./node_modules/jest-cli/bin/jest.js --verbose --watch src/components/AmiEstimator",
+    "test:watch": "./node_modules/jest-cli/bin/jest.js --verbose --watch src/components/AmiEstimator src/components/Search",
     "test:coverage": "./node_modules/jest-cli/bin/jest.js --verbose --watch --collect-coverage src/components/AmiEstimator",
     "eject": "echo 'not CRA'",
     "component": "node _scripts/component.js",
