@@ -14,12 +14,11 @@ import Callout from '@components/Callout';
 import Icon from '@components/Icon';
 
 import { homeObjectDefinition } from '@util/validation';
-// import units from './sample-api-response.json';
-import { apiHomes } from './test-data';
+import isDev from '@util/dev';
 
 // const dev2Ip = '54.227.255.2';
-// const dev2Domain = 'd8-dev2.boston.gov';
-// const dev2Endpoint = `https://${dev2Domain}/metro/api/v1/units?_format=json`;
+const dev2Domain = 'd8-dev2.boston.gov';
+const dev2Endpoint = `https://${dev2Domain}/metro/api/v1/units?_format=json`;
 
 function Search( props ) {
   const [filters, setFilters] = useState( props.filters );
@@ -203,25 +202,42 @@ function Search( props ) {
 
   useEffect( () => {
     if ( !allHomes.length ) {
-      setAllHomes( apiHomes );
-      // setAllHomes( [
-      //   {
-      //     "id": "99977759",
-      //     "title": "Home",
-      //     // "city": "Boston",
-      //     "type": "apt",
-      //     "offer": "rent",
-      //     "listingDate": "2020-04-29T23:16:26.549Z",
-      //     "units": [
-      //       {
-      //         "id": "studio",
-      //         // "amiQualification": 50,
-      //         "bedrooms": 0,
-      //       },
-      //     ],
+      fetch(
+        dev2Endpoint,
+        {
+          "mode": "no-cors",
+          "headers": {
+            "Content-Type": "application/json",
+          },
+        },
+      ) // TODO: CORS
+        .then( async ( response ) => {
+          console.log( {
+            "responseBody": response.body,
+          } );
+          if ( !response.body ) {
+            if ( isDev() ) {
+              console.warn( 'API returned an invalid response; falling back to test data since we’re in a development environment.' );
 
-      //   },
-      // ] );
+              return import( './test-data' )
+                .then( ( json ) => {
+                  console.log( 'json.default', json.default );
+                  return json.default;
+                } );
+            }
+
+            throw new Error( `API returned an invalid response.` );
+          } else {
+            return response.json();
+          }
+        } )
+        .then( ( apiHomes ) => {
+          console.log( 'apiHomes', apiHomes );
+          setAllHomes( apiHomes );
+        } )
+        .catch( ( error ) => {
+          console.error( error );
+        } );
     }
   }, [] );
 
