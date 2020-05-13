@@ -57,7 +57,6 @@ function FiltersPanel( props ) {
   };
 
   const handleClick = ( event ) => {
-    console.log( 'handleclick' );
     const $element = event.target;
     let { className, nodeName } = $element;
 
