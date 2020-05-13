@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { hasOwnProperty } from '@util/objects';
 
-import './Listings.scss';
+import './Search.scss';
 import 'whatwg-fetch';
 
 import FiltersPanel from '@components/FiltersPanel';
@@ -21,7 +21,7 @@ import { apiHomes } from './test-data';
 // const dev2Domain = 'd8-dev2.boston.gov';
 // const dev2Endpoint = `https://${dev2Domain}/metro/api/v1/units?_format=json`;
 
-function Listings( props ) {
+function Search( props ) {
   const [filters, setFilters] = useState( props.filters );
   const [allHomes, setAllHomes] = useState( Object.freeze( props.homes ) );
   const [filteredHomes, setFilteredHomes] = useState( Object.freeze( props.homes ) );
@@ -322,12 +322,12 @@ function Listings( props ) {
   };
 
   return (
-    <article className={ `ml-listings${props.className ? ` ${props.className}` : ''}` }>
+    <article className={ `ml-search${props.className ? ` ${props.className}` : ''}` }>
       <h2 className="sr-only">Search</h2>
       <Row space="panel" stackUntil="large">
         <Stack data-column-width="1/3" space="panel" reverseAt="large">
           <FiltersPanel
-            className="ml-listings__filters"
+            className="ml-search__filters"
             filters={ filters }
             handleFilterChange={ handleFilterChange }
           />
@@ -341,7 +341,7 @@ function Listings( props ) {
           </Inset>
         </Stack>
         <ResultsPanel
-          className="ml-listings__results"
+          className="ml-search__results"
           columnWidth="2/3"
           filters={ filters }
           homes={ filteredHomes }
@@ -351,7 +351,7 @@ function Listings( props ) {
   );
 }
 
-Listings.propTypes = {
+Search.propTypes = {
   "amiEstimation": PropTypes.number,
   "filters": PropTypes.shape( {
     "offer": PropTypes.shape( {
@@ -386,7 +386,7 @@ Listings.propTypes = {
   "className": PropTypes.string,
 };
 
-Listings.defaultProps = {
+Search.defaultProps = {
   "homes": [],
   "amiEstimation": null,
   "filters": {
@@ -425,4 +425,4 @@ Listings.defaultProps = {
   },
 };
 
-export default Listings;
+export default Search;

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route } from 'react-router-dom';
 
-import Listings from '@components/Listings';
+import Search from '@components/Search';
 import AmiEstimator from '@components/AmiEstimator';
 
 import './Routes.scss';
@@ -10,8 +10,8 @@ import './Routes.scss';
 function Routes( props ) {
   return (
     <Switch>
-      <Route path="/listings">
-        <Listings />
+      <Route path="/search">
+        <Search />
       </Route>
       <Route path="/ami-estimator">
         <AmiEstimator />

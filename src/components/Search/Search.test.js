@@ -7,7 +7,7 @@ import {
 } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
-import Listings from './index';
+import Search from './index';
 
 function generateFakeId() {
   return Math.round( Math.random() * 100000000 ).toString();
@@ -51,11 +51,11 @@ function getNoFiltersApplied() {
 }
 // import testData from './test-data.json';
 
-describe( 'Listings', () => {
+describe( 'Search', () => {
   afterEach( cleanup );
 
   it( 'Renders', () => {
-    const { getByTestId } = render( <Listings /> );
+    const { getByTestId } = render( <Search /> );
     const FiltersPanel = getByTestId( 'ml-filters-panel' );
     const ResultsPanel = getByTestId( 'ml-results-panel' );
 
@@ -118,11 +118,11 @@ describe( 'Listings', () => {
       it( 'Filters results to only homes for rent', () => {
         const homesToFilter = [homeToRent, homeToBuy];
         const { getByLabelText, queryByText } = render(
-          <Listings
+          <Search
             homes={ homesToFilter }
             filters={
               {
-                ...Listings.defaultProps.filters,
+                ...Search.defaultProps.filters,
                 "offer": {
                   "rent": false,
                   "sale": false,
@@ -144,11 +144,11 @@ describe( 'Listings', () => {
       it( 'Filters results to only homes for sale', () => {
         const homesToFilter = [homeToRent, homeToBuy];
         const { getByLabelText, queryByText } = render(
-          <Listings
+          <Search
             homes={ homesToFilter }
             filters={
               {
-                ...Listings.defaultProps.filters,
+                ...Search.defaultProps.filters,
                 "offer": {
                   "rent": false,
                   "sale": false,
@@ -185,7 +185,7 @@ describe( 'Listings', () => {
       it( 'Filters results to only homes within Boston', () => {
         const homesToFilter = [homeWithinBoston, homeOutsideBoston];
         const { getByLabelText, queryByText } = render(
-          <Listings
+          <Search
             homes={ homesToFilter }
             filters={ noFiltersApplied }
           />,
@@ -201,7 +201,7 @@ describe( 'Listings', () => {
       it( 'Filters results to only homes outside Boston', () => {
         const homesToFilter = [homeWithinBoston, homeOutsideBoston];
         const { getByLabelText, queryByText } = render(
-          <Listings
+          <Search
             homes={ homesToFilter }
             filters={ noFiltersApplied }
           />,
@@ -215,7 +215,7 @@ describe( 'Listings', () => {
       } );
 
       it( 'Sets all neighborhood checkboxes appropriately when the “Boston” checkbox is toggled', () => {
-        const { getByLabelText } = render( <Listings filters={ noFiltersApplied } /> );
+        const { getByLabelText } = render( <Search filters={ noFiltersApplied } /> );
         const bostonInput = getByLabelText( 'Boston' );
         const dotInput = getByLabelText( 'Dorchester' );
         const southieInput = getByLabelText( 'South Boston' );
@@ -234,7 +234,7 @@ describe( 'Listings', () => {
       } );
 
       it( 'Sets all cardinal direction checkboxes appropriately when the “Beyond Boston” checkbox is toggled', () => {
-        const { getByLabelText } = render( <Listings filters={ noFiltersApplied } /> );
+        const { getByLabelText } = render( <Search filters={ noFiltersApplied } /> );
         const beyondBostonInput = getByLabelText( 'Beyond Boston' );
         const westInput = getByLabelText( 'West of Boston' );
         const southInput = getByLabelText( 'South of Boston' );
@@ -273,7 +273,7 @@ describe( 'Listings', () => {
         const {
           getByLabelText, getByTestId, queryByTestId,
         } = render(
-          <Listings
+          <Search
             homes={ homesToFilter }
             filters={ noFiltersApplied }
           />,
@@ -347,7 +347,7 @@ describe( 'Listings', () => {
         const {
           getByTestId, queryByTestId,
         } = render(
-          <Listings
+          <Search
             homes={ homesToFilter }
             filters={ amiBetweenEightyAndOneHundred }
           />,

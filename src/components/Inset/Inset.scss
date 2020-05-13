@@ -2,12 +2,12 @@
 @import '@globals';
 
 .ml-inset {
-  width: ( $nominal-width-mobile-listings__content / $nominal-width-mobile ) * 100%;
+  width: ( $nominal-width-mobile-search__content / $nominal-width-mobile ) * 100%;
   margin: 0 auto;
 }
   @include media-breakpoint-up( large ) {
     .ml-inset {
-      width: ( $nominal-width-desktop-listings__content / $nominal-width-desktop ) * 100%;
+      width: ( $nominal-width-desktop-search__content / $nominal-width-desktop ) * 100%;
     }
   }
 

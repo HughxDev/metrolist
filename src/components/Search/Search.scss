@@ -1,8 +1,8 @@
-// <Listings />
+// <Search />
 @import '@globals';
 @import '@globals/typography/filters';
 
-  .ml-listings {
+  .ml-search {
     width: 100%;
     // margin: rem( 10px ) auto 0;
     margin: 0 auto;
@@ -11,34 +11,34 @@
   }
 
   @include media-breakpoint-up( large ) {
-    .ml-listings {
+    .ml-search {
 
-      width: ( $nominal-width-mobile-listings__content / $nominal-width-mobile ) * 100%;
+      width: ( $nominal-width-mobile-search__content / $nominal-width-mobile ) * 100%;
       // border: 1px solid maroon;
     }
 
-    .ml-listings__content {
+    .ml-search__content {
       display: flex;
     }
 
-    .ml-listings__filters,
-    .ml-listings__results {
+    .ml-search__filters,
+    .ml-search__results {
       // border: 1px solid black;
       display: inline-block;
     }
 
     // $filters-width: 31%;
-    // .ml-listings__filters {
+    // .ml-search__filters {
     //   width: $filters-width;
     // }
-    // .ml-listings__results {
+    // .ml-search__results {
     //   width: ( 100% - $filters-width );
     // }
   }
 
   @include media-breakpoint-up( xlarge ) {
-    .ml-listings {
-      width: ( $nominal-width-desktop-listings__content / $nominal-width-desktop ) * 100%;
+    .ml-search {
+      width: ( $nominal-width-desktop-search__content / $nominal-width-desktop ) * 100%;
       // max-width: rem( $nominal-width-desktop * 1px );
     }
   }

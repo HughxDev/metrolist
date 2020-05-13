@@ -91,7 +91,7 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
           { !isAboveUpperBound( amiEstimation ) && <p>We recommend searching for homes listed at <b className="ml-ami">{ amiRecommendation }% AMI</b> and above.</p> }
         </Stack>
         <Stack as="nav" space="1">
-          <Button as="a" variant="primary" href="/metrolist/listings">See homes that match this eligibility range</Button>
+          <Button as="a" variant="primary" href="/metrolist/search">See homes that match this eligibility range</Button>
         </Stack>
       </Stack>
     </div>
