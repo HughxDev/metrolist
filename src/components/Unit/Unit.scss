@@ -15,6 +15,7 @@
     padding: $table-cell-spacing;
     border-bottom: 1px solid #D8D8D8;
     width: 33.333333%;
+    line-height: 1;
   }
   @include media-breakpoint-up( large ) {
     .ml-unit__cell {
@@ -30,8 +31,8 @@
   .ml-unit__price {
     text-align: right;
   }
-  .ml-unit__price-rate,
-  .ml-unit__price-rate[title] {
+  .ml-unit__shorthand,
+  .ml-unit__shorthand[title] {
     text-decoration: none;
     border-bottom: none;
   }

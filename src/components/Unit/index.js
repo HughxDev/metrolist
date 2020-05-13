@@ -10,7 +10,10 @@ function formatSize( bedrooms, numberOfIdenticalUnits ) {
   let formattedSize = '';
 
   if ( bedrooms > 0 ) {
-    formattedSize += `${bedrooms} Bedroom`;
+    formattedSize = <>
+      <abbr title={ `${bedrooms} Bedroom` } className="ml-unit__shorthand --hide-at-large">{ `${bedrooms} BR` }</abbr>
+      <span className="--hide-until-large">{ `${bedrooms} Bedroom` }</span>
+    </>;
   } else {
     formattedSize = 'Studio';
   }
@@ -43,7 +46,7 @@ function formatPrice( price, priceRate ) {
         return (
           <>
             { `${value}/` }
-            <abbr className="ml-unit__price-rate" title={ priceRate.substring( 0, 5 ) }>{ priceRate.substring( 0, 2 ) }.</abbr>
+            <abbr className="ml-unit__price-rate ml-unit__shorthand" title={ priceRate.substring( 0, 5 ) }>{ priceRate.substring( 0, 2 ) }.</abbr>
           </>
         );
       } }
