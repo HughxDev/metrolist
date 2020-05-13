@@ -163,3 +163,7 @@ module.exports = {
   },
 };
 ```
+
+## Interfacing with Main Site
+
+- All `mailto:` links require the class `hide-form` to be set, otherwise they will trigger the generic feedback form.

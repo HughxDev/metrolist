@@ -15,7 +15,7 @@ function DetailItem( props ) {
         <div className="detail-item__label">Have questions? Contact us:</div>
         <div className="detail-item__body ">
           <address>
-            <a href={ `mailto:${props.emailAddress}` } rel="nofollow">{ props.emailAddress }</a>
+            <a href={ `mailto:${props.emailAddress}` } className="hide-form" rel="nofollow">{ props.emailAddress }</a>
           </address>
         </div>
       </div>

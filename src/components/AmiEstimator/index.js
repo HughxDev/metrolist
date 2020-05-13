@@ -569,7 +569,7 @@ function AmiEstimator( props ) {
       <Stack as="footer" className="ml-ami-estimator__footer" space="ami-estimator-footer">
         <p>
           <a
-            className="ml-ami-estimator__email-link"
+            className="ml-ami-estimator__email-link hide-form"
             href="mailto:metrolist@boston.gov"
             onClick={ ( e ) => e.preventDefault() }
           >
