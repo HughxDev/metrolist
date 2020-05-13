@@ -332,7 +332,7 @@ function Listings( props ) {
             handleFilterChange={ handleFilterChange }
           />
           <Inset className="filters-panel__callout-container" until="large">
-            <Callout className="filters-panel__callout" as="a" href="#">
+            <Callout className="filters-panel__callout" as="a" href="/metrolist/ami-estimator/">
               <Callout.Heading as="span">Use our AMI Estimator to find homes that match your income</Callout.Heading>
               <Callout.Icon>
                 <Icon use="#icon-mobile-link-marker" />

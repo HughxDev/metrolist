@@ -9,6 +9,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  &:hover,
+  &:focus,
+  &:active {
+    border-color: inherit;
+  }
 }
   @include media-breakpoint-up( large ) {
     .ml-callout {
@@ -29,6 +35,15 @@
     font-range: 480px 1440px; // TODO: make match $grid-breakpoints?
     line-height: $line-height-200;
     margin: 0;
+
+    &:hover,
+    &:focus,
+    &:active,
+    .ml-callout:hover &,
+    .ml-callout:focus &,
+    .ml-callout:active & {
+      color: inherit;
+    }
   }
   .ml-callout__text {
     font-size: rem( 18px );
