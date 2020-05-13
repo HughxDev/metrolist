@@ -61,7 +61,7 @@ class FilterGroup extends React.Component {
         <Wrapper
           id={ groupId }
           ref={ this.$filters }
-          space={ wrapperSpacing }
+          // space={ wrapperSpacing }
           className={ `ml-filter-group__filters${this.state.isExpanded ? ' ml-filter-group__filters--expanded' : ''}` }
         >
           { childArray }
