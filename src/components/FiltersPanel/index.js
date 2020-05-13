@@ -20,27 +20,27 @@ function FiltersPanel( props ) {
   const [isExpanded, setExpanded] = useState( isDesktop );
   // const [filters, setFilters] = useState( props.filters );
   const $self = useRef();
-  // let updatingDrawerHeight = false;
+  let updatingDrawerHeight = false;
 
-  // const updateDrawerHeight = ( wait ) => {
-  //   const updateHeight = () => {
-  //     if ( $drawer.current ) {
-  //       const height = getComputedStyle( $drawer.current ).getPropertyValue( 'height' );
+  const updateDrawerHeight = ( wait ) => {
+    const updateHeight = () => {
+      if ( $drawer.current ) {
+        const height = getComputedStyle( $drawer.current ).getPropertyValue( 'height' );
 
-  //       if ( height !== '0px' ) {
-  //         $drawer.current.style.height = height;
-  //       }
-  //     }
+        if ( height !== '0px' ) {
+          $drawer.current.style.height = height;
+        }
+      }
 
-  //     updatingDrawerHeight = false;
-  //   };
+      updatingDrawerHeight = false;
+    };
 
-  //   if ( wait ) {
-  //     setTimeout( updateHeight, wait );
-  //   } else {
-  //     updateHeight();
-  //   }
-  // };
+    if ( wait ) {
+      setTimeout( updateHeight, wait );
+    } else {
+      updateHeight();
+    }
+  };
 
   // const updateOwnHeight = () => {
   //   const bodyHeight = getComputedStyle( document.body ).getPropertyValue( 'height' ).replace( 'px', '' );
@@ -57,6 +57,7 @@ function FiltersPanel( props ) {
   };
 
   const handleClick = ( event ) => {
+    console.log( 'handleclick' );
     const $element = event.target;
     let { className, nodeName } = $element;
 
@@ -75,22 +76,26 @@ function FiltersPanel( props ) {
     if ( isFiltersPanelClick ) {
       setExpanded( !isExpanded );
     } else {
-      // if ( !updatingDrawerHeight ) {
-      //   updatingDrawerHeight = true;
-      //   $drawer.current.style.height = '';
-      //   updateDrawerHeight( 250 );
-      // }
+      if ( !updatingDrawerHeight ) {
+        updatingDrawerHeight = true;
+        $drawer.current.style.height = '';
+        updateDrawerHeight( 250 );
+      }
     }
 
     // updateOwnHeight();
   };
 
-  // useEffect( updateDrawerHeight );
+  useEffect( updateDrawerHeight );
   // useEffect( updateOwnHeight );
 
-  // document.addEventListener( 'resize', ( event ) => {
-  //   handleClick( event );
-  // }, false );
+  window.addEventListener( 'resize', ( event ) => {
+    if ( !updatingDrawerHeight ) {
+      updatingDrawerHeight = true;
+      $drawer.current.style.height = '';
+      updateDrawerHeight( 125 );
+    }
+  }, false );
 
   if ( props.className ) {
     delete attributes.className;
@@ -131,8 +136,8 @@ function FiltersPanel( props ) {
       }
       { ...attributes }
       onClick={ handleClick }
-      onChange={ () => {
-        props.handleFilterChange();
+      onChange={ ( event ) => {
+        props.handleFilterChange( event );
         // updateOwnHeight();
       } }
     >
