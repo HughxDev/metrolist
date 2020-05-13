@@ -20,34 +20,34 @@ function FiltersPanel( props ) {
   const [isExpanded, setExpanded] = useState( isDesktop );
   // const [filters, setFilters] = useState( props.filters );
   const $self = useRef();
-  let updatingDrawerHeight = false;
+  // let updatingDrawerHeight = false;
 
-  const updateDrawerHeight = ( wait ) => {
-    const updateHeight = () => {
-      if ( $drawer.current ) {
-        const height = getComputedStyle( $drawer.current ).getPropertyValue( 'height' );
+  // const updateDrawerHeight = ( wait ) => {
+  //   const updateHeight = () => {
+  //     if ( $drawer.current ) {
+  //       const height = getComputedStyle( $drawer.current ).getPropertyValue( 'height' );
 
-        if ( height !== '0px' ) {
-          $drawer.current.style.height = height;
-        }
-      }
+  //       if ( height !== '0px' ) {
+  //         $drawer.current.style.height = height;
+  //       }
+  //     }
 
-      updatingDrawerHeight = false;
-    };
+  //     updatingDrawerHeight = false;
+  //   };
 
-    if ( wait ) {
-      setTimeout( updateHeight, wait );
-    } else {
-      updateHeight();
-    }
-  };
+  //   if ( wait ) {
+  //     setTimeout( updateHeight, wait );
+  //   } else {
+  //     updateHeight();
+  //   }
+  // };
 
-  const updateOwnHeight = () => {
-    const bodyHeight = getComputedStyle( document.body ).getPropertyValue( 'height' ).replace( 'px', '' );
-    const topOffset = getComputedStyle( $self.current ).getPropertyValue( 'top' ).replace( 'px', '' );
+  // const updateOwnHeight = () => {
+  //   const bodyHeight = getComputedStyle( document.body ).getPropertyValue( 'height' ).replace( 'px', '' );
+  //   const topOffset = getComputedStyle( $self.current ).getPropertyValue( 'top' ).replace( 'px', '' );
 
-    $self.current.style.height = `${bodyHeight - topOffset}px`;
-  };
+  //   $self.current.style.height = `${bodyHeight - topOffset}px`;
+  // };
 
   const handleDoubleClick = ( event ) => {
     // https://stackoverflow.com/a/43321596/214325
@@ -75,18 +75,22 @@ function FiltersPanel( props ) {
     if ( isFiltersPanelClick ) {
       setExpanded( !isExpanded );
     } else {
-      if ( !updatingDrawerHeight ) {
-        updatingDrawerHeight = true;
-        $drawer.current.style.height = '';
-        updateDrawerHeight( 250 );
-      }
+      // if ( !updatingDrawerHeight ) {
+      //   updatingDrawerHeight = true;
+      //   $drawer.current.style.height = '';
+      //   updateDrawerHeight( 250 );
+      // }
     }
 
-    updateOwnHeight();
+    // updateOwnHeight();
   };
 
-  useEffect( updateDrawerHeight );
-  useEffect( updateOwnHeight );
+  // useEffect( updateDrawerHeight );
+  // useEffect( updateOwnHeight );
+
+  // document.addEventListener( 'resize', ( event ) => {
+  //   handleClick( event );
+  // }, false );
 
   if ( props.className ) {
     delete attributes.className;
@@ -129,7 +133,7 @@ function FiltersPanel( props ) {
       onClick={ handleClick }
       onChange={ () => {
         props.handleFilterChange();
-        updateOwnHeight();
+        // updateOwnHeight();
       } }
     >
       <div className="ml-filters-panel__menu">

@@ -109,8 +109,6 @@ function Home( props ) {
     // url,
   } = home;
 
-  console.log( 'props.filters', props.filters );
-
   return (
     <article className="ml-home">
       <div className="ml-home__content">
