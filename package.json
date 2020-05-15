@@ -62,8 +62,8 @@
   "scripts": {
     "start": "[ -z \"$(ipconfig getifaddr en6)\" ] && export LAN_IP_ADDRESS=\"$(ipconfig getifaddr en0)\" || export LAN_IP_ADDRESS=\"$(ipconfig getifaddr en6)\"; webpack-dev-server --host $LAN_IP_ADDRESS --open",
     "build": "rm -rf dist/ && webpack --config webpack.config.js --mode=production",
-    "build:copy": "cp -r dist/ /Users/Hugh/Sites/city-of-boston/boston.gov-d8/docroot/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/",
-    "build:stage": "yarn build && yarn build:copy",
+    "build:stage": "cp -r dist/ /Users/Hugh/Sites/city-of-boston/boston.gov-d8-deploy/docroot/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/",
+    "build:drupal": "yarn build && yarn build:stage",
     "jest": "./node_modules/jest-cli/bin/jest.js",
     "test": "./node_modules/jest-cli/bin/jest.js --verbose --collect-coverage",
     "test:watch": "./node_modules/jest-cli/bin/jest.js --verbose --watch src/components/AmiEstimator src/components/Search",
