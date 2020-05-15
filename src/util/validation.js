@@ -19,7 +19,7 @@ export const homeObjectDefinition = PropTypes.shape( { // eslint-disable-line im
   "assignment": PropTypes.oneOf( [null, '', 'lottery', 'waitlist', 'first'] ),
   "city": PropTypes.string,
   "neighborhood": PropTypes.string,
-  "type": PropTypes.oneOf( ['', 'apt', 'house', 'sro', 'condo'] ),
+  "type": PropTypes.oneOf( [null, 'apt', 'house', 'sro', 'condo', 'multi-family'] ),
   "offer": PropTypes.oneOf( ['rent', 'sale'] ),
   "units": PropTypes.arrayOf( unitObjectDefinition ),
   "incomeRestricted": PropTypes.bool,

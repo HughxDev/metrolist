@@ -66,6 +66,9 @@ function renderType( type ) {
     case 'condo':
       return 'Condominium';
 
+    case 'multi-family':
+      return 'Multi-family';
+
     default:
       return capitalCase( type );
   }
