@@ -74,28 +74,87 @@ function renderType( type ) {
   }
 }
 
-// function serializeFiltersToUrlParams( filters ) {
-//   // /metrolist/search/listing/275-roxbury-street?ami=30-120&bedrooms=1+2&type=rent
-//   const params = [];
-//   const {
-//     amiQualification, bedrooms, location, offer,
-//   } = filters;
+function serializeFiltersToUrlParams( filters ) {
+  // /metrolist/search/listing/275-roxbury-street?ami=30-120&bedrooms=1+2&type=rent
+  // /metrolist/search/listing/{slug}?ami={ami_low}-{ami_high}&bedrooms={num_beds}+{num_beds}&type={offer}
+  const params = [];
+  const {
+    amiQualification, bedrooms, offer,
+  } = filters;
 
-//   if ( amiQualification ) {
-//     let amiParam = 'ami=';
+  if ( amiQualification ) {
+    let amiParam = 'ami=';
 
-//     if ( amiQualification.lowerBound ) {
-//       amiParam += amiQualification.lowerBound;
-//     }
+    if ( amiQualification.lowerBound ) {
+      amiParam += amiQualification.lowerBound;
+    } else {
+      amiParam += '0';
+    }
 
-//     if ( amiQualification.upperBound ) {
-//       amiParam += amiQualification.upperBound;
-//     }
-//   }
-// }
+    amiParam += '-';
+
+    if ( amiQualification.upperBound ) {
+      amiParam += amiQualification.upperBound;
+    } else {
+      amiParam += '200';
+    }
+
+    if ( amiParam !== 'ami=0-200' ) {
+      params.push( amiParam );
+    }
+  }
+
+  if ( bedrooms ) {
+    let bedroomsParam = 'bedrooms=';
+    let preferredBedroomSizeCount = 0;
+
+    Object.keys( bedrooms ).forEach( ( bedroomSize, index ) => {
+      const bedroomSizeToggled = bedrooms[bedroomSize];
+
+      if ( bedroomSizeToggled ) {
+        if ( ( index > 0 ) && ( preferredBedroomSizeCount > 0 ) ) {
+          bedroomsParam += '+';
+        }
+
+        preferredBedroomSizeCount++;
+        bedroomsParam += bedroomSize.replace( /\+/g, '' ); // TODO: Question for Alex: does 4 work for 4+?
+      }
+    } );
+
+    if ( preferredBedroomSizeCount ) {
+      params.push( bedroomsParam );
+    }
+  }
+
+  if ( offer ) {
+    let offerParam = 'type=';
+
+    if ( offer.rent ) {
+      offerParam += 'rent';
+    }
+
+    if ( offer.rent && offer.sale ) {
+      offerParam += '+';
+    }
+
+    if ( offer.sale ) {
+      offerParam += 'sale';
+    }
+
+    if ( offerParam !== 'type=' ) {
+      params.push( offerParam );
+    }
+  }
+
+  if ( params.length ) {
+    return `?${params.join( '&' )}`;
+  }
+
+  return '';
+}
 
 function Home( props ) {
-  const { home } = props;
+  const { home, filters } = props;
   const {
     title,
     listingDate,
@@ -145,7 +204,7 @@ function Home( props ) {
             as="link"
             className="ml-home-footer__more-info-link"
             variant="primary"
-            data-href={ `listing/${slug}` }
+            href={ `https://d8-ci.boston.gov/metrolist/search/listing/${slug}/${serializeFiltersToUrlParams( filters )}` }
           >More info</Button>
         </Row>
       </div>

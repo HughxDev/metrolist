@@ -436,7 +436,7 @@ Search.defaultProps = {
       "4+": false,
     },
     "amiQualification": {
-      "lowerBound": 0,
+      "lowerBound": ( localStorage.getItem( 'amiRecommendation' ) || 0 ),
       "upperBound": 200,
     },
   },
