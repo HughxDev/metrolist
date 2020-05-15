@@ -17,8 +17,9 @@ import { homeObjectDefinition } from '@util/validation';
 import isDev from '@util/dev';
 
 // const dev2Ip = '54.227.255.2';
-const dev2Domain = 'd8-dev2.boston.gov';
-const dev2Endpoint = `https://${dev2Domain}/metro/api/v1/units?_format=json`;
+// const dev2Domain = 'd8-dev2.boston.gov';
+const ciDomain = 'd8-ci.boston.gov';
+const dev2Endpoint = `https://${ciDomain}/metrolist/api/v1/developments?_format=json`;
 
 function Search( props ) {
   const [filters, setFilters] = useState( props.filters );
