@@ -122,10 +122,7 @@ const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
             values="Yearly,Monthly"
             value={ props.formData.incomeRate.value || defaultIncomeRate }
             required
-            onChange={ ( event ) => {
-              console.log( 'incomeRate scale changed', event.target.nodeName, event.target.value );
-              // event.stopPropagation();
-            } }
+            // onChange={ ( event ) => event.stopPropagation() }
           />
           <FormErrorMessage
             ref={ props.formData.incomeRate.errorRef }

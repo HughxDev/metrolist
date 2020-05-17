@@ -372,7 +372,7 @@ function AmiEstimator( props ) {
         }
       } // if change event
 
-      if ( numberOfErrors > 0 ) {
+      if ( navigateNext && ( numberOfErrors > 0 ) ) {
         populateErrors( errorNameList, newFormData );
       } else {
         clearErrors( errorNameList, newFormData );
