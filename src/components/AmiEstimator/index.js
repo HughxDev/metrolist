@@ -564,14 +564,12 @@ function AmiEstimator( props ) {
             >Next</Button>
           </Row>
         </Stack>
-
       </form>
       <Stack as="footer" className="ml-ami-estimator__footer" space="ami-estimator-footer">
         <p>
           <a
             className="ml-ami-estimator__email-link hide-form"
             href="mailto:metrolist@boston.gov"
-            onClick={ ( e ) => e.preventDefault() }
           >
             For questions email <span className="ml-ami-estimator__email-link-email-address">metrolist@boston.gov</span>
           </a>
