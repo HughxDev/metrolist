@@ -17,7 +17,7 @@ function Reveal( props ) {
       $content.current.style.maxHeight = '';
       // $content.current.style.overflow = '';
     } else {
-      $content.current.style.maxHeight = `${47 * ( props.children.length + 1 )}px`;
+      $content.current.style.maxHeight = `${48 * ( props.children.length + 1 )}px`;
       // $content.current.style.overflow = 'visible';
     }
 

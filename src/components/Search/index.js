@@ -440,10 +440,10 @@ Search.defaultProps = {
         "beyondBoston": false,
       },
       "neighborhood": {
-        "southBoston": false,
-        "hydePark": false,
-        "dorchester": false,
-        "mattapan": false,
+        // "southBoston": false,
+        // "hydePark": false,
+        // "dorchester": false,
+        // "mattapan": false,
       },
       "cardinalDirection": {
         "west": false,

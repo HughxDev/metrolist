@@ -177,7 +177,7 @@ function FiltersPanel( props ) {
               <Filter type="checkbox" criterion="city" value="boston" checked={ location.city.boston }>
                 <Filter.Label>Boston</Filter.Label>
                 {
-                  Object.keys( location.neighborhood ).map( ( neighborhood ) => {
+                  Object.keys( listingCounts.location.neighborhood ).map( ( neighborhood ) => {
                     const count = listingCounts.location.neighborhood[neighborhood];
                     return <Filter
                       key={ neighborhood }
@@ -192,7 +192,7 @@ function FiltersPanel( props ) {
               <Filter type="checkbox" criterion="city" value="beyondBoston" checked={ location.city.beyondBoston }>
                 <Filter.Label>Beyond Boston</Filter.Label>
                 {
-                  Object.keys( location.cardinalDirection ).map( ( cardinalDirection ) => {
+                  Object.keys( listingCounts.location.cardinalDirection ).map( ( cardinalDirection ) => {
                     const count = listingCounts.location.cardinalDirection[cardinalDirection];
                     return <Filter
                       key={ cardinalDirection }
