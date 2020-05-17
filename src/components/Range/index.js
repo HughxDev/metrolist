@@ -8,7 +8,7 @@ import './Range.scss';
 function Range( props ) {
   const min = ( props.min || 0 );
   const max = ( props.max || 100 );
-  const [lowerBound, setLowerBound] = useState( localStorage.getItem( 'amiRecommendation' ) || props.lowerBound || props.min || ( max / 2 ) );
+  const [lowerBound, setLowerBound] = useState( localStorage.getItem( 'amiRecommendation' ) || props.lowerBound || props.min );
   const [upperBound, setUpperBound] = useState( props.upperBound || max );
   const [outOfBounds, setOutOfBounds] = useState( false );
   const handleInput = ( ( event ) => {
