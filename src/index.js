@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
+import ScrollToTop from '@components/ScrollToTop';
 
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
@@ -10,6 +11,7 @@ import '@globals/util.scss';
 
 ReactDOM.render(
   <Router basename="/metrolist">
+    <ScrollToTop />
     <App />
   </Router>,
   document.getElementById( 'web-app' ),
