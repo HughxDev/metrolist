@@ -5,7 +5,7 @@ import Home from '@components/Home';
 import Stack from '@components/Stack';
 import Inset from '@components/Inset';
 
-import { homeObjectDefinition } from '@util/validation';
+import { homeObject } from '@util/validation';
 
 import './ResultsPanel.scss';
 
@@ -73,7 +73,7 @@ function ResultsPanel( props ) {
 }
 
 ResultsPanel.propTypes = {
-  "homes": PropTypes.arrayOf( homeObjectDefinition ),
+  "homes": PropTypes.arrayOf( homeObject ),
   "columnWidth": PropTypes.string,
   "className": PropTypes.string,
   "filters": PropTypes.object,

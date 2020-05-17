@@ -10,7 +10,7 @@ import Row from '@components/Row';
 
 // import { capitalize } from '@util/strings';
 import { date, dateTime } from '@util/datetime';
-import { homeObjectDefinition } from '@util/validation';
+import { homeObject } from '@util/validation';
 
 import './Home.scss';
 import { capitalCase } from 'change-case';
@@ -213,7 +213,7 @@ function Home( props ) {
 }
 
 Home.propTypes = {
-  "home": homeObjectDefinition,
+  "home": homeObject,
   "filters": PropTypes.object,
 };
 

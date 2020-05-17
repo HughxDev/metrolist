@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import Unit from '@components/Unit';
 
-import { unitObjectDefinition } from '@util/validation';
+import { unitObject } from '@util/validation';
 
 import './UnitGroup.scss';
 
@@ -27,7 +27,7 @@ function UnitGroup( { units } ) {
 }
 
 UnitGroup.propTypes = {
-  "units": PropTypes.arrayOf( unitObjectDefinition ),
+  "units": PropTypes.arrayOf( unitObject ),
 };
 
 export default UnitGroup;

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { date, dateTime } from './datetime';
 
-export const unitObjectDefinition = PropTypes.shape( {
+export const unitObject = PropTypes.shape( {
   "id": PropTypes.string.isRequired,
   "bedrooms": PropTypes.number,
   "amiQualification": PropTypes.number,
@@ -9,7 +9,7 @@ export const unitObjectDefinition = PropTypes.shape( {
   "priceRate": PropTypes.oneOf( ['monthly', 'once'] ),
 } );
 
-export const homeObjectDefinition = PropTypes.shape( { // eslint-disable-line import/prefer-default-export
+export const homeObject = PropTypes.shape( {
   "id": PropTypes.string.isRequired,
   "slug": PropTypes.string,
   "url": PropTypes.string,
@@ -21,6 +21,36 @@ export const homeObjectDefinition = PropTypes.shape( { // eslint-disable-line im
   "neighborhood": PropTypes.string,
   "type": PropTypes.oneOf( [null, 'apt', 'house', 'sro', 'condo', 'multi-family'] ),
   "offer": PropTypes.oneOf( ['rent', 'sale'] ),
-  "units": PropTypes.arrayOf( unitObjectDefinition ),
+  "units": PropTypes.arrayOf( unitObject ),
   "incomeRestricted": PropTypes.bool,
+} );
+
+export const filtersObject = PropTypes.shape( {
+  "offer": PropTypes.shape( {
+    "rent": PropTypes.bool,
+    "sale": PropTypes.bool,
+  } ),
+  "location": PropTypes.shape( {
+    "city": PropTypes.shape( {
+      "boston": PropTypes.bool,
+      "beyondBoston": PropTypes.bool,
+    } ),
+    "neighborhood": PropTypes.objectOf( PropTypes.bool ),
+    "cardinalDirection": PropTypes.shape( {
+      "west": PropTypes.bool,
+      "north": PropTypes.bool,
+      "south": PropTypes.bool,
+    } ),
+  } ),
+  "bedrooms": PropTypes.shape( {
+    "0": PropTypes.bool,
+    "1": PropTypes.bool,
+    "2": PropTypes.bool,
+    "3": PropTypes.bool,
+    "4+": PropTypes.bool,
+  } ),
+  "amiQualification": PropTypes.shape( {
+    "lowerBound": PropTypes.number,
+    "upperBound": PropTypes.number,
+  } ),
 } );

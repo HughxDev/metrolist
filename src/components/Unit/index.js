@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 
-import { unitObjectDefinition } from '@util/validation';
+import { unitObject } from '@util/validation';
 
 import './Unit.scss';
 
@@ -75,7 +75,7 @@ function Unit( { unit } ) {
 }
 
 Unit.propTypes = {
-  "unit": unitObjectDefinition,
+  "unit": unitObject,
 };
 
 export default Unit;
