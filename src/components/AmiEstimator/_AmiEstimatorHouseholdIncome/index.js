@@ -105,6 +105,7 @@ const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
             name="householdIncome"
             value={ ( props.formData.householdIncome.value === '$0.00' ) ? '' : props.formData.householdIncome.value }
             type="text"
+            inputMode="numeric"
             pattern="[0-9]*"
             placeholder="$0.00"
             aria-describedby="ami-estimator-form-errors ami-estimator-household-income-error"
