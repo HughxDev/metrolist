@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { capitalCase } from 'change-case';
+import { filtersObject } from '@util/validation';
 
 import FilterGroup from '@components/FilterGroup';
 import Filter from '@components/Filter';
@@ -113,12 +114,16 @@ function FiltersPanel( props ) {
     delete attributes.handleFilterChange;
   }
 
+  delete attributes.listingCounts;
+
   const {
     offer,
     location,
     bedrooms,
     amiQualification,
   } = props.filters;
+
+  const { listingCounts } = props;
 
   return (
     <section
@@ -159,10 +164,10 @@ function FiltersPanel( props ) {
             <FilterGroup.Label>Offer</FilterGroup.Label>
             <Row space="rent-sale" stackAt="large">
               <Column width="1/2">
-                <Filter type="checkbox-button" criterion="offer" value="rent" checked={ offer.rent }>For Rent</Filter>
+                <Filter type="checkbox-button" criterion="offer" value="rent" checked={ offer.rent }>{ `For Rent (${listingCounts.offer.rent})` }</Filter>
               </Column>
               <Column width="1/2">
-                <Filter type="checkbox-button" criterion="offer" value="sale" checked={ offer.sale }>For Sale</Filter>
+                <Filter type="checkbox-button" criterion="offer" value="sale" checked={ offer.sale }>{ `For Sale (${listingCounts.offer.sale})` }</Filter>
               </Column>
             </Row>
           </FilterGroup>
@@ -172,29 +177,31 @@ function FiltersPanel( props ) {
               <Filter type="checkbox" criterion="city" value="boston" checked={ location.city.boston }>
                 <Filter.Label>Boston</Filter.Label>
                 {
-                  Object.keys( location.neighborhood ).map( ( neighborhood ) => (
-                    <Filter
+                  Object.keys( location.neighborhood ).map( ( neighborhood ) => {
+                    const count = listingCounts.location.neighborhood[neighborhood];
+                    return <Filter
                       key={ neighborhood }
                       type="checkbox"
                       criterion="neighborhood"
                       value={ neighborhood }
                       checked={ location.neighborhood[neighborhood] }
-                    >{ capitalCase( neighborhood ) }</Filter>
-                  ) )
+                    >{ `${capitalCase( neighborhood )} (${count || '0'})` }</Filter>;
+                  } )
                 }
               </Filter>
               <Filter type="checkbox" criterion="city" value="beyondBoston" checked={ location.city.beyondBoston }>
                 <Filter.Label>Beyond Boston</Filter.Label>
                 {
-                  Object.keys( location.cardinalDirection ).map( ( cardinalDirection ) => (
-                    <Filter
+                  Object.keys( location.cardinalDirection ).map( ( cardinalDirection ) => {
+                    const count = listingCounts.location.cardinalDirection[cardinalDirection];
+                    return <Filter
                       key={ cardinalDirection }
                       type="checkbox"
                       criterion="cardinalDirection"
                       value={ cardinalDirection }
                       checked={ location.cardinalDirection[cardinalDirection] }
-                    >{ `${capitalCase( cardinalDirection )} of Boston` }</Filter>
-                  ) )
+                    >{ `${capitalCase( cardinalDirection )} of Boston (${count || '0'})` }</Filter>;
+                  } )
                 }
               </Filter>
             </Stack>
@@ -232,8 +239,9 @@ function FiltersPanel( props ) {
 FiltersPanel.propTypes = {
   "className": PropTypes.string,
   "columnWidth": PropTypes.string,
-  "filters": PropTypes.object.isRequired,
-  "handleFilterChange": PropTypes.func,
+  "filters": filtersObject,
+  "handleFilterChange": PropTypes.func.isRequired,
+  "listingCounts": PropTypes.object,
 };
 
 export default FiltersPanel;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { hasOwnProperty } from '@util/objects';
+import { camelCase } from 'change-case';
 
 import './Search.scss';
 import 'whatwg-fetch';
@@ -13,7 +14,7 @@ import Stack from '@components/Stack';
 import Callout from '@components/Callout';
 import Icon from '@components/Icon';
 
-import { homeObjectDefinition } from '@util/validation';
+import { homeObject, filtersObject } from '@util/validation';
 import isDev from '@util/dev';
 
 // const dev2Ip = '54.227.255.2';
@@ -25,6 +26,55 @@ function Search( props ) {
   const [filters, setFilters] = useState( props.filters );
   const [allHomes, setAllHomes] = useState( Object.freeze( props.homes ) );
   const [filteredHomes, setFilteredHomes] = useState( Object.freeze( props.homes ) );
+
+  const getListingCounts = ( homes ) => {
+    const listingCounts = {
+      "offer": {
+        "rent": 0,
+        "sale": 0,
+      },
+      "location": {
+        "city": {
+          "boston": 0,
+          "beyondBoston": 0,
+        },
+        "neighborhood": {},
+        "cardinalDirection": {
+          "west": 0,
+          "north": 0,
+          "south": 0,
+        },
+      },
+    };
+
+    homes.forEach( ( home ) => {
+      if ( home.offer === 'sale' ) {
+        listingCounts.offer.sale++;
+      } else if ( home.offer === 'rent' ) {
+        listingCounts.offer.rent++;
+      }
+
+      if ( home.city.toLowerCase() === 'boston' ) {
+        listingCounts.location.city.boston++;
+      } else {
+        listingCounts.location.city.beyondBoston++;
+      }
+
+      if ( home.neighborhood ) {
+        const neighborhoodKey = camelCase( home.neighborhood );
+
+        if ( hasOwnProperty( listingCounts.location.neighborhood, neighborhoodKey ) ) {
+          listingCounts.location.neighborhood[neighborhoodKey]++;
+        } else {
+          listingCounts.location.neighborhood[neighborhoodKey] = 1;
+        }
+      } else if ( home.cardinalDirection ) {
+        listingCounts.location.cardinalDirection[home.cardinalDirection]++;
+      }
+    } );
+
+    return listingCounts;
+  };
 
   const filterHomes = ( filtersToApply, matchOnNoneSelected = true ) => {
     const matchingHomes = allHomes
@@ -346,6 +396,7 @@ function Search( props ) {
           <FiltersPanel
             className="ml-search__filters"
             filters={ filters }
+            listingCounts={ getListingCounts( allHomes ) }
             handleFilterChange={ handleFilterChange }
           />
           <Inset className="filters-panel__callout-container" until="large">
@@ -370,36 +421,8 @@ function Search( props ) {
 
 Search.propTypes = {
   "amiEstimation": PropTypes.number,
-  "filters": PropTypes.shape( {
-    "offer": PropTypes.shape( {
-      "rent": PropTypes.bool,
-      "sale": PropTypes.bool,
-    } ),
-    "location": PropTypes.shape( {
-      "city": PropTypes.shape( {
-        "boston": PropTypes.bool,
-        "beyondBoston": PropTypes.bool,
-      } ),
-      "neighborhood": PropTypes.objectOf( PropTypes.bool ),
-      "cardinalDirection": PropTypes.shape( {
-        "west": PropTypes.bool,
-        "north": PropTypes.bool,
-        "south": PropTypes.bool,
-      } ),
-    } ),
-    "bedrooms": PropTypes.shape( {
-      "0": PropTypes.bool,
-      "1": PropTypes.bool,
-      "2": PropTypes.bool,
-      "3": PropTypes.bool,
-      "4+": PropTypes.bool,
-    } ),
-    "amiQualification": PropTypes.shape( {
-      "lowerBound": PropTypes.number,
-      "upperBound": PropTypes.number,
-    } ),
-  } ),
-  "homes": PropTypes.arrayOf( homeObjectDefinition ),
+  "filters": filtersObject,
+  "homes": PropTypes.arrayOf( homeObject ),
   "className": PropTypes.string,
 };
 

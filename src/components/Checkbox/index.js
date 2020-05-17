@@ -63,7 +63,7 @@ function renderChoices( props ) {
       const childArray = React.Children.toArray( children );
       const firstChild = childArray.shift();
 
-      if ( firstChild.type.displayName === 'FilterLabel' ) {
+      if ( firstChild.type && firstChild.type.displayName === 'FilterLabel' ) {
         firstRenderedChoice = renderLabel( firstChild, props );
       } else {
         childArray.unshift( firstChild );
