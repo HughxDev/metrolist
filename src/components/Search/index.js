@@ -15,12 +15,12 @@ import Callout from '@components/Callout';
 import Icon from '@components/Icon';
 
 import { homeObject, filtersObject } from '@util/validation';
-import isDev from '@util/dev';
+import isDev, { isLocalDev } from '@util/dev';
 
 // const dev2Ip = '54.227.255.2';
 // const dev2Domain = 'd8-dev2.boston.gov';
-const ciDomain = 'd8-ci.boston.gov';
-const dev2Endpoint = `https://${ciDomain}/metrolist/api/v1/developments?_format=json`;
+const apiDomain = ( isLocalDev() ? 'https://d8-ci.boston.gov' : '' );
+const dev2Endpoint = `${apiDomain}/metrolist/api/v1/developments?_format=json`;
 
 function Search( props ) {
   const [filters, setFilters] = useState( props.filters );
@@ -459,7 +459,7 @@ Search.defaultProps = {
       "4+": false,
     },
     "amiQualification": {
-      "lowerBound": ( localStorage.getItem( 'amiRecommendation' ) || 0 ),
+      "lowerBound": ( localStorage.getItem( 'amiRecommendation' ) ? parseInt( localStorage.getItem( 'amiRecommendation' ), 10 ) : 0 ),
       "upperBound": 200,
     },
   },
