@@ -1,0 +1,24 @@
+// For the most part this file should be avoided in favor of individual component CSS files,
+// but it is occasionally necessary to set global styles, such as in the case of public.css overrides.
+
+@namespace svg url(http://www.w3.org/2000/svg);
+
+p {
+  margin: 0;
+}
+
+svg,
+svg|svg,
+h3 {
+  line-height: inherit;
+}
+
+.container {
+  max-width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+input[type=checkbox], input[type=radio] {
+  display: inherit; // public.css sets to display: none which eliminates tab order even with tabindex set.
+}

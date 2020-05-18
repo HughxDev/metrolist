@@ -469,7 +469,7 @@ function AmiEstimator( props ) {
 
   return (
     <Stack as="article" className={ `ml-ami-estimator${props.className ? ` ${props.className}` : ''}` } space="2" data-testid="ml-ami-estimator">
-      <h2 className="sr-only">AMI Calculator</h2>
+      <h2 className="sr-only">AMI Estimator</h2>
       <Stack as="header" space="2">
         <h3 className="sh-title ml-ami-estimator__heading">Find Housing Based on Your Income &amp; Household Size…</h3>
         <ProgressBar current={ step } total={ totalSteps } />

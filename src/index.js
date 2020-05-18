@@ -5,7 +5,7 @@ import ScrollToTop from '@components/ScrollToTop';
 
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
-import './index.css';
+import './index.scss';
 
 import '@globals/util.scss';
 
