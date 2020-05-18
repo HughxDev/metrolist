@@ -178,7 +178,7 @@ function Home( props ) {
           <header className="ml-home__header">
             <Stack space="home-header">
               <Row>
-                <h2 className="ml-home__title" data-column-width="3/4">{ title }</h2>
+                <h4 className="ml-home__title" data-column-width="3/4">{ title }</h4>
                 { renderJustListed( listingDate ) }
               </Row>
               <p className="ml-home__byline">{
@@ -204,7 +204,8 @@ function Home( props ) {
             as="link"
             className="ml-home-footer__more-info-link"
             variant="primary"
-            href={ `https://d8-ci.boston.gov/metrolist/search/listing/${slug}/${serializeFiltersToUrlParams( filters )}` }
+            href={ `/metrolist/search/listing/${slug}/${serializeFiltersToUrlParams( filters )}` }
+            aria-label={ `More info about ${title}` }
           >More info</Button>
         </Row>
       </div>
