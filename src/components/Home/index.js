@@ -11,6 +11,7 @@ import Row from '@components/Row';
 // import { capitalize } from '@util/strings';
 import { date, dateTime } from '@util/datetime';
 import { homeObject } from '@util/validation';
+import { generateRandomDomId } from '@util/strings';
 
 import './Home.scss';
 import { capitalCase } from 'change-case';
@@ -171,6 +172,22 @@ function Home( props ) {
     // url,
   } = home;
 
+  let containsUnitWhereRentalPriceIsPercentageOfIncome = false;
+  let percentageOfIncomeExplanationId = '';
+
+  for ( let index = 0; index < units.length; index++ ) {
+    const unit = units[index];
+
+    if (
+      ( unit.price === null )
+      || ( unit.price === 'null' )
+    ) {
+      containsUnitWhereRentalPriceIsPercentageOfIncome = true;
+      percentageOfIncomeExplanationId = `rental-price-percentage-income-explanation-${generateRandomDomId()}`;
+      break;
+    }
+  }
+
   return (
     <article className="ml-home">
       <div className="ml-home__content">
@@ -188,7 +205,15 @@ function Home( props ) {
               }</p>
             </Stack>
           </header>
-          <UnitGroup units={ units } />
+          <UnitGroup units={ units } percentageOfIncomeExplanationId={ percentageOfIncomeExplanationId } />
+          {
+            containsUnitWhereRentalPriceIsPercentageOfIncome
+              && (
+                <p id={ percentageOfIncomeExplanationId }>
+                  <span aria-hidden="true">**</span> Rent is determined by the administering agency based on household income.
+                </p>
+              )
+          }
         </Stack>
         <Row as="footer" className="ml-home__footer" space="panel" stackUntil="small">{/* TODO: Should be home-info--two-column */}
           <HomeInfo

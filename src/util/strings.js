@@ -15,3 +15,7 @@ export function slugify( text ) {
 export function componentCase( text ) {
   return capitalize( pascalCase( text ) );
 }
+
+export function generateRandomDomId() {
+  return Math.ceil( Math.random() * 1000000 ).toString();
+}

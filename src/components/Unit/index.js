@@ -29,7 +29,7 @@ function formatAmiQualification( amiQualification ) {
   return `AMI ${amiQualification}%`;
 }
 
-function formatPrice( price, priceRate ) {
+function formatPrice( price, priceRate, rentalPriceIsPercentOfIncome ) {
   return (
     <NumberFormat
       value={ price }
@@ -43,21 +43,29 @@ function formatPrice( price, priceRate ) {
           return <>{ value }</>;
         }
 
+        if ( rentalPriceIsPercentOfIncome ) {
+          return '**';
+        }
+
+        const abbreviationExpansion = `${value} per ${priceRate.substring( 0, 5 )}`;
+
         return (
-          <>
+          <abbr className="ml-unit__shorthand" title={ abbreviationExpansion }>
             { `${value}/` }
-            <abbr className="ml-unit__price-rate ml-unit__shorthand" title={ priceRate.substring( 0, 5 ) }>{ priceRate.substring( 0, 2 ) }.</abbr>
-          </>
+            <span className="ml-unit__price-rate">{ priceRate.substring( 0, 2 ) }.</span>
+          </abbr>
         );
       } }
     />
   );
 }
 
-function Unit( { unit } ) {
+function Unit( { unit, percentageOfIncomeExplanationId } ) {
   const {
     id, bedrooms, numberOfIdenticalUnits, amiQualification, price, priceRate,
   } = unit;
+
+  const rentalPriceIsPercentOfIncome = ( ( price === null ) || price === 'null' );
 
   /*
     Order:
@@ -69,13 +77,14 @@ function Unit( { unit } ) {
     <tr className="ml-unit" data-testid={ id }>
       <td className="ml-unit__cell ml-unit__size">{ formatSize( bedrooms, numberOfIdenticalUnits ) }</td>
       <td className="ml-unit__cell ml-unit__ami-qualification">{ formatAmiQualification( amiQualification ) }</td>
-      <td className="ml-unit__cell ml-unit__price">{ price && priceRate && formatPrice( price, priceRate ) }</td>
+      <td className="ml-unit__cell ml-unit__price" aria-labelledby={ rentalPriceIsPercentOfIncome ? percentageOfIncomeExplanationId : null }>{ formatPrice( price, priceRate, rentalPriceIsPercentOfIncome ) }</td>
     </tr>
   );
 }
 
 Unit.propTypes = {
   "unit": unitObject,
+  "percentageOfIncomeExplanationId": PropTypes.string,
 };
 
 export default Unit;

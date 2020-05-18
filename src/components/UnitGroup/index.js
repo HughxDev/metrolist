@@ -7,9 +7,10 @@ import { unitObject } from '@util/validation';
 
 import './UnitGroup.scss';
 
-function UnitGroup( { units } ) {
+function UnitGroup( { units, percentageOfIncomeExplanationId } ) {
   return (
     <table className="ml-unit-group">
+      <caption className="sr-only">Units</caption>
       <thead>
         <tr>
           <th className="ml-unit-group__cell sr-only" scope="col">Size</th>
@@ -19,7 +20,7 @@ function UnitGroup( { units } ) {
       </thead>
       <tbody>
         {
-          units.map( ( unit ) => <Unit key={ unit.id } unit={ unit } /> )
+          units.map( ( unit ) => <Unit key={ unit.id } unit={ unit } percentageOfIncomeExplanationId={ percentageOfIncomeExplanationId } /> )
         }
       </tbody>
     </table>
@@ -28,6 +29,7 @@ function UnitGroup( { units } ) {
 
 UnitGroup.propTypes = {
   "units": PropTypes.arrayOf( unitObject ),
+  "percentageOfIncomeExplanationId": PropTypes.string,
 };
 
 export default UnitGroup;

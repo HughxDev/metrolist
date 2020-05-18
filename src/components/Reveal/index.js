@@ -4,10 +4,11 @@ import PropTypes from 'prop-types';
 import Stack from '@components/Stack';
 
 import './Reveal.scss';
+import { generateRandomDomId } from '@util/strings';
 
 function Reveal( props ) {
   const $content = useRef();
-  const id = useRef( `reveal-${Math.ceil( Math.random() * 1000000 )}` );
+  const id = useRef( `reveal-${generateRandomDomId()}` );
   const [isExpanded, setExpanded] = useState( false );
 
   function handleMoreLessClick( event ) {
