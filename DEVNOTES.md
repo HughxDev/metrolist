@@ -416,3 +416,23 @@ API Endpoints:
   - AMI Estimator: https://d8-dev2.boston.gov/metrolist/api/v1/ami/hud/base?_format=json
   - Search: https://d8-dev2.boston.gov/metro/api/v1/units?_format=json
   - Production versions would be at boston.gov.
+
+## Search page not loading in Safari/Edge/Internet Explorer
+
+### Safari
+
+Unknown cause, seems resolved.
+
+### Edge
+
+Needed Babel to transpile unsupported ES features.
+
+### Internet Explorer
+
+Same as above, but only with the deprecated `@babel/polyfill`, not the new method of:
+```js
+import "core-js/stable";
+import "regenerator-runtime/runtime";
+```
+…which made it run into an unhandled exception in a script adding support for WeakMap.
+

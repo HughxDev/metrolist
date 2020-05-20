@@ -3,9 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@babel/core": "^7.8.7",
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "7.9.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.9.6",
     "@babel/plugin-proposal-optional-chaining": "^7.9.0",
-    "@babel/preset-env": "^7.8.7",
+    "@babel/plugin-transform-arrow-functions": "^7.8.3",
+    "@babel/plugin-transform-async-to-generator": "^7.8.3",
+    "@babel/plugin-transform-block-scoping": "^7.8.3",
+    "@babel/plugin-transform-classes": "^7.9.5",
+    "@babel/plugin-transform-destructuring": "^7.9.5",
+    "@babel/plugin-transform-parameters": "^7.9.5",
+    "@babel/plugin-transform-shorthand-properties": "^7.8.3",
+    "@babel/plugin-transform-spread": "^7.8.3",
+    "@babel/plugin-transform-template-literals": "^7.8.3",
+    "@babel/polyfill": "^7.8.7",
+    "@babel/preset-env": "7.9.0",
     "@babel/preset-react": "^7.8.3",
     "@babel/register": "^7.8.6",
     "@storybook/addon-actions": "^5.3.14",
@@ -19,9 +31,11 @@
     "airbnb-prop-types": "^2.15.0",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.0.6",
+    "babel-plugin-syntax-async-functions": "^6.13.0",
     "bootstrap": "^4.4.1",
     "change-case": "^4.1.1",
     "copy-webpack-plugin": "^5.1.1",
+    "core-js": "^3.6.5",
     "css-loader": "^3.4.2",
     "dotenv": "^8.2.0",
     "dotenv-webpack": "^1.7.0",
@@ -45,6 +59,7 @@
     "react-number-format": "^4.4.1",
     "react-router-dom": "^5.1.2",
     "react-transition-group": "^4.3.0",
+    "regenerator-runtime": "^0.13.5",
     "replace-in-file": "^5.0.2",
     "rimraf": "^3.0.2",
     "rucksack-css": "^1.0.2",
@@ -60,6 +75,7 @@
     "whatwg-fetch": "^3.0.0"
   },
   "scripts": {
+    "watch": "[ -z \"$(ipconfig getifaddr en6)\" ] && export LAN_IP_ADDRESS=\"$(ipconfig getifaddr en0)\" || export LAN_IP_ADDRESS=\"$(ipconfig getifaddr en6)\"; webpack-dev-server --host $LAN_IP_ADDRESS",
     "start": "[ -z \"$(ipconfig getifaddr en6)\" ] && export LAN_IP_ADDRESS=\"$(ipconfig getifaddr en0)\" || export LAN_IP_ADDRESS=\"$(ipconfig getifaddr en6)\"; webpack-dev-server --host $LAN_IP_ADDRESS --open",
     "build": "rm -rf dist/ && webpack --config webpack.config.js --mode=production",
     "build:stage": "cp -r dist/ /Users/Hugh/Sites/city-of-boston/boston.gov-d8-deploy/docroot/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/",
@@ -81,12 +97,16 @@
     "production": [
       ">0.2%",
       "not dead",
-      "not op_mini all"
+      "not op_mini all",
+      "last 1 edge version",
+      "last 1 ie version"
     ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
-      "last 1 safari version"
+      "last 1 safari version",
+      "last 1 edge version",
+      "last 1 ie version"
     ]
   }
 }

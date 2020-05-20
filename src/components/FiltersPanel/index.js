@@ -15,7 +15,7 @@ import Column from '@components/Column';
 import './FiltersPanel.scss';
 
 function FiltersPanel( props ) {
-  const isDesktop = globalThis.matchMedia( '(min-width: 992px)' ).matches; // TODO: define breakpoints that line up with the CSS in JS somewhere
+  const isDesktop = window.matchMedia( '(min-width: 992px)' ).matches; // TODO: define breakpoints that line up with the CSS in JS somewhere
   const $drawer = useRef();
   const attributes = { ...props };
   const [isExpanded, setExpanded] = useState( isDesktop );
