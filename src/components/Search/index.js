@@ -172,7 +172,7 @@ function Search( props ) {
         }
 
         if ( matchOnNoneSelected ) {
-          if ( !filtersToApply.offer.rent && !filtersToApply.offer.rent ) {
+          if ( !filtersToApply.offer.rent && !filtersToApply.offer.sale ) {
             matchesOffer = true;
           }
 
@@ -186,7 +186,21 @@ function Search( props ) {
           }
         }
 
-        return ( matchesOffer && matchesBroadLocation && matchesNarrowLocation && matchesBedrooms && matchesAmiQualification );
+        console.log( {
+          matchesOffer,
+          matchesBroadLocation,
+          matchesNarrowLocation,
+          matchesBedrooms,
+          matchesAmiQualification,
+        } );
+
+        return (
+          matchesOffer
+          && matchesBroadLocation
+          && matchesNarrowLocation
+          && matchesBedrooms
+          && matchesAmiQualification
+        );
       } )
       .map( ( home ) => {
         const newUnits = home.units.filter( ( unit ) => {
@@ -319,7 +333,7 @@ function Search( props ) {
 
   useEffect( () => {
     setFilteredHomes( filterHomes( filters ) );
-  }, [filters, allHomes] );
+  }, [allHomes] );
 
   const handleFilterChange = ( event ) => {
     // console.log( 'handleFilterChange', event.target.value );

@@ -30,6 +30,8 @@ const AmiEstimatorHouseholdSize = forwardRef( ( props, ref ) => {
             className={ `ml-ami-estimator__prompt--answer-input` }
             criterion="householdSize"
             values="1,2,3,4,5,6+"
+            units={ { "one": "person", "many": "people" } }
+            unitLabel={ { "type": "aria", "affix": "append" } }
             value={ props.formData.householdSize.value }
             aria-describedby="ami-estimator-form-errors ami-estimator-household-size-error"
             required

@@ -5,6 +5,24 @@ import { propTypeErrorMessage } from '@util/errors';
 
 import './Scale.scss';
 
+// function getAriaLabel( props, value ) {
+//   const { units, unitLabel } = props;
+
+//   if ( unitLabel && ( unitLabel.type === 'aria' ) ) {
+//     if ( props.unitLabel.affix ) {
+//       if ( props.unitLabel.affix === 'prepend' ) {
+//         return `${value}`;
+//       } if ( props.unitLabel.affix === 'append' ) {
+
+//       } else {
+
+//       }
+//     }
+//   }
+
+//   return false;
+// }
+
 const Scale = forwardRef( ( props, ref ) => (
   <div className={ `ml-scale${props.className ? ` ${props.className}` : ''}` } onChange={ props.onChange }>{
     props.values.split( ',' )
@@ -16,6 +34,7 @@ const Scale = forwardRef( ( props, ref ) => (
             name={ props.criterion }
             value={ value }
             type="radio"
+            // aria-label={ getAriaLabel( props, value ) }
             required={ props.required }
             defaultChecked={ value === props.value }
           />
@@ -49,6 +68,14 @@ Scale.propTypes = {
   },
   "value": PropTypes.string,
   "onChange": PropTypes.func,
+  "units": PropTypes.shape( {
+    "one": PropTypes.string,
+    "many": PropTypes.string,
+  } ),
+  "unitLabel": PropTypes.shape( {
+    "type": PropTypes.oneOf( ['aria', 'text'] ),
+    "affix": PropTypes.oneOf( ['prepend', 'append'] ),
+  } ),
 };
 
 export default Scale;
