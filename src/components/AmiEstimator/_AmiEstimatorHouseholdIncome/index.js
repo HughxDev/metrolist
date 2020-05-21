@@ -96,7 +96,13 @@ const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
   return (
     <div ref={ selfRef } className={ `ml-ami-estimator__household-income ml-ami-estimator__prompt` } data-testid="ml-ami-estimator__household-income">
       <fieldset className="ml-ami-estimator__prompt-inner">
-        <legend className="ml-ami-estimator__prompt-question">What is the total combined income of all { props.formData.householdSize.value ? `${props.formData.householdSize.value} people` : 'people' } who live in your household before taxes?</legend>
+        <legend className="ml-ami-estimator__prompt-question">
+          {
+            ( parseInt( props.formData.householdSize.value, 10 ) === 1 ) // TODO: Should we event allow string values?
+              ? <>What is your total income before taxes?</>
+              : <>What is the total combined income of all { props.formData.householdSize.value ? `${props.formData.householdSize.value} people` : 'people' } who live in your household before taxes?</>
+          }
+        </legend>
         <Icon className="ml-ami-estimator__prompt-answer-icon" icon="deposit check" width="212" />
         <Stack space="1">{/* ami-estimator-income-rate */}
           <input
