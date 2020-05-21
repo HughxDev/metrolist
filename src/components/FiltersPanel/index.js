@@ -184,7 +184,7 @@ function FiltersPanel( props ) {
                       type="checkbox"
                       criterion="neighborhood"
                       value={ neighborhood }
-                      checked={ location.neighborhood[neighborhood] }
+                      checked={ location.neighborhood[neighborhood] || false }
                     >{ `${capitalCase( neighborhood )} (${count || '0'})` }</Filter>;
                   } )
                 }
@@ -199,7 +199,7 @@ function FiltersPanel( props ) {
                       type="checkbox"
                       criterion="cardinalDirection"
                       value={ cardinalDirection }
-                      checked={ location.cardinalDirection[cardinalDirection] }
+                      checked={ location.cardinalDirection[cardinalDirection] || false }
                     >{ `${capitalCase( cardinalDirection )} of Boston (${count || '0'})` }</Filter>;
                   } )
                 }

@@ -61,7 +61,8 @@ function Search( props ) {
       }
 
       if ( home.neighborhood ) {
-        const neighborhoodKey = camelCase( home.neighborhood );
+        // const neighborhoodKey = camelCase( home.neighborhood );
+        const neighborhoodKey = home.neighborhood;
 
         if ( hasOwnProperty( listingCounts.location.neighborhood, neighborhoodKey ) ) {
           listingCounts.location.neighborhood[neighborhoodKey]++;
@@ -77,48 +78,62 @@ function Search( props ) {
   };
 
   const filterHomes = ( filtersToApply, matchOnNoneSelected = true ) => {
+    // console.log( 'filtersToApply', filtersToApply );
     const matchingHomes = allHomes
       .filter( ( home ) => {
-        if ( !home.incomeRestricted ) {
+        console.log( 'home.incomeRestricted', home.incomeRestricted );
+
+        if ( home.incomeRestricted === false ) {
           return true;
         }
 
         let matchesOffer = (
           (
-            filtersToApply.offer.rent
-              && ( home.offer === 'rent' )
+            ( filtersToApply.offer.rent !== false )
+            && ( home.offer === 'rent' )
           )
-            || (
-              filtersToApply.offer.sale
-              && ( home.offer === 'sale' )
-            )
+          || (
+            ( filtersToApply.offer.sale !== false )
+            && ( home.offer === 'sale' )
+          )
         );
         let matchesBroadLocation = (
           (
-            filtersToApply.location.city.boston
+            ( filtersToApply.location.city.boston !== false )
             && ( home.cardinalDirection === null )
           )
           || (
-            filtersToApply.location.city.beyondBoston
+            ( filtersToApply.location.city.beyondBoston !== false )
             && ( home.cardinalDirection !== null )
           )
+        );
+        let matchesNarrowLocation = (
+          ( home.cardinalDirection === null )
+            ? (
+              hasOwnProperty( filtersToApply.location.neighborhood, home.neighborhood )
+              && ( filtersToApply.location.neighborhood[home.neighborhood] === true )
+            )
+            : (
+              hasOwnProperty( filtersToApply.location.cardinalDirection, home.cardinalDirection )
+              && ( filtersToApply.location.cardinalDirection[home.cardinalDirection] === true )
+            )
         );
         const unitBedroomSizes = home.units.map( ( unit ) => unit.bedrooms ).sort();
         let matchesBedrooms = (
           (
-            filtersToApply.bedrooms['0']
+            ( filtersToApply.bedrooms['0'] === true )
             && ( unitBedroomSizes.indexOf( 0 ) !== -1 )
           )
           || (
-            filtersToApply.bedrooms['1']
+            ( filtersToApply.bedrooms['1'] === true )
             && ( unitBedroomSizes.indexOf( 1 ) !== -1 )
           )
           || (
-            filtersToApply.bedrooms['2']
+            ( filtersToApply.bedrooms['2'] === true )
             && ( unitBedroomSizes.indexOf( 2 ) !== -1 )
           )
           || (
-            filtersToApply.bedrooms['3']
+            ( filtersToApply.bedrooms['3'] === true )
             && ( unitBedroomSizes.indexOf( 3 ) !== -1 )
           )
           || (
@@ -163,6 +178,7 @@ function Search( props ) {
 
           if ( !filtersToApply.location.city.boston && !filtersToApply.location.city.beyondBoston ) {
             matchesBroadLocation = true;
+            matchesNarrowLocation = true;
           }
 
           if ( !filtersToApply.bedrooms['0'] && !filtersToApply.bedrooms['1'] && !filtersToApply.bedrooms['2'] && !filtersToApply.bedrooms['3'] && !filtersToApply.bedrooms['4+'] ) {
@@ -170,7 +186,7 @@ function Search( props ) {
           }
         }
 
-        return ( matchesOffer && matchesBroadLocation && matchesBedrooms && matchesAmiQualification );
+        return ( matchesOffer && matchesBroadLocation && matchesNarrowLocation && matchesBedrooms && matchesAmiQualification );
       } )
       .map( ( home ) => {
         const newUnits = home.units.filter( ( unit ) => {
@@ -285,6 +301,15 @@ function Search( props ) {
         .then( ( apiHomes ) => {
           console.log( 'apiHomes', apiHomes );
           setAllHomes( apiHomes );
+          const listingCounts = getListingCounts( apiHomes );
+          const newFilters = { ...filters };
+          Object.keys( listingCounts.location.neighborhood ).forEach( ( nb ) => {
+            newFilters.location.neighborhood[nb] = null;
+          } );
+          Object.keys( listingCounts.location.cardinalDirection ).forEach( ( cd ) => {
+            newFilters.location.cardinalDirection[cd] = null;
+          } );
+          setFilters( newFilters );
         } )
         .catch( ( error ) => {
           console.error( error );
@@ -297,6 +322,8 @@ function Search( props ) {
   }, [filters, allHomes] );
 
   const handleFilterChange = ( event ) => {
+    // console.log( 'handleFilterChange', event.target.value );
+
     const $input = event.target;
     let newValue;
     const newFilters = { ...filters };
@@ -383,6 +410,8 @@ function Search( props ) {
 
       default:
     }
+
+    console.log( 'newFilters', newFilters );
 
     setFilters( newFilters );
     setFilteredHomes( filterHomes( filters ) );
