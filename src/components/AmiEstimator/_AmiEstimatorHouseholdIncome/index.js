@@ -11,6 +11,8 @@ import Scale from '@components/Scale';
 import Stack from '@components/Stack';
 import FormErrorMessage from '@components/FormErrorMessage';
 
+import { updatePageTitle } from '@util/a11y-seo';
+
 import './AmiEstimatorHouseholdIncome.scss';
 
 const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
@@ -69,6 +71,7 @@ const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
   };
 
   useEffect( () => {
+    updatePageTitle( 'Household Income', 'AMI Estimator' );
     props.setStep( props.step );
     props.adjustContainerHeight( selfRef );
 

@@ -1,6 +1,6 @@
 require( 'dotenv' ).config();
 const Dotenv = require( 'dotenv-webpack' );
-// const webpack = require( 'webpack' );
+const webpack = require( 'webpack' );
 const path = require( 'path' );
 // const fs = require( 'fs' );
 
@@ -72,12 +72,14 @@ module.exports = {
   "plugins": [
     new HtmlWebpackPlugin( {
       "template": "public/index.html",
-      "PUBLIC_URL": process.env.PUBLIC_URL,
-      "NODE_ENV": process.env.NODE_ENV,
     } ),
     new Dotenv(),
     new CopyPlugin( [
       { "from": "public" },
     ] ),
+    new webpack.DefinePlugin( {
+      "process.env.SITE_TITLE": JSON.stringify( process.env.SITE_TITLE ),
+      "process.env.DOMAIN_TITLE": JSON.stringify( process.env.DOMAIN_TITLE ),
+    } ),
   ],
 };

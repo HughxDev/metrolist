@@ -19,3 +19,20 @@ export function componentCase( text ) {
 export function generateRandomDomId() {
   return Math.ceil( Math.random() * 1000000 ).toString();
 }
+
+// Examples:
+// sectionTitle = AMI Estimator|Search
+// pageTitle = Household Income
+export function formatPageTitle( pageTitle, sectionTitle ) {
+  let sectionPageTitle = '';
+
+  if ( pageTitle && sectionTitle ) {
+    sectionPageTitle = ` - ${sectionTitle}: ${pageTitle}`;
+  } else if ( pageTitle && !sectionTitle ) {
+    sectionPageTitle = ` - ${pageTitle}`;
+  } else if ( sectionTitle && !pageTitle ) {
+    sectionPageTitle = ` - ${sectionTitle}`;
+  }
+
+  return `${process.env.SITE_TITLE}${sectionPageTitle} | ${process.env.DOMAIN_TITLE}`;
+}

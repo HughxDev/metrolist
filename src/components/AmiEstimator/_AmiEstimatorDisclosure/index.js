@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import Stack from '@components/Stack';
 import Checkbox from '@components/Checkbox';
 import FormErrorMessage from '@components/FormErrorMessage';
+import { updatePageTitle } from '@util/a11y-seo';
 import InputSummary from '../_AmiEstimatorInputSummary';
 
 import './AmiEstimatorDisclosure.scss';
@@ -14,6 +15,7 @@ const AmiEstimatorDisclosure = forwardRef( ( props, ref ) => {
   const selfRef = ( ref || useRef() );
 
   useEffect( () => {
+    updatePageTitle( 'Disclosure', 'AMI Estimator' );
     props.setStep( props.step );
     props.adjustContainerHeight( selfRef );
   }, [] );

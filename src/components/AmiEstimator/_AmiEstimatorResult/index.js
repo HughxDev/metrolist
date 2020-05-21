@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 import Button from '@components/Button';
 import Stack from '@components/Stack';
+import { updatePageTitle } from '@util/a11y-seo';
 import InputSummary from '../_AmiEstimatorInputSummary';
 
 import './AmiEstimatorResult.scss';
@@ -72,6 +73,7 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
   localStorage.setItem( 'amiRecommendation', amiRecommendation );
 
   useEffect( () => {
+    updatePageTitle( 'Result', 'AMI Estimator' );
     props.setStep( props.step );
     props.adjustContainerHeight( selfRef );
   }, [] );

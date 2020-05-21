@@ -9368,6 +9368,11 @@ obuf@^1.0.0, obuf@^1.1.2:
   resolved "https://registry.yarnpkg.com/obuf/-/obuf-1.1.2.tgz#09bea3343d41859ebd446292d11c9d4db619084e"
   integrity sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==
 
+on-demand-live-region@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/on-demand-live-region/-/on-demand-live-region-0.1.3.tgz#9eed37f2ac0ec68e325b8deb3c059b04f7f6cd7d"
+  integrity sha1-nu038qwOxo4yW43rPAWbBPf2zX0=
+
 on-finished@~2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/on-finished/-/on-finished-2.3.0.tgz#20f1336481b083cd75337992a16971aa2d906947"

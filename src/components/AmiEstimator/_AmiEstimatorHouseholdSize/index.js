@@ -7,12 +7,15 @@ import Icon from '@components/Icon';
 import Scale from '@components/Scale';
 import FormErrorMessage from '@components/FormErrorMessage';
 
+import { updatePageTitle } from '@util/a11y-seo';
+
 import './AmiEstimatorHouseholdSize.scss';
 
 const AmiEstimatorHouseholdSize = forwardRef( ( props, ref ) => {
   const selfRef = ( ref || useRef() );
 
   useEffect( () => {
+    updatePageTitle( 'Household Size', 'AMI Estimator' );
     props.setStep( props.step );
     props.adjustContainerHeight( selfRef );
   }, [] );
