@@ -21,7 +21,7 @@ const amiDefinition = {
 };
 
 function estimateAmi( { householdSize, householdIncome, incomeRate } ) {
-  householdSize = householdSize.value;
+  householdSize = householdSize.value.replace( '+', '' );
   householdIncome = householdIncome.value;
   incomeRate = incomeRate.value;
 
