@@ -177,31 +177,41 @@ function FiltersPanel( props ) {
               <Filter type="checkbox" criterion="city" value="boston" checked={ location.city.boston }>
                 <Filter.Label>Boston</Filter.Label>
                 {
-                  Object.keys( listingCounts.location.neighborhood ).map( ( neighborhood ) => {
-                    const count = listingCounts.location.neighborhood[neighborhood];
-                    return <Filter
-                      key={ neighborhood }
-                      type="checkbox"
-                      criterion="neighborhood"
-                      value={ neighborhood }
-                      checked={ location.neighborhood[neighborhood] || false }
-                    >{ `${capitalCase( neighborhood )} (${count || '0'})` }</Filter>;
-                  } )
+                  Object.keys( listingCounts.location.neighborhood )
+                    .sort( ( neighborhoodA, neighborhoodB ) => (
+                      listingCounts.location.neighborhood[neighborhoodB]
+                        - listingCounts.location.neighborhood[neighborhoodA]
+                    ) )
+                    .map( ( neighborhood ) => {
+                      const count = listingCounts.location.neighborhood[neighborhood];
+                      return <Filter
+                        key={ neighborhood }
+                        type="checkbox"
+                        criterion="neighborhood"
+                        value={ neighborhood }
+                        checked={ location.neighborhood[neighborhood] || false }
+                      >{ `${capitalCase( neighborhood )} (${count || '0'})` }</Filter>;
+                    } )
                 }
               </Filter>
               <Filter type="checkbox" criterion="city" value="beyondBoston" checked={ location.city.beyondBoston }>
                 <Filter.Label>Beyond Boston</Filter.Label>
                 {
-                  Object.keys( listingCounts.location.cardinalDirection ).map( ( cardinalDirection ) => {
-                    const count = listingCounts.location.cardinalDirection[cardinalDirection];
-                    return <Filter
-                      key={ cardinalDirection }
-                      type="checkbox"
-                      criterion="cardinalDirection"
-                      value={ cardinalDirection }
-                      checked={ location.cardinalDirection[cardinalDirection] || false }
-                    >{ `${capitalCase( cardinalDirection )} of Boston (${count || '0'})` }</Filter>;
-                  } )
+                  Object.keys( listingCounts.location.cardinalDirection )
+                    .sort( ( cardinalDirectionA, cardinalDirectionB ) => (
+                      listingCounts.location.cardinalDirection[cardinalDirectionB]
+                        - listingCounts.location.cardinalDirection[cardinalDirectionA]
+                    ) )
+                    .map( ( cardinalDirection ) => {
+                      const count = listingCounts.location.cardinalDirection[cardinalDirection];
+                      return <Filter
+                        key={ cardinalDirection }
+                        type="checkbox"
+                        criterion="cardinalDirection"
+                        value={ cardinalDirection }
+                        checked={ location.cardinalDirection[cardinalDirection] || false }
+                      >{ `${capitalCase( cardinalDirection )} of Boston (${count || '0'})` }</Filter>;
+                    } )
                 }
               </Filter>
             </Stack>
