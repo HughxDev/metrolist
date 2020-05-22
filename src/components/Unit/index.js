@@ -13,19 +13,27 @@ function formatSize( bedrooms, numberOfIdenticalUnits ) {
     formattedSize = <>
       <abbr title={ `${bedrooms} Bedroom` } className="ml-unit__shorthand --hide-at-large">{ `${bedrooms} BR` }</abbr>
       <span className="--hide-until-large">{ `${bedrooms} Bedroom` }</span>
+      { numberOfIdenticalUnits && ` (×${numberOfIdenticalUnits})` }
     </>;
   } else {
     formattedSize = 'Studio';
-  }
 
-  if ( numberOfIdenticalUnits ) {
-    formattedSize += ` (×${numberOfIdenticalUnits})`;
+    if ( numberOfIdenticalUnits ) {
+      formattedSize += ` (×${numberOfIdenticalUnits})`;
+    }
   }
 
   return formattedSize;
 }
 
 function formatAmiQualification( amiQualification ) {
+  if ( amiQualification === null ) {
+    return <>
+      <abbr className="ml-unit__shorthand --hide-at-large">N/A</abbr>
+      <span className="--hide-until-large">Not Applicable</span>
+    </>;
+  }
+
   return `AMI ${amiQualification}%`;
 }
 
@@ -62,7 +70,7 @@ function formatPrice( price, priceRate, rentalPriceIsPercentOfIncome ) {
 
 function Unit( { unit, percentageOfIncomeExplanationId } ) {
   const {
-    id, bedrooms, numberOfIdenticalUnits, amiQualification, price, priceRate,
+    id, bedrooms, count, amiQualification, price, priceRate,
   } = unit;
 
   const rentalPriceIsPercentOfIncome = ( ( price === null ) || price === 'null' );
@@ -75,8 +83,8 @@ function Unit( { unit, percentageOfIncomeExplanationId } ) {
   */
   return (
     <tr className="ml-unit" data-testid={ id }>
-      <td className="ml-unit__cell ml-unit__size">{ formatSize( bedrooms, numberOfIdenticalUnits ) }</td>
-      <td className="ml-unit__cell ml-unit__ami-qualification">{ formatAmiQualification( amiQualification ) }</td>
+      <td className="ml-unit__cell ml-unit__size">{ formatSize( bedrooms, count ) }</td>
+      <td className="ml-unit__cell ml-unit__income-limit">{ formatAmiQualification( amiQualification ) }</td>
       <td className="ml-unit__cell ml-unit__price" aria-labelledby={ rentalPriceIsPercentOfIncome ? percentageOfIncomeExplanationId : null }>{ formatPrice( price, priceRate, rentalPriceIsPercentOfIncome ) }</td>
     </tr>
   );

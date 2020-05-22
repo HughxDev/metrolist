@@ -14,7 +14,7 @@ function UnitGroup( { units, percentageOfIncomeExplanationId } ) {
       <thead>
         <tr>
           <th className="ml-unit-group__cell sr-only" scope="col">Size</th>
-          <th className="ml-unit-group__cell sr-only" scope="col">Qualification</th>
+          <th className="ml-unit-group__cell sr-only" scope="col">Income Limit</th>
           <th className="ml-unit-group__cell sr-only" scope="col">Price</th>
         </tr>
       </thead>

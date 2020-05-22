@@ -81,12 +81,6 @@ function Search( props ) {
     // console.log( 'filtersToApply', filtersToApply );
     const matchingHomes = allHomes
       .filter( ( home ) => {
-        console.log( 'home.incomeRestricted', home.incomeRestricted );
-
-        if ( home.incomeRestricted === false ) {
-          return true;
-        }
-
         let matchesOffer = (
           (
             ( filtersToApply.offer.rent !== false )
@@ -145,29 +139,33 @@ function Search( props ) {
         const unitAmiQualifications = Array.from( dedupedAmi );
         let matchesAmiQualification;
 
-        for ( let index = 0; index < unitAmiQualifications.length; index++ ) {
-          const amiQualification = ( unitAmiQualifications[index] || null );
+        if ( home.incomeRestricted === false ) {
+          matchesAmiQualification = true;
+        } else {
+          for ( let index = 0; index < unitAmiQualifications.length; index++ ) {
+            const amiQualification = ( unitAmiQualifications[index] || null );
 
-          if ( amiQualification === null ) {
-            matchesAmiQualification = true;
-            break;
-          }
+            if ( amiQualification === null ) {
+              matchesAmiQualification = true;
+              break;
+            }
 
-          if ( filtersToApply.amiQualification.lowerBound <= filtersToApply.amiQualification.upperBound ) {
-            matchesAmiQualification = (
-              ( amiQualification >= filtersToApply.amiQualification.lowerBound )
-              && ( amiQualification <= filtersToApply.amiQualification.upperBound )
-            );
-          // These values can be switched in the UI causing the names to no longer be semantic
-          } else if ( filtersToApply.amiQualification.lowerBound > filtersToApply.amiQualification.upperBound ) {
-            matchesAmiQualification = (
-              ( amiQualification >= filtersToApply.amiQualification.upperBound )
-              && ( amiQualification <= filtersToApply.amiQualification.lowerBound )
-            );
-          }
+            if ( filtersToApply.amiQualification.lowerBound <= filtersToApply.amiQualification.upperBound ) {
+              matchesAmiQualification = (
+                ( amiQualification >= filtersToApply.amiQualification.lowerBound )
+                && ( amiQualification <= filtersToApply.amiQualification.upperBound )
+              );
+            // These values can be switched in the UI causing the names to no longer be semantic
+            } else if ( filtersToApply.amiQualification.lowerBound > filtersToApply.amiQualification.upperBound ) {
+              matchesAmiQualification = (
+                ( amiQualification >= filtersToApply.amiQualification.upperBound )
+                && ( amiQualification <= filtersToApply.amiQualification.lowerBound )
+              );
+            }
 
-          if ( matchesAmiQualification ) {
-            break;
+            if ( matchesAmiQualification ) {
+              break;
+            }
           }
         }
 
