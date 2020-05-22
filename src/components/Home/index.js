@@ -16,19 +16,19 @@ import { generateRandomDomId } from '@util/strings';
 import './Home.scss';
 import { capitalCase } from 'change-case';
 
-function wasJustListed( listingDate, unitOfTime = 'days', newnessThreshold = 1 ) {
+function wasJustListed( listingDate, unitOfTime = 'hours', newnessThreshold = 48 ) {
   // testing:
-  return true;
+  // return true;
 
-  // const now = moment();
-  // const then = moment( listingDate );
-  // const diff = now.diff( then, unitOfTime );
+  const now = moment();
+  const then = moment( listingDate );
+  const diff = now.diff( then, unitOfTime );
 
-  // if ( diff <= newnessThreshold ) {
-  //   return true;
-  // }
+  if ( diff <= newnessThreshold ) {
+    return true;
+  }
 
-  // return false;
+  return false;
 }
 
 function renderJustListed( listingDate ) {
