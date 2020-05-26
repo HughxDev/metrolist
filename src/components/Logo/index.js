@@ -1,14 +1,15 @@
 import React from 'react';
-import metrolistLogo from './metrolist-logo.png';
 
 export default function Logo( props ) {
-  console.error( 'Using placeholder Metrolist logo; please update with SVG' );
-
   return (
-    <img
-      src={ metrolistLogo }
-      alt="Metrolist"
-      { ...props }
-    />
+    <picture>
+      <source type="image/svg+xml" srcSet="/images/metrolist-logo.svg" />
+      <img
+        src="/images/metrolist-logo.png"
+        srcSet="/images/metrolist-logo.png 1x, /images/metrolist-logo@2x.png 2x, /images/metrolist-logo@3x.png 3x"
+        alt="Metrolist"
+        { ...props }
+      />
+    </picture>
   );
 }

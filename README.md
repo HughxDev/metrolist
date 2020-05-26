@@ -167,3 +167,4 @@ module.exports = {
 ## Interfacing with Main Site
 
 - All `mailto:` links require the class `hide-form` to be set, otherwise they will trigger the generic feedback form.
+- All references to `/images/` get find & replaced to `/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/images/` when building.
