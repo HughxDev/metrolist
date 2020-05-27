@@ -16,32 +16,10 @@ import './FiltersPanel.scss';
 
 function FiltersPanel( props ) {
   const isDesktop = window.matchMedia( '(min-width: 992px)' ).matches; // TODO: define breakpoints that line up with the CSS in JS somewhere
-  const $drawer = useRef();
   const attributes = { ...props };
   const [isExpanded, setExpanded] = useState( isDesktop );
   // const [filters, setFilters] = useState( props.filters );
   const $self = useRef();
-  let updatingDrawerHeight = false;
-
-  const updateDrawerHeight = ( wait ) => {
-    const updateHeight = () => {
-      if ( $drawer.current ) {
-        const height = getComputedStyle( $drawer.current ).getPropertyValue( 'height' );
-
-        if ( height !== '0px' ) {
-          $drawer.current.style.height = height;
-        }
-      }
-
-      updatingDrawerHeight = false;
-    };
-
-    if ( wait ) {
-      setTimeout( updateHeight, wait );
-    } else {
-      updateHeight();
-    }
-  };
 
   // const updateOwnHeight = () => {
   //   const bodyHeight = getComputedStyle( document.body ).getPropertyValue( 'height' ).replace( 'px', '' );
@@ -76,24 +54,24 @@ function FiltersPanel( props ) {
     if ( isFiltersPanelClick ) {
       setExpanded( !isExpanded );
     } else {
-      if ( !updatingDrawerHeight ) {
-        updatingDrawerHeight = true;
-        $drawer.current.style.height = '';
-        updateDrawerHeight( 250 );
+      if ( !props.updatingDrawerHeight ) {
+        props.setUpdatingDrawerHeight( true );
+        props.drawerRef.current.style.height = '';
+        props.updateDrawerHeight( props.drawerRef, 250 );
       }
     }
 
     // updateOwnHeight();
   };
 
-  useEffect( updateDrawerHeight );
+  useEffect( props.updateDrawerHeight );
   // useEffect( updateOwnHeight );
 
   window.addEventListener( 'resize', ( event ) => {
-    if ( !updatingDrawerHeight ) {
-      updatingDrawerHeight = true;
-      $drawer.current.style.height = '';
-      updateDrawerHeight( 125 );
+    if ( !props.updatingDrawerHeight ) {
+      props.setUpdatingDrawerHeight( true );
+      props.drawerRef.current.style.height = '';
+      props.updateDrawerHeight( props.drawerRef, 125 );
     }
   }, false );
 
@@ -114,7 +92,11 @@ function FiltersPanel( props ) {
     delete attributes.handleFilterChange;
   }
 
+  delete attributes.updateDrawerHeight;
+  delete attributes.updatingDrawerHeight;
+  delete attributes.setUpdatingDrawerHeight;
   delete attributes.listingCounts;
+  delete attributes.drawerRef;
 
   const {
     offer,
@@ -153,11 +135,11 @@ function FiltersPanel( props ) {
           onMouseDown={ handleDoubleClick }
         >
           Filter Listings
-          <Icon className="ml-filters-panel__heading-icon" use="#icon-details-marker" />
+          <Icon className="ml-filters-panel__heading-icon" icon="icon-details-marker" width="19" height="11" alt={ props.isExpanded ? '⌃' : '⌄' } isMetrolistIcon />
         </h3>
         <div
           id="filters-panel-content"
-          ref={ $drawer }
+          ref={ props.drawerRef }
           className={ `ml-filters-panel__content${isExpanded ? ' ml-filters-panel__content--expanded' : ''}` }
         >
           <FilterGroup criterion="offer">
@@ -263,7 +245,11 @@ FiltersPanel.propTypes = {
   "columnWidth": PropTypes.string,
   "filters": filtersObject,
   "handleFilterChange": PropTypes.func.isRequired,
+  "updateDrawerHeight": PropTypes.func.isRequired,
   "listingCounts": PropTypes.object,
+  "drawerRef": PropTypes.object.isRequired,
+  "updatingDrawerHeight": PropTypes.bool,
+  "setUpdatingDrawerHeight": PropTypes.func,
 };
 
 export default FiltersPanel;

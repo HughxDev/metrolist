@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { hasOwnProperty } from '@util/objects';
 
@@ -25,6 +25,8 @@ function Search( props ) {
   const [filters, setFilters] = useState( props.filters );
   const [allHomes, setAllHomes] = useState( Object.freeze( props.homes ) );
   const [filteredHomes, setFilteredHomes] = useState( Object.freeze( props.homes ) );
+  const $drawer = useRef();
+  let [updatingDrawerHeight, setUpdatingDrawerHeight] = useState( false ); // eslint-disable-line
 
   const getListingCounts = ( homes ) => {
     const listingCounts = {
@@ -415,6 +417,32 @@ function Search( props ) {
     setFilteredHomes( filterHomes( filters ) );
   };
 
+  const updateDrawerHeight = ( drawerRef, wait ) => {
+    console.log( 'updateDrawerHeight' );
+
+    const updateHeight = () => {
+      if ( drawerRef && drawerRef.current ) {
+        const height = getComputedStyle( drawerRef.current ).getPropertyValue( 'height' );
+
+        if ( height !== '0px' ) {
+          drawerRef.current.style.height = height;
+        }
+      }
+
+      setUpdatingDrawerHeight( false );
+    };
+
+    if ( wait ) {
+      setTimeout( updateHeight, wait );
+    } else {
+      updateHeight();
+    }
+  };
+
+  const handleHomesLoaded = () => {
+    // updateDrawerHeight( $drawer );
+  };
+
   return (
     <article className={ `ml-search${props.className ? ` ${props.className}` : ''}` }>
       <h2 className="sr-only">Search</h2>
@@ -422,8 +450,12 @@ function Search( props ) {
         <Stack data-column-width="1/3" space="panel" reverseAt="large">
           <FiltersPanel
             className="ml-search__filters"
+            drawerRef={ $drawer }
             filters={ filters }
             listingCounts={ getListingCounts( allHomes ) }
+            updateDrawerHeight={ updateDrawerHeight }
+            updatingDrawerHeight={ updatingDrawerHeight }
+            setUpdatingDrawerHeight={ setUpdatingDrawerHeight }
             handleFilterChange={ handleFilterChange }
           />
           <Inset className="filters-panel__callout-container" until="large">
@@ -440,6 +472,7 @@ function Search( props ) {
           columnWidth="2/3"
           filters={ filters }
           homes={ filteredHomes }
+          handleHomesLoaded={ handleHomesLoaded }
         />
       </Row>
     </article>

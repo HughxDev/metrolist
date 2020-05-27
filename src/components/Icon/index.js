@@ -61,6 +61,8 @@ class Icon extends React.Component {
       },
     };
 
+    delete this.state.attributes.isMetrolistIcon;
+
     const oneSourcePropertyErrorMessage = `Icon component must have only one of \`icon\`, \`src\`, or \`use\` properties.`;
 
     if ( props.use ) {
@@ -86,10 +88,12 @@ class Icon extends React.Component {
       this.state.attributes.className += ` ml-icon--${props.icon}`;
       delete this.state.attributes.icon;
 
-      if ( hasOwnProperty( iconsManifest, props.icon ) ) {
-        this.state.attributes.src = `https://assets.boston.gov${iconsManifest[props.icon].url}`;
-      } else {
-        console.error( `Could not find an icon definition for \`${props.icon}\`.` );
+      if ( !props.isMetrolistIcon ) {
+        if ( hasOwnProperty( iconsManifest, props.icon ) ) {
+          this.state.attributes.src = `https://assets.boston.gov${iconsManifest[props.icon].url}`;
+        } else {
+          console.error( `Could not find an icon definition for \`${props.icon}\`.` );
+        }
       }
     }
   }
@@ -100,6 +104,20 @@ class Icon extends React.Component {
         <svg { ...this.state.attributes }>
           <use xlinkHref={ this.props.use } />
         </svg>
+      );
+    }
+
+    if ( this.props.isMetrolistIcon ) {
+      return (
+        <picture>
+          <source type="image/svg+xml" srcSet={ `/images/${this.props.icon}.sv\g` } />
+          <img
+            { ...this.state.attributes }
+            src={ `/images/${this.props.icon}.png` }
+            srcSet={ `/images/${this.props.icon}.png 1x, /images/${this.props.icon}@2x.png 2x, /images/${this.props.icon}@3x.png 3x` }
+            alt={ this.props.alt }
+          />
+        </picture>
       );
     }
 
@@ -114,6 +132,11 @@ Icon.propTypes = {
   "width": PropTypes.string, // numericString(),
   "height": PropTypes.string, // numericString(),
   "alt": PropTypes.string,
+  "isMetrolistIcon": PropTypes.bool,
+};
+
+Icon.defaultProps = {
+  "isMetrolistIcon": false,
 };
 
 export default Icon;
