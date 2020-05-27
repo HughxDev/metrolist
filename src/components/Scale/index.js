@@ -5,18 +5,57 @@ import { propTypeErrorMessage } from '@util/errors';
 
 import './Scale.scss';
 
-// function getAriaLabel( props, value ) {
+// function getAriaLabel( props, value, omitValue = false ) {
 //   const { units, unitLabel } = props;
+//   const integerValue = parseInt( value, 10 );
 
 //   if ( unitLabel && ( unitLabel.type === 'aria' ) ) {
-//     if ( props.unitLabel.affix ) {
-//       if ( props.unitLabel.affix === 'prepend' ) {
-//         return `${value}`;
-//       } if ( props.unitLabel.affix === 'append' ) {
+//     if ( unitLabel.affix === 'prepend' ) {
+//       if ( integerValue > 1 ) {
+//         if ( units.many ) {
+//           if ( omitValue ) {
+//             return units.many;
+//           }
 
-//       } else {
+//           return `${units.many} ${value}`;
+//         }
 
+//         return false;
 //       }
+
+//       if ( units.one ) {
+//         if ( omitValue ) {
+//           return units.one;
+//         }
+
+//         return `${units.one} ${value}`;
+//       }
+
+//       return false;
+//     }
+
+//     if ( unitLabel.affix === 'append' ) {
+//       if ( integerValue > 1 ) {
+//         if ( units.many ) {
+//           if ( omitValue ) {
+//             return units.many;
+//           }
+
+//           return `${value} ${units.many}`;
+//         }
+
+//         return false;
+//       }
+
+//       if ( units.one ) {
+//         if ( omitValue ) {
+//           return units.one;
+//         }
+
+//         return `${value} ${units.one}`;
+//       }
+
+//       return false;
 //     }
 //   }
 
@@ -34,7 +73,8 @@ const Scale = forwardRef( ( props, ref ) => (
             name={ props.criterion }
             value={ value }
             type="radio"
-            // aria-label={ getAriaLabel( props, value ) }
+            // aria-label={ getAriaLabel( props, value, true ) }
+            aria-describedby={ props['aria-describedby'] }
             required={ props.required }
             defaultChecked={ value === props.value }
           />
@@ -68,14 +108,15 @@ Scale.propTypes = {
   },
   "value": PropTypes.string,
   "onChange": PropTypes.func,
-  "units": PropTypes.shape( {
-    "one": PropTypes.string,
-    "many": PropTypes.string,
-  } ),
-  "unitLabel": PropTypes.shape( {
-    "type": PropTypes.oneOf( ['aria', 'text'] ),
-    "affix": PropTypes.oneOf( ['prepend', 'append'] ),
-  } ),
+  // "units": PropTypes.shape( {
+  //   "one": PropTypes.string,
+  //   "many": PropTypes.string,
+  // } ),
+  // "unitLabel": PropTypes.shape( {
+  //   "type": PropTypes.oneOf( ['aria', 'text'] ),
+  //   "affix": PropTypes.oneOf( ['prepend', 'append'] ),
+  // } ),
+  "aria-describedby": PropTypes.string,
 };
 
 export default Scale;

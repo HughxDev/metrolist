@@ -1,5 +1,6 @@
 // For the most part this file should be avoided in favor of individual component CSS files,
 // but it is occasionally necessary to set global styles, such as in the case of public.css overrides.
+@import '@globals/colors';
 
 @namespace svg url(http://www.w3.org/2000/svg);
 
@@ -21,4 +22,18 @@ h3 {
 
 input[type=checkbox], input[type=radio] {
   display: inherit; // public.css sets to display: none which eliminates tab order even with tabindex set.
+}
+
+.ml-required {
+  display: inline-block;
+  margin-left: .25rem;
+  color: $color-freedom-trail-red--a11y;
+}
+
+.--block {
+  display: block;
+}
+
+.--inline-block {
+  display: inline-block;
 }

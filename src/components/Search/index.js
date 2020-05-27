@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { hasOwnProperty } from '@util/objects';
-import { camelCase } from 'change-case';
 
 import './Search.scss';
 import 'whatwg-fetch';
@@ -81,6 +80,10 @@ function Search( props ) {
     // console.log( 'filtersToApply', filtersToApply );
     const matchingHomes = allHomes
       .filter( ( home ) => {
+        if ( home.incomeRestricted === false ) {
+          return true;
+        }
+
         let matchesOffer = (
           (
             ( filtersToApply.offer.rent !== false )

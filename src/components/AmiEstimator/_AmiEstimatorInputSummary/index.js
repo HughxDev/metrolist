@@ -39,7 +39,7 @@ const AmiEstimatorInputSummary = forwardRef( ( props, ref ) => (
         <Icon className="ml-ami-estimator__prompt-answer-icon" icon="family2" width="114" />
         Household:
       </dt>
-      <dd>{ props.formData.householdSize.value || '0' }</dd>
+      <dd>{ props.formData.householdSize.value || '0' }{ ( props.formData.householdSize.value === '1' ) ? ' person' : ' people' }</dd>
     </div>
     <div>
       <dt>

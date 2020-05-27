@@ -13,12 +13,13 @@ import {
 
 import { hasOwnProperty } from '@util/objects';
 import { slugify, uncapitalize, componentCase } from '@util/strings';
+import { capitalCase } from 'change-case';
 
 import Button from '@components/Button';
 import ProgressBar from '@components/ProgressBar';
 import Row from '@components/Row';
 import Stack from '@components/Stack';
-import Alert from '@components/Alert';
+// import Alert from '@components/Alert';
 
 import HouseholdSize from './_AmiEstimatorHouseholdSize';
 import HouseholdIncome from './_AmiEstimatorHouseholdIncome';
@@ -35,35 +36,39 @@ function AmiEstimator( props ) {
 
   const noErrors = {
     "steps": [...props.steps],
-    "alert": {
-      "page": "all",
-      "value": "",
-      "errorMessage": "",
-      "errorRef": useRef(),
-    },
+    // "alert": {
+    //   "page": "all",
+    //   "value": "",
+    //   "errorMessage": "",
+    //   "errorRef": useRef(),
+    // },
     "householdSize": {
       "page": 1,
       "value": "",
       "errorMessage": "",
       "errorRef": useRef(),
+      "errorMessageWhenRequired": "Please specify how many people live in your household.",
     },
     "householdIncome": {
       "page": 2,
       "value": "",
       "errorMessage": "",
       "errorRef": useRef(),
+      "errorMessageWhenRequired": "Please specify your combined household income.",
     },
     "incomeRate": {
       "page": 2,
       "value": "",
       "errorMessage": "",
       "errorRef": useRef(),
+      "errorMessageWhenRequired": "Please specify how often your combined household income recurs.",
     },
     "disclosure": {
       "page": 3,
       "value": "",
       "errorMessage": "",
       "errorRef": useRef(),
+      "errorMessageWhenRequired": "Please agree to the disclosure before continuing.",
     },
     "amiEstimation": {
       "page": 4,
@@ -118,8 +123,19 @@ function AmiEstimator( props ) {
       setTimeout( () => {
         $errorMessage.classList.add( '--visible' );
 
+        console.log( 'index', index );
+
         if ( index === 0 ) {
-          $errorMessage.focus();
+          let $focusTarget;
+          const $reverseLookup = document.querySelector( `[aria-describedby~=${$errorMessage.id}]` );
+
+          if ( $reverseLookup ) {
+            $focusTarget = $reverseLookup;
+          } else {
+            $focusTarget = $errorMessage;
+          }
+
+          $focusTarget.focus();
         }
       }, 62.5 );
     } else {
@@ -171,6 +187,17 @@ function AmiEstimator( props ) {
 
   const [step, setStep] = useState( getStepNumberFromPath() );
 
+  const getNextStepName = () => {
+    const nextStep = ( step + 1 );
+    const stepDefinition = props.steps[nextStep - 1];
+
+    if ( stepDefinition ) {
+      return capitalCase( stepDefinition.component.displayName );
+    }
+
+    return null;
+  };
+
   const getNextStepPath = () => {
     const nextStep = ( step + 1 );
     const stepDefinition = props.steps[nextStep - 1];
@@ -191,6 +218,17 @@ function AmiEstimator( props ) {
       }
 
       return `${path}${relativePath}`;
+    }
+
+    return null;
+  };
+
+  const getPreviousStepName = () => {
+    const previousStep = ( step - 1 );
+    const stepDefinition = props.steps[previousStep - 1];
+
+    if ( stepDefinition ) {
+      return capitalCase( stepDefinition.component.displayName );
     }
 
     return null;
@@ -267,7 +305,7 @@ function AmiEstimator( props ) {
 
             newErrors[name] = {
               ...newErrors[name],
-              "errorMessage": "Please fill out this field.",
+              "errorMessage": ( formData[name].errorMessageWhenRequired ? formData[name].errorMessageWhenRequired : "Please fill out this field." ),
             };
 
             numberOfErrors++;
@@ -305,9 +343,9 @@ function AmiEstimator( props ) {
   };
 
   const populateErrors = ( errorNameList, newFormData = formData ) => {
-    errorNameList.forEach( ( errorName ) => {
+    errorNameList.forEach( ( errorName, index ) => {
       try {
-        showErrorMessage( newFormData[errorName].errorRef );
+        showErrorMessage( newFormData[errorName].errorRef, index );
       } catch ( exception ) {
         console.error( exception );
       }
@@ -327,7 +365,7 @@ function AmiEstimator( props ) {
     const navigateNext = event.target.hasAttribute( 'data-navigate-next' );
 
     if ( navigatePrevious ) {
-      clearAlert();
+      // clearAlert();
       navigateBackward();
     } else {
       const [newFormData, numberOfErrors] = getErrors();
@@ -466,6 +504,8 @@ function AmiEstimator( props ) {
   //     "height": "auto",
   //   };
   // };
+  const nextStepName = getNextStepName();
+  const previousStepName = getPreviousStepName();
 
   return (
     <Stack as="article" className={ `ml-ami-estimator${props.className ? ` ${props.className}` : ''}` } space="2" data-testid="ml-ami-estimator">
@@ -474,14 +514,14 @@ function AmiEstimator( props ) {
         <h3 className="sh-title ml-ami-estimator__heading">Find Housing Based on Your Income &amp; Household Size…</h3>
         <ProgressBar current={ step } total={ totalSteps } />
       </Stack>
-      <Alert
+      {/* <Alert
         id="ami-estimator-form-alert"
         ref={ formData.alert.errorRef }
         className={ `ml-ami-estimator__error-alert` }
         variant="danger"
       >
         { formData.alert.errorMessage }
-      </Alert>
+      </Alert> */}
       <form
         ref={ formRef }
         className="ami-estimator__form"
@@ -551,6 +591,7 @@ function AmiEstimator( props ) {
               className="ml-ami-estimator__button"
               type="button"
               disabled={ ( step === 1 ) }
+              aria-label={ previousStepName && `Previous step: ${previousStepName}` }
               data-is-navigation-button
               data-navigate-previous
             >Back</Button>
@@ -559,6 +600,7 @@ function AmiEstimator( props ) {
               type="button"
               variant="primary"
               disabled={ ( step === totalSteps ) }
+              aria-label={ nextStepName && `Next step: ${nextStepName}` }
               data-is-navigation-button
               data-navigate-next
             >Next</Button>

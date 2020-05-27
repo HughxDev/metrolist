@@ -19,6 +19,7 @@ const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
   const selfRef = ( ref || useRef() );
   const incomeInputRef = useRef();
   const defaultIncomeRate = 'Monthly';
+  const isRequired = true;
 
   function pad( num, size ) {
     let s = `${num}`;
@@ -104,7 +105,7 @@ const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
             ( parseInt( props.formData.householdSize.value, 10 ) === 1 ) // TODO: Should we event allow string values?
               ? <>What is your total income before taxes?</>
               : <>What is the total combined income of all { props.formData.householdSize.value ? `${props.formData.householdSize.value} people` : 'people' } who live in your household before taxes?</>
-          }
+          }{ isRequired ? <span className="ml-required">*</span> : '' }
         </legend>
         <Icon className="ml-ami-estimator__prompt-answer-icon" icon="deposit check" width="212" />
         <Stack space="1">{/* ami-estimator-income-rate */}
@@ -117,9 +118,9 @@ const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
             inputMode="numeric"
             pattern="[0-9]*"
             placeholder="$0.00"
-            aria-describedby="ami-estimator-form-errors ami-estimator-household-income-error"
+            aria-describedby="ami-estimator-household-income-error"
             onChange={ handleIncomeChange }
-            required
+            required={ isRequired }
           />
           <FormErrorMessage
             ref={ props.formData.householdIncome.errorRef }
@@ -135,7 +136,7 @@ const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
           />
           <FormErrorMessage
             ref={ props.formData.incomeRate.errorRef }
-            id="ami-estimator-household-income-error"
+            id="ami-estimator-household-income-rate-error"
             className="ml-ami-estimator__prompt-answer-error"
           >{ props.formData.incomeRate.errorMessage }</FormErrorMessage>
         </Stack>

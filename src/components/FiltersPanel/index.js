@@ -174,7 +174,13 @@ function FiltersPanel( props ) {
           <FilterGroup criterion="location">
             <FilterGroup.Label>Location</FilterGroup.Label>
             <Stack space="sister-checkboxes">
-              <Filter type="checkbox" criterion="city" value="boston" checked={ location.city.boston }>
+              <Filter
+                type="checkbox"
+                criterion="city"
+                value="boston"
+                checked={ location.city.boston }
+                hasSubcategories
+              >
                 <Filter.Label>Boston</Filter.Label>
                 {
                   Object.keys( listingCounts.location.neighborhood )
@@ -194,7 +200,13 @@ function FiltersPanel( props ) {
                     } )
                 }
               </Filter>
-              <Filter type="checkbox" criterion="city" value="beyondBoston" checked={ location.city.beyondBoston }>
+              <Filter
+                type="checkbox"
+                criterion="city"
+                value="beyondBoston"
+                checked={ location.city.beyondBoston }
+                hasSubcategories
+              >
                 <Filter.Label>Beyond Boston</Filter.Label>
                 {
                   Object.keys( listingCounts.location.cardinalDirection )

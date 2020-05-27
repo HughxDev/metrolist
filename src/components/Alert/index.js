@@ -9,7 +9,7 @@ const Alert = forwardRef( ( props, ref ) => (
       ref={ ref }
       className={ `ml-alert${props.variant && ` ml-alert--${props.variant}`}${props.className ? ` ${props.className}` : ''}` }
       role="alert"
-      aria-live="polite"
+      aria-live="assertive"
       hidden
     >
       { props.children }

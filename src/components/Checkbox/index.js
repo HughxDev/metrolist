@@ -52,13 +52,15 @@ function renderLabel( children, props ) {
 }
 
 function renderChoices( props ) {
-  const { children, subcategoriesOnly, required } = props; // eslint-disable-line react/prop-types
+  const {
+    children, hasSubcategories, subcategoriesOnly, required,
+  } = props; // eslint-disable-line react/prop-types
 
-  switch ( typeof children ) {
-    case 'string':
+  switch ( hasSubcategories ) {
+    case false:
       return renderLabel( children, props );
 
-    case 'object': {
+    case true: {
       let firstRenderedChoice;
       const childArray = React.Children.toArray( children );
       const firstChild = childArray.shift();
@@ -117,10 +119,12 @@ Checkbox.propTypes = {
   "subcategoriesOnly": PropTypes.bool,
   "columnWidth": PropTypes.oneOfType( [PropTypes.string, PropTypes.bool] ),
   "required": PropTypes.bool,
+  "hasSubcategories": PropTypes.bool,
 };
 
 Checkbox.defaultProps = {
   "required": false,
+  "hasSubcategories": false,
 };
 
 export default Checkbox;

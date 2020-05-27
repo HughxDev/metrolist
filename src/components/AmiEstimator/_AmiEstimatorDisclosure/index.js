@@ -13,6 +13,7 @@ import './AmiEstimatorDisclosure.scss';
 
 const AmiEstimatorDisclosure = forwardRef( ( props, ref ) => {
   const selfRef = ( ref || useRef() );
+  const isRequired = true;
 
   useEffect( () => {
     updatePageTitle( 'Disclosure', 'AMI Estimator' );
@@ -24,15 +25,17 @@ const AmiEstimatorDisclosure = forwardRef( ( props, ref ) => {
     <div ref={ selfRef } className={ `ml-ami-estimator__disclosure ml-ami-estimator__prompt${props.className ? ` ${props.className}` : ''}` } data-testid="ml-ami-estimator__disclosure">
       <Stack space="2" className="ml-ami-estimator__prompt-inner">
         <InputSummary formData={ props.formData } />
-        <p>The above information will be combined to estimate your eligibility for income-restricted housing.  Eligibility is officially and finally determined during the application process.</p>
+        <p>The above information will be combined to estimate your eligibility for income-restricted housing. Eligibility is officially and finally determined during the application process.</p>
         <Stack space="1">
           <Checkbox
             className="ml-ami-estimator__disclosure-accept"
             criterion="disclosure"
             aria-describedby="ami-estimator-disclosure-accept-error"
             checked={ props.formData.disclosure.value }
-            required
-          >I have read and understand the above statement.</Checkbox>
+            required={ isRequired }
+          >
+            I have read and understand the above statement.{ isRequired ? <span className="ml-required">*</span> : '' }
+          </Checkbox>
           <FormErrorMessage
             ref={ props.formData.disclosure.errorRef }
             id="ami-estimator-disclosure-accept-error"

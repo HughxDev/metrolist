@@ -13,7 +13,9 @@ function AppHeader() {
       <Inset>
         <Stack as="hgroup" space="0.5" align={['middle']} className="ml-app-header__heading-container">
           <h1 className="ml-app-header__heading">
-            <Logo width="145" />
+            <a className="--block" href="/metrolist/">
+              <Logo width="145" />
+            </a>
           </h1>
           <h2 className="ml-app-header__subheading" role="presentation">
             <Tagline />

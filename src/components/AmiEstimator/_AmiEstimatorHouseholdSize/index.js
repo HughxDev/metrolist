@@ -13,6 +13,7 @@ import './AmiEstimatorHouseholdSize.scss';
 
 const AmiEstimatorHouseholdSize = forwardRef( ( props, ref ) => {
   const selfRef = ( ref || useRef() );
+  const isRequired = true;
 
   useEffect( () => {
     updatePageTitle( 'Household Size', 'AMI Estimator' );
@@ -23,18 +24,18 @@ const AmiEstimatorHouseholdSize = forwardRef( ( props, ref ) => {
   return (
     <div ref={ selfRef } className="ml-ami-estimator__household-size ml-ami-estimator__prompt" data-testid="ml-ami-estimator__household-size">
       <fieldset className="ml-ami-estimator__prompt-inner">
-        <legend className="ml-ami-estimator__prompt-question">How many people live in your household of any age?</legend>
+        <legend className="ml-ami-estimator__prompt-question">How many people live in your household of any age?<span className="ml-required">{ isRequired ? '*' : '' }</span></legend>
         <div className="ml-ami-estimator__prompt-answer">
           <Icon className="ml-ami-estimator__prompt-answer-icon" icon="family2" width="227" />
           <Scale
             className={ `ml-ami-estimator__prompt--answer-input` }
             criterion="householdSize"
             values="1,2,3,4,5,6+"
-            units={ { "one": "person", "many": "people" } }
-            unitLabel={ { "type": "aria", "affix": "append" } }
+            // units={ { "one": "person", "many": "people" } }
+            // unitLabel={ { "type": "aria", "affix": "append" } }
             value={ props.formData.householdSize.value }
-            aria-describedby="ami-estimator-form-errors ami-estimator-household-size-error"
-            required
+            aria-describedby="ami-estimator-household-size-error"
+            required={ isRequired }
           />
           <FormErrorMessage
             ref={ props.formData.householdSize.errorRef }
