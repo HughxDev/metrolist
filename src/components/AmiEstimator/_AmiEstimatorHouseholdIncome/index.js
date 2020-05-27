@@ -18,6 +18,7 @@ import './AmiEstimatorHouseholdIncome.scss';
 const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
   const selfRef = ( ref || useRef() );
   const incomeInputRef = useRef();
+  // const incomeOutputRef = useRef();
   const defaultIncomeRate = 'Monthly';
   const isRequired = true;
 
@@ -57,18 +58,30 @@ const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
     return formatted;
   }
 
-  function setIncomeInput( newValue ) {
+  function setIncomeOutput( newValue ) {
     if ( newValue === '$0.00' ) {
       incomeInputRef.current.value = '';
     } else {
-      incomeInputRef.current.value = formatIncome( newValue );
+      incomeInputRef.current.value = newValue;
     }
   }
 
   const handleIncomeChange = ( event ) => {
-    const formattedAmount = formatIncome( event.target.value );
+    const oldValue = event.target.value;
+    const cursorStart = event.target.selectionStart;
+    const cursorEnd = event.target.selectionEnd;
+    const newValue = formatIncome( event.target.value );
+    const difference = ( newValue.length - oldValue.length );
+    const differenceAbsoluteValue = Math.abs( difference );
 
-    setIncomeInput( formattedAmount );
+    setIncomeOutput( newValue );
+
+    if ( Math.sign( difference ) < 1 ) {
+      // http://dimafeldman.com/js/maintain-cursor-position-after-changing-an-input-value-programatically/
+      event.target.setSelectionRange( cursorStart - differenceAbsoluteValue, cursorEnd - differenceAbsoluteValue );
+    } else {
+      event.target.setSelectionRange( cursorStart + differenceAbsoluteValue, cursorEnd + differenceAbsoluteValue );
+    }
   };
 
   useEffect( () => {
@@ -81,7 +94,7 @@ const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
     if ( initialAmount.length ) {
       const formattedInitialAmount = formatIncome( initialAmount );
 
-      setIncomeInput( formattedInitialAmount );
+      setIncomeOutput( formattedInitialAmount );
     }
 
     if ( !props.formData.incomeRate.value ) {
@@ -121,6 +134,7 @@ const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
             aria-describedby="ami-estimator-household-income-error"
             onChange={ handleIncomeChange }
             required={ isRequired }
+            maxLength="20"
           />
           <FormErrorMessage
             ref={ props.formData.householdIncome.errorRef }
