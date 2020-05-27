@@ -77,7 +77,6 @@ function Search( props ) {
   };
 
   const filterHomes = ( filtersToApply, matchOnNoneSelected = true ) => {
-    // console.log( 'filtersToApply', filtersToApply );
     const matchingHomes = allHomes
       .filter( ( home ) => {
         if ( home.incomeRestricted === false ) {
@@ -187,14 +186,6 @@ function Search( props ) {
           }
         }
 
-        console.log( {
-          matchesOffer,
-          matchesBroadLocation,
-          matchesNarrowLocation,
-          matchesBedrooms,
-          matchesAmiQualification,
-        } );
-
         return (
           matchesOffer
           && matchesBroadLocation
@@ -302,10 +293,7 @@ function Search( props ) {
               console.warn( 'API returned an invalid response; falling back to test data since we’re in a development environment.' );
 
               return import( './test-data' )
-                .then( ( json ) => {
-                  console.log( 'json.default', json.default );
-                  return json.default;
-                } );
+                .then( ( json ) => json.default );
             }
 
             throw new Error( `API returned an invalid response.` );
@@ -314,7 +302,6 @@ function Search( props ) {
           }
         } )
         .then( ( apiHomes ) => {
-          console.log( 'apiHomes', apiHomes );
           setAllHomes( apiHomes );
           const listingCounts = getListingCounts( apiHomes );
           const newFilters = { ...filters };
@@ -337,8 +324,6 @@ function Search( props ) {
   }, [allHomes] );
 
   const handleFilterChange = ( event ) => {
-    // console.log( 'handleFilterChange', event.target.value );
-
     const $input = event.target;
     let newValue;
     const newFilters = { ...filters };
@@ -425,8 +410,6 @@ function Search( props ) {
 
       default:
     }
-
-    console.log( 'newFilters', newFilters );
 
     setFilters( newFilters );
     setFilteredHomes( filterHomes( filters ) );
