@@ -126,7 +126,7 @@ FilterGroup.Label = function FilterGroupLabel( props ) {
       onMouseDown={ props.handleDoubleClick }
     >
       <span className="ml-filter-group__label-text">{ props.children }</span>
-      <Icon className="ml-filter-group__icon" use="#icon-details-marker" />
+      <Icon className="ml-filter-group__icon" icon="icon-details-marker" width="19" height="11" alt={ props.isExpanded ? '⌃' : '⌄' } isMetrolistIcon />
     </legend>
   );
 };
