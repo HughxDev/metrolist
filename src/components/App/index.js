@@ -18,6 +18,13 @@ function App() {
     rootPathSlug = slugify( location.pathname.substring( 0, location.pathname.lastIndexOf( '/' ) ) );
   }
 
+  // Make sure that localStorage.amiRecommendation is a valid number value.
+  let amiRecommendation = parseInt( localStorage.getItem( 'amiRecommendation' ), 10 );
+  if ( Number.isNaN( amiRecommendation ) || ( Math.sign( amiRecommendation ) < 1 ) ) {
+    localStorage.setItem( 'amiRecommendation', '0' );
+    amiRecommendation = 0;
+  }
+
   return (
     <Layout className={ `ml-app${location.pathname ? ` ml-app--${rootPathSlug}` : ''}` }>
       <AppHeader />

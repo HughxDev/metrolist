@@ -519,7 +519,7 @@ Search.defaultProps = {
       "4+": false,
     },
     "amiQualification": {
-      "lowerBound": ( localStorage.getItem( 'amiRecommendation' ) ? parseInt( localStorage.getItem( 'amiRecommendation' ), 10 ) : 0 ),
+      "lowerBound": ( parseInt( localStorage.getItem( 'amiRecommendation' ), 10 ) || 0 ),
       "upperBound": 200,
     },
   },
