@@ -42,3 +42,21 @@
       // max-width: rem( $nominal-width-desktop * 1px );
     }
   }
+
+  // .ml-search__pagination {
+  //   text-align: center;
+  // }
+
+  .ml-search__page-link-container {
+    &:last-child {
+      border-right: none;
+    }
+  }
+
+  .ml-search__page-link {
+    border: none;
+  }
+
+  .pg-li-i--a.ml-search__page-link {
+    background-color: $color-optimistic-blue;
+  }

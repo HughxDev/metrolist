@@ -21,12 +21,27 @@ import isDev, { isLocalDev } from '@util/dev';
 const apiDomain = ( isLocalDev() ? 'https://d8-ci.boston.gov' : '' );
 const dev2Endpoint = `${apiDomain}/metrolist/api/v1/developments?_format=json`;
 
+// https://stackoverflow.com/a/11764168/214325
+function paginate( homes, homesPerPage = 8 ) {
+  const pages = [];
+  let i = 0;
+  const numberOfHomes = homes.length;
+
+  while ( i < numberOfHomes ) {
+    pages.push( homes.slice( i, i += homesPerPage ) );
+  }
+
+  return pages;
+}
+
 function Search( props ) {
   const [filters, setFilters] = useState( props.filters );
   const [allHomes, setAllHomes] = useState( Object.freeze( props.homes ) );
   const [filteredHomes, setFilteredHomes] = useState( Object.freeze( props.homes ) );
   const $drawer = useRef();
   let [updatingDrawerHeight, setUpdatingDrawerHeight] = useState( false ); // eslint-disable-line
+  const [paginatedHomes, setPaginatedHomes] = useState( [] );
+  const [currentPage, setCurrentPage] = useState( 1 );
 
   const getListingCounts = ( homes ) => {
     const listingCounts = {
@@ -304,7 +319,10 @@ function Search( props ) {
           }
         } )
         .then( ( apiHomes ) => {
-          setAllHomes( apiHomes );
+          const paginatedApiHomes = paginate( apiHomes );
+          setPaginatedHomes( paginatedApiHomes );
+          setAllHomes( paginatedApiHomes[0] );
+          setCurrentPage( 1 );
           const listingCounts = getListingCounts( apiHomes );
           const newFilters = { ...filters };
           Object.keys( listingCounts.location.neighborhood ).forEach( ( nb ) => {
@@ -475,6 +493,29 @@ function Search( props ) {
           handleHomesLoaded={ handleHomesLoaded }
         />
       </Row>
+      <nav className="ml-search__pagination">
+        <h3 className="sr-only">Pages</h3>
+        <Row className="pg" space="panel">{
+          Object.keys( paginatedHomes ).map( ( index ) => {
+            const pageNumber = ( parseInt( index, 10 ) + 1 );
+            const isCurrentPage = ( currentPage === pageNumber );
+
+            return (
+              <span className="pg-li ml-search__page-link-container" key={ index }>
+                <a
+                  className={ `pg-li-i pg-li-i--link${isCurrentPage ? ' pg-li-i--a ' : ' '}ml-search__page-link` }
+                  href={ `?page=${pageNumber}` }
+                  onClick={ ( event ) => {
+                    setAllHomes( paginatedHomes[index] );
+                    setCurrentPage( pageNumber );
+                    event.preventDefault();
+                  } }
+                >{ pageNumber }</a>
+              </span>
+            );
+          } )
+        }</Row>
+      </nav>
     </article>
   );
 }
