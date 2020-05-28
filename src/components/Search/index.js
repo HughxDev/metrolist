@@ -324,14 +324,25 @@ function Search( props ) {
           setAllHomes( paginatedApiHomes[0] );
           setCurrentPage( 1 );
           const listingCounts = getListingCounts( apiHomes );
-          const newFilters = { ...filters };
+          const existingFilters = localStorage.getItem( 'filters' );
+          let newFilters;
+
+          if ( existingFilters ) {
+            newFilters = { ...JSON.parse( existingFilters ) };
+          } else {
+            newFilters = { ...filters };
+          }
+
           Object.keys( listingCounts.location.neighborhood ).forEach( ( nb ) => {
-            newFilters.location.neighborhood[nb] = null;
+            newFilters.location.neighborhood[nb] = ( newFilters.location.neighborhood[nb] || null );
           } );
+
           Object.keys( listingCounts.location.cardinalDirection ).forEach( ( cd ) => {
-            newFilters.location.cardinalDirection[cd] = null;
+            newFilters.location.cardinalDirection[cd] = ( newFilters.location.cardinalDirection[cd] || null );
           } );
+
           setFilters( newFilters );
+          localStorage.setItem( 'filters', JSON.stringify( newFilters ) );
         } )
         .catch( ( error ) => {
           console.error( error );
@@ -432,6 +443,7 @@ function Search( props ) {
     }
 
     setFilters( newFilters );
+    localStorage.setItem( 'filters', JSON.stringify( newFilters ) );
     setFilteredHomes( filterHomes( filters ) );
   };
 
