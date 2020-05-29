@@ -36,12 +36,15 @@ function paginate( homes, homesPerPage = 8 ) {
 
 function Search( props ) {
   const [filters, setFilters] = useState( props.filters );
-  const [allHomes, setAllHomes] = useState( Object.freeze( props.homes ) );
+  // const [allHomes, setAllHomes] = useState( Object.freeze( props.homes ) );
+  const [paginatedHomes, setPaginatedHomes] = useState( paginate( Object.freeze( props.homes ) ) );
+  const [currentHomes, setCurrentHomes] = useState( [] );
   const [filteredHomes, setFilteredHomes] = useState( Object.freeze( props.homes ) );
   const $drawer = useRef();
   let [updatingDrawerHeight, setUpdatingDrawerHeight] = useState( false ); // eslint-disable-line
-  const [paginatedHomes, setPaginatedHomes] = useState( [] );
   const [currentPage, setCurrentPage] = useState( 1 );
+  const [totalPages, setTotalPages] = useState( 1 );
+  const [pages, setPages] = useState( [1] );
 
   const getListingCounts = ( homes ) => {
     const listingCounts = {
@@ -93,8 +96,8 @@ function Search( props ) {
     return listingCounts;
   };
 
-  const filterHomes = ( filtersToApply, matchOnNoneSelected = true ) => {
-    const matchingHomes = allHomes
+  const filterHomes = ( homesToFilter, filtersToApply, matchOnNoneSelected = true ) => {
+    const matchingHomes = homesToFilter
       .filter( ( home ) => {
         if ( home.incomeRestricted === false ) {
           return true;
@@ -290,8 +293,16 @@ function Search( props ) {
     return matchingHomes;
   };
 
+  const getAllHomes = () => {
+    if ( paginatedHomes.length ) {
+      return paginatedHomes.reduce( ( pageA, pageB ) => pageA.concat( pageB ) );
+    }
+
+    return [];
+  };
+
   useEffect( () => {
-    if ( !allHomes.length ) {
+    if ( !getAllHomes().length ) {
       fetch(
         dev2Endpoint,
         {
@@ -320,12 +331,15 @@ function Search( props ) {
         } )
         .then( ( apiHomes ) => {
           const paginatedApiHomes = paginate( apiHomes );
-          setPaginatedHomes( paginatedApiHomes );
-          setAllHomes( paginatedApiHomes[0] );
-          setCurrentPage( 1 );
           const listingCounts = getListingCounts( apiHomes );
           const existingFilters = localStorage.getItem( 'filters' );
           let newFilters;
+
+          // setAllHomes( apiHomes );
+          setPaginatedHomes( paginatedApiHomes );
+          setCurrentHomes( paginatedApiHomes[0] );
+          setCurrentPage( 1 );
+          setTotalPages( paginatedApiHomes.length );
 
           if ( existingFilters ) {
             newFilters = { ...JSON.parse( existingFilters ) };
@@ -351,8 +365,30 @@ function Search( props ) {
   }, [] );
 
   useEffect( () => {
-    setFilteredHomes( filterHomes( filters ) );
-  }, [allHomes] );
+    const allHomes = getAllHomes();
+
+    if ( !allHomes.length ) {
+      return;
+    }
+
+    const filteredAllHomes = filterHomes( allHomes, filters );
+    const paginatedFilteredHomes = paginate( filteredAllHomes );
+    const currentPageFilteredHomes = paginatedFilteredHomes[currentPage - 1];
+
+    console.log( {
+      filteredAllHomes,
+      paginatedFilteredHomes,
+      // currentPageFilteredHomes,
+      "currentPage - 1": currentPage - 1,
+    } );
+
+    setFilteredHomes( currentPageFilteredHomes );
+    setTotalPages( paginatedFilteredHomes.length );
+  }, [paginatedHomes, filters, currentPage] );
+
+  useEffect( () => {
+    setPages( Array.from( { "length": totalPages }, ( v, k ) => k + 1 ) );
+  }, [totalPages] );
 
   const handleFilterChange = ( event ) => {
     const $input = event.target;
@@ -444,7 +480,6 @@ function Search( props ) {
 
     setFilters( newFilters );
     localStorage.setItem( 'filters', JSON.stringify( newFilters ) );
-    setFilteredHomes( filterHomes( filters ) );
   };
 
   const updateDrawerHeight = ( drawerRef, wait ) => {
@@ -482,7 +517,7 @@ function Search( props ) {
             className="ml-search__filters"
             drawerRef={ $drawer }
             filters={ filters }
-            listingCounts={ getListingCounts( allHomes ) }
+            listingCounts={ getListingCounts( getAllHomes() ) }
             updateDrawerHeight={ updateDrawerHeight }
             updatingDrawerHeight={ updatingDrawerHeight }
             setUpdatingDrawerHeight={ setUpdatingDrawerHeight }
@@ -508,8 +543,7 @@ function Search( props ) {
       <nav className="ml-search__pagination">
         <h3 className="sr-only">Pages</h3>
         <Row className="pg" space="panel">{
-          Object.keys( paginatedHomes ).map( ( index ) => {
-            const pageNumber = ( parseInt( index, 10 ) + 1 );
+          pages.map( ( pageNumber, index ) => {
             const isCurrentPage = ( currentPage === pageNumber );
 
             return (
@@ -518,7 +552,7 @@ function Search( props ) {
                   className={ `pg-li-i pg-li-i--link${isCurrentPage ? ' pg-li-i--a ' : ' '}ml-search__page-link` }
                   href={ `?page=${pageNumber}` }
                   onClick={ ( event ) => {
-                    setAllHomes( paginatedHomes[index] );
+                    setCurrentHomes( paginatedHomes[index] );
                     setCurrentPage( pageNumber );
                     event.preventDefault();
                   } }
