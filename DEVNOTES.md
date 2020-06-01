@@ -445,3 +445,4 @@ import "regenerator-runtime/runtime";
     - Make the Filters Panel sticky only if the height of the Results Panel is some amount taller than it e.g. 1.5x, 2x, etc.
     - Make the Filters Panel sticky only if the browser window is tall enough to contain the entire thing at once.
 - Can adapt the Mobile treatment of the Filters Panel to Desktop (anchored to top).
+- Can maybe combine sticky + scrolling and make Filters Panel individually scrollable.
