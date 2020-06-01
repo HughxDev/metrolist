@@ -19,7 +19,7 @@ import isDev, { isLocalDev } from '@util/dev';
 // const dev2Ip = '54.227.255.2';
 // const dev2Domain = 'd8-dev2.boston.gov';
 const apiDomain = ( isLocalDev() ? 'https://d8-ci.boston.gov' : '' );
-const dev2Endpoint = `${apiDomain}/metrolist/api/v1/developments?_format=json`;
+const apiEndpoint = `${apiDomain}/metrolist/api/v1/developments?_format=json`;
 
 // https://stackoverflow.com/a/11764168/214325
 function paginate( homes, homesPerPage = 8 ) {
@@ -303,7 +303,7 @@ function Search( props ) {
   useEffect( () => {
     if ( !getAllHomes().length ) {
       fetch(
-        dev2Endpoint,
+        apiEndpoint,
         {
           "mode": "no-cors",
           "headers": {

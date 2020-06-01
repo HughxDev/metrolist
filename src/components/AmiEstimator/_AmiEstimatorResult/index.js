@@ -5,28 +5,48 @@ import PropTypes from 'prop-types';
 
 import Button from '@components/Button';
 import Stack from '@components/Stack';
+
 import { updatePageTitle } from '@util/a11y-seo';
+import isDev, { isLocalDev } from '@util/dev';
+import { hasOwnProperty } from '@util/objects';
 import InputSummary from '../_AmiEstimatorInputSummary';
 
 import './AmiEstimatorResult.scss';
 
-// 100% AMI
-const amiDefinition = {
-  "people_1": 79350,
-  "people_2": 90650,
-  "people_3": 102000,
-  "people_4": 113300,
-  "people_5": 122400,
-  "people_6": 131450,
-};
+const apiDomain = ( isLocalDev() ? 'https://d8-ci.boston.gov' : '' );
+const apiEndpoint = `${apiDomain}/metrolist/api/v1/ami/hud/base?_format=json`;
 
-function estimateAmi( { householdSize, householdIncome, incomeRate } ) {
+function get100percentAmiDefinition( amiDefinitions ) {
+  if ( !Array.isArray( amiDefinitions ) ) {
+    return false;
+  }
+
+  for ( let index = 0; index < amiDefinitions.length; index++ ) {
+    const amiEstimation = amiDefinitions[index];
+
+    console.log( { amiEstimation } );
+
+    if ( amiEstimation && hasOwnProperty( amiEstimation, 'ami' ) && ( amiEstimation.ami === 100 ) ) {
+      return amiEstimation;
+    }
+  }
+
+  throw new Error( 'No 100% AMI definition (HUD) could be found.' );
+}
+
+function estimateAmi( {
+  amiDefinition, householdSize, householdIncome, incomeRate,
+} ) {
+  if ( !amiDefinition ) {
+    return 0;
+  }
+
   householdSize = householdSize.value.replace( '+', '' );
   householdIncome = householdIncome.value;
   incomeRate = incomeRate.value;
 
   const parsedHouseholdIncome = parseFloat( householdIncome.replace( /[$,]/g, '' ) );
-  const maxIncome = amiDefinition[`people_${householdSize}`];
+  const maxIncome = amiDefinition[householdSize];
   let annualizedHouseholdIncome = parsedHouseholdIncome;
   let estimation;
 
@@ -68,7 +88,7 @@ function isAboveUpperBound( amiEstimation ) {
 
 const AmiEstimatorResult = forwardRef( ( props, ref ) => {
   const selfRef = ( ref || useRef() );
-  const [amiEstimation] = useState( estimateAmi( props.formData ) );
+  const [amiEstimation, setAmiEstimation] = useState( 0 );
   let amiRecommendation = recommendAmi( amiEstimation );
   localStorage.setItem( 'amiRecommendation', amiRecommendation );
 
@@ -76,6 +96,53 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
     updatePageTitle( 'Result', 'AMI Estimator' );
     props.setStep( props.step );
     props.adjustContainerHeight( selfRef );
+
+    fetch(
+      apiEndpoint,
+      {
+        "mode": "no-cors",
+        "headers": {
+          "Content-Type": "application/json",
+        },
+      },
+    ) // TODO: CORS
+      .then( async ( response ) => {
+        console.log( {
+          "responseBody": response.body,
+        } );
+        if ( !response.body ) {
+          if ( isDev() ) {
+            console.warn( 'API returned an invalid response; falling back to test data since we’re in a development environment.' );
+
+            return [
+              {
+                "ami": 100,
+                "1": 79350,
+                "2": 90650,
+                "3": 102000,
+                "4": 113300,
+                "5": 122400,
+                "6": 131450,
+              },
+            ];
+          }
+
+          throw new Error( `API returned an invalid response.` );
+        } else {
+          return response.json();
+        }
+      } )
+      .then( ( apiAmiDefinitions ) => {
+        setAmiEstimation(
+          estimateAmi( {
+            "amiDefinition": get100percentAmiDefinition( apiAmiDefinitions ),
+            ...props.formData,
+          } ),
+        );
+      } )
+      .catch( ( error ) => {
+        console.error( error );
+      } );
   }, [] );
 
   useEffect( () => {
