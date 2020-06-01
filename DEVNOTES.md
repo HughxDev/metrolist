@@ -436,3 +436,12 @@ import "regenerator-runtime/runtime";
 ```
 …which made it run into an unhandled exception in a script adding support for WeakMap.
 
+## Filter panel cannot be viewed in full unless you scroll to the bottom of the listings shown
+
+- This is the result of `position: sticky`.
+  - Was trying to offer the same effect as on Mobile where the Filters Panel stays with you as you scroll the listings.
+- Can revert to `position: static` to keep it in one place, allowing people to scroll past it.
+  - Could also make this dynamic. Two options:
+    - Make the Filters Panel sticky only if the height of the Results Panel is some amount taller than it e.g. 1.5x, 2x, etc.
+    - Make the Filters Panel sticky only if the browser window is tall enough to contain the entire thing at once.
+- Can adapt the Mobile treatment of the Filters Panel to Desktop (anchored to top).
