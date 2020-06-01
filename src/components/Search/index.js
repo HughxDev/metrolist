@@ -36,15 +36,14 @@ function paginate( homes, homesPerPage = 8 ) {
 
 function Search( props ) {
   const [filters, setFilters] = useState( props.filters );
-  // const [allHomes, setAllHomes] = useState( Object.freeze( props.homes ) );
   const [paginatedHomes, setPaginatedHomes] = useState( paginate( Object.freeze( props.homes ) ) );
-  const [currentHomes, setCurrentHomes] = useState( [] );
   const [filteredHomes, setFilteredHomes] = useState( Object.freeze( props.homes ) );
-  const $drawer = useRef();
-  let [updatingDrawerHeight, setUpdatingDrawerHeight] = useState( false ); // eslint-disable-line
   const [currentPage, setCurrentPage] = useState( 1 );
   const [totalPages, setTotalPages] = useState( 1 );
   const [pages, setPages] = useState( [1] );
+
+  const $drawer = useRef();
+  let [updatingDrawerHeight, setUpdatingDrawerHeight] = useState( false ); // eslint-disable-line
 
   const getListingCounts = ( homes ) => {
     const listingCounts = {
@@ -337,7 +336,7 @@ function Search( props ) {
 
           // setAllHomes( apiHomes );
           setPaginatedHomes( paginatedApiHomes );
-          setCurrentHomes( paginatedApiHomes[0] );
+          // setCurrentHomes( paginatedApiHomes[0] );
           setCurrentPage( 1 );
           setTotalPages( paginatedApiHomes.length );
 
@@ -479,11 +478,12 @@ function Search( props ) {
     }
 
     setFilters( newFilters );
+    setCurrentPage( 1 );
     localStorage.setItem( 'filters', JSON.stringify( newFilters ) );
   };
 
   const updateDrawerHeight = ( drawerRef, wait ) => {
-    console.log( 'updateDrawerHeight' );
+    // console.log( 'updateDrawerHeight' );
 
     const updateHeight = () => {
       if ( drawerRef && drawerRef.current ) {
@@ -537,6 +537,7 @@ function Search( props ) {
           columnWidth="2/3"
           filters={ filters }
           homes={ filteredHomes }
+          // homes={ ( filteredHomes && filteredHomes.length ) ? filteredHomes : getAllHomes() }
           handleHomesLoaded={ handleHomesLoaded }
         />
       </Row>
@@ -552,7 +553,6 @@ function Search( props ) {
                   className={ `pg-li-i pg-li-i--link${isCurrentPage ? ' pg-li-i--a ' : ' '}ml-search__page-link` }
                   href={ `?page=${pageNumber}` }
                   onClick={ ( event ) => {
-                    setCurrentHomes( paginatedHomes[index] );
                     setCurrentPage( pageNumber );
                     event.preventDefault();
                   } }

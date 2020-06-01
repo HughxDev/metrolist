@@ -166,5 +166,14 @@ module.exports = {
 
 ## Interfacing with Main Site
 
+
 - All `mailto:` links require the class `hide-form` to be set, otherwise they will trigger the generic feedback form.
-- All references to `/images/` get find & replaced to `/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/images/` when building.
+- To make asset URLs work both locally and on Drupal, all references to `/images/` get find-and-replaced to `/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/images/` when building.
+
+## Testing API integrations locally
+
+You have to run a browser without CORS enabled. For Chrome on macOS, you can add this to your `~/.bash_profile` or equivalent for convenience:
+```bash
+alias chrome-insecure='open -n -a Google\ Chrome --args --disable-web-security --user-data-dir=/tmp/chrome --disable-site-isolation-trials --allow-running-insecure-content'
+```
+Then in a terminal, just type `chrome-insecure` and you will get a separate window with no security and no user profile attached. Sometimes Google changes the necessary commands to disable security, so check around online if this command doesn’t work for you. Unfortunately no extensions will be installed for this profile, and if you install any they will only exist for that session since your data directory is under `/tmp/`.

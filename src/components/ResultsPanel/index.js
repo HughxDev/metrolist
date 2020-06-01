@@ -39,7 +39,7 @@ function ResultsPanel( props ) {
   } = props;
   const attributes = { ...props };
 
-  if ( homes.length > 0 ) {
+  if ( homes && ( homes.length > 0 ) ) {
     delete attributes.homes;
   }
 
@@ -66,7 +66,7 @@ function ResultsPanel( props ) {
       <Inset until="large">
         <Stack space="panel">
         {
-          homes.length
+          homes && ( homes.length )
             ? homes.map( ( home ) => <Home key={ home.id } home={ home } filters={ filters } /> )
             : <p>No homes match the selected filters.</p>
         }
