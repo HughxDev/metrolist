@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { useLocation, useHistory, Link } from 'react-router-dom';
 import { hasOwnProperty } from '@util/objects';
-
-import './Search.scss';
-import 'whatwg-fetch';
 
 import FiltersPanel from '@components/FiltersPanel';
 import ResultsPanel from '@components/ResultsPanel';
@@ -16,12 +14,15 @@ import Icon from '@components/Icon';
 import { homeObject, filtersObject } from '@util/validation';
 import isDev, { isLocalDev } from '@util/dev';
 
+import './Search.scss';
+import 'whatwg-fetch';
+
 // const dev2Ip = '54.227.255.2';
 // const dev2Domain = 'd8-dev2.boston.gov';
 const apiDomain = ( isLocalDev() ? 'https://d8-ci.boston.gov' : '' );
 const apiEndpoint = `${apiDomain}/metrolist/api/v1/developments?_format=json`;
 
-// https://stackoverflow.com/a/11764168/214325
+// https://stacko;verflow.com/a/11764168/214325
 function paginate( homes, homesPerPage = 8 ) {
   const pages = [];
   let i = 0;
@@ -34,6 +35,18 @@ function paginate( homes, homesPerPage = 8 ) {
   return pages;
 }
 
+function getQuery( location ) {
+  return new URLSearchParams( location.search );
+}
+
+function useQuery() {
+  return new URLSearchParams( useLocation().search );
+}
+
+function getPage( location ) {
+  return parseInt( getQuery( location ).get( 'page' ), 10 );
+}
+
 function Search( props ) {
   const [filters, setFilters] = useState( props.filters );
   const [paginatedHomes, setPaginatedHomes] = useState( paginate( Object.freeze( props.homes ) ) );
@@ -41,9 +54,22 @@ function Search( props ) {
   const [currentPage, setCurrentPage] = useState( 1 );
   const [totalPages, setTotalPages] = useState( 1 );
   const [pages, setPages] = useState( [1] );
+  const history = useHistory();
+  const location = useLocation();
 
+  const query = useQuery();
   const $drawer = useRef();
   let [updatingDrawerHeight, setUpdatingDrawerHeight] = useState( false ); // eslint-disable-line
+
+  history.listen( ( newLocation ) => {
+    const requestedPage = getPage( newLocation );
+
+    if ( requestedPage ) {
+      setCurrentPage( requestedPage );
+    } else {
+      setCurrentPage( 1 );
+    }
+  } );
 
   const getListingCounts = ( homes ) => {
     const listingCounts = {
@@ -332,12 +358,19 @@ function Search( props ) {
           const paginatedApiHomes = paginate( apiHomes );
           const listingCounts = getListingCounts( apiHomes );
           const existingFilters = localStorage.getItem( 'filters' );
+          const requestedPage = parseInt( query.get( 'page' ), 10 );
           let newFilters;
 
           // setAllHomes( apiHomes );
           setPaginatedHomes( paginatedApiHomes );
           // setCurrentHomes( paginatedApiHomes[0] );
-          setCurrentPage( 1 );
+
+          if ( requestedPage ) {
+            setCurrentPage( requestedPage );
+          } else {
+            setCurrentPage( 1 );
+          }
+
           setTotalPages( paginatedApiHomes.length );
 
           if ( existingFilters ) {
@@ -374,16 +407,24 @@ function Search( props ) {
     const paginatedFilteredHomes = paginate( filteredAllHomes );
     const currentPageFilteredHomes = paginatedFilteredHomes[currentPage - 1];
 
-    console.log( {
-      filteredAllHomes,
-      paginatedFilteredHomes,
-      // currentPageFilteredHomes,
-      "currentPage - 1": currentPage - 1,
-    } );
+    // console.log( {
+    //   filteredAllHomes,
+    //   paginatedFilteredHomes,
+    //   // currentPageFilteredHomes,
+    //   "currentPage - 1": currentPage - 1,
+    // } );
 
     setFilteredHomes( currentPageFilteredHomes );
     setTotalPages( paginatedFilteredHomes.length );
   }, [paginatedHomes, filters, currentPage] );
+
+  // useEffect( () => {
+  //   if ( currentPage === 1 ) {
+  //     history.push( location.pathname );
+  //   } else {
+  //     history.push( `${location.pathname}?page=${currentPage}` );
+  //   }
+  // }, [currentPage] );
 
   useEffect( () => {
     setPages( Array.from( { "length": totalPages }, ( v, k ) => k + 1 ) );
@@ -549,14 +590,10 @@ function Search( props ) {
 
             return (
               <span className="pg-li ml-search__page-link-container" key={ index }>
-                <a
+                <Link
                   className={ `pg-li-i pg-li-i--link${isCurrentPage ? ' pg-li-i--a ' : ' '}ml-search__page-link` }
-                  href={ `?page=${pageNumber}` }
-                  onClick={ ( event ) => {
-                    setCurrentPage( pageNumber );
-                    event.preventDefault();
-                  } }
-                >{ pageNumber }</a>
+                  to={ ( pageNumber > 1 ) ? `${location.pathname}?page=${pageNumber}` : location.pathname }
+                >{ pageNumber }</Link>
               </span>
             );
           } )
