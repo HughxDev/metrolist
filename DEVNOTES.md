@@ -446,3 +446,7 @@ import "regenerator-runtime/runtime";
     - Make the Filters Panel sticky only if the browser window is tall enough to contain the entire thing at once.
 - Can adapt the Mobile treatment of the Filters Panel to Desktop (anchored to top).
 - Can maybe combine sticky + scrolling and make Filters Panel individually scrollable.
+
+## Checkbox showing up on top of pages
+
+- Removed the checkbox on CI, but there is still additional whitespace being added by Boston.gov. public.css sets `.mn { padding-top: 65px; }` but then adds `.page { padding-top: 6.6em }`. So for the Metrolist stylesheet only we’re resetting to what it was before via `.page { padding-top: 65px; }`.

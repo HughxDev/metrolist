@@ -20,8 +20,13 @@ h3 {
   padding-right: 0;
 }
 
-input[type=checkbox], input[type=radio] {
+.ml-app input[type=checkbox],
+.ml-app input[type=radio] {
   display: inherit; // public.css sets to display: none which eliminates tab order even with tabindex set.
+}
+
+.page {
+  padding-top: 65px; // public.css sets .mn { padding-top: 65px; } but then adds .page { padding-top: 6.6em } creating extra white space.
 }
 
 .ml-required {
