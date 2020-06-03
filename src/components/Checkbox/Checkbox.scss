@@ -112,6 +112,7 @@
     height: $checkbox-checked-box__dimensions;
     top: rem( 4px );
     left: rem( 4px );
+    pointer-events: none;
   }
     @include media-breakpoint-up( large ) {
       .ml-checkbox__form-control-ui {
