@@ -46,6 +46,8 @@
   }
   @include media-breakpoint-up( large ) {
     .ml-filters-panel__menu {
+      position: static;
+
       .ml-filters-panel--expanded & {
         box-shadow: none;
       }
