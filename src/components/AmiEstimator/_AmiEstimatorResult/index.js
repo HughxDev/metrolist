@@ -157,7 +157,7 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
         <Stack space="1">
           <p>Estimated Eligibility: <dfn className="ml-ami">{ amiEstimation }% AMI</dfn> (Area Median Income)</p>
           { isAboveUpperBound( amiEstimation ) && <p>Given your income level, you are unlikely to qualify for units marketed on Metrolist.</p> }
-          { !isAboveUpperBound( amiEstimation ) && <p>We recommend searching for homes listed at <b className="ml-ami">{ amiRecommendation }% AMI</b> and above.</p> }
+          { !isAboveUpperBound( amiEstimation ) && <p>We recommend searching for homes listed at <b className="ml-ami">{ amiRecommendation }% AMI</b> and above. Note that minimum income restrictions apply, and are listed in the unit details.</p> }
         </Stack>
         <Stack as="nav" space="1">
           <Button as="a" variant="primary" href="/metrolist/search">See homes that match this eligibility range</Button>
