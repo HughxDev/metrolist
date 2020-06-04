@@ -53,7 +53,8 @@ function HomeInfo( props ) {
         formattedValue = moment( value ).format( 'M/D/YY' );
         break;
       case 'applicationDueDate':
-        formattedValue = ( value ? moment( value ).format( 'M/D/YY' ) : <abbr title="Not Applicable">N/A</abbr> );
+        formattedValue = ( value ? moment( value ).format( 'M/D/YY' ) : null );
+        // formattedValue = null;
         break;
       case 'assignment':
         break;
@@ -101,15 +102,25 @@ function HomeInfo( props ) {
       Object.keys( info )
         .map( ( key, index ) => {
           const value = info[key];
+          const formattedKey = formatKey( key, value );
+          const formattedValue = formatValue( key, value );
+          const isRelevantValue = ( ( formattedValue !== null ) && ( formattedValue !== 'false' ) && ( formattedValue !== '' ) );
+          const isRelevantKey = ( key !== 'assignment' );
+          const isIrrelevantDueDate = (
+            ( key === 'applicationDueDate' )
+            && ( value === '' )
+          );
 
-          if ( value && ( key !== 'assignment' ) ) {
+          if ( isRelevantKey && !isIrrelevantDueDate ) {
             return (
               <div key={ index }>
-                <dt className="ml-home-info__key">{ formatKey( key, value ) }</dt>
-                <dd className="ml-home-info__value">{ formatValue( key, value ) }</dd>
+                <dt className="ml-home-info__key">{ formattedKey }</dt>
+                { isRelevantValue && <dd className="ml-home-info__value">{ formattedValue }</dd> }
               </div>
             );
           }
+
+          return undefined;
         } )
     }</dl>
   );
