@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { capitalCase } from 'change-case';
 import { filtersObject } from '@util/validation';
+import { handlePseudoButtonKeyDown } from '@util/a11y-seo';
 
 import FilterGroup from '@components/FilterGroup';
 import Filter from '@components/Filter';
@@ -133,6 +134,8 @@ function FiltersPanel( props ) {
           aria-expanded={ isExpanded.toString() }
           aria-controls="filters-panel-content"
           onMouseDown={ handleDoubleClick }
+          onKeyDown={ ( event ) => handlePseudoButtonKeyDown( event, true ) }
+          tabIndex="0"
         >
           Filter Listings
           <Icon className="ml-filters-panel__heading-icon" icon="icon-details-marker" width="19" height="11" alt={ props.isExpanded ? '⌃' : '⌄' } isMetrolistIcon />

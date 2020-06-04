@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { slugify } from '@util/strings';
+import { handlePseudoButtonKeyDown } from '@util/a11y-seo';
 
 import Icon from '@components/Icon';
 import Row from '@components/Row';
@@ -124,6 +125,8 @@ FilterGroup.Label = function FilterGroupLabel( props ) {
       aria-controls={ props.disclosureTarget }
       onClick={ props.handleExpandCollapse }
       onMouseDown={ props.handleDoubleClick }
+      onKeyDown={ ( event ) => handlePseudoButtonKeyDown( event, true ) }
+      tabIndex="0"
     >
       <span className="ml-filter-group__label-text">{ props.children }</span>
       <Icon className="ml-filter-group__icon" icon="icon-details-marker" width="19" height="11" alt={ props.isExpanded ? '⌃' : '⌄' } isMetrolistIcon />

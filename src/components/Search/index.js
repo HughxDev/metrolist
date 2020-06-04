@@ -54,6 +54,7 @@ function Search( props ) {
   const [currentPage, setCurrentPage] = useState( 1 );
   const [totalPages, setTotalPages] = useState( 1 );
   const [pages, setPages] = useState( [1] );
+  const [isDesktop, setIsDesktop] = useState( window.matchMedia( '(min-width: 992px)' ).matches );
   const history = useHistory();
   const location = useLocation();
 
@@ -390,6 +391,19 @@ function Search( props ) {
           console.error( error );
         } );
     }
+
+    let isResizing = false;
+
+    window.addEventListener( 'resize', ( event ) => {
+      if ( !isResizing ) {
+        isResizing = true;
+
+        setTimeout( () => {
+          setIsDesktop( window.matchMedia( '(min-width: 992px)' ).matches );
+          isResizing = false;
+        }, 125 );
+      }
+    } );
   }, [] );
 
   useEffect( () => {
