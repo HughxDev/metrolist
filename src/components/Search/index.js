@@ -559,29 +559,37 @@ function Search( props ) {
     // updateDrawerHeight( $drawer );
   };
 
+  const FiltersPanelUi = (
+    <FiltersPanel
+      key="filters-panel"
+      className="ml-search__filters"
+      drawerRef={ $drawer }
+      filters={ filters }
+      listingCounts={ getListingCounts( getAllHomes() ) }
+      updateDrawerHeight={ updateDrawerHeight }
+      updatingDrawerHeight={ updatingDrawerHeight }
+      setUpdatingDrawerHeight={ setUpdatingDrawerHeight }
+      handleFilterChange={ handleFilterChange }
+    />
+  );
+  const CalloutUi = (
+    <Inset key="ami-estimator-callout" className="filters-panel__callout-container" until="large">
+      <Callout className="filters-panel__callout" as="a" href="/metrolist/ami-estimator/">
+        <Callout.Heading as="span">Use our AMI Estimator to find homes that match your income</Callout.Heading>
+        <Callout.Icon>
+          <Icon use="#icon-mobile-link-marker" />
+        </Callout.Icon>
+      </Callout>
+    </Inset>
+  );
+  const SidebarUi = [FiltersPanelUi, CalloutUi];
+
   return (
     <article className={ `ml-search${props.className ? ` ${props.className}` : ''}` }>
       <h2 className="sr-only">Search</h2>
       <Row space="panel" stackUntil="large">
-        <Stack data-column-width="1/3" space="panel" reverseAt="large">
-          <FiltersPanel
-            className="ml-search__filters"
-            drawerRef={ $drawer }
-            filters={ filters }
-            listingCounts={ getListingCounts( getAllHomes() ) }
-            updateDrawerHeight={ updateDrawerHeight }
-            updatingDrawerHeight={ updatingDrawerHeight }
-            setUpdatingDrawerHeight={ setUpdatingDrawerHeight }
-            handleFilterChange={ handleFilterChange }
-          />
-          <Inset className="filters-panel__callout-container" until="large">
-            <Callout className="filters-panel__callout" as="a" href="/metrolist/ami-estimator/">
-              <Callout.Heading as="span">Use our AMI Estimator to find homes that match your income</Callout.Heading>
-              <Callout.Icon>
-                <Icon use="#icon-mobile-link-marker" />
-              </Callout.Icon>
-            </Callout>
-          </Inset>
+        <Stack data-column-width="1/3" space="panel">
+          { isDesktop ? SidebarUi.reverse() : SidebarUi }
         </Stack>
         <ResultsPanel
           className="ml-search__results"
