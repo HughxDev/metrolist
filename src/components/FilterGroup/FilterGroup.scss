@@ -90,4 +90,5 @@
   }
   .ml-filter-group__filters:not(.ml-filter-group__filters--expanded) {
     height: 0 !important;
+    display: none;
   }
