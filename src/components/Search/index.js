@@ -124,10 +124,6 @@ function Search( props ) {
   const filterHomes = ( homesToFilter, filtersToApply, matchOnNoneSelected = true ) => {
     const matchingHomes = homesToFilter
       .filter( ( home ) => {
-        if ( home.incomeRestricted === false ) {
-          return true;
-        }
-
         let matchesOffer = (
           (
             ( filtersToApply.offer.rent !== false )
