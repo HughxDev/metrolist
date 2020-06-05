@@ -36,14 +36,14 @@ const AmiEstimatorInputSummary = forwardRef( ( props, ref ) => (
   <Row ref={ ref } as="dl" className="ml-ami-estimator__input-summary" data-testid="ml-ami-estimator__input-summary">
     <div>
       <dt>
-        <Icon className="ml-ami-estimator__prompt-answer-icon" icon="family2" width="114" />
+        <Icon className="ml-ami-estimator__prompt-answer-icon" icon="family2" width="114" alt="icon: a family" />
         Household:
       </dt>
       <dd>{ props.formData.householdSize.value || '0' }{ ( props.formData.householdSize.value === '1' ) ? ' person' : ' people' }</dd>
     </div>
     <div>
       <dt>
-        <Icon className="ml-ami-estimator__prompt-answer-icon" icon="deposit check" width="114" />
+        <Icon className="ml-ami-estimator__prompt-answer-icon" icon="deposit check" width="114" alt="icon: a check being deposited" />
         Income:
       </dt>
       <dd>{ formatIncome( props.formData.householdIncome.value ) }/{ formatIncomeRate( props.formData.incomeRate.value ) }</dd>

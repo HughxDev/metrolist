@@ -120,7 +120,7 @@ const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
               : <>What is the total combined income of all { props.formData.householdSize.value ? `${props.formData.householdSize.value} people` : 'people' } who live in your household before taxes?</>
           }{ isRequired ? <span className="ml-required">*</span> : '' }
         </legend>
-        <Icon className="ml-ami-estimator__prompt-answer-icon" icon="deposit check" width="212" />
+        <Icon className="ml-ami-estimator__prompt-answer-icon" icon="deposit check" width="212" alt="icon: a check being deposited" />
         <Stack space="1">{/* ami-estimator-income-rate */}
           <input
             ref={ incomeInputRef }
