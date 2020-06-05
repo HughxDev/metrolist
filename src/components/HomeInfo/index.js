@@ -30,7 +30,7 @@ function HomeInfo( props ) {
             formattedKey += ' – ';
           }
         } else {
-          formattedKey = 'Open Market';
+          formattedKey = 'Market Price';
         }
         break;
       default:
