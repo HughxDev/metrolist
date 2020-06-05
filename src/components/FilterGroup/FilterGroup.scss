@@ -34,9 +34,6 @@
     cursor: default;
     height: $filter-group-label-height;
     padding: 0 $filter-group-padding-left-right;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     width: 100%;
     background-color: $color-metrolist-text-blue;
     font-weight: 500;
@@ -51,6 +48,13 @@
     // margin-left: rem( $filter-group-padding-left-right * -1 );
     // margin-right: rem( $filter-group-padding-left-right * -1 );
     margin: 0;
+  }
+  /* Fix for Safari bug where <legend>s can’t be flex containers */
+  .ml-filter-group__label-ui-fix {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
   }
   .ml-filter-group__label-text {
     flex: 1;

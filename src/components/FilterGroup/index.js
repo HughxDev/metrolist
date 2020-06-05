@@ -128,8 +128,10 @@ FilterGroup.Label = function FilterGroupLabel( props ) {
       onKeyDown={ ( event ) => handlePseudoButtonKeyDown( event, true ) }
       tabIndex="0"
     >
-      <span className="ml-filter-group__label-text">{ props.children }</span>
-      <Icon className="ml-filter-group__icon" icon="icon-details-marker" width="19" height="11" alt={ props.isExpanded ? '⌃' : '⌄' } isMetrolistIcon />
+      <span className="ml-filter-group__label-ui-fix">
+        <span className="ml-filter-group__label-text">{ props.children }</span>
+        <Icon className="ml-filter-group__icon" icon="icon-details-marker" width="19" height="11" alt={ props.isExpanded ? '⌃' : '⌄' } isMetrolistIcon />
+      </span>
     </legend>
   );
 };
