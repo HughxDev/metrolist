@@ -60,3 +60,8 @@
   .pg-li-i--a.ml-search__page-link {
     background-color: $color-optimistic-blue;
   }
+
+  .pg-li:first-of-type .pg-li-i--link.ml-search__page-link,
+  .pg-li:last-of-type .pg-li-i--link.ml-search__page-link {
+    display: inherit;
+  }
