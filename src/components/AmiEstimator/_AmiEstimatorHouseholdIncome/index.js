@@ -112,7 +112,7 @@ const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
 
   return (
     <div ref={ selfRef } className={ `ml-ami-estimator__household-income ml-ami-estimator__prompt` } data-testid="ml-ami-estimator__household-income">
-      <fieldset className="ml-ami-estimator__prompt-inner">
+      <Stack as="fieldset" space="2" className="ml-ami-estimator__prompt-inner">
         <legend className="ml-ami-estimator__prompt-question">
           {
             ( parseInt( props.formData.householdSize.value, 10 ) === 1 ) // TODO: Should we event allow string values?
@@ -120,41 +120,43 @@ const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
               : <>What is the total combined income of all { props.formData.householdSize.value ? `${props.formData.householdSize.value} people` : 'people' } who live in your household before taxes?</>
           }{ isRequired ? <span className="ml-required">*</span> : '' }
         </legend>
-        <Icon className="ml-ami-estimator__prompt-answer-icon" icon="deposit check" width="212" alt="icon: a check being deposited" />
-        <Stack space="1">{/* ami-estimator-income-rate */}
-          <input
-            ref={ incomeInputRef }
-            className="ml-ami-estimator__household-income-input"
-            name="householdIncome"
-            value={ ( props.formData.householdIncome.value === '$0.00' ) ? '' : props.formData.householdIncome.value }
-            type="text"
-            inputMode="numeric"
-            pattern="[0-9]*"
-            placeholder="$0.00"
-            aria-describedby="ami-estimator-household-income-error"
-            onChange={ handleIncomeChange }
-            required={ isRequired }
-            maxLength="20"
-          />
-          <FormErrorMessage
-            ref={ props.formData.householdIncome.errorRef }
-            id="ami-estimator-household-income-error"
-            className="ml-ami-estimator__prompt-answer-error"
-          >{ props.formData.householdIncome.errorMessage }</FormErrorMessage>
-          <Scale
-            criterion="incomeRate"
-            values="Yearly,Monthly"
-            value={ props.formData.incomeRate.value || defaultIncomeRate }
-            required
-            // onChange={ ( event ) => event.stopPropagation() }
-          />
-          <FormErrorMessage
-            ref={ props.formData.incomeRate.errorRef }
-            id="ami-estimator-household-income-rate-error"
-            className="ml-ami-estimator__prompt-answer-error"
-          >{ props.formData.incomeRate.errorMessage }</FormErrorMessage>
+        <Stack space="2">
+          <Icon className="ml-ami-estimator__prompt-answer-icon" icon="deposit_check" height="100" alt="icon: a check being deposited" isMetrolistIcon />
+          <Stack space="1">{/* ami-estimator-income-rate */}
+            <input
+              ref={ incomeInputRef }
+              className="ml-ami-estimator__household-income-input"
+              name="householdIncome"
+              value={ ( props.formData.householdIncome.value === '$0.00' ) ? '' : props.formData.householdIncome.value }
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              placeholder="$0.00"
+              aria-describedby="ami-estimator-household-income-error"
+              onChange={ handleIncomeChange }
+              required={ isRequired }
+              maxLength="20"
+            />
+            <FormErrorMessage
+              ref={ props.formData.householdIncome.errorRef }
+              id="ami-estimator-household-income-error"
+              className="ml-ami-estimator__prompt-answer-error"
+            >{ props.formData.householdIncome.errorMessage }</FormErrorMessage>
+            <Scale
+              criterion="incomeRate"
+              values="Yearly,Monthly"
+              value={ props.formData.incomeRate.value || defaultIncomeRate }
+              required
+              // onChange={ ( event ) => event.stopPropagation() }
+            />
+            <FormErrorMessage
+              ref={ props.formData.incomeRate.errorRef }
+              id="ami-estimator-household-income-rate-error"
+              className="ml-ami-estimator__prompt-answer-error"
+            >{ props.formData.incomeRate.errorMessage }</FormErrorMessage>
+          </Stack>
         </Stack>
-      </fieldset>
+      </Stack>
     </div>
   );
 } );

@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import Icon from '@components/Icon';
 import Scale from '@components/Scale';
 import FormErrorMessage from '@components/FormErrorMessage';
+import Stack from '@components/Stack';
 
 import { updatePageTitle } from '@util/a11y-seo';
 
@@ -23,27 +24,29 @@ const AmiEstimatorHouseholdSize = forwardRef( ( props, ref ) => {
 
   return (
     <div ref={ selfRef } className="ml-ami-estimator__household-size ml-ami-estimator__prompt" data-testid="ml-ami-estimator__household-size">
-      <fieldset className="ml-ami-estimator__prompt-inner">
+      <Stack as="fieldset" space="2" className="ml-ami-estimator__prompt-inner">
         <legend className="ml-ami-estimator__prompt-question">How many people live in your household of any age?<span className="ml-required">{ isRequired ? '*' : '' }</span></legend>
         <div className="ml-ami-estimator__prompt-answer">
-          <Icon className="ml-ami-estimator__prompt-answer-icon" icon="family2" width="227" alt="icon: a family" />
-          <Scale
-            className={ `ml-ami-estimator__prompt--answer-input` }
-            criterion="householdSize"
-            values="1,2,3,4,5,6+"
-            // units={ { "one": "person", "many": "people" } }
-            // unitLabel={ { "type": "aria", "affix": "append" } }
-            value={ props.formData.householdSize.value }
-            aria-describedby="ami-estimator-household-size-error"
-            required={ isRequired }
-          />
+          <Stack space="2">
+            <Icon className="ml-ami-estimator__prompt-answer-icon" icon="family2" height="100" alt="icon: a family" isMetrolistIcon />
+            <Scale
+              className={ `ml-ami-estimator__prompt--answer-input` }
+              criterion="householdSize"
+              values="1,2,3,4,5,6+"
+              // units={ { "one": "person", "many": "people" } }
+              // unitLabel={ { "type": "aria", "affix": "append" } }
+              value={ props.formData.householdSize.value }
+              aria-describedby="ami-estimator-household-size-error"
+              required={ isRequired }
+            />
+          </Stack>
           <FormErrorMessage
             ref={ props.formData.householdSize.errorRef }
             id="ami-estimator-household-size-error"
             className="ml-ami-estimator__prompt-answer-error"
           >{ props.formData.householdSize.errorMessage }</FormErrorMessage>
         </div>
-      </fieldset>
+      </Stack>
     </div>
   );
 } );

@@ -468,3 +468,22 @@ After investigating the issue I have discovered the following:
 - The error does not occur on `/metrolist/ami-estimator`
 - `fleetcomponents.gk78kqoc.js` is outside of my purview, so it is not feasible for me to investigate/apply a direct fix of the code on my own. Would be something for the larger DoIT team to handle should they decide to do so.
 - A temporary workaround would be to exclude `fleetcomponents.gk78kqoc.js` from the Metrolist Search page only and/or for IE 11 only.
+
+## Shrink AMI Estimator
+
+Existing sizing (1024x768 viewport):
+
+- Heading
+  - ML: 33.75px
+  - Birth: 38px
+- Step X of Y
+  - ML: 18px (inherited, html)
+  - Birth: 16px (inherited, default)
+- Propmt Question
+  - ML: 27px
+  - Birth: 24px
+- Image
+  - ML Family: 255x255 including built-in padding (intrinsic: 150x150)
+  - Birth Person: 100x100 excluding built-in padding
+  - Birth 2x People: 140x100 excluding built-in padding
+- 

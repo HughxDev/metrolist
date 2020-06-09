@@ -3,12 +3,14 @@
 
 .ml-ami-estimator__input-summary {
   margin: 0;
+  line-height: 1;
 
   & > div {
     flex: 1;
     text-align: center;
     font-family: $font-family-heading;
     color: $color-metrolist-text-blue;
+    font-size: responsive rem( 24px) rem( 30px );
   }
 
   dt, dd {
@@ -22,11 +24,11 @@
 }
 
 @include media-breakpoint-up( medium ) {
-  .ml-ami-estimator__input-summary > div {
-    font-size: rem( 30px );
-  }
+  // .ml-ami-estimator__input-summary > div {
+  //   font-size: rem( 30px );
+  // }
 
-  .ml-ami-estimator__prompt-answer-icon {
-    width: rem( 227px );
-  }
+  // .ml-ami-estimator__prompt-answer-icon {
+  //   width: rem( 227px );
+  // }
 }

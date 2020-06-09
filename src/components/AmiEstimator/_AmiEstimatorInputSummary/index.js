@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import Row from '@components/Row';
 import Icon from '@components/Icon';
+import Stack from '@components/Stack';
 
 import './AmiEstimatorInputSummary.scss';
 
@@ -33,21 +34,21 @@ function formatIncomeRate( incomeRate ) {
 }
 
 const AmiEstimatorInputSummary = forwardRef( ( props, ref ) => (
-  <Row ref={ ref } as="dl" className="ml-ami-estimator__input-summary" data-testid="ml-ami-estimator__input-summary">
-    <div>
-      <dt>
-        <Icon className="ml-ami-estimator__prompt-answer-icon" icon="family2" width="114" alt="icon: a family" />
-        Household:
-      </dt>
+  <Row ref={ ref } as="dl" className="ml-ami-estimator__input-summary" data-testid="ml-ami-estimator__input-summary" space="2" stackUntil="small">
+    <Stack space="0.5" data-column-width="1/2">
+      <Stack as="dt" space="1">
+        <Icon className="ml-ami-estimator__prompt-answer-icon ml-ami-estimator__prompt-answer-icon--half" icon="family2" height="100" alt="icon: a family" isMetrolistIcon />
+        <span>Household:</span>
+      </Stack>
       <dd>{ props.formData.householdSize.value || '0' }{ ( props.formData.householdSize.value === '1' ) ? ' person' : ' people' }</dd>
-    </div>
-    <div>
-      <dt>
-        <Icon className="ml-ami-estimator__prompt-answer-icon" icon="deposit check" width="114" alt="icon: a check being deposited" />
-        Income:
-      </dt>
+    </Stack>
+    <Stack space="0.5" data-column-width="1/2">
+      <Stack as="dt" space="1">
+        <Icon className="ml-ami-estimator__prompt-answer-icon ml-ami-estimator__prompt-answer-icon--half" icon="deposit_check" height="100" alt="icon: a check being deposited" isMetrolistIcon />
+        <span>Income:</span>
+      </Stack>
       <dd>{ formatIncome( props.formData.householdIncome.value ) }/{ formatIncomeRate( props.formData.incomeRate.value ) }</dd>
-    </div>
+    </Stack>
   </Row>
 ) );
 

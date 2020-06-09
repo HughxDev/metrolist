@@ -1,6 +1,8 @@
 // <Row />
 @import '@globals';
 
+$spacing: 1rem;
+
 .ml-row {
   display: flex;
   flex-direction: row;
@@ -39,9 +41,27 @@
   margin-left: $panel-spacing;
 }
 
+.ml-row.ml-row--space-1 > * + * {
+  margin-left: $spacing;
+}
+
+.ml-row.ml-row--space-2 > * + * {
+  margin-left: $spacing * 2;
+}
+
 .ml-row.ml-row--space-panel.ml-row--stack-until > * + * {
   margin-left: unset;
   margin-top: $panel-spacing;
+}
+
+.ml-row.ml-row--space-1.ml-row--stack-until > * + * {
+  margin-left: unset;
+  margin-top: $spacing;
+}
+
+.ml-row.ml-row--space-2.ml-row--stack-until > * + * {
+  margin-left: unset;
+  margin-top: $spacing * 2;
 }
 
 .ml-row.ml-row--space-equally > * {
@@ -63,8 +83,22 @@
     margin-left: $panel-spacing;
   }
 
+  .ml-row.ml-row--space-1.ml-row--stack-until-small > * + * {
+    margin-top: unset;
+    margin-left: $spacing;
+  }
+
+  .ml-row.ml-row--space-2.ml-row--stack-until-small > * + * {
+    margin-top: unset;
+    margin-left: $spacing * 2;
+  }
+
   .ml-row.ml-row--stack-until-small > [data-column-width="1/3"] {
     width: ( 100% / 3 );
+  }
+
+  .ml-row.ml-row--stack-until-small > [data-column-width="1/2"] {
+    width: 50%;
   }
 
   .ml-row.ml-row--stack-until-small > [data-column-width="2/3"] {
@@ -98,8 +132,22 @@
     margin-left: $panel-spacing--desktop;
   }
 
+  .ml-row.ml-row--space-1.ml-row--stack-until-medium > * + * {
+    margin-top: unset;
+    margin-left: $spacing;
+  }
+
+  .ml-row.ml-row--space-2.ml-row--stack-until-medium > * + * {
+    margin-top: unset;
+    margin-left: $spacing * 2;
+  }
+
   .ml-row.ml-row--stack-until-medium > [data-column-width="1/3"] {
     width: ( 100% / 3 );
+  }
+
+  .ml-row.ml-row--stack-until-medium > [data-column-width="1/2"] {
+    width: 50%;
   }
 
   .ml-row.ml-row--stack-until-medium > [data-column-width="2/3"] {
@@ -117,6 +165,7 @@
     margin-top: rem( 25px );
   }
 }
+
 @include media-breakpoint-up( large ) {
   .ml-row.ml-row--space-panel > * + * {
     margin-left: $panel-spacing--desktop;
@@ -136,8 +185,22 @@
     margin-left: $panel-spacing--desktop;
   }
 
+  .ml-row.ml-row--space-1.ml-row--stack-until-large > * + * {
+    margin-top: unset;
+    margin-left: $spacing;
+  }
+
+  .ml-row.ml-row--space-2.ml-row--stack-until-large > * + * {
+    margin-top: unset;
+    margin-left: $spacing * 2;
+  }
+
   .ml-row.ml-row--stack-until-large > [data-column-width="1/3"] {
     width: ( 100% / 3 );
+  }
+
+  .ml-row.ml-row--stack-until-large > [data-column-width="1/2"] {
+    width: 50%;
   }
 
   .ml-row.ml-row--stack-until-large > [data-column-width="2/3"] {
