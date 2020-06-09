@@ -450,3 +450,21 @@ import "regenerator-runtime/runtime";
 ## Checkbox showing up on top of pages
 
 - Removed the checkbox on CI, but there is still additional whitespace being added by Boston.gov. public.css sets `.mn { padding-top: 65px; }` but then adds `.page { padding-top: 6.6em }`. So for the Metrolist stylesheet only we’re resetting to what it was before via `.page { padding-top: 65px; }`.
+
+## Not Loading on IE11
+
+After investigating the issue I have discovered the following:
+
+- The Search page was working fine on IE 11.418.18362.0, but after upgrading to IE 11.836.18362.0 (via Windows Update), the page broke in the way David Wilcox describes.
+- Ruled out, but provided for posterity: The CORS policy on the Acquia server doesn’t allow us to fetch the Developments API from a domain other than `boston.gov`, therefore `d8-dev2.boston.gov` et al. fail. This won’t be an issue on production when `boston.gov` is the domain from which all requests originate. Even the production site produces this same error.
+- When disabling IE’s browser security to circumvent the CORS issue, the React app still doesn’t load due to an IE-specific JavaScript error in `fleetcomponents.gk78kqoc.js`. The error states:
+
+> SCRIPT28: Out of stack space
+> fleetcomponents.gk78kqoc.js (88,44)
+> SCRIPT2343: Stack overflow at line: 88
+
+- If the `fleet-components.patterns` section is commented out of `bos_theme.libraries.yml` in Drupal, then the app loads successfully. However this would disable the Fleet JavaScript across the entire site and as such is not a viable permanent fix.
+- https://registry.boston.gov/birth also loads `fleetcomponents.gk78kqoc.js`, but does not produce the same error. Comparing the contents of this file with the file of the same name being loaded on `/metrolist/search` shows that they are identical.
+- The error does not occur on `/metrolist/ami-estimator`
+- `fleetcomponents.gk78kqoc.js` is outside of my purview, so it is not feasible for me to investigate/apply a direct fix of the code on my own. Would be something for the larger DoIT team to handle should they decide to do so.
+- A temporary workaround would be to exclude `fleetcomponents.gk78kqoc.js` from the Metrolist Search page only and/or for IE 11 only.
