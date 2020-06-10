@@ -68,7 +68,7 @@ function FiltersPanel( props ) {
   useEffect( props.updateDrawerHeight );
   // useEffect( updateOwnHeight );
 
-  window.addEventListener( 'resize', ( event ) => {
+  window.addEventListener( 'resize', ( /* event */ ) => {
     if ( !props.updatingDrawerHeight ) {
       props.setUpdatingDrawerHeight( true );
       props.drawerRef.current.style.height = '';
@@ -253,6 +253,7 @@ FiltersPanel.propTypes = {
   "drawerRef": PropTypes.object.isRequired,
   "updatingDrawerHeight": PropTypes.bool,
   "setUpdatingDrawerHeight": PropTypes.func,
+  "isExpanded": PropTypes.bool,
 };
 
 export default FiltersPanel;
