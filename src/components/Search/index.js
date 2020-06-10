@@ -394,7 +394,7 @@ function Search( props ) {
 
     let isResizing = false;
 
-    window.addEventListener( 'resize', ( event ) => {
+    window.addEventListener( 'resize', ( /* event */ ) => {
       if ( !isResizing ) {
         isResizing = true;
 
@@ -559,6 +559,8 @@ function Search( props ) {
     // updateDrawerHeight( $drawer );
   };
 
+  const supportsSvg = ( typeof SVGRect !== "undefined" );
+
   const FiltersPanelUi = (
     <FiltersPanel
       key="filters-panel"
@@ -574,10 +576,26 @@ function Search( props ) {
   );
   const CalloutUi = (
     <Inset key="ami-estimator-callout" className="filters-panel__callout-container" until="large">
-      <Callout className="filters-panel__callout" as="a" href="/metrolist/ami-estimator/">
+      <Callout className={ `${supportsSvg ? 'ml-callout--icon-visible ' : ''}filters-panel__callout` } as="a" href="/metrolist/ami-estimator/">
         <Callout.Heading as="span">Use our AMI Estimator to find homes that match your income</Callout.Heading>
         <Callout.Icon>
-          <Icon use="#icon-mobile-link-marker" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            version="1.1"
+            className="ml-icon ml-icon--rightward-arrowhead"
+            viewBox="0 0 10.842 18.615"
+            width="11"
+            height="19"
+          >
+            <title>&gt;</title>
+            <path
+              d="m0.93711 17.907c2.83-2.8267 5.66-5.6533 8.49-8.48-2.9067-2.9067-5.8133-5.8133-8.72-8.72"
+              fill="none"
+              stroke="currentColor"
+              strokeMiterlimit="10"
+              strokeWidth="2"
+            ></path>
+          </svg>
         </Callout.Icon>
       </Callout>
     </Inset>

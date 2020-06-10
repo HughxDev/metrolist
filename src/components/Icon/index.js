@@ -21,7 +21,7 @@ class Icon extends React.Component {
     };
 
     if ( !$svgElement ) {
-      // console.warn( `Could not find an element with the id \`${idSelector}\`.` );
+      console.warn( `Could not find an element with the id \`${idSelector.substring( 1 )}\`.` );
       return dimensions;
     }
 

@@ -16,6 +16,10 @@
     border-color: inherit;
   }
 }
+  .ml-callout.ml-callout--icon-visible {
+    padding-right: 1rem + rem( 11px );
+  }
+
   @include media-breakpoint-up( large ) {
     .ml-callout {
       // border: 2px solid $color-filters-callout-border;
@@ -25,6 +29,10 @@
         // rem( 29px ) /* b */
         // rem( 29px ) /* l */
       ;
+    }
+
+    .ml-callout.ml-callout--icon-visible {
+      padding-right: rem( 26px ) + rem( 11px );
     }
   }
   .ml-callout__heading {
@@ -52,4 +60,7 @@
   }
   .ml-callout__cta {
     flex: none;
+  }
+  .ml-callout.ml-callout--icon-visible .ml-callout__icon {
+    margin-right: rem( -11px );
   }
