@@ -36,6 +36,7 @@ function Button( props ) {
 Button.propTypes = {
   "as": PropTypes.string,
   "variant": PropTypes.oneOf( ['primary', 'secondary'] ),
+  "accesskey": PropTypes.string,
   "href": PropTypes.string,
   "children": PropTypes.node,
   "className": PropTypes.string,

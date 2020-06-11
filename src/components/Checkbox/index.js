@@ -5,10 +5,47 @@ import Row from '@components/Row';
 import Stack from '@components/Stack';
 import Reveal from '@components/Reveal';
 
+import { hasOwnProperty } from '@util/objects';
+
 import './Checkbox.scss';
 
 function renderText( text ) {
   return <span className="ml-checkbox__text">{ text }</span>;
+}
+
+function toTextContent( children ) {
+  let textContent = children;
+
+  while (
+    ( typeof textContent !== 'string' )
+    && textContent.props
+    && textContent.props.children
+  ) {
+    textContent = children.props.children;
+  }
+
+  if ( typeof textContent !== 'string' ) {
+    if ( Array.isArray( textContent ) ) {
+      textContent = textContent
+        .map( ( node ) => {
+          if ( typeof node === 'string' ) {
+            return node;
+          }
+
+          const nodeTextContent = toTextContent( node );
+          const forcedStringConversion = `${nodeTextContent}`;
+
+          if ( forcedStringConversion.toLowerCase() === '[object object]' ) {
+            return '';
+          }
+
+          return nodeTextContent;
+        } )
+        .join( '' );
+    }
+  }
+
+  return textContent;
 }
 
 function renderLabel( children, props ) {
@@ -29,8 +66,10 @@ function renderLabel( children, props ) {
     }
   }
 
+  const ariaLabel = ( props['aria-label'] || toTextContent( children ) );
+
   return (
-    <label className="ml-checkbox__label">
+    <label className="ml-checkbox__label" aria-label={ ariaLabel }>
       <Row className="ml-checkbox__label-content" space="panel" align="middle">
         <span className="ml-checkbox__form-control-container">
           <input
@@ -120,6 +159,7 @@ Checkbox.propTypes = {
   "columnWidth": PropTypes.oneOfType( [PropTypes.string, PropTypes.bool] ),
   "required": PropTypes.bool,
   "hasSubcategories": PropTypes.bool,
+  "aria-label": PropTypes.string,
 };
 
 Checkbox.defaultProps = {

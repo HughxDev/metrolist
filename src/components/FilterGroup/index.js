@@ -64,6 +64,7 @@ class FilterGroup extends React.Component {
           ref={ this.$filters }
           // space={ wrapperSpacing }
           className={ `ml-filter-group__filters${this.state.isExpanded ? ' ml-filter-group__filters--expanded' : ''}` }
+          // style={ { "display": ( this.state.isExpanded ? '' : 'none' ) } }
         >
           { childArray }
         </Wrapper>
@@ -118,9 +119,20 @@ FilterGroup.defaultProps = {
 };
 
 FilterGroup.Label = function FilterGroupLabel( props ) {
+  /*
+    Note: VoiceOver reads '⌃' as “control” (as in the Ctrl key; incorrect)
+    However, '⌄' is “down arrowhead” (correct)
+    May want to replace with black pointing triangles? ▲ ▼
+  */
+  const isExpandedIndicator = ( props.isExpanded ? '⌃' : '⌄' );
+  // const isExpandedIndicator = '';
+  const ariaLabel = `${`${props.children}`.trim()} ${isExpandedIndicator}`;
+
   return (
     <legend
       className="ml-filter-group__label"
+      aria-label={ ariaLabel }
+      // role="button"
       aria-expanded={ props.isExpanded.toString() }
       aria-controls={ props.disclosureTarget }
       onClick={ props.handleExpandCollapse }
@@ -130,7 +142,7 @@ FilterGroup.Label = function FilterGroupLabel( props ) {
     >
       <span className="ml-filter-group__label-ui-fix">
         <span className="ml-filter-group__label-text">{ props.children }</span>
-        <Icon className="ml-filter-group__icon" icon="icon-details-marker" width="19" height="11" alt={ props.isExpanded ? '⌃' : '⌄' } isMetrolistIcon />
+        <Icon className="ml-filter-group__icon" icon="icon-details-marker" width="19" height="11" alt={ isExpandedIndicator } isMetrolistIcon />
       </span>
     </legend>
   );

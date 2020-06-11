@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 import Stack from '@components/Stack';
 import Checkbox from '@components/Checkbox';
 import FormErrorMessage from '@components/FormErrorMessage';
+import Required from '@components/Required';
+
 import { updatePageTitle } from '@util/a11y-seo';
 import InputSummary from '../_AmiEstimatorInputSummary';
 
@@ -34,7 +36,7 @@ const AmiEstimatorDisclosure = forwardRef( ( props, ref ) => {
             checked={ props.formData.disclosure.value }
             required={ isRequired }
           >
-            I have read and understand the above statement.{ isRequired ? <span className="ml-required">*</span> : '' }
+            I have read and understand the above statement.{ isRequired ? <Required /> : '' }
           </Checkbox>
           <FormErrorMessage
             ref={ props.formData.disclosure.errorRef }

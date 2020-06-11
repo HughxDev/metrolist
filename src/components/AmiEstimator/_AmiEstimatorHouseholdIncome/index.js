@@ -10,6 +10,7 @@ import Scale from '@components/Scale';
 // import Column from '@components/Column';
 import Stack from '@components/Stack';
 import FormErrorMessage from '@components/FormErrorMessage';
+import Required from '@components/Required';
 
 import { updatePageTitle } from '@util/a11y-seo';
 
@@ -118,16 +119,18 @@ const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
             ( parseInt( props.formData.householdSize.value, 10 ) === 1 ) // TODO: Should we event allow string values?
               ? <>What is your total income before taxes?</>
               : <>What is the total combined income of all { props.formData.householdSize.value ? `${props.formData.householdSize.value} people` : 'people' } who live in your household before taxes?</>
-          }{ isRequired ? <span className="ml-required">*</span> : '' }
+          }{ isRequired ? <Required /> : '' }
         </legend>
         <Stack space="2">
           <Icon className="ml-ami-estimator__prompt-answer-icon" icon="deposit_check" height="100" alt="icon: a check being deposited" isMetrolistIcon />
           <Stack space="1">{/* ami-estimator-income-rate */}
             <input
+              id="household-income"
               ref={ incomeInputRef }
               className="ml-ami-estimator__household-income-input"
               name="householdIncome"
               value={ ( props.formData.householdIncome.value === '$0.00' ) ? '' : props.formData.householdIncome.value }
+              aria-label={ props.formData.householdIncome.value }
               type="text"
               inputMode="numeric"
               pattern="[0-9]*"
@@ -146,6 +149,7 @@ const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
               criterion="incomeRate"
               values="Yearly,Monthly"
               value={ props.formData.incomeRate.value || defaultIncomeRate }
+              aria-label="income rate"
               required
               // onChange={ ( event ) => event.stopPropagation() }
             />

@@ -629,6 +629,7 @@ function Search( props ) {
                 <Link
                   className={ `pg-li-i pg-li-i--link${isCurrentPage ? ' pg-li-i--a ' : ' '}ml-search__page-link` }
                   to={ ( pageNumber > 1 ) ? `${location.pathname}?page=${pageNumber}` : location.pathname }
+                  aria-label={ `Search Results: Page ${pageNumber}` }
                 >{ pageNumber }</Link>
               </span>
             );

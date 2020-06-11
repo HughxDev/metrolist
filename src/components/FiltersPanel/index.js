@@ -108,6 +108,9 @@ function FiltersPanel( props ) {
 
   const { listingCounts } = props;
 
+  const isExpandedIndicator = ( isExpanded ? '⌃' : '⌄' );
+  const ariaLabel = `Filter Listings ${isExpandedIndicator}`;
+
   return (
     <section
       data-testid="ml-filters-panel"
@@ -131,6 +134,7 @@ function FiltersPanel( props ) {
       <div className="ml-filters-panel__menu">
         <h3
           className="ml-filters-panel__heading"
+          aria-label={ ariaLabel }
           aria-expanded={ isExpanded.toString() }
           aria-controls="filters-panel-content"
           onMouseDown={ handleDoubleClick }
@@ -138,7 +142,7 @@ function FiltersPanel( props ) {
           tabIndex="0"
         >
           Filter Listings
-          <Icon className="ml-filters-panel__heading-icon" icon="icon-details-marker" width="19" height="11" alt={ props.isExpanded ? '⌃' : '⌄' } isMetrolistIcon />
+          <Icon className="ml-filters-panel__heading-icon" icon="icon-details-marker" width="19" height="11" alt={ isExpandedIndicator } isMetrolistIcon />
         </h3>
         <div
           id="filters-panel-content"
@@ -149,7 +153,13 @@ function FiltersPanel( props ) {
             <FilterGroup.Label>Offer</FilterGroup.Label>
             <Row space="rent-sale" stackAt="large">
               <Column width="1/2">
-                <Filter type="checkbox-button" criterion="offer" value="rent" checked={ offer.rent }>{ `For Rent (${listingCounts.offer.rent})` }</Filter>
+                <Filter
+                  type="checkbox-button"
+                  criterion="offer"
+                  value="rent"
+                  checked={ offer.rent }
+                  aria-label="For Rent (9)"
+                >{ `For Rent (${listingCounts.offer.rent})` }</Filter>
               </Column>
               <Column width="1/2">
                 <Filter type="checkbox-button" criterion="offer" value="sale" checked={ offer.sale }>{ `For Sale (${listingCounts.offer.sale})` }</Filter>
@@ -215,11 +225,11 @@ function FiltersPanel( props ) {
           </FilterGroup>
           <FilterGroup criterion="bedrooms" orientation="horizontal">
             <FilterGroup.Label>Bedrooms</FilterGroup.Label>
-            <Filter type="checkbox" criterion="bedrooms" checked={ bedrooms['0'] }>0</Filter>
-            <Filter type="checkbox" criterion="bedrooms" checked={ bedrooms['1'] }>1</Filter>
-            <Filter type="checkbox" criterion="bedrooms" checked={ bedrooms['2'] }>2</Filter>
-            <Filter type="checkbox" criterion="bedrooms" checked={ bedrooms['3'] }>3</Filter>
-            <Filter type="checkbox" criterion="bedrooms" checked={ bedrooms['4+'] }>4+</Filter>
+            <Filter type="checkbox" criterion="bedrooms" aria-label="0-bedrooms" checked={ bedrooms['0'] }>0</Filter>
+            <Filter type="checkbox" criterion="bedrooms" aria-label="1-bedrooms" checked={ bedrooms['1'] }>1</Filter>
+            <Filter type="checkbox" criterion="bedrooms" aria-label="2-bedrooms" checked={ bedrooms['2'] }>2</Filter>
+            <Filter type="checkbox" criterion="bedrooms" aria-label="3-bedrooms" checked={ bedrooms['3'] }>3</Filter>
+            <Filter type="checkbox" criterion="bedrooms" aria-label="4+-bedrooms" checked={ bedrooms['4+'] }>4+</Filter>
           </FilterGroup>
           <FilterGroup criterion="amiQualification">
             <FilterGroup.Label>Income Eligibility</FilterGroup.Label>

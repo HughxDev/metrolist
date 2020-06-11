@@ -29,12 +29,6 @@ h3 {
 //   padding-top: 65px; // public.css sets .mn { padding-top: 65px; } but then adds .page { padding-top: 6.6em } creating extra white space.
 // }
 
-.ml-required {
-  display: inline-block;
-  margin-left: .25rem;
-  color: $color-freedom-trail-red--a11y;
-}
-
 .--block {
   display: block;
 }

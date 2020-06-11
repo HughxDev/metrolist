@@ -7,6 +7,7 @@ import Icon from '@components/Icon';
 import Scale from '@components/Scale';
 import FormErrorMessage from '@components/FormErrorMessage';
 import Stack from '@components/Stack';
+import Required from '@components/Required';
 
 import { updatePageTitle } from '@util/a11y-seo';
 
@@ -25,7 +26,7 @@ const AmiEstimatorHouseholdSize = forwardRef( ( props, ref ) => {
   return (
     <div ref={ selfRef } className="ml-ami-estimator__household-size ml-ami-estimator__prompt" data-testid="ml-ami-estimator__household-size">
       <Stack as="fieldset" space="2" className="ml-ami-estimator__prompt-inner">
-        <legend className="ml-ami-estimator__prompt-question">How many people live in your household of any age?<span className="ml-required">{ isRequired ? '*' : '' }</span></legend>
+        <legend className="ml-ami-estimator__prompt-question">How many people live in your household of any age? { isRequired ? <Required /> : '' }</legend>
         <div className="ml-ami-estimator__prompt-answer">
           <Stack space="2">
             <Icon className="ml-ami-estimator__prompt-answer-icon" icon="family2" height="100" alt="icon: a family" isMetrolistIcon />

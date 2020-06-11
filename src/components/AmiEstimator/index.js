@@ -513,6 +513,7 @@ function AmiEstimator( props ) {
       <Stack as="header" space="1">
         <h3 className="sh-title ml-ami-estimator__heading">Find Housing Based on Your Income &amp; Household Size…</h3>
         <ProgressBar current={ step } total={ totalSteps } />
+        {/* <p><span className="ml-required">*</span> = required field</p> */}
       </Stack>
       {/* <Alert
         id="ami-estimator-form-alert"

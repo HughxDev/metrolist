@@ -75,6 +75,7 @@ const Scale = forwardRef( ( props, ref ) => (
             type="radio"
             // aria-label={ getAriaLabel( props, value, true ) }
             aria-describedby={ props['aria-describedby'] }
+            aria-label={ props['aria-label'] }
             required={ props.required }
             defaultChecked={ value === props.value }
           />
@@ -117,6 +118,7 @@ Scale.propTypes = {
   //   "affix": PropTypes.oneOf( ['prepend', 'append'] ),
   // } ),
   "aria-describedby": PropTypes.string,
+  "aria-label": PropTypes.string,
 };
 
 export default Scale;
