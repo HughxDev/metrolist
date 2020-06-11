@@ -37,14 +37,14 @@ const AmiEstimatorInputSummary = forwardRef( ( props, ref ) => (
   <Row ref={ ref } as="dl" className="ml-ami-estimator__input-summary" data-testid="ml-ami-estimator__input-summary" space="2" stackUntil="small">
     <Stack space="0.5" data-column-width="1/2">
       <Stack as="dt" space="1">
-        <Icon className="ml-ami-estimator__prompt-answer-icon ml-ami-estimator__prompt-answer-icon--half" icon="family2" height="100" alt="icon: a family" isMetrolistIcon />
+        <Icon className="ml-ami-estimator__prompt-answer-icon ml-ami-estimator__prompt-answer-icon--half" icon="family2" height="100" alt="" isMetrolistIcon />
         <span>Household:</span>
       </Stack>
       <dd>{ props.formData.householdSize.value || '0' }{ ( props.formData.householdSize.value === '1' ) ? ' person' : ' people' }</dd>
     </Stack>
     <Stack space="0.5" data-column-width="1/2">
       <Stack as="dt" space="1">
-        <Icon className="ml-ami-estimator__prompt-answer-icon ml-ami-estimator__prompt-answer-icon--half" icon="deposit_check" height="100" alt="icon: a check being deposited" isMetrolistIcon />
+        <Icon className="ml-ami-estimator__prompt-answer-icon ml-ami-estimator__prompt-answer-icon--half" icon="deposit_check" height="100" alt="" isMetrolistIcon />
         <span>Income:</span>
       </Stack>
       <dd>{ formatIncome( props.formData.householdIncome.value ) }/{ formatIncomeRate( props.formData.incomeRate.value ) }</dd>

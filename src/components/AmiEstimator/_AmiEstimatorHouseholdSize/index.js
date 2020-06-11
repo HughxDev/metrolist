@@ -29,7 +29,7 @@ const AmiEstimatorHouseholdSize = forwardRef( ( props, ref ) => {
         <legend className="ml-ami-estimator__prompt-question">How many people live in your household of any age? { isRequired ? <Required /> : '' }</legend>
         <div className="ml-ami-estimator__prompt-answer">
           <Stack space="2">
-            <Icon className="ml-ami-estimator__prompt-answer-icon" icon="family2" height="100" alt="icon: a family" isMetrolistIcon />
+            <Icon className="ml-ami-estimator__prompt-answer-icon" icon="family2" height="100" alt="" isMetrolistIcon />
             <Scale
               className={ `ml-ami-estimator__prompt--answer-input` }
               criterion="householdSize"
