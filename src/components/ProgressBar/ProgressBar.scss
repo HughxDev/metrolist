@@ -15,6 +15,7 @@
   -moz-appearance: none;
   appearance: none;
   border: rem( 3px ) solid $color-black;
+  height: 1rem;
 }
 
 .ml-progress-bar__step {
@@ -47,3 +48,8 @@
 .ml-progress-bar__progress::-moz-progress-bar {
   @include progress-indicator();
 } // Bar
+
+// IE/Edge (supposedly; can’t get it to work)
+.ml-progress-bar__progress::-ms-fill {
+  @include progress-indicator();
+}

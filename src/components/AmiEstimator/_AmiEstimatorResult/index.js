@@ -110,27 +110,27 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
         console.log( {
           "responseBody": response.body,
         } );
-        if ( !response.body ) {
-          if ( isDev() ) {
-            console.warn( 'API returned an invalid response; falling back to test data since we’re in a development environment.' );
+        // if ( !response.body ) {
+        //   if ( isDev() ) {
+        //     console.warn( 'API returned an invalid response; falling back to test data since we’re in a development environment.' );
 
-            return [
-              {
-                "ami": 100,
-                "1": 79350,
-                "2": 90650,
-                "3": 102000,
-                "4": 113300,
-                "5": 122400,
-                "6": 131450,
-              },
-            ];
-          }
+        //     return [
+        //       {
+        //         "ami": 100,
+        //         "1": 79350,
+        //         "2": 90650,
+        //         "3": 102000,
+        //         "4": 113300,
+        //         "5": 122400,
+        //         "6": 131450,
+        //       },
+        //     ];
+        //   }
 
-          throw new Error( `API returned an invalid response.` );
-        } else {
-          return response.json();
-        }
+        //   throw new Error( `API returned an invalid response.` );
+        // } else {
+        return response.json();
+        // }
       } )
       .then( ( apiAmiDefinitions ) => {
         setAmiEstimation(

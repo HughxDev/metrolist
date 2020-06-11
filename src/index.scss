@@ -20,9 +20,17 @@ h3 {
   padding-right: 0;
 }
 
-.ml-app input[type=checkbox],
-.ml-app input[type=radio] {
+.ml-app input[type="checkbox"],
+.ml-app input[type="radio"] {
   display: inherit; // public.css sets to display: none which eliminates tab order even with tabindex set.
+}
+
+.ml-app ::-ms-check {
+  display: none;
+}
+
+.ml-app :-ms-input-placeholder {
+  font-style: normal;
 }
 
 // .page {
@@ -40,4 +48,4 @@ h3 {
 // Overrides /sites/default/files/linked/css/css_6oJnxXTl5t9fkw3C8uMRtGxwbWXLDmLm2glpmOsBgVY.css
 .breadcrumb {
   margin-top: 0;
-}
+} 

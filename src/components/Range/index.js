@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 
 import Stack from '@components/Stack';
 
-import './Range.scss';
+const isIE = /* @cc_on!@ */false || !!document.documentMode;
+const isEdge = ( window.navigator.userAgent.indexOf( "Edge" ) > -1 ); // Excludes Chromium-based Edge which reports “Edg” without the e
+const isIEorEdge = ( isIE || isEdge );
 
 function Range( props ) {
   const min = ( props.min || 0 );
@@ -30,6 +32,14 @@ function Range( props ) {
     setOutOfBounds( lowerBound > upperBound );
   } );
 
+  if ( isIEorEdge ) {
+    import( './Range.ie-edge.css' ).then();
+  } else {
+    import( './Range.scss' ).then();
+  }
+
+  const RangeMultiInput = ( isIEorEdge ? Stack : 'div' );
+
   return (
     <div
       className="ml-range"
@@ -47,14 +57,15 @@ function Range( props ) {
             <span className="en-dash">–</span>
             <output className="ml-range__output" htmlFor="upper-bound">{ `${upperBound}%` }</output>
           </span>
-          &#30;<abbr className="ml-range__review-unit">AMI</abbr></p>
-        <div
+          &nbsp;<abbr className="ml-range__review-unit">AMI</abbr></p>
+        <RangeMultiInput
+          space={ isIEorEdge ? '1.5' : undefined }
           className="ml-range__multi-input"
           role="group"
           // onChange={ handleInput }
         >
           <label
-            className="sr-only"
+            className={ isIEorEdge ? undefined : 'sr-only' }
             htmlFor="lower-bound"
           >{ outOfBounds ? 'Maximum' : 'Minimum' }</label>
           <input
@@ -69,7 +80,7 @@ function Range( props ) {
           />
 
           <label
-            className="sr-only"
+            className={ isIEorEdge ? undefined : 'sr-only' }
             htmlFor="upper-bound"
           >{ outOfBounds ? 'Minimum' : 'Maximum' }</label>
           <input
@@ -82,7 +93,7 @@ function Range( props ) {
             max={ max }
             onChange={ handleInput }
           />
-        </div>
+        </RangeMultiInput>
       </Stack>
     </div>
   );

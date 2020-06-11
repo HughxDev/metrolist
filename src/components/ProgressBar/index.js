@@ -2,14 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Stack from '@components/Stack';
+import { generateRandomDomId } from '@util/strings';
 
 import './ProgressBar.scss';
 
 function ProgressBar( props ) {
+  const domId = `progress-label-${generateRandomDomId()}`;
+
   return (
     <Stack className={ `ml-progress-bar${props.className ? ` ${props.className}` : ''}` } space="1">
-      <progress className="ml-progress-bar__progress" value={ props.current } max={ props.total }>{ props.children }</progress>
-      <p className="ml-progress-bar__step">Step { props.current } of { props.total }</p>
+      <progress className="ml-progress-bar__progress" min="1" value={ props.current } max={ props.total } aria-labelledby={ domId }>{ props.children }</progress>
+      <p id={ domId } className="ml-progress-bar__step">Step { props.current } of { props.total }</p>
     </Stack>
   );
 }
