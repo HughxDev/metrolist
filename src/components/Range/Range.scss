@@ -18,6 +18,11 @@ $thumb-translate-y: ( $thumb-diameter * -.75 );
   background: none /* get rid of Firefox track background */
 }
 
+@mixin thumb-highlighted() {
+  border-color: $highlight-color;
+  background-color: $highlight-color;
+}
+
 @mixin thumb() {
   box-sizing: border-box; /* different between Chrome & Firefox */
   /* box-sizing needed now that we have a non-zero border */
@@ -48,9 +53,10 @@ $thumb-translate-y: ( $thumb-diameter * -.75 );
   border: 8px solid $color-metrolist-text-blue;
   background-color: #0A1F2F;
 
-  &:active {
-    border-color: $highlight-color;
-    background-color: $highlight-color;
+  &:active,
+  &:hover,
+  &:focus {
+    @include thumb-highlighted();
   }
 }
 
@@ -144,7 +150,8 @@ $thumb-translate-y: ( $thumb-diameter * -.75 );
 
 .ml-range__input {
   &::-webkit-slider-runnable-track, 
-  &::-webkit-slider-thumb, & {
+  &::-webkit-slider-thumb,
+  & {
     -webkit-appearance: none
   }
 
@@ -168,24 +175,16 @@ $thumb-translate-y: ( $thumb-diameter * -.75 );
   &::-moz-range-track {
     @include track();
   }
-  &::-ms-track {
-    @include track();
-    // display: none;
-    // opacity: 0;
-  }
 
   $thumb-position-tweak: .07rem;
 
   &::-webkit-slider-thumb {
     @include thumb();
   }
-  &::-ms-thumb {
-    @include thumb();
-    // display: none;
-  }
 
   &:focus::-webkit-slider-thumb {
     outline: inherit;
+    @include thumb-highlighted();
   }
 
   &:first-of-type::-webkit-slider-thumb,
@@ -208,6 +207,10 @@ $thumb-translate-y: ( $thumb-diameter * -.75 );
   // &:last-of-type::-moz-range-thumb {
   // 	transform: translate( $thumb-position-tweak * -1, $thumb-translate-y * 1.5 ) rotate( -45deg );
   // }
+  &:focus::-moz-range-thumb {
+    outline: inherit;
+    @include thumb-highlighted();
+  }
 
   &:focus {
     --highlighted: 1;
