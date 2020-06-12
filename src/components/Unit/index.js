@@ -34,7 +34,7 @@ function formatAmiQualification( amiQualification ) {
     </>;
   }
 
-  return `AMI ${amiQualification}%`;
+  return `${amiQualification}% AMI`;
 }
 
 function formatPrice( price, priceRate, rentalPriceIsPercentOfIncome ) {
