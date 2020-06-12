@@ -61,7 +61,7 @@
     }
 
     &:checked {
-      background-color: $color-optimistic-blue;
+      background-color: $color-optimistic-blue--a11y;
     }
 
     &:checked ~ .ml-scale__text {

@@ -13,7 +13,7 @@
 
 // Primary Color Scheme
 .btn.btn--metrolist-primary {
-  background-color: $color-optimistic-blue;
+  background-color: $color-optimistic-blue--a11y;
 }
 
 @include media-breakpoint-up( small ) {

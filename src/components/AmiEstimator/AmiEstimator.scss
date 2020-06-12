@@ -73,7 +73,7 @@
   }
   .ml-ami-estimator__footer {
     text-align: center;
-    color: $color-metrolist-ami-estimator-footer-text;
+    color: $color-metrolist-ami-estimator-footer-text--a11y;
   }
   .ml-ami-estimator__exit-link {
     color: $color-charles-blue;
@@ -88,7 +88,7 @@
     }
   }
   .ml-ami-estimator__email-link {
-    color: $color-metrolist-ami-estimator-footer-text;
+    color: $color-metrolist-ami-estimator-footer-text--a11y;
     text-decoration: underline;
 
     &:hover {
@@ -96,7 +96,7 @@
     }
   }
   .ml-ami-estimator__email-link-email-address {
-    color: $color-metrolist-ami-estimator-footer-link;
+    color: $color-metrolist-ami-estimator-footer-link--a11y;
   }
   .ml-ami-estimator__prompt-answer-error {
     transition: opacity .125s linear, height .125s linear, padding-top .125s linear, padding-bottom .125s linear;

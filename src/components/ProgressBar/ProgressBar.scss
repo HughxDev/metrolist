@@ -29,8 +29,7 @@
   background-color: transparent;
 }
 @mixin progress-indicator {
-  background-color: $color-black;
-  background-color: $color-optimistic-blue;
+  background-color: $color-optimistic-blue--a11y;
   transition: width 0.5s;
   height: 100%;
 }
