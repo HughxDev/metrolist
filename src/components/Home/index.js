@@ -216,7 +216,7 @@ function Home( props ) {
           {
             containsUnitWhereRentalPriceIsPercentageOfIncome
               && (
-                <p id={ percentageOfIncomeExplanationId }>
+                <p id={ percentageOfIncomeExplanationId } className="ml-home__rental-price-percentage-income-explanation">
                   <span aria-hidden="true">**</span> Rent is determined by the administering agency based on household income.
                 </p>
               )

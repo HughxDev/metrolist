@@ -117,3 +117,12 @@ $padding-home-horizontal--large: rem( 26px );
       width: auto;
     }
   }
+  .ml-home__rental-price-percentage-income-explanation {
+    font-size: rem( 15px );
+    line-height: 1.5;
+  }
+  @include media-breakpoint-up( large ) {
+    .ml-home__rental-price-percentage-income-explanation {
+      font-size: 1rem;
+    }
+  }
