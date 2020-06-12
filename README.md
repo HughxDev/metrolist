@@ -172,8 +172,16 @@ module.exports = {
 
 ## Testing API integrations locally
 
-You have to run a browser without CORS enabled. For Chrome on macOS, you can add this to your `~/.bash_profile` or equivalent for convenience:
-```bash
+You have to run a browser without CORS enabled. For Chrome on macOS, you can add this to your `~/.bash_profile`, `~/.zshrc`, or equivalent for convenience:
+
+```shell
 alias chrome-insecure='open -n -a Google\ Chrome --args --disable-web-security --user-data-dir=/tmp/chrome --disable-site-isolation-trials --allow-running-insecure-content'
 ```
+
+This will prevent you from running your normal Chrome profile. To run both simultaneously, install an alternate Chrome such as Canary or Chromium. For Canary you would use this command instead:
+
+```shell
+alias chrome-insecure='open -n -a Google\ Chrome\ Canary --args --disable-web-security --user-data-dir=/tmp/chrome --disable-site-isolation-trials --allow-running-insecure-content'
+```
+
 Then in a terminal, just type `chrome-insecure` and you will get a separate window with no security and no user profile attached. Sometimes Google changes the necessary commands to disable security, so check around online if this command doesn’t work for you. Unfortunately no extensions will be installed for this profile, and if you install any they will only exist for that session since your data directory is under `/tmp/`.
