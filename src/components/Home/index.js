@@ -12,6 +12,7 @@ import Row from '@components/Row';
 import { date, dateTime } from '@util/datetime';
 import { homeObject } from '@util/validation';
 import { generateRandomDomId } from '@util/strings';
+import { isLocalDev } from '@util/dev';
 
 import './Home.scss';
 import { capitalCase } from 'change-case';
@@ -188,6 +189,8 @@ function Home( props ) {
     }
   }
 
+  const baseUrl = ( isLocalDev() ? 'https://d8-ci.boston.gov' : '' );
+
   return (
     <article className="ml-home">
       <div className="ml-home__content">
@@ -229,7 +232,7 @@ function Home( props ) {
             as="link"
             className="ml-home-footer__more-info-link"
             variant="primary"
-            href={ `/metrolist/search/listing/${slug}/${serializeFiltersToUrlParams( filters )}` }
+            href={ `${baseUrl}/metrolist/search/housing/${slug}/${serializeFiltersToUrlParams( filters )}` }
             aria-label={ `More info about ${title}` }
           >More info</Button>
         </Row>
