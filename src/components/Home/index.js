@@ -56,6 +56,10 @@ function renderOffer( offer ) {
 }
 
 function renderType( type ) {
+  if ( !type ) {
+    return type;
+  }
+
   type = type.toLowerCase();
 
   switch ( type ) {
