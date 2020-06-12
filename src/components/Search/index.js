@@ -339,12 +339,12 @@ function Search( props ) {
             "responseBody": response.body,
           } );
           if ( !response.body ) {
-            if ( isDev() ) {
-              console.warn( 'API returned an invalid response; falling back to test data since we’re in a development environment.' );
+            // if ( isDev() ) {
+            //   console.warn( 'API returned an invalid response; falling back to test data since we’re in a development environment.' );
 
-              return import( './test-data' )
-                .then( ( json ) => json.default );
-            }
+            //   return import( './test-data' )
+            //     .then( ( json ) => json.default );
+            // }
 
             throw new Error( `API returned an invalid response.` );
           } else {
