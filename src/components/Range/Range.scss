@@ -156,7 +156,8 @@ $thumb-translate-y: ( $thumb-diameter * -.75 );
   }
 
   padding: 0;
-  height: auto;
+  // height: auto;
+  height: 2.2rem;
   color: inherit;
   border: none;
   grid-column: 1;

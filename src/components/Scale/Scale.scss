@@ -5,7 +5,6 @@
 .ml-scale {
   padding: 0;
   margin: 0;
-  border: 2px solid $color-filters-scale-border;
   height: rem( 43px );
   font-family: $font-family-montserrat;
   display: flex;
@@ -41,7 +40,7 @@
     text-transform: none;
   }
     .ml-scale__label + .ml-scale__label {
-      border-left: 1px solid $color-filters-scale-border;
+      // border-left: 1px solid $color-filters-scale-border;
     }
   .ml-scale__form-control {
     position: absolute;
@@ -54,13 +53,14 @@
     -moz-appearance: none;
     appearance: none;
     color: black;
+    border: 2px solid $color-filters-scale-border;
 
     &, &:checked {
       display: block;
-      border: none
     }
 
     &:checked {
+      border: none;
       background-color: $color-optimistic-blue--a11y;
     }
 

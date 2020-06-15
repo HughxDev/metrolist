@@ -487,3 +487,21 @@ Existing sizing (1024x768 viewport):
   - Birth Person: 100x100 excluding built-in padding
   - Birth 2x People: 140x100 excluding built-in padding
 - 
+
+## Address Design Feedback
+
+### Sebastian
+
+[notes on Metrolist.pdf]
+
+- AMI Estimator
+  - Remove border [on Yearly/Monthly toggle] - Removed the gray border from the blue “selected” state. If you’re saying we should remove the entire border then please specify (though I think that would make it harder to make out the buttons).
+- Un-round corners
+  - The rounded corners are not part of the button but rather the focus outline. In Chrome 83 (released a few weeks ago) the focus outline changed from a drop-shadow to a rounded border. Unfortunately in Chrome there is no way to modify the border radius without also changing the outline’s overall appearance. Notably when I do change to the squared style, then we also lose the outline around the AMI filter’s range thumbs (see attached). The range thumbs still turn red when highlighted but from an accessibility standpoint we can’t rely on color alone to convey information. But regardless, if the outline style is to be modified at all it should probably be modified for all of Boston.gov and not just Metrolist so we have a consistent experience. 
+
+### André
+
+[Google Doc](https://docs.google.com/document/d/1y7RMUiQkozv4pJfhBMspk1UtrSmO75XndrvwN2HRbr0/edit)
+
+- When user clicks on one of the drawers it adds a white space/box select, but only at the top
+  - This is also due to the focus outline. Can remove but not without the same issues described above.

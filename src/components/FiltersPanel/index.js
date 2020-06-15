@@ -179,6 +179,7 @@ function FiltersPanel( props ) {
                 <Filter.Label>Boston</Filter.Label>
                 {
                   Object.keys( listingCounts.location.neighborhood )
+                    .sort()
                     .sort( ( neighborhoodA, neighborhoodB ) => (
                       listingCounts.location.neighborhood[neighborhoodB]
                         - listingCounts.location.neighborhood[neighborhoodA]

@@ -75,7 +75,7 @@
     $grid-gap: .75rem;
 
     transition: height .125s ease;
-    overflow: hidden;
+    // overflow: hidden;
     flex-wrap: wrap;
     margin-bottom: ( $grid-gap * -1 );
 
