@@ -10,10 +10,10 @@ import './Routes.scss';
 function Routes( props ) {
   return (
     <Switch>
-      <Route path="/(search|pklwqd)">
+      <Route path="/pklwqd">
         <Search />
       </Route>
-      <Route path="/(ami-estimator|rytxh)">
+      <Route path="/rytxh">
         <AmiEstimator />
       </Route>
       <Route exact path="/">

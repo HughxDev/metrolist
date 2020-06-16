@@ -57,6 +57,14 @@ module.exports = {
         "test": /\.(svg|webp|png|jpe?g|gif)$/,
         "use": "file-loader",
       },
+      // {
+      //   "test": /\.js$/,
+      //   "loader": 'string-replace-loader',
+      //   "options": {
+      //     "search": /\/images\/(.*)/g,
+      //     "replace": 'https://assets.boston.gov/icons/metrolist/$1',
+      //   },
+      // },
     ],
   },
   "mode": "development",
