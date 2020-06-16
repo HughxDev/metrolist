@@ -24,7 +24,7 @@ function get100percentAmiDefinition( amiDefinitions ) {
   for ( let index = 0; index < amiDefinitions.length; index++ ) {
     const amiEstimation = amiDefinitions[index];
 
-    console.log( { amiEstimation } );
+    // console.log( { amiEstimation } );
 
     if ( amiEstimation && hasOwnProperty( amiEstimation, 'ami' ) && ( amiEstimation.ami === 100 ) ) {
       return amiEstimation;
@@ -107,9 +107,9 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
       },
     ) // TODO: CORS
       .then( async ( response ) => {
-        console.log( {
-          "responseBody": response.body,
-        } );
+        // console.log( {
+        //   "responseBody": response.body,
+        // } );
         if ( !response.body ) {
           // if ( isDev() ) {
           //   console.warn( 'API returned an invalid response; falling back to test data since we’re in a development environment.' );

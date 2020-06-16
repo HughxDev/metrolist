@@ -335,9 +335,9 @@ function Search( props ) {
         },
       ) // TODO: CORS
         .then( async ( response ) => {
-          console.log( {
-            "responseBody": response.body,
-          } );
+          // console.log( {
+          //   "responseBody": response.body,
+          // } );
           if ( !response.body ) {
             // if ( isDev() ) {
             //   console.warn( 'API returned an invalid response; falling back to test data since we’re in a development environment.' );

@@ -123,7 +123,7 @@ function AmiEstimator( props ) {
       setTimeout( () => {
         $errorMessage.classList.add( '--visible' );
 
-        console.log( 'index', index );
+        // console.log( 'index', index );
 
         if ( index === 0 ) {
           let $focusTarget;
