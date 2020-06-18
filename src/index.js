@@ -14,10 +14,8 @@ import './index.scss';
 
 import '@globals/util.scss';
 
-// const basename = ( /^\/36178\//.test( window.location.pathname ) ? '/36178' : '/metrolist' );
-
 ReactDOM.render(
-  <Router basename="/36178">
+  <Router basename="/metrolist">
     <ScrollToTop />
     <App />
   </Router>,
