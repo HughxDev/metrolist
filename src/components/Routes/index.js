@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, useLocation } from 'react-router-dom';
+
 
 import Search from '@components/Search';
 import AmiEstimator from '@components/AmiEstimator';
@@ -8,15 +9,21 @@ import AmiEstimator from '@components/AmiEstimator';
 import './Routes.scss';
 
 function Routes( props ) {
+  const useLocationObject = useLocation();
+
+  console.log( 'useLocationObject', useLocationObject );
+  console.log( 'window.location', window.location );
+  console.log( 'window.parent', window.parent );
+
   return (
     <Switch>
-      <Route path="/search">
+      <Route path="/metrolist/search">
         <Search />
       </Route>
-      <Route path="/ami-estimator">
+      <Route path="/metrolist/ami-estimator">
         <AmiEstimator />
       </Route>
-      <Route exact path="/">
+      <Route exact path="/metrolist/">
         <article>
           <div className="hro hro--t">
             <div className="hro-c">

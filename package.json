@@ -81,6 +81,7 @@
     "watch": "[ -z \"$(ipconfig getifaddr en6)\" ] && export LAN_IP_ADDRESS=\"$(ipconfig getifaddr en0)\" || export LAN_IP_ADDRESS=\"$(ipconfig getifaddr en6)\"; webpack-dev-server --host $LAN_IP_ADDRESS",
     "start": "[ -z \"$(ipconfig getifaddr en6)\" ] && export LAN_IP_ADDRESS=\"$(ipconfig getifaddr en0)\" || export LAN_IP_ADDRESS=\"$(ipconfig getifaddr en6)\"; webpack-dev-server --host $LAN_IP_ADDRESS --open",
     "build": "rm -rf dist/ && webpack --config webpack.production.js",
+    "build:dev": "rm -rf dist/ && webpack --config webpack.config.js",
     "build:stage": "rm -rf ../boston.gov-d8-deploy/docroot/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/* && cp -r dist/ ../boston.gov-d8-deploy/docroot/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/ && rm -rf ../boston.gov-d8-deploy/docroot/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/images/",
     "build:drupal": "yarn build && yarn build:stage",
     "jest": "./node_modules/jest-cli/bin/jest.js",
