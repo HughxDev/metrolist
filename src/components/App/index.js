@@ -18,8 +18,6 @@ function App() {
     rootPathSlug = slugify( location.pathname.substring( 0, location.pathname.lastIndexOf( '/' ) ) );
   }
 
-  console.log( 'rootPathSlug', rootPathSlug );
-
   // Make sure that localStorage.amiRecommendation is a valid number value.
   let amiRecommendation = parseInt( localStorage.getItem( 'amiRecommendation' ), 10 );
   if ( Number.isNaN( amiRecommendation ) || ( Math.sign( amiRecommendation ) < 1 ) ) {

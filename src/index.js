@@ -15,7 +15,7 @@ import './index.scss';
 import '@globals/util.scss';
 
 ReactDOM.render(
-  <Router>
+  <Router basename="/metrolist">
     <ScrollToTop />
     <App />
   </Router>,
