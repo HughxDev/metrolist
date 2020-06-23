@@ -29,23 +29,13 @@ function Routes( props ) {
 
   return (
     <Switch location={ { ...location, "pathname": resolvedMetrolistUrl } }>
-      <Route path="/metrolist/search">
+      <Route path="/search">
         <Search />
       </Route>
-      <Route path="/metrolist/ami-estimator">
+      <Route path="/ami-estimator">
         <AmiEstimator />
       </Route>
-      {/* <Route path="/translate_c" render={ () => (
-        <Switch location={ { ...location, "pathname": metrolistUrlBeingTranslated } }>
-          <Route path="/metrolist/search">
-            <Search />
-          </Route>
-          <Route path="/metrolist/ami-estimator">
-            <AmiEstimator />
-          </Route>
-        </Switch>
-      ) } /> */}
-      <Route exact path="/metrolist/">
+      <Route exact path="/">
         <article>
           <div className="hro hro--t">
             <div className="hro-c">
