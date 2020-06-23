@@ -36,7 +36,7 @@ function Routes( props ) {
         <AmiEstimator />
       </Route>
       <Route path="/translate_c" render={ () => (
-        <Redirect to={ metrolistUrlBeingTranslated } />
+        <Redirect push to={ metrolistUrlBeingTranslated } />
       ) } />
       <Route exact path="/metrolist/">
         <article>
