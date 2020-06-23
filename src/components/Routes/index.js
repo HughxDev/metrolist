@@ -17,20 +17,24 @@ function Routes( props ) {
   console.log( 'window.location', window.location );
   console.log( 'window.parent', window.parent );
 
+  let metrolistUrlBeingTranslated = '/metrolist/';
+  // let isBeingTranslated = false;
+
   /*
     pathname: "/translate_c"
     search: "?depth=1&pto=aue&rurl=translate.google.com&sl=auto&sp=nmt4&tl=ja&u=https://metrolist.netlify.app/metrolist/search&usg=ALkJrhhsNi3jF5ynWyb-Ncz__3jCJj7CzQ"
   */
 
   if ( ( location.pathname === '/translate_c' ) && location.search.length ) {
+    // isBeingTranslated = true;
     const filteredQueryParameters = location.search.split( '&' ).filter( ( item ) => item.indexOf( '/metrolist/' ) !== -1 );
 
     console.log( 'filteredQueryParameters', filteredQueryParameters );
 
     if ( filteredQueryParameters.length ) {
-      const metrolistUrlBeingTranslated = filteredQueryParameters[0].replace( /[a-z]+=https?:\/\/[^/]+(\/metrolist\/(.*))/i, '$1' );
+      const metrolistSubroute = filteredQueryParameters[0].replace( /[a-z]+=https?:\/\/[^/]+\/metrolist\/(.*)/i, '$1' );
 
-      console.log( 'metrolistUrlBeingTranslated', metrolistUrlBeingTranslated );
+      metrolistUrlBeingTranslated += metrolistSubroute;
     }
   }
 
@@ -45,7 +49,7 @@ function Routes( props ) {
         <AmiEstimator />
       </Route>
       <Route path="/translate_c" render={ () => (
-        <><Redirect to={ metrolistUrlBeingTranslated } />{/* eslint-disable-line no-undef */}</>
+        <Redirect to={ metrolistUrlBeingTranslated } />
       ) } />
       <Route exact path="/metrolist/">
         <article>
