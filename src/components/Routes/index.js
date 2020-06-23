@@ -29,16 +29,16 @@ function Routes( props ) {
 
   return (
     <Switch>
-      <Route path="/search">
+      <Route path="/metrolist/search">
         <Search />
       </Route>
-      <Route path="/ami-estimator">
+      <Route path="/metrolist/ami-estimator">
         <AmiEstimator />
       </Route>
       <Route path="/translate_c" render={ () => (
         <Redirect to={ metrolistUrlBeingTranslated } />
       ) } />
-      <Route exact path="/">
+      <Route exact path="/metrolist/">
         <article>
           <div className="hro hro--t">
             <div className="hro-c">
