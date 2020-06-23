@@ -14,30 +14,37 @@ function Routes( props ) {
   const location = useLocation();
 
   // Fix for Google Translate iframe shenanigans
-  let metrolistUrlBeingTranslated = '/';
+  let resolvedMetrolistUrl = location.pathname;
 
   if ( ( location.pathname === '/translate_c' ) && location.search.length ) {
     // isBeingTranslated = true;
     const filteredQueryParameters = location.search.split( '&' ).filter( ( item ) => item.indexOf( '/metrolist/' ) !== -1 );
 
     if ( filteredQueryParameters.length ) {
-      const metrolistSubroute = filteredQueryParameters[0].replace( /[a-z]+=https?:\/\/[^/]+\/metrolist\/(.*)/i, '$1' );
+      const metrolistUrlBeingTranslated = filteredQueryParameters[0].replace( /[a-z]+=https?:\/\/[^/]+(\/metrolist\/.*)/i, '$1' );
 
-      metrolistUrlBeingTranslated += metrolistSubroute;
+      resolvedMetrolistUrl = metrolistUrlBeingTranslated;
     }
   }
 
   return (
-    <Switch>
+    <Switch location={ { ...location, "pathname": resolvedMetrolistUrl } }>
       <Route path="/metrolist/search">
         <Search />
       </Route>
       <Route path="/metrolist/ami-estimator">
         <AmiEstimator />
       </Route>
-      <Route path="/translate_c" render={ () => (
-        <Redirect push to={ metrolistUrlBeingTranslated } />
-      ) } />
+      {/* <Route path="/translate_c" render={ () => (
+        <Switch location={ { ...location, "pathname": metrolistUrlBeingTranslated } }>
+          <Route path="/metrolist/search">
+            <Search />
+          </Route>
+          <Route path="/metrolist/ami-estimator">
+            <AmiEstimator />
+          </Route>
+        </Switch>
+      ) } /> */}
       <Route exact path="/metrolist/">
         <article>
           <div className="hro hro--t">
