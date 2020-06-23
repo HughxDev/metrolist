@@ -29,13 +29,13 @@ function Routes( props ) {
 
   return (
     <Switch location={ { ...location, "pathname": resolvedMetrolistUrl } }>
-      <Route path="/search">
+      <Route path="/metrolist/search">
         <Search />
       </Route>
-      <Route path="/ami-estimator">
+      <Route path="/metrolist/ami-estimator">
         <AmiEstimator />
       </Route>
-      <Route exact path="/">
+      <Route exact path="/metrolist/">
         <article>
           <div className="hro hro--t">
             <div className="hro-c">
