@@ -505,3 +505,32 @@ Existing sizing (1024x768 viewport):
 
 - When user clicks on one of the drawers it adds a white space/box select, but only at the top
   - This is also due to the focus outline. Can remove but not without the same issues described above.
+
+## [Bugfix: Metrolist via Google Translate](https://github.com/CityOfBoston/boston.gov-d8/pull/1459)
+
+Fixes #1446
+
+Verify on CI:
+- [Search](https://translate.google.com/translate?sl=auto&tl=ja&u=https%3A%2F%2Fd8-ci.boston.gov%2Fmetrolist%2Fsearch)
+- [AMI Estimator](https://translate.google.com/translate?sl=auto&tl=ja&u=https%3A%2F%2Fd8-ci.boston.gov%2Fmetrolist%2Fami-estimator)
+
+Note that the homes do not load because the API call is blocked by CORS. If Chrome is run with web security disabled then they do load, which should emulate what we’d see on production.
+
+### Bug
+While Metrolist loads under the offsite version of Google Translate, the React views (Search and AMI Estimator) do not populate.
+
+### Background
+- React Router matches on the current URL (`window.location`).
+- The Google Translate widget loads the entire page into an iframe.
+- Under normal circumstances, the React page loading inside of an iframe would not break anything, since iframes are self-contained. The `window.location` from the POV of the page would still be e.g. `https://www.boston.gov/metrolist/search` even if included on another domain. However, Google needs to modify the content on the page in order to translate it, and it isn’t usually possible to modify the contents of an iframe from the parent page. Therefore, Google merely scrapes the content of the included page and dynamically inserts it into an iframe that it controls.
+- Because of the above process, the `window.location` under Google Translate is not `www.boston.gov` but rather `translate.googleusercontent.com`. The path of the page becomes `/translate_c`, which throws off React Router matching.
+
+### Attempted Solutions
+- The top-level basename of `/metrolist` was removed and the routes were updated from `/`, `/search`, and `/ami-estimator` to `/metrolist/`, `/metrolist/search`, and `/metrolist/ami-estimator` respectively. This removed the basename mismatch console warning, but it did not fix the routing.
+- I wrote a quick algorithm (described in more detail below) to detect whether we were inside a Google Translate iframe. Then I extracted the original URL from the query parameters and told React Router to redirect the page to that. However, the views still did not load under Google Translate unless browser security was disabled. This is because React Router uses the HTML5 History API under the hood, and browsers do not allow the History API to update the URL to a different domain, since this could be used for phishing.
+
+### Final Solution
+I wrote a quick algorithm to detect whether we were inside a Google Translate iframe; i.e. if the current path is `/translate_c` and if there is a query string present. If so, I scan for a query string parameter pointing to a URL containing `/metrolist/`, then extract the path. Even though Google Translate re-hosts the page content, the URL is scraped via a parameter like `u=https://www.boston.gov/metrolist/search`. Given that parameter is found, I can extract `/metrolist/search` and then manually override the React Router location to think it is on `/metrolist/search` even if it is actually on `/translate_c`.
+
+### Caveats
+If Google Translate changes the way their iframe code works, this could break.
