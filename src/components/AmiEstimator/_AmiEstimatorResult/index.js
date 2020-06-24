@@ -161,7 +161,7 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
   if ( isBeingTranslated ) {
     metrolistSearchUrl = (
       `${window.location.protocol}//${window.location.host}${window.location.pathname}?${
-        location.search
+        window.location.search
           .split( '&' )
           .map( ( urlParameter ) => {
             if ( urlParameter.indexOf( '/metrolist/' ) !== -1 ) {
