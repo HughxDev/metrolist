@@ -46,6 +46,9 @@ export function resolveLocationConsideringGoogleTranslate() {
       const metrolistUrlBeingTranslated = filteredQueryParameters[0].replace( /[a-z]+=https?:\/\/[^/]+(\/metrolist\/.*)/i, '$1' );
 
       resolvedUrlPath = metrolistUrlBeingTranslated;
+
+      localStorage.setItem( 'metrolistGoogleTranslateUrl', window.location.href );
+      localStorage.setItem( 'metrolistGoogleTranslateIframeUrl', document.location.href );
     }
   }
 

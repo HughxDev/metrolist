@@ -535,8 +535,6 @@ function AmiEstimator( props ) {
   const nextStepName = getNextStepName();
   const previousStepName = getPreviousStepName();
 
-  console.log( 'location', location );
-
   return (
     <Stack as="article" className={ `ml-ami-estimator${props.className ? ` ${props.className}` : ''}` } space="1" data-testid="ml-ami-estimator">
       <h2 className="sr-only">AMI Estimator</h2>
@@ -610,7 +608,6 @@ function AmiEstimator( props ) {
                           formData={ formData }
                           setFormData={ setFormData }
                           adjustContainerHeight={ adjustContainerHeight }
-                          googleTranslateLocation={ props.googleTranslateLocation }
                         />
                       ) } />
                     );
@@ -663,7 +660,6 @@ AmiEstimator.propTypes = {
       "component": PropTypes.oneOfType( [PropTypes.func, PropTypes.object] ).isRequired,
     } ),
   ).isRequired,
-  "googleTranslateLocation": PropTypes.oneOfType( [PropTypes.object, PropTypes.string] ),
 };
 
 AmiEstimator.defaultProps = {

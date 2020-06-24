@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { slugify } from '@util/strings';
-import { isOnGoogleTranslate, resolveLocationConsideringGoogleTranslate } from '@util/a11y-seo';
+import { resolveLocationConsideringGoogleTranslate } from '@util/a11y-seo';
 
 import Layout from '@components/Layout';
 import AppHeader from '@components/AppHeader';
@@ -12,14 +12,8 @@ import './App.scss';
 
 function App() {
   const location = resolveLocationConsideringGoogleTranslate();
-  let googleTranslateLocation = null;
   const baselessPathname = location.pathname.replace( /^\/metrolist\//, '/' );
   let rootPathSlug;
-
-  if ( isOnGoogleTranslate() ) {
-    googleTranslateLocation = window.location.href;
-  }
-  Object.freeze( googleTranslateLocation );
 
   if ( baselessPathname.lastIndexOf( '/' ) === 0 ) {
     rootPathSlug = slugify( baselessPathname );
@@ -37,7 +31,7 @@ function App() {
   return (
     <Layout className={ `ml-app ml-app--${rootPathSlug}` }>
       <AppHeader />
-      <Routes googleTranslateLocation={ googleTranslateLocation } />
+      <Routes />
     </Layout>
   );
 }

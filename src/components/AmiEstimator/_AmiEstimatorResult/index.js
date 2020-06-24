@@ -153,12 +153,20 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
   }, [amiEstimation] );
 
   let metrolistSearchUrl = '/metrolist/search';
+  const isBeingTranslated = isOnGoogleTranslate();
 
-  if ( props.googleTranslateLocation ) {
-    metrolistSearchUrl = props.googleTranslateLocation.replace( /([a-z]+=https?:\/\/[^/]+)(\/metrolist\/.*)/i, '$1/metrolist/search' );
+  if ( isBeingTranslated ) {
+    const metrolistGoogleTranslateUrl = localStorage.getItem( 'metrolistGoogleTranslateUrl' );
+
+    if ( metrolistGoogleTranslateUrl ) {
+      metrolistSearchUrl = metrolistGoogleTranslateUrl.replace(
+        /([a-z]+=https?:\/\/[^/]+)(\/metrolist\/.*)/i,
+        `$1${metrolistSearchUrl}`,
+      );
+    } else {
+      console.error( 'Could not find `metrolistGoogleTranslateUrl` in localStorage' );
+    }
   }
-
-  console.log( 'props.googleTranslateLocation', props.googleTranslateLocation );
 
   return (
     <div ref={ selfRef } className={ `ml-ami-estimator__result ml-ami-estimator__prompt${props.className ? ` ${props.className}` : ''}` } data-testid="ml-ami-estimator__result">
@@ -170,7 +178,7 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
           { !isAboveUpperBound( amiEstimation ) && <p>We recommend searching for homes listed at <b className="ml-ami">{ amiRecommendation }% AMI</b> and above. Note that minimum income restrictions apply, and are listed in the unit details.</p> }
         </Stack>
         <Stack as="nav" space="1">
-          <Button as="a" variant="primary" href={ metrolistSearchUrl }>See homes that match this eligibility range</Button>
+          <Button as="a" variant="primary" href={ metrolistSearchUrl } target={ isBeingTranslated ? '_blank' : undefined }>See homes that match this eligibility range</Button>
         </Stack>
       </Stack>
     </div>
@@ -187,7 +195,6 @@ AmiEstimatorResult.propTypes = {
   "formData": PropTypes.object,
   "fakeFormData": PropTypes.object,
   "adjustContainerHeight": PropTypes.func,
-  "googleTranslateLocation": PropTypes.oneOfType( [PropTypes.object, PropTypes.string] ),
 };
 
 AmiEstimatorResult.defaultProps = {
