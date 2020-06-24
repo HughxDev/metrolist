@@ -19,6 +19,7 @@ function App() {
   if ( isOnGoogleTranslate() ) {
     googleTranslateLocation = window.location.href;
   }
+  Object.freeze( googleTranslateLocation );
 
   if ( baselessPathname.lastIndexOf( '/' ) === 0 ) {
     rootPathSlug = slugify( baselessPathname );
