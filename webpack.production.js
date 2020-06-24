@@ -11,8 +11,16 @@ module.exports = merge( developmentConfig, {
         "test": /\.js$/,
         "loader": 'string-replace-loader',
         "options": {
-          "search": /\/images\/(.*)/g,
-          "replace": 'https://assets.boston.gov/icons/metrolist/$1',
+          "multiple": [
+            {
+              "search": /\/images\/(.*)/g,
+              "replace": 'https://assets.boston.gov/icons/metrolist/$1',
+            },
+            {
+              "search": /\/metrolist\/(.*)/g,
+              "replace": 'https://www.boston.gov/metrolist/$1',
+            },
+          ],
         },
       },
     ],
