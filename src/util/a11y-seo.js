@@ -40,7 +40,7 @@ export function resolveLocationConsideringGoogleTranslate() {
   let resolvedUrlPath = location.pathname;
 
   if ( isBeingTranslated && location.search.length ) {
-    const filteredQueryParameters = location.search.split( '&' ).filter( ( item ) => item.indexOf( '/metrolist/' ) !== -1 );
+    const filteredQueryParameters = location.search.split( '&' ).filter( ( urlParameter ) => urlParameter.indexOf( '/metrolist/' ) !== -1 );
 
     if ( filteredQueryParameters.length ) {
       const metrolistUrlBeingTranslated = filteredQueryParameters[0].replace( /[a-z]+=https?:\/\/[^/]+(\/metrolist\/.*)/i, '$1' );

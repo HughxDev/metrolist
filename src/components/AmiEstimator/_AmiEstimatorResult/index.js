@@ -1,14 +1,16 @@
 import React, {
   useEffect, useRef, useState, forwardRef,
 } from 'react';
+import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import Button from '@components/Button';
 import Stack from '@components/Stack';
 
-import { updatePageTitle } from '@util/a11y-seo';
+import { updatePageTitle, isOnGoogleTranslate } from '@util/a11y-seo';
 import isDev, { isLocalDev } from '@util/dev';
 import { hasOwnProperty } from '@util/objects';
+
 import InputSummary from '../_AmiEstimatorInputSummary';
 
 import './AmiEstimatorResult.scss';
@@ -150,6 +152,26 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
     localStorage.setItem( 'amiRecommendation', amiRecommendation );
   }, [amiEstimation] );
 
+  const isBeingTranslated = isOnGoogleTranslate();
+  const location = useLocation();
+  let metrolistSearchUrl = '/metrolist/search';
+
+  if ( isBeingTranslated ) {
+    metrolistSearchUrl = (
+      `${window.location.protocol}//${window.location.host}${window.location.pathname}${
+        location.search
+          .split( '&' )
+          .map( ( urlParameter ) => {
+            if ( urlParameter.indexOf( '/metrolist/' ) !== -1 ) {
+              return urlParameter.replace( /([a-z]+=https?:\/\/[^/]+)(\/metrolist\/.*)/i, '$1/metrolist/search' );
+            }
+
+            return urlParameter;
+          } )
+          .join( '&' )}`
+    );
+  }
+
   return (
     <div ref={ selfRef } className={ `ml-ami-estimator__result ml-ami-estimator__prompt${props.className ? ` ${props.className}` : ''}` } data-testid="ml-ami-estimator__result">
       <Stack space="2" className="ml-ami-estimator__prompt-inner">
@@ -160,7 +182,7 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
           { !isAboveUpperBound( amiEstimation ) && <p>We recommend searching for homes listed at <b className="ml-ami">{ amiRecommendation }% AMI</b> and above. Note that minimum income restrictions apply, and are listed in the unit details.</p> }
         </Stack>
         <Stack as="nav" space="1">
-          <Button as="a" variant="primary" href="/metrolist/search">See homes that match this eligibility range</Button>
+          <Button as="a" variant="primary" href={ metrolistSearchUrl }>See homes that match this eligibility range</Button>
         </Stack>
       </Stack>
     </div>
