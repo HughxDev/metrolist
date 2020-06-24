@@ -1,34 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Switch, Route, useLocation, Redirect,
+  Switch, Route,
 } from 'react-router-dom';
-
 
 import Search from '@components/Search';
 import AmiEstimator from '@components/AmiEstimator';
 
+import { resolveLocationConsideringGoogleTranslate } from '@util/a11y-seo';
+
 import './Routes.scss';
 
 function Routes( props ) {
-  const location = useLocation();
-
-  // Fix for Google Translate iframe shenanigans
-  let resolvedMetrolistUrl = location.pathname;
-
-  if ( ( location.pathname === '/translate_c' ) && location.search.length ) {
-    // isBeingTranslated = true;
-    const filteredQueryParameters = location.search.split( '&' ).filter( ( item ) => item.indexOf( '/metrolist/' ) !== -1 );
-
-    if ( filteredQueryParameters.length ) {
-      const metrolistUrlBeingTranslated = filteredQueryParameters[0].replace( /[a-z]+=https?:\/\/[^/]+(\/metrolist\/.*)/i, '$1' );
-
-      resolvedMetrolistUrl = metrolistUrlBeingTranslated;
-    }
-  }
-
   return (
-    <Switch location={ { ...location, "pathname": resolvedMetrolistUrl } }>
+    <Switch location={ resolveLocationConsideringGoogleTranslate() }>
       <Route path="/metrolist/search">
         <Search />
       </Route>

@@ -1,6 +1,5 @@
 import React from 'react';
 import { slugify } from '@util/strings';
-import { useLocation } from 'react-router-dom';
 import Layout from '@components/Layout';
 import AppHeader from '@components/AppHeader';
 import Routes from '@components/Routes';
@@ -8,14 +7,17 @@ import Routes from '@components/Routes';
 // import '@patterns/stylesheets/public.css';
 import './App.scss';
 
+import { resolveLocationConsideringGoogleTranslate } from '@util/a11y-seo';
+
 function App() {
-  const location = useLocation();
+  const location = resolveLocationConsideringGoogleTranslate();
+  const baselessPathname = location.pathname.replace( /^\/metrolist\//, '/' );
   let rootPathSlug;
 
-  if ( location.pathname.lastIndexOf( '/' ) === 0 ) {
-    rootPathSlug = slugify( location.pathname );
+  if ( baselessPathname.lastIndexOf( '/' ) === 0 ) {
+    rootPathSlug = slugify( baselessPathname );
   } else {
-    rootPathSlug = slugify( location.pathname.substring( 0, location.pathname.lastIndexOf( '/' ) ) );
+    rootPathSlug = slugify( baselessPathname.substring( 0, baselessPathname.lastIndexOf( '/' ) ) );
   }
 
   // Make sure that localStorage.amiRecommendation is a valid number value.
@@ -26,7 +28,7 @@ function App() {
   }
 
   return (
-    <Layout className={ `ml-app${location.pathname ? ` ml-app--${rootPathSlug}` : ''}` }>
+    <Layout className={ `ml-app ml-app--${rootPathSlug}` }>
       <AppHeader />
       <Routes />
     </Layout>

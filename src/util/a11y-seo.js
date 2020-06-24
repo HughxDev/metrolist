@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom';
 import { formatPageTitle } from '@util/strings';
 import OnDemandLiveRegion from 'on-demand-live-region';
 
@@ -21,4 +22,27 @@ export function handlePseudoButtonKeyDown( event, triggerClick = false ) {
       event.target.click();
     }
   }
+}
+
+// Fix for Google Translate iframe shenanigans
+// @location - React Router useLocation instance
+export function resolveLocationConsideringGoogleTranslate() {
+  const location = useLocation();
+  let resolvedUrlPath = location.pathname;
+
+  if ( ( location.pathname === '/translate_c' ) && location.search.length ) {
+    // isBeingTranslated = true;
+    const filteredQueryParameters = location.search.split( '&' ).filter( ( item ) => item.indexOf( '/metrolist/' ) !== -1 );
+
+    if ( filteredQueryParameters.length ) {
+      const metrolistUrlBeingTranslated = filteredQueryParameters[0].replace( /[a-z]+=https?:\/\/[^/]+(\/metrolist\/.*)/i, '$1' );
+
+      resolvedUrlPath = metrolistUrlBeingTranslated;
+    }
+  }
+
+  return {
+    ...location,
+    "pathname": resolvedUrlPath,
+  };
 }

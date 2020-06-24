@@ -13,6 +13,7 @@ import {
 
 import { hasOwnProperty } from '@util/objects';
 import { slugify, uncapitalize, componentCase } from '@util/strings';
+import { resolveLocationConsideringGoogleTranslate } from '@util/a11y-seo';
 import { capitalCase } from 'change-case';
 
 import Button from '@components/Button';
@@ -30,7 +31,7 @@ import './AmiEstimator.scss';
 
 function AmiEstimator( props ) {
   const { path } = useRouteMatch();
-  const location = useLocation();
+  const location = resolveLocationConsideringGoogleTranslate();
   const [heights, setHeights] = useState( {} );
   const [isNavigatingBackward, setIsNavigatingBackward] = useState( false );
 
@@ -506,6 +507,8 @@ function AmiEstimator( props ) {
   // };
   const nextStepName = getNextStepName();
   const previousStepName = getPreviousStepName();
+
+  console.log( 'location', location );
 
   return (
     <Stack as="article" className={ `ml-ami-estimator${props.className ? ` ${props.className}` : ''}` } space="1" data-testid="ml-ami-estimator">
