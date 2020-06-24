@@ -24,14 +24,22 @@ export function handlePseudoButtonKeyDown( event, triggerClick = false ) {
   }
 }
 
+export function isOnGoogleTranslate() {
+  return (
+    ( window.location.hostname === 'translate.googleusercontent.com' )
+    || ( window.location.hostname === 'translate.google.com' )
+    || ( window.location.pathname === '/translate_c' )
+  );
+}
+
 // Fix for Google Translate iframe shenanigans
 // @location - React Router useLocation instance
 export function resolveLocationConsideringGoogleTranslate() {
   const location = useLocation();
+  const isBeingTranslated = isOnGoogleTranslate();
   let resolvedUrlPath = location.pathname;
 
-  if ( ( location.pathname === '/translate_c' ) && location.search.length ) {
-    // isBeingTranslated = true;
+  if ( isBeingTranslated && location.search.length ) {
     const filteredQueryParameters = location.search.split( '&' ).filter( ( item ) => item.indexOf( '/metrolist/' ) !== -1 );
 
     if ( filteredQueryParameters.length ) {

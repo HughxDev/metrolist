@@ -1,5 +1,8 @@
 import React from 'react';
+
 import { slugify } from '@util/strings';
+import { isOnGoogleTranslate, resolveLocationConsideringGoogleTranslate } from '@util/a11y-seo';
+
 import Layout from '@components/Layout';
 import AppHeader from '@components/AppHeader';
 import Routes from '@components/Routes';
@@ -7,11 +10,11 @@ import Routes from '@components/Routes';
 // import '@patterns/stylesheets/public.css';
 import './App.scss';
 
-import { resolveLocationConsideringGoogleTranslate } from '@util/a11y-seo';
 
 function App() {
   const location = resolveLocationConsideringGoogleTranslate();
   const baselessPathname = location.pathname.replace( /^\/metrolist\//, '/' );
+  const isBeingTranslated = isOnGoogleTranslate();
   let rootPathSlug;
 
   if ( baselessPathname.lastIndexOf( '/' ) === 0 ) {
@@ -25,6 +28,15 @@ function App() {
   if ( Number.isNaN( amiRecommendation ) || ( Math.sign( amiRecommendation ) < 1 ) ) {
     localStorage.setItem( 'amiRecommendation', '0' );
     amiRecommendation = 0;
+  }
+
+  // Fix CORS issue with history.push routing inside of Google Translate
+  if ( isBeingTranslated ) {
+    const $base = document.querySelector( 'base[href]' );
+
+    if ( $base ) {
+      $base.href = window.location.origin;
+    }
   }
 
   return (
