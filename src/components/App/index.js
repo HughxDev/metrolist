@@ -10,11 +10,9 @@ import Routes from '@components/Routes';
 // import '@patterns/stylesheets/public.css';
 import './App.scss';
 
-
 function App() {
   const location = resolveLocationConsideringGoogleTranslate();
   const baselessPathname = location.pathname.replace( /^\/metrolist\//, '/' );
-  const isBeingTranslated = isOnGoogleTranslate();
   let rootPathSlug;
 
   if ( baselessPathname.lastIndexOf( '/' ) === 0 ) {
@@ -28,15 +26,6 @@ function App() {
   if ( Number.isNaN( amiRecommendation ) || ( Math.sign( amiRecommendation ) < 1 ) ) {
     localStorage.setItem( 'amiRecommendation', '0' );
     amiRecommendation = 0;
-  }
-
-  // Fix CORS issue with history.push routing inside of Google Translate
-  if ( isBeingTranslated ) {
-    const $base = document.querySelector( 'base[href]' );
-
-    if ( $base ) {
-      $base.href = window.location.origin;
-    }
   }
 
   return (

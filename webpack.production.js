@@ -16,10 +16,10 @@ module.exports = merge( developmentConfig, {
               "search": /\/images\/(.*)/g,
               "replace": 'https://assets.boston.gov/icons/metrolist/$1',
             },
-            {
-              "search": /\/metrolist\/(.*)/g,
-              "replace": 'https://www.boston.gov/metrolist/$1',
-            },
+            // {
+            //   "search": /\/metrolist\/(.*)/g,
+            //   "replace": 'https://www.boston.gov/metrolist/$1',
+            // },
           ],
         },
       },
