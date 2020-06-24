@@ -156,9 +156,11 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
   const location = useLocation();
   let metrolistSearchUrl = '/metrolist/search';
 
+  console.log( 'location', location );
+
   if ( isBeingTranslated ) {
     metrolistSearchUrl = (
-      `${window.location.protocol}//${window.location.host}${window.location.pathname}${
+      `${window.location.protocol}//${window.location.host}${window.location.pathname}?${
         location.search
           .split( '&' )
           .map( ( urlParameter ) => {
