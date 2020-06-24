@@ -275,9 +275,8 @@ function AmiEstimator( props ) {
 
     if ( nextStepPath !== null ) {
       props.history.push( nextStepPath );
-      setTimeout( () => {
-        switchBackToMetrolistBaseIfNeeded();
-      }, 1000 );
+
+      switchBackToMetrolistBaseIfNeeded();
     } else {
       console.error( 'Can’t navigate forward' );
     }
@@ -291,9 +290,11 @@ function AmiEstimator( props ) {
 
     if ( previousStepPath !== null ) {
       props.history.push( previousStepPath );
+
+      switchBackToMetrolistBaseIfNeeded();
+
       setTimeout( () => {
         setIsNavigatingBackward( false );
-        switchBackToMetrolistBaseIfNeeded();
       }, 1000 );
     } else {
       console.error( 'Can’t navigate backward' );
