@@ -18,7 +18,7 @@ function Routes( props ) {
         <Search />
       </Route>
       <Route path="/metrolist/ami-estimator">
-        <AmiEstimator />
+        <AmiEstimator googleTranslateLocation={ props.googleTranslateLocation } />
       </Route>
       <Route exact path="/metrolist/">
         <article>
@@ -40,6 +40,7 @@ Routes.displayName = 'Routes';
 Routes.propTypes = {
   "children": PropTypes.node,
   "className": PropTypes.string,
+  "googleTranslateLocation": PropTypes.oneOfType( [PropTypes.object, PropTypes.string] ),
 };
 
 export default Routes;

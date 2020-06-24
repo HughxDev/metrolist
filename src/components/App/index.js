@@ -12,8 +12,13 @@ import './App.scss';
 
 function App() {
   const location = resolveLocationConsideringGoogleTranslate();
+  const googleTranslateLocation = null;
   const baselessPathname = location.pathname.replace( /^\/metrolist\//, '/' );
   let rootPathSlug;
+
+  if ( isOnGoogleTranslate() ) {
+    const googleTranslateLocation = window.location.href;
+  }
 
   if ( baselessPathname.lastIndexOf( '/' ) === 0 ) {
     rootPathSlug = slugify( baselessPathname );
@@ -31,7 +36,7 @@ function App() {
   return (
     <Layout className={ `ml-app ml-app--${rootPathSlug}` }>
       <AppHeader />
-      <Routes />
+      <Routes googleTranslateLocation={ googleTranslateLocation } />
     </Layout>
   );
 }

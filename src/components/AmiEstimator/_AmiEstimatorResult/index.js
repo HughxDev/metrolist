@@ -152,26 +152,10 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
     localStorage.setItem( 'amiRecommendation', amiRecommendation );
   }, [amiEstimation] );
 
-  const isBeingTranslated = isOnGoogleTranslate();
-  const location = useLocation();
   let metrolistSearchUrl = '/metrolist/search';
 
-  console.log( 'location', location );
-
-  if ( isBeingTranslated ) {
-    metrolistSearchUrl = (
-      `${window.location.protocol}//${window.location.host}${window.location.pathname}?${
-        window.location.search
-          .split( '&' )
-          .map( ( urlParameter ) => {
-            if ( urlParameter.indexOf( '/metrolist/' ) !== -1 ) {
-              return urlParameter.replace( /([a-z]+=https?:\/\/[^/]+)(\/metrolist\/.*)/i, '$1/metrolist/search' );
-            }
-
-            return urlParameter;
-          } )
-          .join( '&' )}`
-    );
+  if ( props.googleTranslateLocation ) {
+    metrolistSearchUrl = props.googleTranslateLocation.replace( /([a-z]+=https?:\/\/[^/]+)(\/metrolist\/.*)/i, '$1/metrolist/search' );
   }
 
   return (
@@ -201,6 +185,7 @@ AmiEstimatorResult.propTypes = {
   "formData": PropTypes.object,
   "fakeFormData": PropTypes.object,
   "adjustContainerHeight": PropTypes.func,
+  "googleTranslateLocation": PropTypes.oneOfType( [PropTypes.object, PropTypes.string] ),
 };
 
 AmiEstimatorResult.defaultProps = {

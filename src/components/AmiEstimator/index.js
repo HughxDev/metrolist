@@ -610,6 +610,7 @@ function AmiEstimator( props ) {
                           formData={ formData }
                           setFormData={ setFormData }
                           adjustContainerHeight={ adjustContainerHeight }
+                          googleTranslateLocation={ props.googleTranslateLocation }
                         />
                       ) } />
                     );
@@ -662,6 +663,7 @@ AmiEstimator.propTypes = {
       "component": PropTypes.oneOfType( [PropTypes.func, PropTypes.object] ).isRequired,
     } ),
   ).isRequired,
+  "googleTranslateLocation": PropTypes.oneOfType( [PropTypes.object, PropTypes.string] ),
 };
 
 AmiEstimator.defaultProps = {
