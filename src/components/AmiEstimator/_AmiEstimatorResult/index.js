@@ -158,6 +158,8 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
     metrolistSearchUrl = props.googleTranslateLocation.replace( /([a-z]+=https?:\/\/[^/]+)(\/metrolist\/.*)/i, '$1/metrolist/search' );
   }
 
+  console.log( 'props.googleTranslateLocation', props.googleTranslateLocation );
+
   return (
     <div ref={ selfRef } className={ `ml-ami-estimator__result ml-ami-estimator__prompt${props.className ? ` ${props.className}` : ''}` } data-testid="ml-ami-estimator__result">
       <Stack space="2" className="ml-ami-estimator__prompt-inner">

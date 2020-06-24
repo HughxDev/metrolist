@@ -12,12 +12,12 @@ import './App.scss';
 
 function App() {
   const location = resolveLocationConsideringGoogleTranslate();
-  const googleTranslateLocation = null;
+  let googleTranslateLocation = null;
   const baselessPathname = location.pathname.replace( /^\/metrolist\//, '/' );
   let rootPathSlug;
 
   if ( isOnGoogleTranslate() ) {
-    const googleTranslateLocation = window.location.href;
+    googleTranslateLocation = window.location.href;
   }
 
   if ( baselessPathname.lastIndexOf( '/' ) === 0 ) {
