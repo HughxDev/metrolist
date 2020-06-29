@@ -166,9 +166,8 @@ module.exports = {
 
 ## Interfacing with Main Site
 
-
 - All `mailto:` links require the class `hide-form` to be set, otherwise they will trigger the generic feedback form.
-- To make asset URLs work both locally and on Drupal, all references to `/images/` get find-and-replaced to `/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/images/` when building.
+- To make asset URLs work both locally and on Drupal, all references to `/images/` get find-and-replaced to `https://assets.boston.gov/icons/metrolist/` when building for production, defined in `webpack.production.js`. Note that this requires assets to be uploaded to `assets.boston.gov` first, by someone with appropriate access. If assets are not yet on that domain, then you can build using `webpack.staging.js`, which instead replaces `/images/` with `/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/images/`. This is where images wind up when running `yarn build:drupal`. They should be manually deleted from that location after uploading to `assets.boston.gov` and before deploying to production.
 
 ## Testing API integrations locally
 
