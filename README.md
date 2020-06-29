@@ -164,14 +164,27 @@ module.exports = {
 };
 ```
 
+### Development
+
+Run `yarn build:dev`. Currently this is used for previewing on Netlify, to get a live URL up without going through the lengthy Travis and Acquia build process.
+
+### Production
+
+Run `yarn build:prod`, which first runs a production Webpack build (referencing `webpack.config.js`), then copies the result of that build to `../boston.gov-d8/docroot/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/`, replacing whatever was there beforehand. This requires you to have the [`boston.gov-d8`](https://github.com/CityOfBoston/boston.gov-d8) repo checked out and up-to-date one directory up from the project root.
+
+To make asset URLs work both locally and on Drupal, all references to `/images/` get find-and-replaced to `https://assets.boston.gov/icons/metrolist/` when building for production. Note that this requires assets to be uploaded to `assets.boston.gov` first, by someone with appropriate access. If you want to look at a production build without uploading to `assets.boston.gov` first, you can run a staging build instead.
+
+### Staging
+
+Run `yarn build:stage`. This is identical to the production build, except Webpack replaces references to `/images/` with `/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/images/`. This is where images normally wind up when running `yarn copy:drupal`.
+
 ## Interfacing with Main Site
 
 - All `mailto:` links require the class `hide-form` to be set, otherwise they will trigger the generic feedback form.
-- To make asset URLs work both locally and on Drupal, all references to `/images/` get find-and-replaced to `https://assets.boston.gov/icons/metrolist/` when building for production, defined in `webpack.production.js`. Note that this requires assets to be uploaded to `assets.boston.gov` first, by someone with appropriate access. If assets are not yet on that domain, then you can build using `webpack.staging.js`, which instead replaces `/images/` with `/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/images/`. This is where images wind up when running `yarn build:drupal`. They should be manually deleted from that location after uploading to `assets.boston.gov` and before deploying to production.
 
 ## Testing API integrations locally
 
-You have to run a browser without CORS enabled. For Chrome on macOS, you can add this to your `~/.bash_profile`, `~/.zshrc`, or equivalent for convenience:
+You have to run a browser without CORS restrictions enabled. For Chrome on macOS, you can add this to your `~/.bash_profile`, `~/.zshrc`, or equivalent for convenience:
 
 ```shell
 alias chrome-insecure='open -n -a Google\ Chrome --args --disable-web-security --user-data-dir=/tmp/chrome --disable-site-isolation-trials --allow-running-insecure-content'
