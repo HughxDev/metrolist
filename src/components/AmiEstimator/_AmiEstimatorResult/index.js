@@ -101,7 +101,7 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
     fetch(
       apiEndpoint,
       {
-        "mode": "no-cors",
+        "mode": "cors",
         "headers": {
           "Content-Type": "application/json",
         },

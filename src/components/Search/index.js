@@ -327,7 +327,7 @@ function Search( props ) {
       fetch(
         apiEndpoint,
         {
-          "mode": "no-cors",
+          "mode": "cors",
           "headers": {
             "Content-Type": "application/json",
           },
