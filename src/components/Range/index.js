@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Stack from '@components/Stack';
 
 const isIE = /* @cc_on!@ */false || !!document.documentMode;
-const isEdge = ( window.navigator.userAgent.indexOf( "Edge" ) > -1 ); // Excludes Chromium-based Edge which reports “Edg” without the e
+const isEdge = ( globalThis.navigator.userAgent.indexOf( "Edge" ) > -1 ); // Excludes Chromium-based Edge which reports “Edg” without the e
 const isIEorEdge = ( isIE || isEdge );
 
 function Range( props ) {

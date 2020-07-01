@@ -83,7 +83,7 @@ function AmiEstimator( props ) {
   const isBeingTranslated = isOnGoogleTranslate();
   const $base = document.querySelector( 'base[href]' );
   const metrolistBaseUrl = ( ( isBeingTranslated && $base ) ? $base.href : null ); // Added by Google to correct links, but breaks React Router
-  const googleTranslateBaseUrl = ( ( isBeingTranslated && $base ) ? window.location.origin : null );
+  const googleTranslateBaseUrl = ( ( isBeingTranslated && $base ) ? globalThis.location.origin : null );
   const badErrorMessageElementError = ( showHide = 'show/hide' ) => {
     throw new Error(
       `Can’t ${showHide} UI error message: the value passed to \`${showHide}ErrorMessage\` is “${typeof $errorMessage}”;`
@@ -517,7 +517,7 @@ function AmiEstimator( props ) {
   //   adjustContainerHeight( currentStepRef, 1000 );
   // }, [step] );
 
-  window.addEventListener( 'resize', () => {
+  globalThis.addEventListener( 'resize', () => {
     adjustContainerHeight( currentStepRef, 62.5 );
   } );
 

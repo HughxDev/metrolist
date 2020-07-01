@@ -26,9 +26,9 @@ export function handlePseudoButtonKeyDown( event, triggerClick = false ) {
 
 export function isOnGoogleTranslate() {
   return (
-    ( window.location.hostname === 'translate.googleusercontent.com' )
-    || ( window.location.hostname === 'translate.google.com' )
-    || ( window.location.pathname === '/translate_c' )
+    ( globalThis.location.hostname === 'translate.googleusercontent.com' )
+    || ( globalThis.location.hostname === 'translate.google.com' )
+    || ( globalThis.location.pathname === '/translate_c' )
   );
 }
 
@@ -47,7 +47,7 @@ export function resolveLocationConsideringGoogleTranslate() {
 
       resolvedUrlPath = metrolistUrlBeingTranslated;
 
-      localStorage.setItem( 'metrolistGoogleTranslateUrl', window.location.href );
+      localStorage.setItem( 'metrolistGoogleTranslateUrl', globalThis.location.href );
       localStorage.setItem( 'metrolistGoogleTranslateIframeUrl', document.location.href );
     }
   }

@@ -85,7 +85,9 @@ function Unit( { unit, percentageOfIncomeExplanationId } ) {
     <tr className="ml-unit" data-testid={ id }>
       <td className="ml-unit__cell ml-unit__size">{ formatSize( bedrooms, count ) }</td>
       <td className="ml-unit__cell ml-unit__income-limit">{ formatAmiQualification( amiQualification ) }</td>
-      <td className="ml-unit__cell ml-unit__price" aria-labelledby={ rentalPriceIsPercentOfIncome ? percentageOfIncomeExplanationId : null }>{ formatPrice( price, priceRate, rentalPriceIsPercentOfIncome ) }</td>
+      <td className="ml-unit__cell ml-unit__price" aria-labelledby={ rentalPriceIsPercentOfIncome ? percentageOfIncomeExplanationId : null }>
+        { ( price && priceRate ) && formatPrice( price, priceRate, rentalPriceIsPercentOfIncome ) }
+      </td>
     </tr>
   );
 }

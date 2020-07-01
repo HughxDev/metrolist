@@ -12,15 +12,12 @@ import Callout from '@components/Callout';
 import Icon from '@components/Icon';
 
 import { homeObject, filtersObject } from '@util/validation';
-import isDev, { isLocalDev } from '@util/dev';
+import { getDevelopmentsApiEndpoint } from '@util/dev';
 
 import './Search.scss';
 import 'whatwg-fetch';
 
-// const dev2Ip = '54.227.255.2';
-// const dev2Domain = 'd8-dev2.boston.gov';
-const apiDomain = ( isLocalDev() ? 'https://d8-ci.boston.gov' : '' );
-const apiEndpoint = `${apiDomain}/metrolist/api/v1/developments?_format=json`;
+const apiEndpoint = getDevelopmentsApiEndpoint();
 
 // https://stacko;verflow.com/a/11764168/214325
 function paginate( homes, homesPerPage = 8 ) {
@@ -99,10 +96,12 @@ function Search( props ) {
         listingCounts.offer.rent++;
       }
 
-      if ( home.city.toLowerCase() === 'boston' ) {
-        listingCounts.location.city.boston++;
-      } else {
-        listingCounts.location.city.beyondBoston++;
+      if ( home.city ) {
+        if ( home.city.toLowerCase() === 'boston' ) {
+          listingCounts.location.city.boston++;
+        } else {
+          listingCounts.location.city.beyondBoston++;
+        }
       }
 
       if ( home.neighborhood ) {
@@ -338,7 +337,8 @@ function Search( props ) {
           // console.log( {
           //   "responseBody": response.body,
           // } );
-          if ( !response.body ) {
+
+          if ( !response.body && !response._bodyInit ) {
             // if ( isDev() ) {
             //   console.warn( 'API returned an invalid response; falling back to test data since we’re in a development environment.' );
 
@@ -346,7 +346,7 @@ function Search( props ) {
             //     .then( ( json ) => json.default );
             // }
 
-            throw new Error( `API returned an invalid response.` );
+            throw new Error( `Metrolist Developments API returned an invalid response.` );
           } else {
             return response.json();
           }

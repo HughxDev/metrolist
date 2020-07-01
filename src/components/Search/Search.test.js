@@ -1,11 +1,20 @@
+import '@babel/polyfill';
 import '__mocks__/matchMedia';
+import mockApiResponse from '__mocks__/developmentsApiResponse.json';
 import React from 'react';
 import {
   render,
   cleanup,
   fireEvent,
+  waitForElement,
+  getAllByRole,
 } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
+import { getDevelopmentsApiEndpoint } from '@util/dev';
+import { MemoryRouter } from 'react-router-dom';
+import { rest } from 'msw';
+import { setupServer } from 'msw/node';
+import { act } from 'react-dom/test-utils';
 
 import Search from './index';
 
@@ -51,13 +60,40 @@ function getNoFiltersApplied() {
 }
 // import testData from './test-data.json';
 
-describe( 'Search', () => {
-  afterEach( cleanup );
+// console.error( mockApiResponse );
 
-  it( 'Renders', () => {
-    const { getByTestId } = render( <Search /> );
+// Mock Developments API response
+const server = setupServer(
+  rest.get(
+    getDevelopmentsApiEndpoint(),
+    ( request, response, context ) => response(
+      context.json( mockApiResponse ),
+    ),
+  ),
+);
+
+describe( 'Search', () => {
+  beforeAll( () => server.listen() );
+
+  afterEach( () => {
+    server.resetHandlers();
+    cleanup();
+  } );
+
+  afterAll( () => server.close() );
+
+  it( 'Renders', async () => {
+    const { getByTestId } = render(
+      <MemoryRouter initialEntries={['/metrolist/search']} initialIndex={0}>
+        <Search />
+      </MemoryRouter>,
+    );
     const FiltersPanel = getByTestId( 'ml-filters-panel' );
     const ResultsPanel = getByTestId( 'ml-results-panel' );
+
+    await act( async () => {
+      await waitForElement( () => getAllByRole( ResultsPanel, 'article' ) );
+    } );
 
     expect( FiltersPanel ).toBeInTheDocument();
     expect( ResultsPanel ).toBeInTheDocument();
@@ -118,20 +154,22 @@ describe( 'Search', () => {
       it( 'Filters results to only homes for rent', () => {
         const homesToFilter = [homeToRent, homeToBuy];
         const { getByLabelText, queryByText } = render(
-          <Search
-            homes={ homesToFilter }
-            filters={
-              {
-                ...Search.defaultProps.filters,
-                "offer": {
-                  "rent": false,
-                  "sale": false,
-                },
+          <MemoryRouter initialEntries={['/metrolist/search']} initialIndex={0}>
+            <Search
+              homes={ homesToFilter }
+              filters={
+                {
+                  ...Search.defaultProps.filters,
+                  "offer": {
+                    "rent": false,
+                    "sale": false,
+                  },
+                }
               }
-            }
-          />,
+            />
+          </MemoryRouter>,
         );
-        const forRentInput = getByLabelText( 'For Rent' );
+        const forRentInput = getByLabelText( /For Rent \(.*\)/, { "selector": "input" } );
 
         fireEvent.click( forRentInput );
 
@@ -144,20 +182,22 @@ describe( 'Search', () => {
       it( 'Filters results to only homes for sale', () => {
         const homesToFilter = [homeToRent, homeToBuy];
         const { getByLabelText, queryByText } = render(
-          <Search
-            homes={ homesToFilter }
-            filters={
-              {
-                ...Search.defaultProps.filters,
-                "offer": {
-                  "rent": false,
-                  "sale": false,
-                },
+          <MemoryRouter initialEntries={['/metrolist/search']} initialIndex={0}>
+            <Search
+              homes={ homesToFilter }
+              filters={
+                {
+                  ...Search.defaultProps.filters,
+                  "offer": {
+                    "rent": false,
+                    "sale": false,
+                  },
+                }
               }
-            }
-          />,
+            />
+          </MemoryRouter>,
         );
-        const forSaleInput = getByLabelText( 'For Sale' );
+        const forSaleInput = getByLabelText( /For Sale \(.*\)/, { "selector": "input" } );
         fireEvent.click( forSaleInput );
         const homeToBeFilteredOut = queryByText( homeToRent.title );
 
@@ -185,12 +225,14 @@ describe( 'Search', () => {
       it( 'Filters results to only homes within Boston', () => {
         const homesToFilter = [homeWithinBoston, homeOutsideBoston];
         const { getByLabelText, queryByText } = render(
-          <Search
-            homes={ homesToFilter }
-            filters={ noFiltersApplied }
-          />,
+          <MemoryRouter initialEntries={['/metrolist/search']} initialIndex={0}>
+            <Search
+              homes={ homesToFilter }
+              filters={ noFiltersApplied }
+            />
+          </MemoryRouter>,
         );
-        const bostonInput = getByLabelText( 'Boston' );
+        const bostonInput = getByLabelText( 'Boston', { "selector": "input" } );
         fireEvent.click( bostonInput );
         const homeToBeFilteredOut = queryByText( homeOutsideBoston.title );
 
@@ -201,12 +243,14 @@ describe( 'Search', () => {
       it( 'Filters results to only homes outside Boston', () => {
         const homesToFilter = [homeWithinBoston, homeOutsideBoston];
         const { getByLabelText, queryByText } = render(
-          <Search
-            homes={ homesToFilter }
-            filters={ noFiltersApplied }
-          />,
+          <MemoryRouter initialEntries={['/metrolist/search']} initialIndex={0}>
+            <Search
+              homes={ homesToFilter }
+              filters={ noFiltersApplied }
+            />
+          </MemoryRouter>,
         );
-        const beyondBostonInput = getByLabelText( 'Beyond Boston' );
+        const beyondBostonInput = getByLabelText( 'Beyond Boston', { "selector": "input" } );
         fireEvent.click( beyondBostonInput );
         const homeToBeFilteredOut = queryByText( homeWithinBoston.title );
 
@@ -214,11 +258,20 @@ describe( 'Search', () => {
         expect( homeToBeFilteredOut ).not.toBeInTheDocument();
       } );
 
-      it( 'Sets all neighborhood checkboxes appropriately when the “Boston” checkbox is toggled', () => {
-        const { getByLabelText } = render( <Search filters={ noFiltersApplied } /> );
-        const bostonInput = getByLabelText( 'Boston' );
-        const dotInput = getByLabelText( 'Dorchester' );
-        const southieInput = getByLabelText( 'South Boston' );
+      it( 'Sets all neighborhood checkboxes appropriately when the “Boston” checkbox is toggled', async () => {
+        const { getByLabelText } = render(
+          <MemoryRouter initialEntries={['/metrolist/search']} initialIndex={0}>
+            <Search filters={ noFiltersApplied } />
+          </MemoryRouter>,
+        );
+        const bostonInput = getByLabelText( 'Boston', { "selector": "input" } );
+        let dotInput;
+        let southieInput;
+
+        await act( async () => {
+          dotInput = await waitForElement( () => getByLabelText( /Dorchester \(.*\)/, { "selector": "input" } ) );
+          southieInput = await waitForElement( () => getByLabelText( /South Boston \(.*\)/, { "selector": "input" } ) );
+        } );
 
         fireEvent.click( bostonInput );
 
@@ -233,13 +286,24 @@ describe( 'Search', () => {
         expect( southieInput ).not.toBeChecked();
       } );
 
-      it( 'Sets all cardinal direction checkboxes appropriately when the “Beyond Boston” checkbox is toggled', () => {
-        const { getByLabelText } = render( <Search filters={ noFiltersApplied } /> );
-        const beyondBostonInput = getByLabelText( 'Beyond Boston' );
-        const westInput = getByLabelText( 'West of Boston' );
-        const southInput = getByLabelText( 'South of Boston' );
+      it( 'Sets all cardinal direction checkboxes appropriately when the “Beyond Boston” checkbox is toggled', async () => {
+        const { getByLabelText } = render(
+          <MemoryRouter initialEntries={['/metrolist/search']} initialIndex={0}>
+            <Search filters={ noFiltersApplied } />
+          </MemoryRouter>,
+        );
+        const beyondBostonInput = getByLabelText( 'Beyond Boston', { "selector": "input" } );
+        let westInput;
+        let southInput;
 
-        fireEvent.click( beyondBostonInput );
+        await act( async () => {
+          westInput = await waitForElement( () => getByLabelText( /West of Boston \(.*\)/, { "selector": "input" } ) );
+          southInput = await waitForElement( () => getByLabelText( /South of Boston \(.*\)/, { "selector": "input" } ) );
+
+          // For some reason this fireEvent has to go inside act() or there is a race condition and the test fails,
+          // even though it works outside of act() in the previous test
+          fireEvent.click( beyondBostonInput );
+        } );
 
         expect( beyondBostonInput ).toBeChecked();
         expect( westInput ).toBeChecked();
@@ -273,10 +337,12 @@ describe( 'Search', () => {
         const {
           getByLabelText, getByTestId, queryByTestId,
         } = render(
-          <Search
-            homes={ homesToFilter }
-            filters={ noFiltersApplied }
-          />,
+          <MemoryRouter initialEntries={['/metrolist/search']} initialIndex={0}>
+            <Search
+              homes={ homesToFilter }
+              filters={ noFiltersApplied }
+            />
+          </MemoryRouter>,
         );
         const zeroBedroomInput = getByLabelText( '0' );
         const twoBedroomInput = getByLabelText( '2' );
@@ -347,10 +413,12 @@ describe( 'Search', () => {
         const {
           getByTestId, queryByTestId,
         } = render(
-          <Search
-            homes={ homesToFilter }
-            filters={ amiBetweenEightyAndOneHundred }
-          />,
+          <MemoryRouter initialEntries={['/metrolist/search']} initialIndex={0}>
+            <Search
+              homes={ homesToFilter }
+              filters={ amiBetweenEightyAndOneHundred }
+            />
+          </MemoryRouter>,
         );
 
         getByTestId( homeWithAmiWithinBounds.units[0].id );

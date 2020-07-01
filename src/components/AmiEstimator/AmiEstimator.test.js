@@ -24,7 +24,7 @@ describe( 'AmiEstimator', () => {
 
   it( 'Renders', () => {
     const { getByText } = render(
-      <MemoryRouter initialEntries={['/ami-estimator']} initialIndex={0}>
+      <MemoryRouter initialEntries={['/metrolist/ami-estimator']} initialIndex={0}>
         <Routes />
       </MemoryRouter>,
     );
@@ -33,7 +33,7 @@ describe( 'AmiEstimator', () => {
 
   it( 'Warns about missing input', () => {
     const { getByText, getByRole } = render(
-      <MemoryRouter initialEntries={['/ami-estimator']} initialIndex={0}>
+      <MemoryRouter initialEntries={['/metrolist/ami-estimator']} initialIndex={0}>
         <Routes />
       </MemoryRouter>,
     );
@@ -51,7 +51,7 @@ describe( 'AmiEstimator', () => {
     const {
       getByText, getByLabelText, queryByTestId, getByPlaceholderText,
     } = render(
-      <MemoryRouter initialEntries={['/ami-estimator']} initialIndex={0}>
+      <MemoryRouter initialEntries={['/metrolist/ami-estimator']} initialIndex={0}>
         <Routes />
       </MemoryRouter>,
     );

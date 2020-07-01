@@ -8,15 +8,14 @@ import Button from '@components/Button';
 import Stack from '@components/Stack';
 
 import { updatePageTitle, isOnGoogleTranslate } from '@util/a11y-seo';
-import isDev, { isLocalDev } from '@util/dev';
+import { getAmiApiEndpoint } from '@util/dev';
 import { hasOwnProperty } from '@util/objects';
 
 import InputSummary from '../_AmiEstimatorInputSummary';
 
 import './AmiEstimatorResult.scss';
 
-const apiDomain = ( isLocalDev() ? 'https://d8-ci.boston.gov' : '' );
-const apiEndpoint = `${apiDomain}/metrolist/api/v1/ami/hud/base?_format=json`;
+const apiEndpoint = getAmiApiEndpoint();
 
 function get100percentAmiDefinition( amiDefinitions ) {
   if ( !Array.isArray( amiDefinitions ) ) {
@@ -129,7 +128,7 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
           //   ];
           // }
 
-          throw new Error( `API returned an invalid response.` );
+          throw new Error( `Metrolist AMI API returned an invalid response.` );
         } else {
           return response.json();
         }

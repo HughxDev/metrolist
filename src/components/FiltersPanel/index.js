@@ -16,7 +16,7 @@ import Column from '@components/Column';
 import './FiltersPanel.scss';
 
 function FiltersPanel( props ) {
-  const isDesktop = window.matchMedia( '(min-width: 992px)' ).matches; // TODO: define breakpoints that line up with the CSS in JS somewhere
+  const isDesktop = globalThis.matchMedia( '(min-width: 992px)' ).matches; // TODO: define breakpoints that line up with the CSS in JS somewhere
   const attributes = { ...props };
   const [isExpanded, setExpanded] = useState( isDesktop );
   // const [filters, setFilters] = useState( props.filters );
@@ -68,7 +68,7 @@ function FiltersPanel( props ) {
   useEffect( props.updateDrawerHeight );
   // useEffect( updateOwnHeight );
 
-  window.addEventListener( 'resize', ( /* event */ ) => {
+  globalThis.addEventListener( 'resize', ( /* event */ ) => {
     if ( !props.updatingDrawerHeight ) {
       props.setUpdatingDrawerHeight( true );
       props.drawerRef.current.style.height = '';
@@ -110,6 +110,7 @@ function FiltersPanel( props ) {
 
   const isExpandedIndicator = ( isExpanded ? '⌃' : '⌄' );
   const ariaLabel = `Filter Listings ${isExpandedIndicator}`;
+  const rentalCount = listingCounts.offer.rent;
 
   return (
     <section
@@ -158,8 +159,8 @@ function FiltersPanel( props ) {
                   criterion="offer"
                   value="rent"
                   checked={ offer.rent }
-                  aria-label="For Rent (9)"
-                >{ `For Rent (${listingCounts.offer.rent})` }</Filter>
+                  aria-label={ `For Rent (${rentalCount})` }
+                >{ `For Rent (${rentalCount})` }</Filter>
               </Column>
               <Column width="1/2">
                 <Filter type="checkbox-button" criterion="offer" value="sale" checked={ offer.sale }>{ `For Sale (${listingCounts.offer.sale})` }</Filter>
