@@ -13,7 +13,7 @@ export function isLocalDev() {
 }
 
 export function getApiDomain() {
-  return ( isLocalDev() ? 'https://d8-ci.boston.gov' : '' );
+  return ( ( isDev() || isLocalDev() ) ? 'https://d8-dev.boston.gov' : '' );
 }
 
 export function getDevelopmentsApiEndpoint() {
