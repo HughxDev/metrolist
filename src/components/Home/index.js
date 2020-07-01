@@ -8,11 +8,10 @@ import Button from '@components/Button';
 import Stack from '@components/Stack';
 import Row from '@components/Row';
 
-// import { capitalize } from '@util/strings';
-import { date, dateTime } from '@util/datetime';
 import { homeObject } from '@util/validation';
 import { generateRandomDomId } from '@util/strings';
-import { isLocalDev } from '@util/dev';
+import { isLiveDev } from '@util/dev';
+import { isOnGoogleTranslate, copyGoogleTranslateParametersToNewUrl } from '@util/a11y-seo';
 
 import './Home.scss';
 import { capitalCase } from 'change-case';
@@ -193,7 +192,24 @@ function Home( props ) {
     }
   }
 
-  const baseUrl = ( isLocalDev() ? 'https://d8-ci.boston.gov' : '' );
+  const isBeingTranslated = isOnGoogleTranslate();
+  let baseUrl;
+
+  if ( isBeingTranslated ) {
+    baseUrl = document.querySelector( 'base' ).getAttribute( 'href' ).replace( /\/metrolist\/.*/, '' );
+
+    if ( isLiveDev( baseUrl ) ) {
+      baseUrl = 'https://d8-dev.boston.gov';
+    }
+  } else if ( isLiveDev() ) {
+    baseUrl = 'https://d8-dev.boston.gov';
+  } else {
+    baseUrl = globalThis.location.origin;
+  }
+
+  const relativePropertyPageUrl = `/metrolist/search/housing/${slug}/${serializeFiltersToUrlParams( filters )}`;
+  const absolutePropertyPageUrl = `${baseUrl}${relativePropertyPageUrl}`;
+  const propertyPageUrl = ( isBeingTranslated ? copyGoogleTranslateParametersToNewUrl( absolutePropertyPageUrl ) : absolutePropertyPageUrl );
 
   return (
     <article className="ml-home">
@@ -236,7 +252,8 @@ function Home( props ) {
             as="link"
             className="ml-home-footer__more-info-link"
             variant="primary"
-            href={ `${baseUrl}/metrolist/search/housing/${slug}/${serializeFiltersToUrlParams( filters )}` }
+            href={ propertyPageUrl }
+            target={ isBeingTranslated ? '_blank' : undefined }
             aria-label={ `More info about ${title}` }
           >More info</Button>
         </Row>

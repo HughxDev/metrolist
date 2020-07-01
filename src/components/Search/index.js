@@ -12,7 +12,8 @@ import Callout from '@components/Callout';
 import Icon from '@components/Icon';
 
 import { homeObject, filtersObject } from '@util/validation';
-import { getDevelopmentsApiEndpoint } from '@util/dev';
+import isDev, { isLocalDev, getDevelopmentsApiEndpoint } from '@util/dev';
+import { isOnGoogleTranslate, copyGoogleTranslateParametersToNewUrl } from '@util/a11y-seo';
 
 import './Search.scss';
 import 'whatwg-fetch';
@@ -574,9 +575,21 @@ function Search( props ) {
       handleFilterChange={ handleFilterChange }
     />
   );
+
+  const isBeingTranslated = isOnGoogleTranslate();
+  const baseUrl = ( isBeingTranslated ? document.querySelector( 'base' ).getAttribute( 'href' ).replace( /\/metrolist\/.*/, '' ) : globalThis.location.origin );
+  const relativeAmiEstimatorUrl = '/metrolist/ami-estimator';
+  const absoluteAmiEstimatorUrl = `${baseUrl}${relativeAmiEstimatorUrl}`;
+  const amiEstimatorUrl = ( isBeingTranslated ? copyGoogleTranslateParametersToNewUrl( absoluteAmiEstimatorUrl ) : relativeAmiEstimatorUrl );
+
   const CalloutUi = (
     <Inset key="ami-estimator-callout" className="filters-panel__callout-container" until="large">
-      <Callout className={ `${supportsSvg ? 'ml-callout--icon-visible ' : ''}filters-panel__callout` } as="a" href="/metrolist/ami-estimator/">
+      <Callout
+        className={ `${supportsSvg ? 'ml-callout--icon-visible ' : ''}filters-panel__callout` }
+        as="a"
+        href={ amiEstimatorUrl }
+        target={ isBeingTranslated ? '_blank' : undefined }
+      >
         <Callout.Heading as="span">Use our AMI Estimator to find homes that match your income</Callout.Heading>
         <Callout.Icon>
           <svg

@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import Button from '@components/Button';
 import Stack from '@components/Stack';
 
-import { updatePageTitle, isOnGoogleTranslate } from '@util/a11y-seo';
+import { updatePageTitle, isOnGoogleTranslate, copyGoogleTranslateParametersToNewUrl } from '@util/a11y-seo';
 import { getAmiApiEndpoint } from '@util/dev';
 import { hasOwnProperty } from '@util/objects';
 
@@ -151,21 +151,9 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
     localStorage.setItem( 'amiRecommendation', amiRecommendation );
   }, [amiEstimation] );
 
-  let metrolistSearchUrl = '/metrolist/search';
   const isBeingTranslated = isOnGoogleTranslate();
-
-  if ( isBeingTranslated ) {
-    const metrolistGoogleTranslateUrl = localStorage.getItem( 'metrolistGoogleTranslateUrl' );
-
-    if ( metrolistGoogleTranslateUrl ) {
-      metrolistSearchUrl = metrolistGoogleTranslateUrl.replace(
-        /([a-z]+=https?:\/\/[^/]+)(\/metrolist\/.*)/i,
-        `$1${metrolistSearchUrl}`,
-      );
-    } else {
-      console.error( 'Could not find `metrolistGoogleTranslateUrl` in localStorage' );
-    }
-  }
+  const metrolistSearchPath = '/metrolist/search';
+  const metrolistSearchUrl = ( isBeingTranslated ? copyGoogleTranslateParametersToNewUrl( metrolistSearchPath ) : metrolistSearchPath );
 
   return (
     <div ref={ selfRef } className={ `ml-ami-estimator__result ml-ami-estimator__prompt${props.className ? ` ${props.className}` : ''}` } data-testid="ml-ami-estimator__result">

@@ -32,6 +32,28 @@ export function isOnGoogleTranslate() {
   );
 }
 
+export function copyGoogleTranslateParametersToNewUrl( url ) {
+  let newUrl = '';
+  const isBeingTranslated = isOnGoogleTranslate();
+
+  if ( isBeingTranslated ) {
+    const metrolistGoogleTranslateUrl = localStorage.getItem( 'metrolistGoogleTranslateUrl' );
+
+    if ( metrolistGoogleTranslateUrl ) {
+      newUrl = metrolistGoogleTranslateUrl.replace(
+        /([a-z]+=)(https?:\/\/[^/]+\/metrolist\/.*)/i,
+        `$1${url}`,
+      );
+    } else {
+      console.error( 'Could not find `metrolistGoogleTranslateUrl` in localStorage' );
+    }
+  } else {
+    console.error( 'Google Translate URL not detected (checked for translate.googleusercontent.com, translate.google.com, and /translate_c). Can not copy query parameters to new Google Translate URL.' );
+  }
+
+  return newUrl;
+}
+
 // Fix for Google Translate iframe shenanigans
 // @location - React Router useLocation instance
 export function resolveLocationConsideringGoogleTranslate() {

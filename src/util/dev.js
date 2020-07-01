@@ -1,10 +1,19 @@
-export default function isDev() {
-  return ( globalThis.location.hostname !== 'boston.gov' );
+export function isProd( hostname = globalThis.location.hostname ) {
+  return (
+    ( hostname === 'wwww.boston.gov' )
+    || ( hostname === 'boston.gov' )
+  );
 }
 
-export function isLocalDev() {
-  const { hostname } = globalThis.location;
+export default function isDev() {
+  return !isProd();
+}
 
+export function isLiveDev( urlOrDomain = globalThis.location.hostname ) {
+  return /^(?:https?:\/\/)?metrolist\.netlify\.app/.test( urlOrDomain );
+}
+
+export function isLocalDev( hostname = globalThis.location.hostname ) {
   return (
     ( hostname === 'localhost' )
     || ( hostname === '127.0.0.1' )
