@@ -8,7 +8,7 @@ import Button from '@components/Button';
 import Stack from '@components/Stack';
 
 import { updatePageTitle, isOnGoogleTranslate, copyGoogleTranslateParametersToNewUrl } from '@util/a11y-seo';
-import { getAmiApiEndpoint } from '@util/dev';
+import isDev, { getAmiApiEndpoint } from '@util/dev';
 import { hasOwnProperty } from '@util/objects';
 
 import InputSummary from '../_AmiEstimatorInputSummary';
@@ -91,6 +91,8 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
   const selfRef = ( ref || useRef() );
   const [amiEstimation, setAmiEstimation] = useState( 0 );
   let amiRecommendation = recommendAmi( amiEstimation );
+  const isBeingTranslated = isOnGoogleTranslate();
+
   localStorage.setItem( 'amiRecommendation', amiRecommendation );
 
   useEffect( () => {
@@ -107,7 +109,7 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
         },
       },
     ) // TODO: CORS
-      .then( async ( response ) => {
+      .then( ( response ) => {
         // console.log( {
         //   "responseBody": response.body,
         // } );
@@ -151,7 +153,6 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
     localStorage.setItem( 'amiRecommendation', amiRecommendation );
   }, [amiEstimation] );
 
-  const isBeingTranslated = isOnGoogleTranslate();
   const metrolistSearchPath = '/metrolist/search';
   const metrolistSearchUrl = ( isBeingTranslated ? copyGoogleTranslateParametersToNewUrl( metrolistSearchPath ) : metrolistSearchPath );
 
