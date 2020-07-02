@@ -81,9 +81,9 @@
   "scripts": {
     "watch": "[ -z \"$(ipconfig getifaddr en6)\" ] && export LAN_IP_ADDRESS=\"$(ipconfig getifaddr en0)\" || export LAN_IP_ADDRESS=\"$(ipconfig getifaddr en6)\"; webpack-dev-server --host $LAN_IP_ADDRESS",
     "start": "[ -z \"$(ipconfig getifaddr en6)\" ] && export LAN_IP_ADDRESS=\"$(ipconfig getifaddr en0)\" || export LAN_IP_ADDRESS=\"$(ipconfig getifaddr en6)\"; webpack-dev-server --host $LAN_IP_ADDRESS --open",
-    "build": "yarn sync-icons && rm -rf dist/ && webpack --config webpack.production.js",
-    "build:dev": "yarn sync-icons && rm -rf dist/ && webpack --config webpack.config.js && cp _redirects dist/",
-    "build:stage": "yarn sync-icons && rm -rf dist/ && webpack --config webpack.staging.js",
+    "build": "yarn sync:icons && yarn sync:ami prod && rm -rf dist/ && webpack --config webpack.production.js",
+    "build:dev": "yarn sync:icons && yarn sync:ami dev && rm -rf dist/ && webpack --config webpack.config.js && cp _redirects dist/",
+    "build:stage": "yarn sync:icons && yarn sync:ami dev && rm -rf dist/ && webpack --config webpack.staging.js",
     "copy:drupal": "rm -rf ../boston.gov-d8/docroot/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/* && cp -r dist/ ../boston.gov-d8/docroot/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/",
     "clean:drupal": "rm -rf ../boston.gov-d8/docroot/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/images/",
     "build:prod": "yarn build && yarn copy:drupal && yarn clean:drupal",
@@ -93,7 +93,8 @@
     "test:coverage": "./node_modules/jest-cli/bin/jest.js --verbose --watch --collect-coverage src/components/AmiEstimator",
     "eject": "echo 'not CRA'",
     "component": "node _scripts/component.js",
-    "sync-icons": "node _scripts/sync-icons.js",
+    "sync:icons": "node _scripts/sync-icons.js",
+    "sync:ami": "node _scripts/sync-ami.js",
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public"
   },

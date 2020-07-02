@@ -12,12 +12,13 @@ import isDev, { getAmiApiEndpoint } from '@util/dev';
 import { hasOwnProperty } from '@util/objects';
 
 import InputSummary from '../_AmiEstimatorInputSummary';
+import amiDefinitions from '../ami-definitions.json';
 
 import './AmiEstimatorResult.scss';
 
 const apiEndpoint = getAmiApiEndpoint();
 
-function get100percentAmiDefinition( amiDefinitions ) {
+function get100percentAmiDefinition() {
   if ( !Array.isArray( amiDefinitions ) ) {
     return false;
   }
@@ -100,52 +101,12 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
     props.setStep( props.step );
     props.adjustContainerHeight( selfRef );
 
-    fetch(
-      apiEndpoint,
-      {
-        "mode": "cors",
-        "headers": {
-          "Content-Type": "application/json",
-        },
-      },
-    ) // TODO: CORS
-      .then( ( response ) => {
-        // console.log( {
-        //   "responseBody": response.body,
-        // } );
-        if ( !response.body ) {
-          // if ( isDev() ) {
-          //   console.warn( 'API returned an invalid response; falling back to test data since we’re in a development environment.' );
-
-          //   return [
-          //     {
-          //       "ami": 100,
-          //       "1": 79350,
-          //       "2": 90650,
-          //       "3": 102000,
-          //       "4": 113300,
-          //       "5": 122400,
-          //       "6": 131450,
-          //     },
-          //   ];
-          // }
-
-          throw new Error( `Metrolist AMI API returned an invalid response.` );
-        } else {
-          return response.json();
-        }
-      } )
-      .then( ( apiAmiDefinitions ) => {
-        setAmiEstimation(
-          estimateAmi( {
-            "amiDefinition": get100percentAmiDefinition( apiAmiDefinitions ),
-            ...props.formData,
-          } ),
-        );
-      } )
-      .catch( ( error ) => {
-        console.error( error );
-      } );
+    setAmiEstimation(
+      estimateAmi( {
+        "amiDefinition": get100percentAmiDefinition(),
+        ...props.formData,
+      } ),
+    );
   }, [] );
 
   useEffect( () => {
