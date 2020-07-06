@@ -9,10 +9,9 @@ import Row from '@components/Row';
 import Inset from '@components/Inset';
 import Stack from '@components/Stack';
 import Callout from '@components/Callout';
-import Icon from '@components/Icon';
 
 import { homeObject, filtersObject } from '@util/validation';
-import isDev, { isLocalDev, getDevelopmentsApiEndpoint } from '@util/dev';
+import { getDevelopmentsApiEndpoint } from '@util/dev';
 import { isOnGoogleTranslate, copyGoogleTranslateParametersToNewUrl } from '@util/a11y-seo';
 
 import './Search.scss';
