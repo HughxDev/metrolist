@@ -90,7 +90,7 @@
     "jest": "./node_modules/jest-cli/bin/jest.js",
     "test": "./node_modules/jest-cli/bin/jest.js --verbose --collect-coverage",
     "test:watch": "./node_modules/jest-cli/bin/jest.js --verbose --watch src/components/Search src/components/AmiEstimator",
-    "test:coverage": "./node_modules/jest-cli/bin/jest.js --verbose --watch --collect-coverage src/components/AmiEstimator",
+    "test:coverage": "./node_modules/jest-cli/bin/jest.js --verbose --watch --collect-coverage src/components/Search src/components/AmiEstimator",
     "eject": "echo 'not CRA'",
     "component": "node _scripts/component.js",
     "sync:icons": "node _scripts/sync-icons.js",

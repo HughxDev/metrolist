@@ -12,6 +12,7 @@ const FormErrorMessage = forwardRef( ( props, ref ) => (
       role="alert"
       aria-live="assertive"
       // hidden
+      data-testid="ml-form-error-message"
     >{ props.children }</div>
 ) );
 

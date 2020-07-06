@@ -1,3 +1,4 @@
+import '@babel/polyfill';
 import '__mocks__/matchMedia';
 import React from 'react';
 import {
@@ -32,19 +33,20 @@ describe( 'AmiEstimator', () => {
   } );
 
   it( 'Warns about missing input', () => {
-    const { getByText, getByRole } = render(
+    const { getByText, getByTestId } = render(
       <MemoryRouter initialEntries={['/metrolist/ami-estimator']} initialIndex={0}>
         <Routes />
       </MemoryRouter>,
     );
     const nextButton = getByText( 'Next' );
-    const errorMessage = getByRole( 'alert' );
 
     act( () => {
       fireEvent.click( nextButton );
     } );
 
-    expect( errorMessage ).toHaveTextContent( 'There were errors in your submission.' );
+    const errorMessage = getByTestId( 'ml-form-error-message' );
+
+    expect( errorMessage ).toHaveTextContent( 'Please specify how many people live in your household.' );
   } );
 
   it( 'Navigates between steps', async () => {
