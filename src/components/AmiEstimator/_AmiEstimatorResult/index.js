@@ -1,22 +1,18 @@
 import React, {
   useEffect, useRef, useState, forwardRef,
 } from 'react';
-import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import Button from '@components/Button';
 import Stack from '@components/Stack';
 
 import { updatePageTitle, isOnGoogleTranslate, copyGoogleTranslateParametersToNewUrl } from '@util/a11y-seo';
-import isDev, { getAmiApiEndpoint } from '@util/dev';
 import { hasOwnProperty } from '@util/objects';
 
 import InputSummary from '../_AmiEstimatorInputSummary';
 import amiDefinitions from '../ami-definitions.json';
 
 import './AmiEstimatorResult.scss';
-
-const apiEndpoint = getAmiApiEndpoint();
 
 function get100percentAmiDefinition() {
   if ( !Array.isArray( amiDefinitions ) ) {
@@ -25,8 +21,6 @@ function get100percentAmiDefinition() {
 
   for ( let index = 0; index < amiDefinitions.length; index++ ) {
     const amiEstimation = amiDefinitions[index];
-
-    // console.log( { amiEstimation } );
 
     if ( amiEstimation && hasOwnProperty( amiEstimation, 'ami' ) && ( amiEstimation.ami === 100 ) ) {
       return amiEstimation;
