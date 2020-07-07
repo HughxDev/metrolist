@@ -80,7 +80,7 @@ Avoid parent selectors when constructing BEM classes. This allows the full selec
 .ml-block {
   &__element {} // Bad
 }
-.ml__block {}
+.ml-block {}
 .ml-block__element {} // Good
 ```
 
@@ -107,7 +107,7 @@ Don’t declare margins directly on components, only in wrappers.
 
 ### Postprocessing
 
-https://www.rucksackcss.org/
+[Rucksack](https://www.rucksackcss.org/) is installed to enable the same CSS helper functions (such as `font-size: responsive 16px 24px`) that are used on Patterns.
 
 ## Build Process
 
