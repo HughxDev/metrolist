@@ -56,6 +56,10 @@ function getNoFiltersApplied() {
       "lowerBound": 0,
       "upperBound": 200,
     },
+    "rentalPrice": {
+      "lowerBound": 0,
+      "upperBound": 0,
+    },
   };
 }
 // import testData from './test-data.json';
@@ -110,31 +114,101 @@ describe( 'Search', () => {
     const studioUnit = {
       "id": "studio",
       "bedrooms": 0,
+      "price": 900,
+      "priceRate": "monthly",
     };
     const oneBedroomUnit = {
       "id": "1br",
       "bedrooms": 1,
+      "price": 1000,
+      "priceRate": "monthly",
     };
     const twoBedroomUnit = {
       "id": "2br",
       "bedrooms": 2,
+      "price": 2000,
+      "priceRate": "monthly",
     };
     const threeBedroomUnit = {
       "id": "3br",
       "bedrooms": 3,
+      "price": 3000,
+      "priceRate": "monthly",
     };
     const fourBedroomUnit = {
       "id": "4br",
       "bedrooms": 4,
+      "price": 4000,
+      "priceRate": "monthly",
     };
     const aboveFourBedroomUnit = {
       "id": "4+br",
       "bedrooms": 10,
+      "price": 5000,
+      "priceRate": "monthly",
     };
     let noFiltersApplied = getNoFiltersApplied();
 
     beforeEach( () => {
       noFiltersApplied = getNoFiltersApplied();
+    } );
+
+    describe( 'Rental Price', () => {
+      const homeWithUnitWithinPriceRange = {
+        ...minimalHomeDefinition,
+        "id": generateFakeId(),
+        "title": "Affordable",
+        "offer": "rent",
+        "units": [
+          threeBedroomUnit,
+        ],
+      };
+      const homeWithUnitOutsidePriceRange = {
+        ...minimalHomeDefinition,
+        "id": generateFakeId(),
+        "title": "Unaffordable",
+        "offer": "rent",
+        "units": [
+          aboveFourBedroomUnit,
+        ],
+      };
+
+      it( 'Filters results to only homes with units in the specified price range', () => {
+        const homesToFilter = [homeWithUnitWithinPriceRange, homeWithUnitOutsidePriceRange];
+        const { queryByText, getByTestId } = render(
+          <MemoryRouter initialEntries={['/metrolist/search']} initialIndex={0}>
+            <Search
+              homes={ homesToFilter }
+              filters={
+                {
+                  ...Search.defaultProps.filters,
+                  "rentalPrice": {
+                    "lowerBound": 1000,
+                    "upperBound": 4000,
+                  },
+                }
+              }
+            />
+          </MemoryRouter>,
+        );
+
+        const lowerBoundInput = getByTestId( 'rentalPriceLowerBound' );
+        const upperBoundInput = getByTestId( 'rentalPriceUpperBound' );
+
+        const fourThousandPerMonth = () => queryByText( homeWithUnitWithinPriceRange.title );
+        const fiveThousandPerMonth = () => queryByText( homeWithUnitOutsidePriceRange.title );
+
+        expect( fourThousandPerMonth() ).toBeInTheDocument();
+        expect( fiveThousandPerMonth() ).not.toBeInTheDocument();
+
+        act( () => {
+          fireEvent.change( lowerBoundInput, { "target": { "value": "4000" } } );
+          fireEvent.change( upperBoundInput, { "target": { "value": "5000" } } );
+        } );
+
+        expect( fourThousandPerMonth() ).not.toBeInTheDocument();
+        expect( fiveThousandPerMonth() ).toBeInTheDocument();
+      } );
     } );
 
     describe( 'Offer', () => {

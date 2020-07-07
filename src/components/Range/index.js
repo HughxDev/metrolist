@@ -9,6 +9,15 @@ const isIE = /* @cc_on!@ */false || !!document.documentMode;
 const isEdge = ( globalThis.navigator.userAgent.indexOf( "Edge" ) > -1 ); // Excludes Chromium-based Edge which reports “Edg” without the e
 const isIEorEdge = ( isIE || isEdge );
 
+// NOTE: Normally we would do something like this to ensure multiple Ranges
+// do not have conflicting HTML IDs, but for some reason it completely breaks
+// the synchronization between the fill and the thumbs to have the randomDomId number on the end.
+// It also breaks when completely removing the for/id relationship between the label and input.
+// ------
+// const randomDomId = generateRandomDomId();
+// const lowerBoundId = `lower-bound-${randomDomId}`;
+// const upperBoundId = `upper-bound-${randomDomId}`;
+
 function Range( props ) {
   const { min, max } = props;
   const [lowerBound, setLowerBound] = useState( props.lowerBound || min );
@@ -99,6 +108,7 @@ function Range( props ) {
             max={ max }
             step={ props.step }
             onChange={ handleInput }
+            data-testid={ `${props.criterion}LowerBound` }
           />
 
           <label
@@ -115,6 +125,7 @@ function Range( props ) {
             max={ max }
             step={ props.step }
             onChange={ handleInput }
+            data-testid={ `${props.criterion}UpperBound` }
           />
         </RangeMultiInput>
       </Stack>

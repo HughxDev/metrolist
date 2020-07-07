@@ -200,9 +200,15 @@ function Search( props ) {
           )
         );
 
-        let matchesRentalPrice = true;
+        let matchesRentalPrice;
 
-        if ( ( home.offer === 'rent' ) || ( home.type === 'apt' ) ) {
+        if (
+          !( ( filtersToApply.rentalPrice.lowerBound === 0 ) && ( filtersToApply.rentalPrice.upperBound === 0 ) )
+          && (
+            ( home.offer === 'rent' )
+            || ( home.type === 'apt' )
+          )
+        ) {
           let rentalPriceLowerBound;
           let rentalPriceUpperBound;
 
@@ -221,6 +227,8 @@ function Search( props ) {
           ) );
 
           matchesRentalPrice = !!unitsWithinPriceRange.length;
+        } else {
+          matchesRentalPrice = true;
         }
 
         const dedupedAmi = new Set( home.units.map( ( unit ) => unit.amiQualification ) );
@@ -437,8 +445,6 @@ function Search( props ) {
           // if ( existingFilters.rentalPrice.upperBound ) {
           //   newFilters.rentalPrice.upperBound = existingFilters.rentalPrice.upperBound;
           // }
-
-          console.log( 'newFilters', newFilters );
 
           setFilters( newFilters );
           localStorage.setItem( 'filters', JSON.stringify( newFilters ) );
