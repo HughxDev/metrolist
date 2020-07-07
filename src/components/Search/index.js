@@ -152,6 +152,7 @@ function Search( props ) {
             && ( home.offer === 'sale' )
           )
         );
+
         let matchesBroadLocation = (
           (
             ( filtersToApply.location.city.boston !== false )
@@ -162,6 +163,7 @@ function Search( props ) {
             && ( home.cardinalDirection !== null )
           )
         );
+
         let matchesNarrowLocation = (
           ( home.cardinalDirection === null )
             ? (
@@ -173,6 +175,7 @@ function Search( props ) {
               && ( filtersToApply.location.cardinalDirection[home.cardinalDirection] === true )
             )
         );
+
         const unitBedroomSizes = home.units.map( ( unit ) => unit.bedrooms ).sort();
         let matchesBedrooms = (
           (
@@ -196,6 +199,30 @@ function Search( props ) {
             && ( unitBedroomSizes[unitBedroomSizes.length - 1] >= 4 )
           )
         );
+
+        let matchesRentalPrice = true;
+
+        if ( ( home.offer === 'rent' ) || ( home.type === 'apt' ) ) {
+          let rentalPriceLowerBound;
+          let rentalPriceUpperBound;
+
+          if ( filtersToApply.rentalPrice.lowerBound > filtersToApply.rentalPrice.upperBound ) {
+            rentalPriceLowerBound = filtersToApply.rentalPrice.upperBound;
+            rentalPriceUpperBound = filtersToApply.rentalPrice.lowerBound;
+          } else {
+            rentalPriceLowerBound = filtersToApply.rentalPrice.lowerBound;
+            rentalPriceUpperBound = filtersToApply.rentalPrice.upperBound;
+          }
+
+          const unitsWithinPriceRange = home.units.filter( ( unit ) => (
+            // ( unit.priceRate === 'monthly' )
+            ( unit.price >= rentalPriceLowerBound )
+              && ( unit.price <= rentalPriceUpperBound )
+          ) );
+
+          matchesRentalPrice = !!unitsWithinPriceRange.length;
+        }
+
         const dedupedAmi = new Set( home.units.map( ( unit ) => unit.amiQualification ) );
         const unitAmiQualifications = Array.from( dedupedAmi );
         let matchesAmiQualification;
@@ -251,6 +278,7 @@ function Search( props ) {
           && matchesNarrowLocation
           && matchesBedrooms
           && matchesAmiQualification
+          && matchesRentalPrice
         );
       } )
       .map( ( home ) => {
