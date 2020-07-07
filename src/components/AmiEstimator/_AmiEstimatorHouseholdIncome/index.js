@@ -13,6 +13,7 @@ import FormErrorMessage from '@components/FormErrorMessage';
 import Required from '@components/Required';
 
 import { updatePageTitle } from '@util/a11y-seo';
+import { formatIncome } from '@util/strings';
 
 import './AmiEstimatorHouseholdIncome.scss';
 
@@ -22,42 +23,6 @@ const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
   // const incomeOutputRef = useRef();
   const defaultIncomeRate = 'Monthly';
   const isRequired = true;
-
-  function pad( num, size ) {
-    let s = `${num}`;
-    while ( s.length < size ) s = `0${s}`;
-    return s;
-  }
-
-  function formatIncome( amount ) {
-    // Sanitize input
-    amount = amount.trim().replace( /[^0-9]+/g, '' );
-    let formatted;
-
-    // If less than or equal to two digits long, attribute the digits to cents
-    if ( amount.length <= 2 ) {
-      formatted = `$0.${pad( amount, 2 )}`;
-    // If greater than two digits long, attribute the remaining digits to dollars
-    } else {
-      const dollars = amount.substring( 0, amount.length - 2 );
-      const dollarAmount = parseInt( dollars, 10 );
-      let formattedDollars;
-
-      if ( dollarAmount >= 1000 ) {
-        // Add thousands separators
-        // Via: https://blog.abelotech.com/posts/number-currency-formatting-javascript/
-        formattedDollars = dollarAmount.toString().replace( /(\d)(?=(\d{3})+(?!\d))/g, '$1,' );
-      } else {
-        formattedDollars = dollarAmount.toString();
-      }
-
-      const cents = amount.substr( -2 );
-
-      formatted = `$${formattedDollars}.${cents}`;
-    }
-
-    return formatted;
-  }
 
   function setIncomeOutput( newValue ) {
     if ( newValue === '$0.00' ) {

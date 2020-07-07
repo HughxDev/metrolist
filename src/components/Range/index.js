@@ -3,17 +3,37 @@ import PropTypes from 'prop-types';
 
 import Stack from '@components/Stack';
 
+import { formatIncome } from '@util/strings';
+
 const isIE = /* @cc_on!@ */false || !!document.documentMode;
 const isEdge = ( globalThis.navigator.userAgent.indexOf( "Edge" ) > -1 ); // Excludes Chromium-based Edge which reports “Edg” without the e
 const isIEorEdge = ( isIE || isEdge );
 
 function Range( props ) {
-  const min = ( props.min || 0 );
-  const max = ( props.max || 100 );
-  const amiRecommendation = parseInt( localStorage.getItem( 'amiRecommendation' ), 10 );
-  const [lowerBound, setLowerBound] = useState( amiRecommendation || props.lowerBound || props.min );
+  const { min, max } = props;
+  const [lowerBound, setLowerBound] = useState( props.lowerBound || min );
   const [upperBound, setUpperBound] = useState( props.upperBound || max );
   const [outOfBounds, setOutOfBounds] = useState( false );
+
+  const formatValue = ( value ) => {
+    let formattedValue;
+
+    switch ( props.valueFormat ) {
+      case '%':
+        formattedValue = `${value}%`;
+        break;
+
+      case '$':
+        formattedValue = formatIncome( value * 100, false );
+        break;
+
+      default:
+        formattedValue = value;
+    }
+
+    return formattedValue;
+  };
+
   const handleInput = ( ( event ) => {
     const $input = event.target;
 
@@ -53,11 +73,12 @@ function Range( props ) {
       <Stack space="1">
         <p>
           <span className={ `ml-range__review${outOfBounds ? ` ml-range__review--inverted` : ''}` }>
-            <output className="ml-range__output" htmlFor="lower-bound">{ `${lowerBound}%` }</output>
+            <output className="ml-range__output" htmlFor="lower-bound">{ formatValue( lowerBound ) }</output>
             <span className="en-dash">–</span>
-            <output className="ml-range__output" htmlFor="upper-bound">{ `${upperBound}%` }</output>
+            <output className="ml-range__output" htmlFor="upper-bound">{ formatValue( upperBound ) }</output>
           </span>
-          &nbsp;<abbr className="ml-range__review-unit">AMI</abbr></p>
+          { props.valueAppend && props.valueAppend() }
+        </p>
         <RangeMultiInput
           space={ isIEorEdge ? '1.5' : undefined }
           className="ml-range__multi-input"
@@ -76,6 +97,7 @@ function Range( props ) {
             min={ min }
             defaultValue={ lowerBound }
             max={ max }
+            step={ props.step }
             onChange={ handleInput }
           />
 
@@ -91,6 +113,7 @@ function Range( props ) {
             min={ min }
             defaultValue={ upperBound }
             max={ max }
+            step={ props.step }
             onChange={ handleInput }
           />
         </RangeMultiInput>
@@ -106,9 +129,12 @@ Range.propTypes = {
   "className": PropTypes.string,
   "criterion": PropTypes.string,
   "min": PropTypes.number,
+  "step": PropTypes.number,
   "max": PropTypes.number,
   "lowerBound": PropTypes.number,
   "upperBound": PropTypes.number,
+  "valueFormat": PropTypes.oneOf( ['%', '$'] ),
+  "valueAppend": PropTypes.func,
 };
 
 export default Range;

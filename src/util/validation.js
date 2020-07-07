@@ -53,4 +53,7 @@ export const filtersObject = PropTypes.shape( {
     "lowerBound": PropTypes.number,
     "upperBound": PropTypes.number,
   } ),
+  "rentalPrice": PropTypes.shape( {
+    "upperBound": PropTypes.number,
+  } ),
 } );

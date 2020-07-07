@@ -89,6 +89,7 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
   const isBeingTranslated = isOnGoogleTranslate();
 
   localStorage.setItem( 'amiRecommendation', amiRecommendation );
+  localStorage.setItem( 'useAmiRecommendationAsLowerBound', 'true' );
 
   useEffect( () => {
     updatePageTitle( 'Result', 'AMI Estimator' );

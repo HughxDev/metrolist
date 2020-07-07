@@ -7,12 +7,12 @@ import FiltersPanel from '@components/FiltersPanel';
 import ResultsPanel from '@components/ResultsPanel';
 import Row from '@components/Row';
 import Inset from '@components/Inset';
-import Stack from '@components/Stack';
 import Callout from '@components/Callout';
 
 import { homeObject, filtersObject } from '@util/validation';
 import { getDevelopmentsApiEndpoint } from '@util/dev';
 import { isOnGoogleTranslate, copyGoogleTranslateParametersToNewUrl } from '@util/a11y-seo';
+import Stack from '@components/Stack';
 
 import './Search.scss';
 import 'whatwg-fetch';
@@ -87,6 +87,12 @@ function Search( props ) {
           "south": 0,
         },
       },
+      // Technically not a count, but better to just log here than
+      // loop through the entire home array again in a separate function
+      "rentalPrice": {
+        "lowerBound": 0,
+        "upperBound": 0,
+      },
     };
 
     homes.forEach( ( home ) => {
@@ -115,6 +121,18 @@ function Search( props ) {
         }
       } else if ( home.cardinalDirection ) {
         listingCounts.location.cardinalDirection[home.cardinalDirection]++;
+      }
+
+      if ( Array.isArray( home.units ) ) {
+        home.units.forEach( ( unit ) => {
+          if ( home.offer === 'rent' ) {
+            // Not extracting lowest rent since we can just default to $0 and let the user adjust
+
+            if ( unit.price > listingCounts.rentalPrice.upperBound ) {
+              listingCounts.rentalPrice.upperBound = unit.price;
+            }
+          }
+        } );
       }
     } );
 
@@ -384,6 +402,16 @@ function Search( props ) {
             newFilters.location.cardinalDirection[cd] = ( newFilters.location.cardinalDirection[cd] || null );
           } );
 
+          // if ( existingFilters.rentalPrice.lowerBound ) {
+          //   newFilters.rentalPrice.lowerBound = existingFilters.rentalPrice.lowerBound;
+          // }
+
+          // if ( existingFilters.rentalPrice.upperBound ) {
+          //   newFilters.rentalPrice.upperBound = existingFilters.rentalPrice.upperBound;
+          // }
+
+          console.log( 'newFilters', newFilters );
+
           setFilters( newFilters );
           localStorage.setItem( 'filters', JSON.stringify( newFilters ) );
         } )
@@ -466,6 +494,7 @@ function Search( props ) {
 
         switch ( parentCriterion ) { // eslint-disable-line default-case
           case 'amiQualification':
+          case 'rentalPrice':
             isNumeric = true;
             break;
         }
@@ -659,10 +688,25 @@ Search.propTypes = {
   "className": PropTypes.string,
 };
 
+let savedFilters = localStorage.getItem( 'filters' );
+if ( savedFilters ) {
+  savedFilters = JSON.parse( savedFilters );
+}
+
+let useAmiRecommendationAsLowerBound = localStorage.getItem( 'useAmiRecommendationAsLowerBound' );
+if ( useAmiRecommendationAsLowerBound ) {
+  useAmiRecommendationAsLowerBound = ( useAmiRecommendationAsLowerBound === 'true' );
+
+  if ( useAmiRecommendationAsLowerBound ) {
+    savedFilters.amiQualification.lowerBound = parseInt( localStorage.getItem( 'amiRecommendation' ), 10 );
+    localStorage.setItem( 'useAmiRecommendationAsLowerBound', 'false' );
+  }
+}
+
 Search.defaultProps = {
   "homes": [],
   "amiEstimation": null,
-  "filters": {
+  "filters": savedFilters || {
     "offer": {
       "rent": false,
       "sale": false,
@@ -692,8 +736,12 @@ Search.defaultProps = {
       "4+": false,
     },
     "amiQualification": {
-      "lowerBound": ( parseInt( localStorage.getItem( 'amiRecommendation' ), 10 ) || 0 ),
+      "lowerBound": 0,
       "upperBound": 200,
+    },
+    "rentalPrice": {
+      "lowerBound": 0,
+      "upperBound": 0,
     },
   },
 };

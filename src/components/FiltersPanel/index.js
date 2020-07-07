@@ -8,10 +8,10 @@ import FilterGroup from '@components/FilterGroup';
 import Filter from '@components/Filter';
 // import Callout from '@components/Callout';
 import Icon from '@components/Icon';
-import Stack from '@components/Stack';
 // import Inset from '@components/Inset';
 import Row from '@components/Row';
 import Column from '@components/Column';
+import Stack from '@components/Stack';
 
 import './FiltersPanel.scss';
 
@@ -104,8 +104,8 @@ function FiltersPanel( props ) {
     location,
     bedrooms,
     amiQualification,
+    rentalPrice,
   } = props.filters;
-
   const { listingCounts } = props;
 
   const isExpandedIndicator = ( isExpanded ? '⌃' : '⌄' );
@@ -150,6 +150,24 @@ function FiltersPanel( props ) {
           ref={ props.drawerRef }
           className={ `ml-filters-panel__content${isExpanded ? ' ml-filters-panel__content--expanded' : ''}` }
         >
+          <FilterGroup criterion="rentalPrice">
+            <FilterGroup.Label>Rental Price</FilterGroup.Label>
+            {
+              listingCounts.rentalPrice.upperBound
+              && (
+                <Filter
+                  type="range"
+                  criterion="rentalPrice"
+                  min={ 0 }
+                  step={ 100 }
+                  max={ listingCounts.rentalPrice.upperBound }
+                  lowerBound={ rentalPrice.lowerBound }
+                  upperBound={ rentalPrice.upperBound }
+                  valueFormat="$"
+                />
+              )
+            }
+          </FilterGroup>
           <FilterGroup criterion="offer">
             <FilterGroup.Label>Offer</FilterGroup.Label>
             <Row space="rent-sale" stackAt="large">
@@ -246,6 +264,8 @@ function FiltersPanel( props ) {
                 max={ 200 }
                 lowerBound={ amiQualification.lowerBound }
                 upperBound={ amiQualification.upperBound }
+                valueFormat="%"
+                valueAppend={ () => <>&nbsp;<abbr className="ml-range__review-unit">AMI</abbr></> }
               />
             </div>
           </FilterGroup>
