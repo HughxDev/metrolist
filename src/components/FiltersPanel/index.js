@@ -153,7 +153,8 @@ function FiltersPanel( props ) {
           <FilterGroup criterion="rentalPrice">
             <FilterGroup.Label>Rental Price</FilterGroup.Label>
             {
-              listingCounts.rentalPrice.upperBound
+              rentalPrice
+              && listingCounts.rentalPrice.upperBound
               && (
                 <Filter
                   type="range"
