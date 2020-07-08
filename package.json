@@ -81,7 +81,7 @@
   "scripts": {
     "watch": "[ -z \"$(ipconfig getifaddr en6)\" ] && export LAN_IP_ADDRESS=\"$(ipconfig getifaddr en0)\" || export LAN_IP_ADDRESS=\"$(ipconfig getifaddr en6)\"; webpack-dev-server --host $LAN_IP_ADDRESS",
     "start": "[ -z \"$(ipconfig getifaddr en6)\" ] && export LAN_IP_ADDRESS=\"$(ipconfig getifaddr en0)\" || export LAN_IP_ADDRESS=\"$(ipconfig getifaddr en6)\"; webpack-dev-server --host $LAN_IP_ADDRESS --open",
-    "build": "yarn sync:icons && yarn sync:ami prod && rm -rf dist/ && webpack --config webpack.production.js",
+    "build": "yarn sync:icons && yarn sync:ami ci && rm -rf dist/ && webpack --config webpack.production.js",
     "build:dev": "yarn sync:icons && yarn sync:ami dev && rm -rf dist/ && webpack --config webpack.config.js && cp _redirects dist/",
     "build:stage": "yarn sync:icons && yarn sync:ami dev && rm -rf dist/ && webpack --config webpack.staging.js",
     "copy:drupal": "rm -rf ../boston.gov-d8/docroot/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/* && cp -r dist/ ../boston.gov-d8/docroot/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/",
