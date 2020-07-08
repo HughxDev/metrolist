@@ -32,11 +32,11 @@ export function getApiDomain() {
     }
   }
 
-  if ( !devApi ) {
-    devApi = 'https://d8-dev.boston.gov';
+  if ( isLocalDev() && !devApi ) {
+    devApi = 'https://d8-ci.boston.gov';
   }
 
-  return ( ( isDev() || isLocalDev() ) ? devApi : '' );
+  return ( devApi || '' );
 }
 
 export function getDevelopmentsApiEndpoint() {
