@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation, useHistory, Link } from 'react-router-dom';
-import { hasOwnProperty } from '@util/objects';
+import { hasOwnProperty, isPlainObject } from '@util/objects';
 
 import FiltersPanel from '@components/FiltersPanel';
 import ResultsPanel from '@components/ResultsPanel';
@@ -12,6 +12,7 @@ import Callout from '@components/Callout';
 import { homeObject, filtersObject } from '@util/validation';
 import { getDevelopmentsApiEndpoint } from '@util/dev';
 import { isOnGoogleTranslate, copyGoogleTranslateParametersToNewUrl } from '@util/a11y-seo';
+
 import Stack from '@components/Stack';
 
 import './Search.scss';
@@ -715,16 +716,62 @@ function Search( props ) {
   );
 }
 
-Search.propTypes = {
-  "amiEstimation": PropTypes.number,
-  "filters": filtersObject,
-  "homes": PropTypes.arrayOf( homeObject ),
-  "className": PropTypes.string,
+const baseFilters = {
+  "offer": {
+    "rent": false,
+    "sale": false,
+  },
+  "location": {
+    "city": {
+      "boston": false,
+      "beyondBoston": false,
+    },
+    "neighborhood": {
+      // "southBoston": false,
+      // "hydePark": false,
+      // "dorchester": false,
+      // "mattapan": false,
+    },
+    "cardinalDirection": {
+      "west": false,
+      "north": false,
+      "south": false,
+    },
+  },
+  "bedrooms": {
+    "0": false,
+    "1": false,
+    "2": false,
+    "3": false,
+    "4+": false,
+  },
+  "amiQualification": {
+    "lowerBound": 0,
+    "upperBound": 200,
+  },
+  "rentalPrice": {
+    "lowerBound": 0,
+    "upperBound": 0,
+  },
 };
+const baseFilterKeys = Object.keys( baseFilters );
 
 let savedFilters = localStorage.getItem( 'filters' );
 if ( savedFilters ) {
   savedFilters = JSON.parse( savedFilters );
+
+  // Sanitize localStorage values that might arise from testing/old releases
+  if ( isPlainObject( savedFilters ) ) {
+    Object.keys( savedFilters )
+      .filter( ( savedFilterKey ) => baseFilterKeys.indexOf( savedFilterKey ) === -1 )
+      .forEach( ( errantKey ) => {
+        delete savedFilters[errantKey];
+      } );
+  } else {
+    savedFilters = {};
+  }
+} else {
+  savedFilters = {};
 }
 
 let useAmiRecommendationAsLowerBound = localStorage.getItem( 'useAmiRecommendationAsLowerBound' );
@@ -737,47 +784,22 @@ if ( useAmiRecommendationAsLowerBound ) {
   }
 }
 
+Search.propTypes = {
+  "amiEstimation": PropTypes.number,
+  "filters": filtersObject,
+  "homes": PropTypes.arrayOf( homeObject ),
+  "className": PropTypes.string,
+};
+
 Search.defaultProps = {
   "homes": [],
   "amiEstimation": null,
-  "filters": savedFilters || {
-    "offer": {
-      "rent": false,
-      "sale": false,
-    },
-    "location": {
-      "city": {
-        "boston": false,
-        "beyondBoston": false,
-      },
-      "neighborhood": {
-        // "southBoston": false,
-        // "hydePark": false,
-        // "dorchester": false,
-        // "mattapan": false,
-      },
-      "cardinalDirection": {
-        "west": false,
-        "north": false,
-        "south": false,
-      },
-    },
-    "bedrooms": {
-      "0": false,
-      "1": false,
-      "2": false,
-      "3": false,
-      "4+": false,
-    },
-    "amiQualification": {
-      "lowerBound": 0,
-      "upperBound": 200,
-    },
-    "rentalPrice": {
-      "lowerBound": 0,
-      "upperBound": 0,
-    },
+  "filters": {
+    ...baseFilters,
+    ...savedFilters,
   },
 };
+
+localStorage.setItem( 'filters', JSON.stringify( Search.defaultProps.filters ) );
 
 export default Search;
