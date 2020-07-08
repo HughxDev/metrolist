@@ -153,20 +153,23 @@ function FiltersPanel( props ) {
           <FilterGroup criterion="rentalPrice">
             <FilterGroup.Label>Rental Price</FilterGroup.Label>
             {
-              rentalPrice
-              && listingCounts.rentalPrice.upperBound
-              && (
-                <Filter
-                  type="range"
-                  criterion="rentalPrice"
-                  min={ 0 }
-                  step={ 100 }
-                  max={ listingCounts.rentalPrice.upperBound }
-                  lowerBound={ rentalPrice.lowerBound }
-                  upperBound={ rentalPrice.upperBound }
-                  valueFormat="$"
-                />
+              (
+                rentalPrice
+                && listingCounts.rentalPrice.upperBound
+                && (
+                  <Filter
+                    type="range"
+                    criterion="rentalPrice"
+                    min={ 0 }
+                    step={ 100 }
+                    max={ listingCounts.rentalPrice.upperBound }
+                    lowerBound={ rentalPrice.lowerBound }
+                    upperBound={ rentalPrice.upperBound }
+                    valueFormat="$"
+                  />
+                )
               )
+              || ''
             }
           </FilterGroup>
           <FilterGroup criterion="offer">
