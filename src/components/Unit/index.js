@@ -11,7 +11,7 @@ function formatSize( bedrooms, numberOfIdenticalUnits ) {
 
   if ( bedrooms > 0 ) {
     formattedSize = <>
-      <abbr title={ `${bedrooms} Bedroom` } className="ml-unit__shorthand --hide-at-large">{ `${bedrooms} BR` }</abbr>
+      <abbr title={ `${bedrooms} Bedroom` } className="--shorthand --hide-at-large">{ `${bedrooms} BR` }</abbr>
       <span className="--hide-until-large">{ `${bedrooms} Bedroom` }</span>
       { numberOfIdenticalUnits && ` (×${numberOfIdenticalUnits})` }
     </>;
@@ -29,7 +29,7 @@ function formatSize( bedrooms, numberOfIdenticalUnits ) {
 function formatAmiQualification( amiQualification ) {
   if ( amiQualification === null ) {
     return <>
-      <abbr className="ml-unit__shorthand --hide-at-large">N/A</abbr>
+      <abbr className="--shorthand --hide-at-large">N/A</abbr>
       <span className="--hide-until-large">Not Applicable</span>
     </>;
   }
@@ -58,7 +58,7 @@ function formatPrice( price, priceRate, rentalPriceIsPercentOfIncome ) {
         const abbreviationExpansion = `${value} per ${priceRate.substring( 0, 5 )}`;
 
         return (
-          <abbr className="ml-unit__shorthand" title={ abbreviationExpansion }>
+          <abbr className="--shorthand" title={ abbreviationExpansion }>
             { `${value}/` }
             <span className="ml-unit__price-rate">{ priceRate.substring( 0, 2 ) }.</span>
           </abbr>
