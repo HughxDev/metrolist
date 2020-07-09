@@ -81,12 +81,15 @@
     text-align: center;
     width: $checkbox-dimensions;
   }
-  @include media-breakpoint-up( large ) {
-    .ml-checkbox__form-control-container {
-      background-color: $color-white;
-      width: $checkbox-dimensions--desktop;
+    .ml-checkbox__form-control-container.ml-checkbox__form-control-container--small {
+      transform: scale( 0.8 );
     }
-  }
+    @include media-breakpoint-up( large ) {
+      .ml-checkbox__form-control-container {
+        background-color: $color-white;
+        width: $checkbox-dimensions--desktop;
+      }
+    }
   .ml-checkbox__form-control,
   .ml-checkbox__form-control-ui {
     position: absolute;

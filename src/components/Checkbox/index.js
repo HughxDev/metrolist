@@ -71,7 +71,7 @@ function renderLabel( children, props ) {
   return (
     <label className="ml-checkbox__label" aria-label={ ariaLabel }>
       <Row className="ml-checkbox__label-content" space="panel" align="middle">
-        <span className="ml-checkbox__form-control-container">
+        <span className={ `ml-checkbox__form-control-container${props.size ? ` ml-checkbox__form-control-container--${props.size}` : ''}` }>
           <input
             className="ml-checkbox__form-control"
             type="checkbox"
@@ -160,11 +160,13 @@ Checkbox.propTypes = {
   "required": PropTypes.bool,
   "hasSubcategories": PropTypes.bool,
   "aria-label": PropTypes.string,
+  "size": PropTypes.oneOf( ['small', null] ),
 };
 
 Checkbox.defaultProps = {
   "required": false,
   "hasSubcategories": false,
+  "size": null,
 };
 
 export default Checkbox;

@@ -53,4 +53,10 @@ h3 {
 // Overrides /sites/default/files/linked/css/css_6oJnxXTl5t9fkw3C8uMRtGxwbWXLDmLm2glpmOsBgVY.css
 .breadcrumb {
   margin-top: 0;
-} 
+}
+
+.--shorthand,
+.--shorthand[title] {
+  text-decoration: none;
+  border-bottom: none;
+}

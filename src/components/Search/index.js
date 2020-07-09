@@ -8,6 +8,9 @@ import ResultsPanel from '@components/ResultsPanel';
 import Row from '@components/Row';
 import Inset from '@components/Inset';
 import Callout from '@components/Callout';
+import Button from '@components/Button';
+import Checkbox from '@components/Checkbox';
+import Column from '@components/Column';
 
 import { homeObject, filtersObject } from '@util/validation';
 import { getDevelopmentsApiEndpoint } from '@util/dev';
@@ -677,11 +680,51 @@ function Search( props ) {
     </Inset>
   );
   const SidebarUi = [FiltersPanelUi, CalloutUi];
+  const householdIncome = localStorage.getItem( 'householdIncome' );
+
+  const incomeRate = localStorage.getItem( 'incomeRate' );
+  const hasEnteredHouseholdIncome = ( householdIncome && incomeRate );
+  let householdIncomeRate;
+  let abbreviatedHouseholdIncome;
+  let incomeRateUnit;
+  let abbreviatedIncomeRateUnit;
+
+  if ( hasEnteredHouseholdIncome ) {
+    const incomeRateLength = incomeRate.length;
+    abbreviatedHouseholdIncome = householdIncome.substring( 0, householdIncome.length - 3 );
+    incomeRateUnit = incomeRate.substring( 0, incomeRateLength - 2 );
+    abbreviatedIncomeRateUnit = incomeRate.substring( 0, incomeRateLength - 5 );
+    householdIncomeRate = `${abbreviatedHouseholdIncome}/${abbreviatedIncomeRateUnit}.`;
+  }
 
   return (
     <article className={ `ml-search${props.className ? ` ${props.className}` : ''}` }>
       <h2 className="sr-only">Search</h2>
-      <Row space="panel" stackUntil="large">
+      <Stack space="panel">
+        <Row space="1" style={ { "justifyContent": "flex-end", "alignItems": "flex-start" } }>
+          <Column>
+            {
+              hasEnteredHouseholdIncome
+              && (
+                <Checkbox size="small">
+                  <span style={{ "display": "inline-block", "maxWidth": "12.8rem" }}>
+                    Hide income-restricted homes with limits &gt; <abbr className="--shorthand" title={ `${abbreviatedHouseholdIncome} per ${incomeRateUnit}` }>{ householdIncomeRate }</abbr>
+                  </span>
+                </Checkbox>
+              )
+            }
+          </Column>
+          {/* <div>
+            <label style={{ "margin": "0" }}>Sort by:</label>
+            <select>
+              <option>Date posted: newest to oldest</option>
+              <option>Date posted: oldest to newest</option>
+              <option>Price: high to low</option>
+              <option>Price: low to high</option>
+            </select>
+          </div> */}
+        </Row>
+        <Row space="panel" stackUntil="large">
         <Stack data-column-width="1/3" space="panel">
           { isDesktop ? SidebarUi.reverse() : SidebarUi }
         </Stack>
@@ -694,6 +737,7 @@ function Search( props ) {
           handleHomesLoaded={ handleHomesLoaded }
         />
       </Row>
+      </Stack>
       <nav className="ml-search__pagination">
         <h3 className="sr-only">Pages</h3>
         <Row className="pg" space="panel">{
