@@ -150,6 +150,23 @@ function FiltersPanel( props ) {
           ref={ props.drawerRef }
           className={ `ml-filters-panel__content${isExpanded ? ' ml-filters-panel__content--expanded' : ''}` }
         >
+          <FilterGroup criterion="offer">
+            <FilterGroup.Label>Offer</FilterGroup.Label>
+            <Row space="rent-sale" stackAt="large">
+              <Column width="1/2">
+                <Filter
+                  type="checkbox-button"
+                  criterion="offer"
+                  value="rent"
+                  checked={ offer.rent }
+                  aria-label={ `For Rent (${rentalCount})` }
+                >{ `For Rent (${rentalCount})` }</Filter>
+              </Column>
+              <Column width="1/2">
+                <Filter type="checkbox-button" criterion="offer" value="sale" checked={ offer.sale }>{ `For Sale (${listingCounts.offer.sale})` }</Filter>
+              </Column>
+            </Row>
+          </FilterGroup>
           <FilterGroup criterion="rentalPrice">
             <FilterGroup.Label>Rental Price</FilterGroup.Label>
             {
@@ -172,23 +189,6 @@ function FiltersPanel( props ) {
               )
               || ''
             }
-          </FilterGroup>
-          <FilterGroup criterion="offer">
-            <FilterGroup.Label>Offer</FilterGroup.Label>
-            <Row space="rent-sale" stackAt="large">
-              <Column width="1/2">
-                <Filter
-                  type="checkbox-button"
-                  criterion="offer"
-                  value="rent"
-                  checked={ offer.rent }
-                  aria-label={ `For Rent (${rentalCount})` }
-                >{ `For Rent (${rentalCount})` }</Filter>
-              </Column>
-              <Column width="1/2">
-                <Filter type="checkbox-button" criterion="offer" value="sale" checked={ offer.sale }>{ `For Sale (${listingCounts.offer.sale})` }</Filter>
-              </Column>
-            </Row>
           </FilterGroup>
           <FilterGroup criterion="location">
             <FilterGroup.Label>Location</FilterGroup.Label>
