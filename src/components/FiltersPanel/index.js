@@ -166,6 +166,7 @@ function FiltersPanel( props ) {
                     lowerBound={ rentalPrice.lowerBound }
                     upperBound={ rentalPrice.upperBound }
                     valueFormat="$"
+                    valueAppend={ () => <> per month</> }
                   />
                 )
               )
