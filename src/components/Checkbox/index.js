@@ -80,7 +80,7 @@ function renderLabel( children, props ) {
             required={ props.required }
             // defaultChecked={ props.checked }
             checked={ props.checked }
-            onChange={ () => {} }
+            onChange={ props.onChange }
           />
           <span className="ml-checkbox__form-control-ui"></span>
         </span>
@@ -161,12 +161,14 @@ Checkbox.propTypes = {
   "hasSubcategories": PropTypes.bool,
   "aria-label": PropTypes.string,
   "size": PropTypes.oneOf( ['small', null] ),
+  "onChange": PropTypes.func,
 };
 
 Checkbox.defaultProps = {
   "required": false,
   "hasSubcategories": false,
   "size": null,
+  "onChange": () => {},
 };
 
 export default Checkbox;

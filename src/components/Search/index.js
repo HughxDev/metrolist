@@ -330,24 +330,17 @@ function Search( props ) {
             }
           }
 
-          return unitMatchesBedrooms;
-        } );
+          // TODO: Maybe exit early if we already know it is not a match?
+          // if ( !unitMatchesBedrooms ) {
+          //   return false;
+          // }
 
-        return {
-          ...home,
-          "units": newUnits,
-        };
-      } )
-      .map( ( home ) => {
-        const newUnits = home.units.filter( ( unit ) => {
           let unitMatchesAmiQualification;
           const unitAmiQualification = ( unit.amiQualification || null );
 
           if ( unitAmiQualification === null ) {
-            return true;
-          }
-
-          if ( filters.amiQualification.lowerBound <= filters.amiQualification.upperBound ) {
+            unitMatchesAmiQualification = true;
+          } else if ( filters.amiQualification.lowerBound <= filters.amiQualification.upperBound ) {
             unitMatchesAmiQualification = (
               ( unitAmiQualification >= filters.amiQualification.lowerBound )
               && ( unitAmiQualification <= filters.amiQualification.upperBound )
@@ -360,14 +353,28 @@ function Search( props ) {
             );
           }
 
-          return unitMatchesAmiQualification;
+          // if ( !unitMatchesAmiQualification ) {
+          //   return false;
+          // }
+
+          let unitMatchesIncomeQualification;
+          const unitIncomeQualification = ( unit.incomeQualification || null );
+
+          if ( ( unitIncomeQualification === null ) || !Number.isFinite( filters.incomeQualification.upperBound ) ) {
+            unitMatchesIncomeQualification = true;
+          } else {
+            unitMatchesIncomeQualification = ( unitIncomeQualification <= filters.incomeQualification.upperBound );
+          }
+
+          return ( unitMatchesBedrooms && unitMatchesAmiQualification && unitMatchesIncomeQualification );
         } );
 
         return {
           ...home,
           "units": newUnits,
         };
-      } );
+      } )
+      .filter( ( home ) => !!home.units.length );
 
     return matchingHomes;
   };
@@ -688,6 +695,23 @@ function Search( props ) {
   let abbreviatedHouseholdIncome;
   let incomeRateUnit;
   let abbreviatedIncomeRateUnit;
+  const handleIncomeRestrictionToggle = ( event ) => {
+    if ( !householdIncome ) {
+      console.error( `localStorage.householdIncome not found; cannot apply minimum income filter` );
+      return;
+    }
+    const { checked } = event.target;
+
+    const householdIncomeDecimal = ( parseInt( householdIncome.replace( /\D/g, '' ), 10 ) / 100 );
+    const newFilters = {
+      ...filters,
+      "incomeQualification": {
+        "upperBound": ( checked ? householdIncomeDecimal : Infinity ),
+      },
+    };
+
+    setFilters( newFilters );
+  };
 
   if ( hasEnteredHouseholdIncome ) {
     const incomeRateLength = incomeRate.length;
@@ -706,7 +730,7 @@ function Search( props ) {
             {
               hasEnteredHouseholdIncome
               && (
-                <Checkbox size="small">
+                <Checkbox criterion="hideIneligibleIncomeRestrictedUnits" size="small" onChange={ handleIncomeRestrictionToggle }>
                   <span style={{ "display": "inline-block", "maxWidth": "12.8rem" }}>
                     Hide income-restricted homes with limits &gt; <abbr className="--shorthand" title={ `${abbreviatedHouseholdIncome} per ${incomeRateUnit}` }>{ householdIncomeRate }</abbr>
                   </span>
@@ -793,9 +817,12 @@ const baseFilters = {
     "lowerBound": 0,
     "upperBound": 200,
   },
+  "incomeQualification": {
+    "upperBound": Infinity,
+  },
   "rentalPrice": {
     "lowerBound": 0,
-    "upperBound": 0,
+    "upperBound": Infinity,
   },
 };
 const baseFilterKeys = Object.keys( baseFilters );
