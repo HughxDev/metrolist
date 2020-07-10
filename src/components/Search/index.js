@@ -204,37 +204,6 @@ function Search( props ) {
           )
         );
 
-        let matchesRentalPrice;
-
-        if (
-          !( ( filtersToApply.rentalPrice.lowerBound === 0 ) && ( filtersToApply.rentalPrice.upperBound === 0 ) )
-          && (
-            ( home.offer === 'rent' )
-            || ( home.type === 'apt' )
-          )
-        ) {
-          let rentalPriceLowerBound;
-          let rentalPriceUpperBound;
-
-          if ( filtersToApply.rentalPrice.lowerBound > filtersToApply.rentalPrice.upperBound ) {
-            rentalPriceLowerBound = filtersToApply.rentalPrice.upperBound;
-            rentalPriceUpperBound = filtersToApply.rentalPrice.lowerBound;
-          } else {
-            rentalPriceLowerBound = filtersToApply.rentalPrice.lowerBound;
-            rentalPriceUpperBound = filtersToApply.rentalPrice.upperBound;
-          }
-
-          const unitsWithinPriceRange = home.units.filter( ( unit ) => (
-            // ( unit.priceRate === 'monthly' )
-            ( unit.price >= rentalPriceLowerBound )
-              && ( unit.price <= rentalPriceUpperBound )
-          ) );
-
-          matchesRentalPrice = !!unitsWithinPriceRange.length;
-        } else {
-          matchesRentalPrice = true;
-        }
-
         const dedupedAmi = new Set( home.units.map( ( unit ) => unit.amiQualification ) );
         const unitAmiQualifications = Array.from( dedupedAmi );
         let matchesAmiQualification;
@@ -290,11 +259,38 @@ function Search( props ) {
           && matchesNarrowLocation
           && matchesBedrooms
           && matchesAmiQualification
-          && matchesRentalPrice
         );
       } )
       .map( ( home ) => {
         const newUnits = home.units.filter( ( unit ) => {
+          let unitMatchesRentalPrice;
+
+          if (
+            Number.isFinite( filtersToApply.rentalPrice.upperBound )
+            && (
+              ( home.offer === 'rent' )
+              || ( home.type === 'apt' )
+            )
+          ) {
+            let rentalPriceLowerBound;
+            let rentalPriceUpperBound;
+
+            if ( filtersToApply.rentalPrice.lowerBound > filtersToApply.rentalPrice.upperBound ) {
+              rentalPriceLowerBound = filtersToApply.rentalPrice.upperBound;
+              rentalPriceUpperBound = filtersToApply.rentalPrice.lowerBound;
+            } else {
+              rentalPriceLowerBound = filtersToApply.rentalPrice.lowerBound;
+              rentalPriceUpperBound = filtersToApply.rentalPrice.upperBound;
+            }
+
+            unitMatchesRentalPrice = (
+              ( unit.price >= rentalPriceLowerBound )
+              && ( unit.price <= rentalPriceUpperBound )
+            );
+          } else {
+            unitMatchesRentalPrice = true;
+          }
+
           let unitMatchesBedrooms = (
             (
               filtersToApply.bedrooms['0']
@@ -366,7 +362,7 @@ function Search( props ) {
             unitMatchesIncomeQualification = ( unitIncomeQualification <= filters.incomeQualification.upperBound );
           }
 
-          return ( unitMatchesBedrooms && unitMatchesAmiQualification && unitMatchesIncomeQualification );
+          return ( unitMatchesRentalPrice && unitMatchesBedrooms && unitMatchesAmiQualification && unitMatchesIncomeQualification );
         } );
 
         return {

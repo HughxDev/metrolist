@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Stack from '@components/Stack';
@@ -23,6 +23,10 @@ function Range( props ) {
   const [lowerBound, setLowerBound] = useState( props.lowerBound || min );
   const [upperBound, setUpperBound] = useState( props.upperBound || max );
   const [outOfBounds, setOutOfBounds] = useState( false );
+
+  useEffect( () => {
+    setOutOfBounds( lowerBound > upperBound );
+  }, [lowerBound, upperBound] );
 
   const formatValue = ( value ) => {
     let formattedValue;

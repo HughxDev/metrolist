@@ -56,9 +56,12 @@ function getNoFiltersApplied() {
       "lowerBound": 0,
       "upperBound": 200,
     },
+    "incomeQualification": {
+      "upperBound": Infinity,
+    },
     "rentalPrice": {
       "lowerBound": 0,
-      "upperBound": 0,
+      "upperBound": Infinity,
     },
   };
 }
