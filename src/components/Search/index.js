@@ -266,7 +266,7 @@ function Search( props ) {
           let unitMatchesRentalPrice;
 
           if (
-            Number.isFinite( filtersToApply.rentalPrice.upperBound )
+            filtersToApply.rentalPrice.upperBound
             && (
               ( home.offer === 'rent' )
               || ( home.type === 'apt' )
@@ -356,7 +356,7 @@ function Search( props ) {
           let unitMatchesIncomeQualification;
           const unitIncomeQualification = ( unit.incomeQualification || null );
 
-          if ( ( unitIncomeQualification === null ) || !Number.isFinite( filters.incomeQualification.upperBound ) ) {
+          if ( ( unitIncomeQualification === null ) || !filters.incomeQualification.upperBound ) {
             unitMatchesIncomeQualification = true;
           } else {
             unitMatchesIncomeQualification = ( unitIncomeQualification <= filters.incomeQualification.upperBound );
@@ -495,6 +495,8 @@ function Search( props ) {
 
     setFilteredHomes( currentPageFilteredHomes );
     setTotalPages( paginatedFilteredHomes.length );
+
+    localStorage.setItem( 'filters', JSON.stringify( filters ) );
   }, [paginatedHomes, filters, currentPage] );
 
   // useEffect( () => {
@@ -694,15 +696,27 @@ function Search( props ) {
   const handleIncomeRestrictionToggle = ( event ) => {
     if ( !householdIncome ) {
       console.error( `localStorage.householdIncome not found; cannot apply minimum income filter` );
+    }
+
+    if ( !incomeRate ) {
+      console.error( `localStorage.incomeRate not found; cannot apply minimum income filter` );
+    }
+
+    if ( !householdIncome || !incomeRate ) {
       return;
     }
+
     const { checked } = event.target;
 
-    const householdIncomeDecimal = ( parseInt( householdIncome.replace( /\D/g, '' ), 10 ) / 100 );
+    const householdIncomeNormalized = (
+      ( parseInt( householdIncome.replace( /\D/g, '' ), 10 ) / 100 )
+      * ( ( incomeRate === 'monthly' ) ? 12 : 1 )
+    );
+
     const newFilters = {
       ...filters,
       "incomeQualification": {
-        "upperBound": ( checked ? householdIncomeDecimal : Infinity ),
+        "upperBound": ( checked ? householdIncomeNormalized : null ),
       },
     };
 
@@ -814,11 +828,11 @@ const baseFilters = {
     "upperBound": 200,
   },
   "incomeQualification": {
-    "upperBound": Infinity,
+    "upperBound": null,
   },
   "rentalPrice": {
     "lowerBound": 0,
-    "upperBound": Infinity,
+    "upperBound": null,
   },
 };
 const baseFilterKeys = Object.keys( baseFilters );

@@ -1573,6 +1573,14 @@
     prop-types "^15.6.1"
     react-lifecycles-compat "^3.0.4"
 
+"@react-mock/localstorage@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@react-mock/localstorage/-/localstorage-0.1.2.tgz#694c7d59d8fc8450db98025a61e62b842b307435"
+  integrity sha512-IprMHwcAeyl6gfSA9nEhNDYQiLlVnKdw62O3WDFkHtuT6X16Fajic/geN7HrTdPTL47flhG9coXhgkXDmj665w==
+  dependencies:
+    "@babel/runtime" "^7.1.2"
+    lodash "^4.17.11"
+
 "@sheerun/mutationobserver-shim@^0.3.2":
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/@sheerun/mutationobserver-shim/-/mutationobserver-shim-0.3.3.tgz#5405ee8e444ed212db44e79351f0c70a582aae25"

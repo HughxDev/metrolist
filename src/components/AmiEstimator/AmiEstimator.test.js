@@ -5,6 +5,7 @@ import {
   render, act, fireEvent,
 } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
+import { LocalStorageMock } from '@react-mock/localstorage';
 
 import { MemoryRouter } from 'react-router-dom';
 import AmiEstimator from './index';
@@ -115,5 +116,26 @@ describe( 'AmiEstimator', () => {
 
     expect( firstStep() ).toBeInTheDocument();
     expect( secondStep() ).not.toBeInTheDocument();
+  } );
+
+  it( 'Stores household income for use on other pages', () => {
+    const { getByRole } = render(
+      <LocalStorageMock items={ {} }>
+        <MemoryRouter initialEntries={['/metrolist/ami-estimator/household-income']} initialIndex={0}>
+          <Routes />
+        </MemoryRouter>
+      </LocalStorageMock>,
+    );
+
+    fireEvent.change(
+      getByRole( 'textbox' ),
+      {
+        "target": {
+          "value": "$5,000.00",
+        },
+      },
+    );
+
+    expect( localStorage.getItem( 'householdIncome' ) ).toBe( '$5,000.00' );
   } );
 } );

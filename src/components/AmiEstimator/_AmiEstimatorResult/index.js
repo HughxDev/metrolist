@@ -91,10 +91,6 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
   localStorage.setItem( 'amiRecommendation', amiRecommendation );
   localStorage.setItem( 'useAmiRecommendationAsLowerBound', 'true' );
 
-  localStorage.setItem( 'householdIncome', props.formData.householdIncome.value );
-  localStorage.setItem( 'incomeRate', props.formData.incomeRate.value.toLowerCase() );
-  localStorage.setItem( 'useHouseholdIncomeAsIncomeQualificationFilter', 'true' );
-
   useEffect( () => {
     updatePageTitle( 'Result', 'AMI Estimator' );
     props.setStep( props.step );

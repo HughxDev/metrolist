@@ -30,6 +30,10 @@ const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
     } else {
       incomeInputRef.current.value = newValue;
     }
+
+    localStorage.setItem( 'householdIncome', newValue );
+    localStorage.setItem( 'incomeRate', props.formData.incomeRate.value.toLowerCase() );
+    localStorage.setItem( 'useHouseholdIncomeAsIncomeQualificationFilter', 'true' );
   }
 
   const handleIncomeChange = ( event ) => {
@@ -48,6 +52,10 @@ const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
     } else {
       event.target.setSelectionRange( cursorStart + differenceAbsoluteValue, cursorEnd + differenceAbsoluteValue );
     }
+  };
+
+  const handleIncomeRateChange = ( event ) => {
+    localStorage.setItem( 'incomeRate', event.target.value.toLowerCase() );
   };
 
   useEffect( () => {
@@ -116,7 +124,7 @@ const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
               value={ props.formData.incomeRate.value || defaultIncomeRate }
               aria-label="income rate"
               required
-              // onChange={ ( event ) => event.stopPropagation() }
+              onChange={ handleIncomeRateChange }
             />
             <FormErrorMessage
               ref={ props.formData.incomeRate.errorRef }

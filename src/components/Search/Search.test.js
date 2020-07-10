@@ -15,6 +15,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { act } from 'react-dom/test-utils';
+import { LocalStorageMock } from '@react-mock/localstorage';
 
 import Search from './index';
 
@@ -57,11 +58,11 @@ function getNoFiltersApplied() {
       "upperBound": 200,
     },
     "incomeQualification": {
-      "upperBound": Infinity,
+      "upperBound": null,
     },
     "rentalPrice": {
       "lowerBound": 0,
-      "upperBound": Infinity,
+      "upperBound": null,
     },
   };
 }
@@ -501,6 +502,46 @@ describe( 'Search', () => {
         getByTestId( homeWithAmiWithinBounds.units[0].id );
         expect( queryByTestId( homeWithAmiAboveUpperBound.units[0].id ) ).not.toBeInTheDocument();
         expect( queryByTestId( homeWithAmiBelowLowerBound.units[0].id ) ).not.toBeInTheDocument();
+      } );
+    } );
+
+    describe( 'Income Qualification', () => {
+      it( 'Hides income-restricted homes with limits higher than one’s household income', () => {
+        const homesToFilter = [
+          {
+            ...minimalHomeDefinition,
+            "id": generateFakeId(),
+            "units": [
+              {
+                ...oneBedroomUnit,
+                "incomeQualification": 65000,
+              },
+              {
+                ...twoBedroomUnit,
+                "incomeQualification": null,
+              },
+            ],
+          },
+        ];
+
+        const { queryByTestId, getByLabelText } = render(
+          <LocalStorageMock items={ { "householdIncome": "$5,000.00", "incomeRate": "monthly" } }>
+            <MemoryRouter initialEntries={['/metrolist/search']} initialIndex={0}>
+              <Search homes={ homesToFilter } />
+            </MemoryRouter>
+          </LocalStorageMock>,
+        );
+        const incomeRestrictionFilterToggle = getByLabelText( /Hide income-restricted homes with limits/, { "selector": "input" } );
+
+        fireEvent.click( incomeRestrictionFilterToggle );
+
+        expect( queryByTestId( '1br' ) ).not.toBeInTheDocument();
+        expect( queryByTestId( '2br' ) ).toBeInTheDocument();
+
+        fireEvent.click( incomeRestrictionFilterToggle );
+
+        expect( queryByTestId( '1br' ) ).toBeInTheDocument();
+        expect( queryByTestId( '2br' ) ).toBeInTheDocument();
       } );
     } );
   } );

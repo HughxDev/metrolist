@@ -116,5 +116,8 @@
       "last 1 edge version",
       "last 1 ie version"
     ]
+  },
+  "devDependencies": {
+    "@react-mock/localstorage": "^0.1.2"
   }
 }
