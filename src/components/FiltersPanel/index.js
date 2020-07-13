@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { capitalCase } from 'change-case';
+
 import { filtersObject } from '@util/validation';
 import { handlePseudoButtonKeyDown } from '@util/a11y-seo';
+import { getGlobalThis } from '@util/objects';
 
 import FilterGroup from '@components/FilterGroup';
 import Filter from '@components/Filter';
@@ -14,6 +16,8 @@ import Column from '@components/Column';
 import Stack from '@components/Stack';
 
 import './FiltersPanel.scss';
+
+const globalThis = getGlobalThis();
 
 function FiltersPanel( props ) {
   const isDesktop = globalThis.matchMedia( '(min-width: 992px)' ).matches; // TODO: define breakpoints that line up with the CSS in JS somewhere

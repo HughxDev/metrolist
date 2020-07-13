@@ -11,7 +11,7 @@ import {
 } from "react-transition-group";
 // import { pascalCase } from 'change-case';
 
-import { hasOwnProperty } from '@util/objects';
+import { hasOwnProperty, getGlobalThis } from '@util/objects';
 import { slugify, uncapitalize, componentCase } from '@util/strings';
 import { resolveLocationConsideringGoogleTranslate, isOnGoogleTranslate } from '@util/a11y-seo';
 import { capitalCase } from 'change-case';
@@ -28,6 +28,8 @@ import Disclosure from './_AmiEstimatorDisclosure';
 import Result from './_AmiEstimatorResult';
 
 import './AmiEstimator.scss';
+
+const globalThis = getGlobalThis();
 
 function AmiEstimator( props ) {
   const { path } = useRouteMatch();

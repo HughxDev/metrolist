@@ -4,6 +4,9 @@ import PropTypes from 'prop-types';
 import Stack from '@components/Stack';
 
 import { formatIncome } from '@util/strings';
+import { getGlobalThis } from '@util/objects';
+
+const globalThis = getGlobalThis();
 
 const isIE = /* @cc_on!@ */false || !!document.documentMode;
 const isEdge = ( globalThis.navigator.userAgent.indexOf( "Edge" ) > -1 ); // Excludes Chromium-based Edge which reports “Edg” without the e

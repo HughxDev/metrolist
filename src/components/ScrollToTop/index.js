@@ -1,5 +1,8 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { getGlobalThis } from '@util/objects';
+
+const globalThis = getGlobalThis();
 
 function ScrollToTop() {
   const { pathname } = useLocation();

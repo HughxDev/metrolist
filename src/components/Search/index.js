@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation, useHistory, Link } from 'react-router-dom';
-import { hasOwnProperty, isPlainObject } from '@util/objects';
+import { hasOwnProperty, isPlainObject, getGlobalThis } from '@util/objects';
 
 import FiltersPanel from '@components/FiltersPanel';
 import ResultsPanel from '@components/ResultsPanel';
@@ -16,11 +16,13 @@ import { homeObject, filtersObject } from '@util/validation';
 import { getDevelopmentsApiEndpoint } from '@util/dev';
 import { isOnGoogleTranslate, copyGoogleTranslateParametersToNewUrl } from '@util/a11y-seo';
 
+
 import Stack from '@components/Stack';
 
 import './Search.scss';
 import 'whatwg-fetch';
 
+const globalThis = getGlobalThis();
 const apiEndpoint = getDevelopmentsApiEndpoint();
 
 // https://stacko;verflow.com/a/11764168/214325

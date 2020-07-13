@@ -1,6 +1,9 @@
 import { useLocation } from 'react-router-dom';
 import { formatPageTitle } from '@util/strings';
 import OnDemandLiveRegion from 'on-demand-live-region';
+import { getGlobalThis } from '@util/objects';
+
+const globalThis = getGlobalThis();
 
 // Accessibility and Search Engine Optimization
 export function updatePageTitle( pageTitle, sectionTitle ) {

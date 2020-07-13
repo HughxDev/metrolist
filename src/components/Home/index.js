@@ -12,9 +12,12 @@ import { homeObject } from '@util/validation';
 import { generateRandomDomId } from '@util/strings';
 import { isLiveDev } from '@util/dev';
 import { isOnGoogleTranslate, copyGoogleTranslateParametersToNewUrl } from '@util/a11y-seo';
+import { getGlobalThis } from '@util/objects';
 
 import './Home.scss';
 import { capitalCase } from 'change-case';
+
+const globalThis = getGlobalThis();
 
 function wasJustListed( listingDate, unitOfTime = 'hours', newnessThreshold = 48 ) {
   // testing:

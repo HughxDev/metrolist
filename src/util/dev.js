@@ -1,3 +1,7 @@
+import { getGlobalThis } from '@util/objects';
+
+const globalThis = getGlobalThis();
+
 export function isProd( hostname = globalThis.location.hostname ) {
   return (
     ( hostname === 'wwww.boston.gov' )

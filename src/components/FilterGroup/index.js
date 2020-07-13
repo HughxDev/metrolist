@@ -3,11 +3,14 @@ import PropTypes from 'prop-types';
 
 import { slugify } from '@util/strings';
 import { handlePseudoButtonKeyDown } from '@util/a11y-seo';
+import { getGlobalThis } from '@util/objects';
 
 import Icon from '@components/Icon';
 import Row from '@components/Row';
 
 import './FilterGroup.scss';
+
+const globalThis = getGlobalThis();
 
 class FilterGroup extends React.Component {
   constructor( props ) {
