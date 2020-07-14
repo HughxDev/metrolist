@@ -27,4 +27,4 @@ $checkbox-checked-box__dimensions-pixels: ( $checkbox-dimensions__pixels - 12px 
 $checkbox-checked-box__dimensions: rem( $checkbox-checked-box__dimensions-pixels );
 
 $filters-panel-top-offset: 5rem;
-$filters-panel-top-offset--half: ( $filters-panel-top-offset / 2 );
+$filters-panel-top-offset--half: 2.2rem; // ( $filters-panel-top-offset / 2 );

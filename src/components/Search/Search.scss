@@ -65,3 +65,25 @@
   .pg-li:last-of-type .pg-li-i--link.ml-search__page-link {
     display: inherit;
   }
+
+  .ml-search__preferences {
+    margin-top: ( $filters-panel-top-offset--half + $panel-spacing );
+    margin-bottom: 0;
+  }
+  @include media-breakpoint-up( large ) {
+    .ml-search__preferences {
+      margin: 0;
+      margin-bottom: $panel-spacing;
+    }
+  }
+
+  .ml-search__hide-ineligible-income-restricted-units {
+    justify-content: center;
+    align-items: flex-start;
+    list-style: none;
+  }
+  @include media-breakpoint-up( large ) {
+    .ml-search__hide-ineligible-income-restricted-units {
+      justify-content: flex-end;
+    }
+  }

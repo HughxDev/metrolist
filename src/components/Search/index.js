@@ -736,31 +736,26 @@ function Search( props ) {
   return (
     <article className={ `ml-search${props.className ? ` ${props.className}` : ''}` }>
       <h2 className="sr-only">Search</h2>
-      <Stack space="panel">
-        <Row space="1" style={ { "justifyContent": "flex-end", "alignItems": "flex-start" } }>
-          <Column>
-            {
-              hasEnteredHouseholdIncome
-              && (
-                <Checkbox criterion="hideIneligibleIncomeRestrictedUnits" size="small" onChange={ handleIncomeRestrictionToggle }>
-                  <span style={{ "display": "inline-block", "maxWidth": "12.8rem" }}>
-                    Hide income-restricted homes with limits &gt; <abbr className="--shorthand" title={ `${abbreviatedHouseholdIncome} per ${incomeRateUnit}` }>{ householdIncomeRate }</abbr>
-                  </span>
-                </Checkbox>
-              )
-            }
-          </Column>
-          {/* <div>
-            <label style={{ "margin": "0" }}>Sort by:</label>
-            <select>
-              <option>Date posted: newest to oldest</option>
-              <option>Date posted: oldest to newest</option>
-              <option>Price: high to low</option>
-              <option>Price: low to high</option>
-            </select>
-          </div> */}
-        </Row>
-        <Row space="panel" stackUntil="large">
+      <menu className="ml-search__preferences">
+        <Row as="li" className="ml-search__hide-ineligible-income-restricted-units" space="1">
+        {
+          hasEnteredHouseholdIncome
+          && (
+            <Checkbox
+              criterion="hideIneligibleIncomeRestrictedUnits"
+              size="small"
+              onChange={ handleIncomeRestrictionToggle }
+
+            >
+              <span style={{ "display": "inline-block", "maxWidth": "12.8rem" }}>
+                Hide income-restricted homes with limits &gt; <abbr className="--shorthand" title={ `${abbreviatedHouseholdIncome} per ${incomeRateUnit}` }>{ householdIncomeRate }</abbr>
+              </span>
+            </Checkbox>
+          )
+        }
+      </Row>
+      </menu>
+      <Row space="panel" stackUntil="large">
         <Stack data-column-width="1/3" space="panel">
           { isDesktop ? SidebarUi.reverse() : SidebarUi }
         </Stack>
@@ -773,7 +768,6 @@ function Search( props ) {
           handleHomesLoaded={ handleHomesLoaded }
         />
       </Row>
-      </Stack>
       <nav className="ml-search__pagination">
         <h3 className="sr-only">Pages</h3>
         <Row className="pg" space="panel">{
