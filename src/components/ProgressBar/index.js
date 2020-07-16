@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Stack from '@components/Stack';
-import { generateRandomDomId } from '@util/strings';
+import { generateRandomNumberString } from '@util/strings';
 
 import './ProgressBar.scss';
 
 function ProgressBar( props ) {
-  const domId = `progress-label-${generateRandomDomId()}`;
+  const domId = `progress-label-${generateRandomNumberString()}`;
 
   return (
     <Stack className={ `ml-progress-bar${props.className ? ` ${props.className}` : ''}` } space="1">

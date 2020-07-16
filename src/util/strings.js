@@ -16,7 +16,7 @@ export function componentCase( text ) {
   return capitalize( pascalCase( text ) );
 }
 
-export function generateRandomDomId() {
+export function generateRandomNumberString() {
   return Math.ceil( Math.random() * 1000000 ).toString();
 }
 

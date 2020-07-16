@@ -790,7 +790,7 @@ function Search( props ) {
   );
 }
 
-const baseFilters = {
+export const baseFilters = {
   "offer": {
     "rent": false,
     "sale": false,

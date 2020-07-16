@@ -1,5 +1,15 @@
 import '@babel/polyfill';
 import '__mocks__/matchMedia';
+import {
+  minimalHomeDefinition,
+  studioUnit,
+  oneBedroomUnit,
+  twoBedroomUnit,
+  threeBedroomUnit,
+  fourBedroomUnit,
+  aboveFourBedroomUnit,
+} from '__mocks__/homes';
+import { getNoFiltersApplied } from '__mocks__/filters';
 import mockApiResponse from '__mocks__/developmentsApiResponse.json';
 import React from 'react';
 import {
@@ -11,6 +21,7 @@ import {
 } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { getDevelopmentsApiEndpoint } from '@util/dev';
+import { generateRandomNumberString } from '@util/strings';
 import { MemoryRouter } from 'react-router-dom';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
@@ -18,57 +29,6 @@ import { act } from 'react-dom/test-utils';
 import { LocalStorageMock } from '@react-mock/localstorage';
 
 import Search from './index';
-
-function generateFakeId() {
-  return Math.round( Math.random() * 100000000 ).toString();
-}
-
-function getNoFiltersApplied() {
-  return {
-    "offer": {
-      "rent": false,
-      "sale": false,
-    },
-    "location": {
-      "city": {
-        "boston": false,
-        "beyondBoston": false,
-      },
-      "neighborhood": {
-        "southBoston": false,
-        "hydePark": false,
-        "dorchester": false,
-        "mattapan": false,
-      },
-      "cardinalDirection": {
-        "west": false,
-        "north": false,
-        "south": false,
-      },
-    },
-    "bedrooms": {
-      "0": false,
-      "1": false,
-      "2": false,
-      "3": false,
-      "4+": false,
-    },
-    "amiQualification": {
-      "lowerBound": 0,
-      "upperBound": 200,
-    },
-    "incomeQualification": {
-      "upperBound": null,
-    },
-    "rentalPrice": {
-      "lowerBound": 0,
-      "upperBound": null,
-    },
-  };
-}
-// import testData from './test-data.json';
-
-// console.error( mockApiResponse );
 
 // Mock Developments API response
 const server = setupServer(
@@ -108,49 +68,6 @@ describe( 'Search', () => {
   } );
 
   describe( 'Filters', () => {
-    const minimalHomeDefinition = {
-      "title": "Home",
-      "type": "apt",
-      "offer": "rent",
-      "listingDate": ( new Date() ).toISOString(),
-      "units": [],
-    };
-    const studioUnit = {
-      "id": "studio",
-      "bedrooms": 0,
-      "price": 900,
-      "priceRate": "monthly",
-    };
-    const oneBedroomUnit = {
-      "id": "1br",
-      "bedrooms": 1,
-      "price": 1000,
-      "priceRate": "monthly",
-    };
-    const twoBedroomUnit = {
-      "id": "2br",
-      "bedrooms": 2,
-      "price": 2000,
-      "priceRate": "monthly",
-    };
-    const threeBedroomUnit = {
-      "id": "3br",
-      "bedrooms": 3,
-      "price": 3000,
-      "priceRate": "monthly",
-    };
-    const fourBedroomUnit = {
-      "id": "4br",
-      "bedrooms": 4,
-      "price": 4000,
-      "priceRate": "monthly",
-    };
-    const aboveFourBedroomUnit = {
-      "id": "4+br",
-      "bedrooms": 10,
-      "price": 5000,
-      "priceRate": "monthly",
-    };
     let noFiltersApplied = getNoFiltersApplied();
 
     beforeEach( () => {
@@ -160,7 +77,7 @@ describe( 'Search', () => {
     describe( 'Rental Price', () => {
       const homeWithUnitWithinPriceRange = {
         ...minimalHomeDefinition,
-        "id": generateFakeId(),
+        "id": generateRandomNumberString(),
         "title": "Affordable",
         "offer": "rent",
         "units": [
@@ -169,7 +86,7 @@ describe( 'Search', () => {
       };
       const homeWithUnitOutsidePriceRange = {
         ...minimalHomeDefinition,
-        "id": generateFakeId(),
+        "id": generateRandomNumberString(),
         "title": "Unaffordable",
         "offer": "rent",
         "units": [
@@ -218,13 +135,13 @@ describe( 'Search', () => {
     describe( 'Offer', () => {
       const homeToRent = {
         ...minimalHomeDefinition,
-        "id": generateFakeId(),
+        "id": generateRandomNumberString(),
         "title": "Home 1",
         "offer": "rent",
       };
       const homeToBuy = {
         ...minimalHomeDefinition,
-        "id": generateFakeId(),
+        "id": generateRandomNumberString(),
         "title": "Home 2",
         "offer": "sale",
       };
@@ -287,14 +204,14 @@ describe( 'Search', () => {
     describe( 'Location', () => {
       const homeWithinBoston = {
         ...minimalHomeDefinition,
-        "id": generateFakeId(),
+        "id": generateRandomNumberString(),
         "title": "Home 1",
         "city": "Boston",
         "cardinalDirection": null,
       };
       const homeOutsideBoston = {
         ...minimalHomeDefinition,
-        "id": generateFakeId(),
+        "id": generateRandomNumberString(),
         "title": "Home 2",
         "city": "Cambridge",
         "cardinalDirection": "west",
@@ -401,7 +318,7 @@ describe( 'Search', () => {
       it( 'Filters by unit size', () => {
         const homeWithUnitsForEveryBedroomSize = {
           ...minimalHomeDefinition,
-          "id": generateFakeId(),
+          "id": generateRandomNumberString(),
           "units": [
             studioUnit,
             oneBedroomUnit,
@@ -459,31 +376,31 @@ describe( 'Search', () => {
         };
         const homeWithAmiAboveUpperBound = {
           ...minimalHomeDefinition,
-          "id": generateFakeId(),
+          "id": generateRandomNumberString(),
           "offer": "rent",
           "units": [{
             ...studioUnit,
-            "id": generateFakeId(),
+            "id": generateRandomNumberString(),
             "amiQualification": 110,
           }],
         };
         const homeWithAmiWithinBounds = {
           ...minimalHomeDefinition,
-          "id": generateFakeId(),
+          "id": generateRandomNumberString(),
           "offer": "rent",
           "units": [{
             ...studioUnit,
-            "id": generateFakeId(),
+            "id": generateRandomNumberString(),
             "amiQualification": 90,
           }],
         };
         const homeWithAmiBelowLowerBound = {
           ...minimalHomeDefinition,
-          "id": generateFakeId(),
+          "id": generateRandomNumberString(),
           "offer": "rent",
           "units": [{
             ...studioUnit,
-            "id": generateFakeId(),
+            "id": generateRandomNumberString(),
             "amiQualification": 70,
           }],
         };
@@ -510,7 +427,7 @@ describe( 'Search', () => {
         const homesToFilter = [
           {
             ...minimalHomeDefinition,
-            "id": generateFakeId(),
+            "id": generateRandomNumberString(),
             "units": [
               {
                 ...oneBedroomUnit,

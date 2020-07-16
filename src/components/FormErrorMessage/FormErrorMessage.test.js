@@ -1,7 +1,8 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import FormErrorMessage from './index';
+// import { generateRandomNumberString } from '@util/strings';
 
 it( 'renders', () => {
-  throw new Error( 'Test missing' );
+  render( <FormErrorMessage id="form-error-message" /> );
 } );

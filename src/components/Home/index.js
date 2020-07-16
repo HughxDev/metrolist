@@ -9,7 +9,7 @@ import Stack from '@components/Stack';
 import Row from '@components/Row';
 
 import { homeObject } from '@util/validation';
-import { generateRandomDomId } from '@util/strings';
+import { generateRandomNumberString } from '@util/strings';
 import { isLiveDev } from '@util/dev';
 import { isOnGoogleTranslate, copyGoogleTranslateParametersToNewUrl } from '@util/a11y-seo';
 import { getGlobalThis } from '@util/objects';
@@ -190,7 +190,7 @@ function Home( props ) {
       || ( unit.price === 'null' )
     ) {
       containsUnitWhereRentalPriceIsPercentageOfIncome = true;
-      percentageOfIncomeExplanationId = `rental-price-percentage-income-explanation-${generateRandomDomId()}`;
+      percentageOfIncomeExplanationId = `rental-price-percentage-income-explanation-${generateRandomNumberString()}`;
       break;
     }
   }

@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Switch, Route, useRouteMatch, useLocation, withRouter,
+  Switch, Route, useRouteMatch, withRouter,
 } from 'react-router-dom';
 import {
   TransitionGroup,

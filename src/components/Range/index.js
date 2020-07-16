@@ -17,7 +17,7 @@ const isIEorEdge = ( isIE || isEdge );
 // the synchronization between the fill and the thumbs to have the randomDomId number on the end.
 // It also breaks when completely removing the for/id relationship between the label and input.
 // ------
-// const randomDomId = generateRandomDomId();
+// const randomDomId = generateRandomNumberString();
 // const lowerBoundId = `lower-bound-${randomDomId}`;
 // const upperBoundId = `upper-bound-${randomDomId}`;
 
