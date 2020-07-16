@@ -747,8 +747,8 @@ function Search( props ) {
               onChange={ handleIncomeRestrictionToggle }
 
             >
-              <span style={{ "display": "inline-block", "maxWidth": "12.8rem" }}>
-                Hide income-restricted homes with limits &gt; <abbr className="--shorthand" title={ `${abbreviatedHouseholdIncome} per ${incomeRateUnit}` }>{ householdIncomeRate }</abbr>
+              <span style={{ "display": "inline-block", "maxWidth": "14.8rem" }}>
+                Hide homes that require a household income over <abbr className="--shorthand" title={ `${abbreviatedHouseholdIncome} per ${incomeRateUnit}` }>{ householdIncomeRate }</abbr>
               </span>
             </Checkbox>
           )
