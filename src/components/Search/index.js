@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { useLocation, useHistory, Link } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import { hasOwnProperty, isPlainObject, getGlobalThis } from '@util/objects';
 
 import FiltersPanel from '@components/FiltersPanel';
@@ -8,16 +8,16 @@ import ResultsPanel from '@components/ResultsPanel';
 import Row from '@components/Row';
 import Inset from '@components/Inset';
 import Callout from '@components/Callout';
-import Button from '@components/Button';
 import Checkbox from '@components/Checkbox';
-import Column from '@components/Column';
+import Stack from '@components/Stack';
+import Link from '@components/Link';
 
 import { homeObject, filtersObject } from '@util/validation';
 import { getDevelopmentsApiEndpoint } from '@util/dev';
-import { isOnGoogleTranslate, copyGoogleTranslateParametersToNewUrl } from '@util/a11y-seo';
-
-
-import Stack from '@components/Stack';
+import {
+  isOnGoogleTranslate,
+  copyGoogleTranslateParametersToNewUrl,
+} from '@util/translation';
 
 import './Search.scss';
 import 'whatwg-fetch';
@@ -60,10 +60,15 @@ function Search( props ) {
   const [isDesktop, setIsDesktop] = useState( window.matchMedia( '(min-width: 992px)' ).matches );
   const history = useHistory();
   const location = useLocation();
-
   const query = useQuery();
   const $drawer = useRef();
   let [updatingDrawerHeight, setUpdatingDrawerHeight] = useState( false ); // eslint-disable-line
+  const isBeingTranslated = isOnGoogleTranslate();
+  const $base = document.querySelector( 'base[href]' );
+  const baseUrl = ( isBeingTranslated ? $base.getAttribute( 'href' ).replace( /\/metrolist\/.*/, '' ) : globalThis.location.origin );
+  const relativeAmiEstimatorUrl = '/metrolist/ami-estimator';
+  const absoluteAmiEstimatorUrl = `${baseUrl}${relativeAmiEstimatorUrl}`;
+  const amiEstimatorUrl = ( isBeingTranslated ? copyGoogleTranslateParametersToNewUrl( absoluteAmiEstimatorUrl ) : relativeAmiEstimatorUrl );
 
   history.listen( ( newLocation ) => {
     const requestedPage = getPage( newLocation );
@@ -649,12 +654,6 @@ function Search( props ) {
     />
   );
 
-  const isBeingTranslated = isOnGoogleTranslate();
-  const baseUrl = ( isBeingTranslated ? document.querySelector( 'base' ).getAttribute( 'href' ).replace( /\/metrolist\/.*/, '' ) : globalThis.location.origin );
-  const relativeAmiEstimatorUrl = '/metrolist/ami-estimator';
-  const absoluteAmiEstimatorUrl = `${baseUrl}${relativeAmiEstimatorUrl}`;
-  const amiEstimatorUrl = ( isBeingTranslated ? copyGoogleTranslateParametersToNewUrl( absoluteAmiEstimatorUrl ) : relativeAmiEstimatorUrl );
-
   const CalloutUi = (
     <Inset key="ami-estimator-callout" className="filters-panel__callout-container" until="large">
       <Callout
@@ -745,7 +744,6 @@ function Search( props ) {
               criterion="hideIneligibleIncomeRestrictedUnits"
               size="small"
               onChange={ handleIncomeRestrictionToggle }
-
             >
               <span style={{ "display": "inline-block", "maxWidth": "14.8rem" }}>
                 Hide homes that require a household income over <abbr className="--shorthand" title={ `${abbreviatedHouseholdIncome} per ${incomeRateUnit}` }>{ householdIncomeRate }</abbr>

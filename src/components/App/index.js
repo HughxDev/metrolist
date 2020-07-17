@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { slugify } from '@util/strings';
-import { resolveLocationConsideringGoogleTranslate } from '@util/a11y-seo';
+import { resolveLocationConsideringGoogleTranslate } from '@util/translation';
 
 import Layout from '@components/Layout';
 import AppHeader from '@components/AppHeader';

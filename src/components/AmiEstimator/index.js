@@ -3,7 +3,10 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Switch, Route, useRouteMatch, useLocation, withRouter,
+  Switch,
+  Route,
+  useRouteMatch,
+  withRouter,
 } from 'react-router-dom';
 import {
   TransitionGroup,
@@ -13,7 +16,11 @@ import {
 
 import { hasOwnProperty, getGlobalThis } from '@util/objects';
 import { slugify, uncapitalize, componentCase } from '@util/strings';
-import { resolveLocationConsideringGoogleTranslate, isOnGoogleTranslate } from '@util/a11y-seo';
+import {
+  resolveLocationConsideringGoogleTranslate,
+  switchToGoogleTranslateBaseIfNeeded,
+  switchBackToMetrolistBaseIfNeeded,
+} from '@util/translation';
 import { capitalCase } from 'change-case';
 
 import Button from '@components/Button';
@@ -82,10 +89,7 @@ function AmiEstimator( props ) {
   const formRef = useRef();
   const currentStepRef = useRef();
   const totalSteps = props.steps.length;
-  const isBeingTranslated = isOnGoogleTranslate();
-  const $base = document.querySelector( 'base[href]' );
-  const metrolistBaseUrl = ( ( isBeingTranslated && $base ) ? $base.href : null ); // Added by Google to correct links, but breaks React Router
-  const googleTranslateBaseUrl = ( ( isBeingTranslated && $base ) ? globalThis.location.origin : null );
+
   const badErrorMessageElementError = ( showHide = 'show/hide' ) => {
     throw new Error(
       `Can’t ${showHide} UI error message: the value passed to \`${showHide}ErrorMessage\` is “${typeof $errorMessage}”;`
@@ -254,20 +258,6 @@ function AmiEstimator( props ) {
     }
 
     return null;
-  };
-
-  const switchToGoogleTranslateBaseIfNeeded = () => {
-    // Fix CORS issue with history.push routing inside of Google Translate
-    if ( googleTranslateBaseUrl ) {
-      $base.href = googleTranslateBaseUrl;
-    }
-  };
-
-  const switchBackToMetrolistBaseIfNeeded = () => {
-    // Fix CORS issue with history.push routing inside of Google Translate
-    if ( metrolistBaseUrl ) {
-      $base.href = metrolistBaseUrl;
-    }
   };
 
   const navigateForward = () => {

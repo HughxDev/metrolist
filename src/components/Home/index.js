@@ -11,7 +11,7 @@ import Row from '@components/Row';
 import { homeObject } from '@util/validation';
 import { generateRandomDomId } from '@util/strings';
 import { isLiveDev } from '@util/dev';
-import { isOnGoogleTranslate, copyGoogleTranslateParametersToNewUrl } from '@util/a11y-seo';
+import { isOnGoogleTranslate, copyGoogleTranslateParametersToNewUrl } from '@util/translation';
 import { getGlobalThis } from '@util/objects';
 
 import './Home.scss';

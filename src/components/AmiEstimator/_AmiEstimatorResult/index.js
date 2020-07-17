@@ -6,7 +6,8 @@ import PropTypes from 'prop-types';
 import Button from '@components/Button';
 import Stack from '@components/Stack';
 
-import { updatePageTitle, isOnGoogleTranslate, copyGoogleTranslateParametersToNewUrl } from '@util/a11y-seo';
+import { updatePageTitle } from '@util/a11y-seo';
+import { isOnGoogleTranslate, copyGoogleTranslateParametersToNewUrl } from '@util/translation';
 import { hasOwnProperty } from '@util/objects';
 
 import InputSummary from '../_AmiEstimatorInputSummary';

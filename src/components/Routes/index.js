@@ -7,19 +7,24 @@ import {
 import Search from '@components/Search';
 import AmiEstimator from '@components/AmiEstimator';
 
-import { resolveLocationConsideringGoogleTranslate } from '@util/a11y-seo';
+import {
+  resolveLocationConsideringGoogleTranslate,
+  switchBackToMetrolistBaseIfNeeded,
+} from '@util/translation';
 
 import './Routes.scss';
 
 function Routes( props ) {
   return (
     <Switch location={ resolveLocationConsideringGoogleTranslate() }>
-      <Route path="/metrolist/search">
-        <Search />
-      </Route>
-      <Route path="/metrolist/ami-estimator">
-        <AmiEstimator />
-      </Route>
+      <Route path="/metrolist/search" render={ () => {
+        switchBackToMetrolistBaseIfNeeded();
+        return <Search />;
+      } }></Route>
+      <Route path="/metrolist/ami-estimator" render={ () => {
+        switchBackToMetrolistBaseIfNeeded();
+        return <AmiEstimator />;
+      } }></Route>
       <Route exact path="/metrolist/">
         <article>
           <div className="hro hro--t">
