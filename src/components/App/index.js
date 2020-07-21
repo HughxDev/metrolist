@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 
 import { slugify } from '@util/strings';
 import { resolveLocationConsideringGoogleTranslate } from '@util/translation';
@@ -11,7 +12,7 @@ import Routes from '@components/Routes';
 import './App.scss';
 
 function App() {
-  const location = resolveLocationConsideringGoogleTranslate();
+  const location = resolveLocationConsideringGoogleTranslate( useLocation() );
   const baselessPathname = location.pathname.replace( /^\/metrolist\//, '/' );
   let rootPathSlug;
 

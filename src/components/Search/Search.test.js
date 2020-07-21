@@ -531,7 +531,7 @@ describe( 'Search', () => {
             </MemoryRouter>
           </LocalStorageMock>,
         );
-        const incomeRestrictionFilterToggle = getByLabelText( /Hide income-restricted homes with limits/, { "selector": "input" } );
+        const incomeRestrictionFilterToggle = getByLabelText( /Hide homes that require a household income over \$[0-9,]+\/(mo|yr)\./, { "selector": "input" } );
 
         fireEvent.click( incomeRestrictionFilterToggle );
 

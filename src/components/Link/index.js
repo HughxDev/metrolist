@@ -1,25 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link as ReactRouterLink } from 'react-router-dom';
+import { Link as ReactRouterLink, useLocation } from 'react-router-dom';
 import {
   switchToGoogleTranslateBaseIfNeeded,
-  // switchBackToMetrolistBaseIfNeeded,
+  switchBackToMetrolistBaseIfNeeded,
+  resolveLocationConsideringGoogleTranslate,
 } from '@util/translation';
 
 import './Link.scss';
 
-function handleClick( event ) {
-  switchToGoogleTranslateBaseIfNeeded();
+function handleClick( location ) {
+  const $base = document.querySelector( 'base[href]' );
+  const resolvedLocation = resolveLocationConsideringGoogleTranslate( location );
+
+  switchToGoogleTranslateBaseIfNeeded( $base );
+
+  setTimeout( () => switchBackToMetrolistBaseIfNeeded( resolvedLocation, $base ), 125 );
 }
 
 function Link( props ) {
+  const location = useLocation();
+
   return (
     <ReactRouterLink
       data-testid="ml-link"
       // className={ `ml-link${props.className ? ` ${props.className}` : ''}` }
       { ...props }
       onClick={ ( event ) => {
-        handleClick( event );
+        handleClick( location );
         if ( props.onClick ) {
           props.onClick( event );
         }

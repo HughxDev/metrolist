@@ -2,29 +2,29 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Switch, Route,
+  useLocation,
 } from 'react-router-dom';
+
 
 import Search from '@components/Search';
 import AmiEstimator from '@components/AmiEstimator';
 
 import {
   resolveLocationConsideringGoogleTranslate,
-  switchBackToMetrolistBaseIfNeeded,
+  // switchBackToMetrolistBaseIfNeeded,
 } from '@util/translation';
 
 import './Routes.scss';
 
-function Routes( props ) {
+function Routes() {
   return (
-    <Switch location={ resolveLocationConsideringGoogleTranslate() }>
-      <Route path="/metrolist/search" render={ () => {
-        switchBackToMetrolistBaseIfNeeded();
-        return <Search />;
-      } }></Route>
-      <Route path="/metrolist/ami-estimator" render={ () => {
-        switchBackToMetrolistBaseIfNeeded();
-        return <AmiEstimator />;
-      } }></Route>
+    <Switch location={ resolveLocationConsideringGoogleTranslate( useLocation() ) }>
+      <Route path="/metrolist/search">
+        <Search />
+      </Route>
+      <Route path="/metrolist/ami-estimator">
+        <AmiEstimator />
+      </Route>
       <Route exact path="/metrolist/">
         <article>
           <div className="hro hro--t">

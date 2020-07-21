@@ -17,6 +17,7 @@ import { getDevelopmentsApiEndpoint } from '@util/dev';
 import {
   isOnGoogleTranslate,
   copyGoogleTranslateParametersToNewUrl,
+  getUrlBeingTranslated,
 } from '@util/translation';
 
 import './Search.scss';
@@ -64,8 +65,7 @@ function Search( props ) {
   const $drawer = useRef();
   let [updatingDrawerHeight, setUpdatingDrawerHeight] = useState( false ); // eslint-disable-line
   const isBeingTranslated = isOnGoogleTranslate();
-  const $base = document.querySelector( 'base[href]' );
-  const baseUrl = ( isBeingTranslated ? $base.getAttribute( 'href' ).replace( /\/metrolist\/.*/, '' ) : globalThis.location.origin );
+  const baseUrl = ( isBeingTranslated ? getUrlBeingTranslated().replace( /\/metrolist\/.*/, '' ) : globalThis.location.origin );
   const relativeAmiEstimatorUrl = '/metrolist/ami-estimator';
   const absoluteAmiEstimatorUrl = `${baseUrl}${relativeAmiEstimatorUrl}`;
   const amiEstimatorUrl = ( isBeingTranslated ? copyGoogleTranslateParametersToNewUrl( absoluteAmiEstimatorUrl ) : relativeAmiEstimatorUrl );
@@ -728,7 +728,7 @@ function Search( props ) {
     const incomeRateLength = incomeRate.length;
     abbreviatedHouseholdIncome = householdIncome.substring( 0, householdIncome.length - 3 );
     incomeRateUnit = incomeRate.substring( 0, incomeRateLength - 2 );
-    abbreviatedIncomeRateUnit = incomeRate.substring( 0, incomeRateLength - 5 );
+    abbreviatedIncomeRateUnit = ( incomeRate === 'monthly' ) ? 'mo' : 'yr';
     householdIncomeRate = `${abbreviatedHouseholdIncome}/${abbreviatedIncomeRateUnit}.`;
   }
 
@@ -745,7 +745,7 @@ function Search( props ) {
               size="small"
               onChange={ handleIncomeRestrictionToggle }
             >
-              <span style={{ "display": "inline-block", "maxWidth": "14.8rem" }}>
+              <span style={{ "display": "inline-block", "maxWidth": "15.2rem" }}>
                 Hide homes that require a household income over <abbr className="--shorthand" title={ `${abbreviatedHouseholdIncome} per ${incomeRateUnit}` }>{ householdIncomeRate }</abbr>
               </span>
             </Checkbox>

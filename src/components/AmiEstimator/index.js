@@ -7,6 +7,7 @@ import {
   Route,
   useRouteMatch,
   withRouter,
+  useLocation,
 } from 'react-router-dom';
 import {
   TransitionGroup,
@@ -40,7 +41,8 @@ const globalThis = getGlobalThis();
 
 function AmiEstimator( props ) {
   const { path } = useRouteMatch();
-  const location = resolveLocationConsideringGoogleTranslate();
+  const routerLocation = useLocation();
+  const location = resolveLocationConsideringGoogleTranslate( routerLocation );
   const [heights, setHeights] = useState( {} );
   const [isNavigatingBackward, setIsNavigatingBackward] = useState( false );
 
@@ -262,13 +264,14 @@ function AmiEstimator( props ) {
 
   const navigateForward = () => {
     const nextStepPath = getNextStepPath();
+    const $base = document.querySelector( 'base[href]' );
 
-    switchToGoogleTranslateBaseIfNeeded();
+    switchToGoogleTranslateBaseIfNeeded( $base );
 
     if ( nextStepPath !== null ) {
       props.history.push( nextStepPath );
 
-      switchBackToMetrolistBaseIfNeeded();
+      switchBackToMetrolistBaseIfNeeded( location, $base );
     } else {
       console.error( 'Can’t navigate forward' );
     }
@@ -277,13 +280,14 @@ function AmiEstimator( props ) {
   const navigateBackward = () => {
     setIsNavigatingBackward( true );
     const previousStepPath = getPreviousStepPath();
+    const $base = document.querySelector( 'base[href]' );
 
-    switchToGoogleTranslateBaseIfNeeded();
+    switchToGoogleTranslateBaseIfNeeded( $base );
 
     if ( previousStepPath !== null ) {
       props.history.push( previousStepPath );
 
-      switchBackToMetrolistBaseIfNeeded();
+      switchBackToMetrolistBaseIfNeeded( location, $base );
 
       setTimeout( () => {
         setIsNavigatingBackward( false );

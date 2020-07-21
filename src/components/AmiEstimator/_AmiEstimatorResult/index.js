@@ -7,7 +7,7 @@ import Button from '@components/Button';
 import Stack from '@components/Stack';
 
 import { updatePageTitle } from '@util/a11y-seo';
-import { isOnGoogleTranslate, copyGoogleTranslateParametersToNewUrl } from '@util/translation';
+import { isOnGoogleTranslate, copyGoogleTranslateParametersToNewUrl, getUrlBeingTranslated } from '@util/translation';
 import { hasOwnProperty } from '@util/objects';
 
 import InputSummary from '../_AmiEstimatorInputSummary';
@@ -111,7 +111,8 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
   }, [amiEstimation] );
 
   const metrolistSearchPath = '/metrolist/search';
-  const metrolistSearchUrl = ( isBeingTranslated ? copyGoogleTranslateParametersToNewUrl( metrolistSearchPath ) : metrolistSearchPath );
+  const urlBeingTranslated = getUrlBeingTranslated();
+  const metrolistSearchUrl = ( isBeingTranslated ? copyGoogleTranslateParametersToNewUrl( urlBeingTranslated.replace( /\/metrolist\/.*/, metrolistSearchPath ) ) : metrolistSearchPath );
 
   return (
     <div ref={ selfRef } className={ `ml-ami-estimator__result ml-ami-estimator__prompt${props.className ? ` ${props.className}` : ''}` } data-testid="ml-ami-estimator__result">
