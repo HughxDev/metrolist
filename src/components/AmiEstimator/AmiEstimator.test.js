@@ -62,21 +62,25 @@ describe( 'AmiEstimator', () => {
     const previousButton = getByText( 'Back' );
     let firstStep;
     let firstStepInput;
+    let firstStepTitle;
 
     switch ( steps[0] ) {
       case 'HouseholdSize':
         firstStep = () => queryByTestId( 'ml-ami-estimator__household-size' );
         firstStepInput = getByLabelText( '4' );
+        firstStepTitle = 'AMI Estimator: Household Size';
         break;
 
       case 'HouseholdIncome':
         firstStep = () => queryByTestId( 'ml-ami-estimator__household-income' );
         firstStepInput = getByPlaceholderText( '$0.00' );
+        firstStepTitle = 'AMI Estimator: Household Income';
         break;
 
       case 'Disclosure':
         firstStep = () => queryByTestId( 'ml-ami-estimator__disclosure' );
         firstStepInput = getByLabelText( 'I have read and understand the above statement.' );
+        firstStepTitle = 'AMI Estimator: Disclosure';
         break;
 
       default:
@@ -89,18 +93,22 @@ describe( 'AmiEstimator', () => {
     } );
 
     let secondStep;
+    let secondStepTitle;
 
     switch ( steps[1] ) {
       case 'HouseholdSize':
         secondStep = () => queryByTestId( 'ml-ami-estimator__household-size' );
+        secondStepTitle = 'AMI Estimator: Household Size';
         break;
 
       case 'HouseholdIncome':
         secondStep = () => queryByTestId( 'ml-ami-estimator__household-income' );
+        secondStepTitle = 'AMI Estimator: Household Income';
         break;
 
       case 'Disclosure':
         secondStep = () => queryByTestId( 'ml-ami-estimator__disclosure' );
+        secondStepTitle = 'AMI Estimator: Disclosure';
         break;
 
       default:
@@ -108,6 +116,7 @@ describe( 'AmiEstimator', () => {
 
     expect( firstStep() ).not.toBeInTheDocument();
     expect( secondStep() ).toBeInTheDocument();
+    expect( document.title ).toMatch( new RegExp( `.*${secondStepTitle}.*` ) );
 
     act( () => {
       fireEvent.click( previousButton );
@@ -116,6 +125,7 @@ describe( 'AmiEstimator', () => {
 
     expect( firstStep() ).toBeInTheDocument();
     expect( secondStep() ).not.toBeInTheDocument();
+    expect( document.title ).toMatch( new RegExp( `.*${firstStepTitle}.*` ) );
   } );
 
   it( 'Stores household income for use on other pages', () => {

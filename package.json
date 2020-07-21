@@ -95,7 +95,7 @@
     "build:debug": "yarn sync:icons && yarn sync:ami ci && rm -rf dist/ && webpack --config webpack.config.js && yarn copy:drupal && yarn clean:drupal && yarn version:drupal",
     "jest": "./node_modules/jest-cli/bin/jest.js",
     "test": "./node_modules/jest-cli/bin/jest.js --verbose --collect-coverage --env=jsdom src/",
-    "test:watch": "./node_modules/jest-cli/bin/jest.js --verbose --watch --env=jsdom src/components/Search src/components/AmiEstimator",
+    "test:watch": "./node_modules/jest-cli/bin/jest.js --verbose --watch --env=jsdom src/",
     "test:coverage": "./node_modules/jest-cli/bin/jest.js --verbose --watch --collect-coverage --env=jsdom src/",
     "eject": "echo 'not CRA'",
     "component": "node _scripts/component.js",
