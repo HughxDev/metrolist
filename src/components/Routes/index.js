@@ -2,18 +2,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Switch, Route,
+  useLocation,
 } from 'react-router-dom';
+
 
 import Search from '@components/Search';
 import AmiEstimator from '@components/AmiEstimator';
 
-import { resolveLocationConsideringGoogleTranslate } from '@util/a11y-seo';
+import {
+  resolveLocationConsideringGoogleTranslate,
+  // switchBackToMetrolistBaseIfNeeded,
+} from '@util/translation';
 
 import './Routes.scss';
 
-function Routes( props ) {
+function Routes() {
   return (
-    <Switch location={ resolveLocationConsideringGoogleTranslate() }>
+    <Switch location={ resolveLocationConsideringGoogleTranslate( useLocation() ) }>
       <Route path="/metrolist/search">
         <Search />
       </Route>

@@ -3,7 +3,11 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Switch, Route, useRouteMatch, withRouter,
+  Switch,
+  Route,
+  useRouteMatch,
+  withRouter,
+  useLocation,
 } from 'react-router-dom';
 import {
   TransitionGroup,
@@ -13,7 +17,11 @@ import {
 
 import { hasOwnProperty, getGlobalThis } from '@util/objects';
 import { slugify, uncapitalize, componentCase } from '@util/strings';
-import { resolveLocationConsideringGoogleTranslate, isOnGoogleTranslate } from '@util/a11y-seo';
+import {
+  resolveLocationConsideringGoogleTranslate,
+  switchToGoogleTranslateBaseIfNeeded,
+  switchBackToMetrolistBaseIfNeeded,
+} from '@util/translation';
 import { capitalCase } from 'change-case';
 
 import Button from '@components/Button';
@@ -33,7 +41,8 @@ const globalThis = getGlobalThis();
 
 function AmiEstimator( props ) {
   const { path } = useRouteMatch();
-  const location = resolveLocationConsideringGoogleTranslate();
+  const routerLocation = useLocation();
+  const location = resolveLocationConsideringGoogleTranslate( routerLocation );
   const [heights, setHeights] = useState( {} );
   const [isNavigatingBackward, setIsNavigatingBackward] = useState( false );
 
@@ -82,10 +91,7 @@ function AmiEstimator( props ) {
   const formRef = useRef();
   const currentStepRef = useRef();
   const totalSteps = props.steps.length;
-  const isBeingTranslated = isOnGoogleTranslate();
-  const $base = document.querySelector( 'base[href]' );
-  const metrolistBaseUrl = ( ( isBeingTranslated && $base ) ? $base.href : null ); // Added by Google to correct links, but breaks React Router
-  const googleTranslateBaseUrl = ( ( isBeingTranslated && $base ) ? globalThis.location.origin : null );
+
   const badErrorMessageElementError = ( showHide = 'show/hide' ) => {
     throw new Error(
       `Can’t ${showHide} UI error message: the value passed to \`${showHide}ErrorMessage\` is “${typeof $errorMessage}”;`
@@ -256,29 +262,16 @@ function AmiEstimator( props ) {
     return null;
   };
 
-  const switchToGoogleTranslateBaseIfNeeded = () => {
-    // Fix CORS issue with history.push routing inside of Google Translate
-    if ( googleTranslateBaseUrl ) {
-      $base.href = googleTranslateBaseUrl;
-    }
-  };
-
-  const switchBackToMetrolistBaseIfNeeded = () => {
-    // Fix CORS issue with history.push routing inside of Google Translate
-    if ( metrolistBaseUrl ) {
-      $base.href = metrolistBaseUrl;
-    }
-  };
-
   const navigateForward = () => {
     const nextStepPath = getNextStepPath();
+    const $base = document.querySelector( 'base[href]' );
 
-    switchToGoogleTranslateBaseIfNeeded();
+    switchToGoogleTranslateBaseIfNeeded( $base );
 
     if ( nextStepPath !== null ) {
       props.history.push( nextStepPath );
 
-      switchBackToMetrolistBaseIfNeeded();
+      switchBackToMetrolistBaseIfNeeded( location, $base );
     } else {
       console.error( 'Can’t navigate forward' );
     }
@@ -287,13 +280,14 @@ function AmiEstimator( props ) {
   const navigateBackward = () => {
     setIsNavigatingBackward( true );
     const previousStepPath = getPreviousStepPath();
+    const $base = document.querySelector( 'base[href]' );
 
-    switchToGoogleTranslateBaseIfNeeded();
+    switchToGoogleTranslateBaseIfNeeded( $base );
 
     if ( previousStepPath !== null ) {
       props.history.push( previousStepPath );
 
-      switchBackToMetrolistBaseIfNeeded();
+      switchBackToMetrolistBaseIfNeeded( location, $base );
 
       setTimeout( () => {
         setIsNavigatingBackward( false );

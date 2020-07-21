@@ -197,3 +197,33 @@ alias chrome-insecure='open -n -a Google\ Chrome\ Canary --args --disable-web-se
 ```
 
 Then in a terminal, just type `chrome-insecure` and you will get a separate window with no security and no user profile attached. Sometimes Google changes the necessary commands to disable security, so check around online if this command doesn’t work for you. Unfortunately no extensions will be installed for this profile, and if you install any they will only exist for that session since your data directory is under `/tmp/`.
+
+## Google Translate Compatibility
+
+We’re using React Router for routing, which provides a `Link` component to use in place of `a`. `Link` uses `history.pushState` under the hood, but this will fail inside the Google Translate iframe due to cross-domain security features in the browser. So in order to make app navigation work again, we have to hack around the issue like so:
+
+- Change `base.href` to the Google Translate iframe domain,
+- Perform the navigation,
+- Change `base.href` back to boston.gov immediately afterward to make sure normal links and assets don’t break.
+
+To do this automatically, there is a custom Metrolist `Link` which wraps the React Router `Link` and attaches a click handler with the workaround logic. So, anytime you want to use React Router’s `Link`, you need to import and use `@components/Link` instead. This is the technique used by the Search component to link to the different pages of results.
+
+If instead you want to use React Router’s `history.push` (or the browser-native `history.pushState`) manually, you can import these helper functions individually:
+
+```js
+import {
+  switchToGoogleTranslateBaseIfNeeded,
+  switchBackToMetrolistBaseIfNeeded,
+} from '@util/translation';
+import { useHistory } from 'react-router-dom';
+
+const history = useHistory();
+
+switchToGoogleTranslateBaseIfNeeded();
+
+history.push( newUrlPath );
+
+switchBackToMetrolistBaseIfNeeded();
+```
+
+This is the technique used by the AMI Estimator component to link to navigate between the different steps in the form.
