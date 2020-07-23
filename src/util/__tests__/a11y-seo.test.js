@@ -1,4 +1,3 @@
-// import '__mocks__/matchMedia';
 import React, { useEffect } from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';

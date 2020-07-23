@@ -1,5 +1,3 @@
-import { isProd } from '@util/dev';
-
 export function isOnGoogleTranslate() {
   return (
     ( globalThis.location.hostname === 'translate.googleusercontent.com' )
@@ -32,8 +30,8 @@ export function copyGoogleTranslateParametersToNewUrl( url ) {
 
     if ( metrolistGoogleTranslateIframeUrl ) {
       newUrl = metrolistGoogleTranslateIframeUrl.replace(
-        /([a-z]+=)(https?:\/\/[^/]+\/metrolist\/.*)/i,
-        `$1${url}`,
+        /([a-z]+=)(?:https?:\/\/[^/]+\/metrolist\/[^&?=]*)(.*)/i,
+        `$1${url}$2`,
       );
     } else {
       console.error( 'Could not find `metrolistGoogleTranslateIframeUrl` in localStorage' );
@@ -55,6 +53,7 @@ export function resolveLocationConsideringGoogleTranslate( location, isBeingTran
   if ( isBeingTranslated && location.search.length ) {
     const filteredQueryParameters = location.search.split( '&' ).filter( ( urlParameter ) => urlParameter.indexOf( '/metrolist/' ) !== -1 );
 
+    /* istanbul ignore else */
     if ( filteredQueryParameters.length ) {
       urlBeingTranslated = filteredQueryParameters[0].replace( /[a-z]+=(https?:\/\/[^/]+\/metrolist\/.*)/i, '$1' );
       resolvedUrlPath = urlBeingTranslated.replace( /https?:\/\/[^/]+(\/metrolist\/.*)/i, '$1' );
@@ -67,48 +66,39 @@ export function resolveLocationConsideringGoogleTranslate( location, isBeingTran
   if ( !urlBeingTranslated ) {
     const $base = document.querySelector( 'base[href]' );
 
+    /* istanbul ignore else */
     if ( $base && ( $base.href.indexOf( '/metrolist/' ) !== -1 ) ) {
       urlBeingTranslated = $base.href;
     }
   }
 
-  const returnValue = {
+  return {
     ...location,
     "pathname": resolvedUrlPath,
     "_urlBeingTranslated": urlBeingTranslated,
   };
-
-  // console.log( returnValue );
-
-  return returnValue;
 }
 
 export function switchToGoogleTranslateBaseIfNeeded( $base ) {
   localStorage.removeItem( 'metrolistGoogleTranslateUrl' );
-  // console.log( "switchToGoogleTranslateBaseIfNeeded" );
+
   $base = ( $base || document.querySelector( 'base[href]' ) );
   const googleTranslateBaseUrl = ( ( $base && isOnGoogleTranslate() && $base ) ? globalThis.location.origin : null );
 
-  // console.log( 'googleTranslateBaseUrl', googleTranslateBaseUrl );
-
   // Fix CORS issue with history.push routing inside of Google Translate
   if ( googleTranslateBaseUrl ) {
-    // console.log( "switched base to google" );
     $base.href = googleTranslateBaseUrl;
   }
 }
 
 export function switchBackToMetrolistBaseIfNeeded( resolvedLocation, $base ) {
   localStorage.removeItem( 'metrolistGoogleTranslateUrl' );
-  // console.log( "switchBackToMetrolistBaseIfNeeded" );
+
   $base = ( $base || document.querySelector( 'base[href]' ) );
   const metrolistBaseUrl = ( ( $base && isOnGoogleTranslate() ) ? resolvedLocation._urlBeingTranslated : null ); // Added by Google to correct links, but breaks React Router
 
-  // console.log( 'metrolistBaseUrl', metrolistBaseUrl );
-
   // Fix CORS issue with history.push routing inside of Google Translate
   if ( metrolistBaseUrl ) {
-    // console.log( "switched base back to metrolist" );
     $base.href = metrolistBaseUrl;
   }
 }
