@@ -19,7 +19,7 @@ export const homeObject = PropTypes.shape( {
   "assignment": PropTypes.oneOf( [null, '', 'lottery', 'waitlist', 'first'] ),
   "city": PropTypes.string,
   "neighborhood": PropTypes.string,
-  "type": PropTypes.oneOf( [null, 'apt', 'house', 'sro', 'condo', 'multi-family'] ),
+  "type": PropTypes.oneOf( [null, 'apt', 'single-family', 'sro', 'condo', 'multi-family'] ),
   "offer": PropTypes.oneOf( ['rent', 'sale'] ),
   "units": PropTypes.arrayOf( unitObject ),
   "incomeRestricted": PropTypes.bool,
