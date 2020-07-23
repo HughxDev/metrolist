@@ -82,7 +82,7 @@ function renderType( type ) {
   }
 }
 
-function serializeFiltersToUrlParams( filters ) {
+function serializeFiltersToUrlParams( filters, home ) {
   // /metrolist/search/listing/275-roxbury-street?ami=30-120&bedrooms=1+2&type=rent
   // /metrolist/search/listing/{slug}?ami={ami_low}-{ami_high}&bedrooms={num_beds}+{num_beds}&type={offer}
   const params = [];
@@ -154,6 +154,13 @@ function serializeFiltersToUrlParams( filters ) {
     }
   }
 
+  // Since single developments can be split into two virtual “homes” by the API, then
+  // we need to tell the Property Page which version of a home it should display when
+  // the user clicks on More Info.
+  if ( home && home.assignment ) {
+    params.push( `assignment=${home.assignment}` );
+  }
+
   if ( params.length ) {
     return `?${params.join( '&' )}`;
   }
@@ -210,7 +217,7 @@ function Home( props ) {
     baseUrl = globalThis.location.origin;
   }
 
-  const relativePropertyPageUrl = `/metrolist/search/housing/${slug}/${serializeFiltersToUrlParams( filters )}`;
+  const relativePropertyPageUrl = `/metrolist/search/housing/${slug}/${serializeFiltersToUrlParams( filters, home )}`;
   const absolutePropertyPageUrl = `${baseUrl}${relativePropertyPageUrl}`;
   const propertyPageUrl = ( isBeingTranslated ? copyGoogleTranslateParametersToNewUrl( absolutePropertyPageUrl ) : absolutePropertyPageUrl );
 
