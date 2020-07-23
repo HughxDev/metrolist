@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { numericString } from 'airbnb-prop-types';
+// import { numericString } from 'airbnb-prop-types';
 import { hasOwnProperty } from '@util/objects';
 
 // import 'whatwg-fetch';
@@ -110,7 +110,7 @@ class Icon extends React.Component {
     if ( this.props.isMetrolistIcon ) {
       return (
         <picture>
-          <source type="image/svg+xml" srcSet={ `/images/${this.props.icon}.sv\g` } />
+          <source data-testid="ml-icon__svg" type="image/svg+xml" srcSet={ `/images/${this.props.icon}.sv\g` } />
           <img
             { ...this.state.attributes }
             src={ `/images/${this.props.icon}.png` }

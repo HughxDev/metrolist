@@ -39,6 +39,168 @@ import './AmiEstimator.scss';
 
 const globalThis = getGlobalThis();
 
+function badErrorMessageElementError( showHide = 'show/hide' ) {
+  throw new Error(
+    `Can’t ${showHide} UI error message: the value passed to \`${showHide}ErrorMessage\` is “${typeof $errorMessage}”;`
+    + ` should be a DOM element or a React ref pointing to a DOM element. Check the state object and make sure your input has an \`errorRef\` property.`,
+  );
+}
+
+function hideErrorMessage( $errorMessage ) {
+  if ( $errorMessage ) {
+    if ( hasOwnProperty( $errorMessage, 'current' ) ) {
+      $errorMessage = $errorMessage.current;
+    }
+
+    if ( !$errorMessage ) {
+      badErrorMessageElementError( 'hide' );
+      return;
+    }
+
+    $errorMessage.classList.remove( '--visible' );
+
+    setTimeout( () => {
+      $errorMessage.hidden = true;
+    }, 62.5 );
+  } else {
+    badErrorMessageElementError( 'hide' );
+  }
+}
+
+function showErrorMessage( $errorMessage, index ) {
+  if ( $errorMessage ) {
+    if ( hasOwnProperty( $errorMessage, 'current' ) ) {
+      $errorMessage = $errorMessage.current;
+    }
+
+    if ( !$errorMessage ) {
+      badErrorMessageElementError( 'show' );
+      return;
+    }
+
+    $errorMessage.hidden = false;
+
+    setTimeout( () => {
+      $errorMessage.classList.add( '--visible' );
+
+      // console.log( 'index', index );
+
+      if ( index === 0 ) {
+        let $focusTarget;
+        const $reverseLookup = document.querySelector( `[aria-describedby~=${$errorMessage.id}]` );
+
+        if ( $reverseLookup ) {
+          $focusTarget = $reverseLookup;
+        } else {
+          $focusTarget = $errorMessage;
+        }
+
+        $focusTarget.focus();
+      }
+    }, 62.5 );
+  } else {
+    badErrorMessageElementError( 'show' );
+  }
+}
+
+function reportMissingValidityProperty( $formControl ) {
+  throw new Error(
+    `Form control `
+      + `\`${$formControl.nodeName.toLowerCase()}`
+      + `${$formControl.id && `#${$formControl.id}`}`
+      + `${$formControl.className && `.${$formControl.className}`}\``
+    + ` does not have the \`validity\` or \`checkValidity\` properties.`
+    + ` This means either the current browser does not support HTML5 forms, or the React ref is misconfigured.`,
+  );
+}
+
+function reportMissingDisplayNameProperty( index ) {
+  throw new Error(
+    `AMI Calculator step definition is incomplete:`
+    + ` the object at \`AmiEstimator.steps[${index}]\` either needs a \`relativePath\` property,`
+    + ` or its constituent ami-estimator needs to specify React’s \`displayName\` property.`,
+  );
+}
+
+function getStepNumberFromPath( location, routePath, steps ) {
+  const currentRelativePath = location.pathname.replace( routePath, '/' ).replace( '//', '/' );
+
+  for ( let index = 0; index < steps.length; index++ ) {
+    const currentStep = steps[index];
+    let relativePath;
+
+    if ( hasOwnProperty( currentStep, 'relativePath' ) ) {
+      relativePath = currentStep.relativePath;
+    } else if ( hasOwnProperty( currentStep.component, 'displayName' ) ) {
+      relativePath = `/${slugify( currentStep.component.displayName )}`;
+    } else {
+      reportMissingDisplayNameProperty( index );
+    }
+
+    if ( relativePath === currentRelativePath ) {
+      return ( index + 1 );
+    }
+  }
+
+  throw new Error( `Cannot find step number for ${location.pathname}; please check the \`AmiEstimator.steps\` array.` );
+}
+
+function getErrors( $form, formData ) {
+  const formValidity = $form.checkValidity();
+  const newErrors = { ...formData };
+  let numberOfErrors = 0;
+
+  if ( !formValidity ) {
+    const $elements = $form.elements;
+    const radioButtons = {};
+
+    for ( let index = 0; index < $elements.length; index++ ) {
+      const $element = $elements[index];
+      const { name } = $element;
+
+      if ( hasOwnProperty( radioButtons, $element.name ) ) {
+        break;
+      }
+
+      if ( 'validity' in $element ) {
+        const { validity } = $element;
+
+        if ( validity.valueMissing === true ) {
+          if ( $element.type === 'radio' ) {
+            radioButtons[name] = true;
+          }
+
+          newErrors[name] = {
+            ...newErrors[name],
+            "errorMessage": ( formData[name].errorMessageWhenRequired ? formData[name].errorMessageWhenRequired : "Please fill out this field." ),
+          };
+
+          numberOfErrors++;
+        }
+      } else {
+        reportMissingValidityProperty( $element );
+      } // if validity in $element
+    } // for
+
+    if ( numberOfErrors ) {
+      newErrors.alert = {
+        ...formData.alert,
+        "errorMessage": "There were errors in your submission.",
+      };
+    }
+  } else {
+    Object.keys( formData ).forEach( ( errorName ) => {
+      newErrors[errorName].errorMessage = '';
+    } );
+  }
+
+  return [newErrors, numberOfErrors];
+}
+
+function handleSubmit( event ) {
+  event.preventDefault();
+}
+
 function AmiEstimator( props ) {
   const { path } = useRouteMatch();
   const routerLocation = useLocation();
@@ -48,12 +210,6 @@ function AmiEstimator( props ) {
 
   const noErrors = {
     "steps": [...props.steps],
-    // "alert": {
-    //   "page": "all",
-    //   "value": "",
-    //   "errorMessage": "",
-    //   "errorRef": useRef(),
-    // },
     "householdSize": {
       "page": 1,
       "value": "",
@@ -91,114 +247,7 @@ function AmiEstimator( props ) {
   const formRef = useRef();
   const currentStepRef = useRef();
   const totalSteps = props.steps.length;
-
-  const badErrorMessageElementError = ( showHide = 'show/hide' ) => {
-    throw new Error(
-      `Can’t ${showHide} UI error message: the value passed to \`${showHide}ErrorMessage\` is “${typeof $errorMessage}”;`
-      + ` should be a DOM element or a React ref pointing to a DOM element. Check the state object and make sure your input has an \`errorRef\` property.`,
-    );
-  };
-
-  const hideErrorMessage = ( $errorMessage ) => {
-    if ( $errorMessage ) {
-      if ( hasOwnProperty( $errorMessage, 'current' ) ) {
-        $errorMessage = $errorMessage.current;
-      }
-
-      if ( !$errorMessage ) {
-        badErrorMessageElementError( 'hide' );
-        return;
-      }
-
-      $errorMessage.classList.remove( '--visible' );
-
-      setTimeout( () => {
-        $errorMessage.hidden = true;
-      }, 62.5 );
-    } else {
-      badErrorMessageElementError( 'hide' );
-    }
-  };
-
-  const showErrorMessage = ( $errorMessage, index ) => {
-    if ( $errorMessage ) {
-      if ( hasOwnProperty( $errorMessage, 'current' ) ) {
-        $errorMessage = $errorMessage.current;
-      }
-
-      if ( !$errorMessage ) {
-        badErrorMessageElementError( 'show' );
-        return;
-      }
-
-      $errorMessage.hidden = false;
-
-      setTimeout( () => {
-        $errorMessage.classList.add( '--visible' );
-
-        // console.log( 'index', index );
-
-        if ( index === 0 ) {
-          let $focusTarget;
-          const $reverseLookup = document.querySelector( `[aria-describedby~=${$errorMessage.id}]` );
-
-          if ( $reverseLookup ) {
-            $focusTarget = $reverseLookup;
-          } else {
-            $focusTarget = $errorMessage;
-          }
-
-          $focusTarget.focus();
-        }
-      }, 62.5 );
-    } else {
-      badErrorMessageElementError( 'show' );
-    }
-  };
-
-  const reportMissingValidityProperty = ( $formControl ) => {
-    throw new Error(
-      `Form control `
-        + `\`${$formControl.nodeName.toLowerCase()}`
-        + `${$formControl.id && `#${$formControl.id}`}`
-        + `${$formControl.className && `.${$formControl.className}`}\``
-      + ` does not have the \`validity\` or \`checkValidity\` properties.`
-      + ` This means either the current browser does not support HTML5 forms, or the React ref is misconfigured.`,
-    );
-  };
-
-  const reportMissingDisplayNameProperty = ( index ) => {
-    throw new Error(
-      `AMI Calculator step definition is incomplete:`
-      + ` the object at \`AmiEstimator.steps[${index}]\` either needs a \`relativePath\` property,`
-      + ` or its constituent ami-estimator needs to specify React’s \`displayName\` property.`,
-    );
-  };
-
-  const getStepNumberFromPath = () => {
-    const currentRelativePath = location.pathname.replace( path, '/' ).replace( '//', '/' );
-
-    for ( let index = 0; index < props.steps.length; index++ ) {
-      const currentStep = props.steps[index];
-      let relativePath;
-
-      if ( hasOwnProperty( currentStep, 'relativePath' ) ) {
-        relativePath = currentStep.relativePath;
-      } else if ( hasOwnProperty( currentStep.component, 'displayName' ) ) {
-        relativePath = `/${slugify( currentStep.component.displayName )}`;
-      } else {
-        reportMissingDisplayNameProperty( index );
-      }
-
-      if ( relativePath === currentRelativePath ) {
-        return ( index + 1 );
-      }
-    }
-
-    throw new Error( `Cannot find step number for ${location.pathname}; please check the \`AmiEstimator.steps\` array.` );
-  };
-
-  const [step, setStep] = useState( getStepNumberFromPath() );
+  const [step, setStep] = useState( getStepNumberFromPath( location, path, props.steps ) );
 
   const getNextStepName = () => {
     const nextStep = ( step + 1 );
@@ -297,63 +346,6 @@ function AmiEstimator( props ) {
     }
   };
 
-  const handleSubmit = ( event ) => {
-    event.preventDefault();
-  };
-
-  const getErrors = () => {
-    const $form = formRef.current;
-    const formValidity = $form.checkValidity();
-    const newErrors = { ...formData };
-    let numberOfErrors = 0;
-
-    if ( !formValidity ) {
-      const $elements = $form.elements;
-      const radioButtons = {};
-
-      for ( let index = 0; index < $elements.length; index++ ) {
-        const $element = $elements[index];
-        const { name } = $element;
-
-        if ( hasOwnProperty( radioButtons, $element.name ) ) {
-          break;
-        }
-
-        if ( 'validity' in $element ) {
-          const { validity } = $element;
-
-          if ( validity.valueMissing === true ) {
-            if ( $element.type === 'radio' ) {
-              radioButtons[name] = true;
-            }
-
-            newErrors[name] = {
-              ...newErrors[name],
-              "errorMessage": ( formData[name].errorMessageWhenRequired ? formData[name].errorMessageWhenRequired : "Please fill out this field." ),
-            };
-
-            numberOfErrors++;
-          }
-        } else {
-          reportMissingValidityProperty( $element );
-        } // if validity in $element
-      } // for
-
-      if ( numberOfErrors ) {
-        newErrors.alert = {
-          ...formData.alert,
-          "errorMessage": "There were errors in your submission.",
-        };
-      }
-    } else {
-      Object.keys( formData ).forEach( ( errorName ) => {
-        newErrors[errorName].errorMessage = '';
-      } );
-    }
-
-    return [newErrors, numberOfErrors];
-  };
-
   const clearErrors = ( errorNameList, newFormData = formData ) => {
     errorNameList.forEach( ( errorName ) => {
       try {
@@ -378,12 +370,6 @@ function AmiEstimator( props ) {
     setFormData( newFormData );
   };
 
-  const clearAlert = ( newFormData = formData ) => {
-    hideErrorMessage( newFormData.alert.errorRef );
-    newFormData.alert.errorMessage = '';
-    setFormData( newFormData );
-  };
-
   const handleFormInteraction = ( event ) => {
     const navigatePrevious = event.target.hasAttribute( 'data-navigate-previous' );
     const navigateNext = event.target.hasAttribute( 'data-navigate-next' );
@@ -392,7 +378,7 @@ function AmiEstimator( props ) {
       // clearAlert();
       navigateBackward();
     } else {
-      const [newFormData, numberOfErrors] = getErrors();
+      const [newFormData, numberOfErrors] = getErrors( formRef.current, formData );
       const errorNameList = Object.keys( newFormData )
         .filter( ( formDataKey ) => (
           ( newFormData[formDataKey].page === step )
@@ -487,47 +473,14 @@ function AmiEstimator( props ) {
     }, timing ) );
   };
 
-  // const adjustContainerHeight = ( stepRef, timing = 1000 ) => {
-  //   setTimeout( () => {
-  //     if ( stepRef && stepRef.current ) {
-  //       const newHeights = {
-  //         ...heights,
-  //       };
-  //       const $stepContent = stepRef.current.querySelector( '.ml-ami-estimator__prompt-inner' );
-
-  //       newHeights[location.pathname] = getComputedStyle( $stepContent ).getPropertyValue( 'height' );
-
-  //       setHeights( newHeights );
-  //       console.log( 'new heights:', newHeights );
-  //     }
-  //   }, timing );
-  // };
-
   useEffect( () => {
-    // console.log( 'useeffect', currentStepRef );
     adjustContainerHeight( currentStepRef, 62.5 );
   }, [formData] );
-
-  // useEffect( () => {
-  //   console.log( 'step changed', step );
-  //   adjustContainerHeight( currentStepRef, 1000 );
-  // }, [step] );
 
   globalThis.addEventListener( 'resize', () => {
     adjustContainerHeight( currentStepRef, 62.5 );
   } );
 
-  // const getStepHeight = () => {
-  //   if ( Object.keys( heights ).length ) {
-  //     return {
-  //       "height": heights[location.pathname],
-  //     };
-  //   }
-
-  //   return {
-  //     "height": "auto",
-  //   };
-  // };
   const nextStepName = getNextStepName();
   const previousStepName = getPreviousStepName();
 
@@ -537,16 +490,7 @@ function AmiEstimator( props ) {
       <Stack as="header" space="1">
         <h3 className="sh-title ml-ami-estimator__heading">Find Housing Based on Your Income &amp; Household Size…</h3>
         <ProgressBar current={ step } total={ totalSteps } />
-        {/* <p><span className="ml-required">*</span> = required field</p> */}
       </Stack>
-      {/* <Alert
-        id="ami-estimator-form-alert"
-        ref={ formData.alert.errorRef }
-        className={ `ml-ami-estimator__error-alert` }
-        variant="danger"
-      >
-        { formData.alert.errorMessage }
-      </Alert> */}
       <form
         ref={ formRef }
         className="ami-estimator__form"

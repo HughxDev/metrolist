@@ -22,7 +22,7 @@ describe( 'AmiEstimator', () => {
     jest.useRealTimers();
   } );
 
-  const steps = AmiEstimator.WrappedComponent.defaultProps.steps.map( ( step ) => step.component.displayName );
+  const steps = ['HouseholdSize', 'HouseholdIncome', 'Disclosure', 'Result'];
 
   it( 'Renders', () => {
     const { getByText } = render(
@@ -53,6 +53,7 @@ describe( 'AmiEstimator', () => {
   it( 'Navigates between steps', async () => {
     const {
       getByText, getByLabelText, queryByTestId, getByPlaceholderText,
+      queryByLabelText, queryByPlaceholderText,
     } = render(
       <MemoryRouter initialEntries={['/metrolist/ami-estimator']} initialIndex={0}>
         <Routes />
@@ -60,72 +61,106 @@ describe( 'AmiEstimator', () => {
     );
     const nextButton = getByText( 'Next' );
     const previousButton = getByText( 'Back' );
-    let firstStep;
-    let firstStepInput;
-    let firstStepTitle;
+    const firstStep = () => queryByTestId( 'ml-ami-estimator__household-size' );
+    const firstStepInput = () => queryByLabelText( '4' );
+    const firstStepTitle = 'AMI Estimator: Household Size';
 
-    switch ( steps[0] ) {
-      case 'HouseholdSize':
-        firstStep = () => queryByTestId( 'ml-ami-estimator__household-size' );
-        firstStepInput = getByLabelText( '4' );
-        firstStepTitle = 'AMI Estimator: Household Size';
-        break;
+    const secondStep = () => queryByTestId( 'ml-ami-estimator__household-income' );
+    const secondStepInput = () => queryByPlaceholderText( '$0.00' );
+    const secondStepTitle = 'AMI Estimator: Household Income';
 
-      case 'HouseholdIncome':
-        firstStep = () => queryByTestId( 'ml-ami-estimator__household-income' );
-        firstStepInput = getByPlaceholderText( '$0.00' );
-        firstStepTitle = 'AMI Estimator: Household Income';
-        break;
+    const thirdStep = () => queryByTestId( 'ml-ami-estimator__disclosure' );
+    const thirdStepInput = () => queryByLabelText( 'I have read and understand the above statement.' );
+    const thirdStepTitle = 'AMI Estimator: Disclosure';
 
-      case 'Disclosure':
-        firstStep = () => queryByTestId( 'ml-ami-estimator__disclosure' );
-        firstStepInput = getByLabelText( 'I have read and understand the above statement.' );
-        firstStepTitle = 'AMI Estimator: Disclosure';
-        break;
+    const fourthStep = () => queryByTestId( 'ml-ami-estimator__result' );
+    const fourthStepTitle = 'AMI Estimator: Result';
 
-      default:
-    }
+    /* Should be on Step 1 - Household Size */
+    expect( firstStep() ).toBeInTheDocument();
+    expect( secondStep() ).not.toBeInTheDocument();
+    expect( thirdStep() ).not.toBeInTheDocument();
+    expect( fourthStep() ).not.toBeInTheDocument();
+    expect( document.title ).toMatch( new RegExp( `.*${firstStepTitle}.*` ) );
 
     act( () => {
-      fireEvent.click( firstStepInput );
+      fireEvent.click( firstStepInput() );
+    } );
+    act( () => {
       fireEvent.click( nextButton );
       jest.advanceTimersByTime( 1000 );
     } );
 
-    let secondStep;
-    let secondStepTitle;
-
-    switch ( steps[1] ) {
-      case 'HouseholdSize':
-        secondStep = () => queryByTestId( 'ml-ami-estimator__household-size' );
-        secondStepTitle = 'AMI Estimator: Household Size';
-        break;
-
-      case 'HouseholdIncome':
-        secondStep = () => queryByTestId( 'ml-ami-estimator__household-income' );
-        secondStepTitle = 'AMI Estimator: Household Income';
-        break;
-
-      case 'Disclosure':
-        secondStep = () => queryByTestId( 'ml-ami-estimator__disclosure' );
-        secondStepTitle = 'AMI Estimator: Disclosure';
-        break;
-
-      default:
-    }
-
+    /* Should be on Step 2 - Household Income */
     expect( firstStep() ).not.toBeInTheDocument();
     expect( secondStep() ).toBeInTheDocument();
+    expect( thirdStep() ).not.toBeInTheDocument();
+    expect( fourthStep() ).not.toBeInTheDocument();
     expect( document.title ).toMatch( new RegExp( `.*${secondStepTitle}.*` ) );
+
+    act( () => {
+      fireEvent.change( secondStepInput(), { "target": { "value": "500000" } } ); // Doesn’t work
+    } );
+    act( () => {
+      // fireEvent.click( getByLabelText( 'income rate', { "selector": 'input[value="Monthly"]' } ) );
+      fireEvent.click( nextButton );
+      jest.advanceTimersByTime( 1000 );
+    } );
+
+    /* Should be on Step 3 - Disclosure */
+    expect( firstStep() ).not.toBeInTheDocument();
+    expect( secondStep() ).not.toBeInTheDocument();
+    expect( thirdStep() ).toBeInTheDocument();
+    expect( fourthStep() ).not.toBeInTheDocument();
+    expect( document.title ).toMatch( new RegExp( `.*${thirdStepTitle}.*` ) );
+
+    act( () => {
+      fireEvent.click( thirdStepInput() );
+    } );
+    act( () => {
+      fireEvent.click( nextButton );
+      jest.advanceTimersByTime( 1000 );
+    } );
+
+    /* Should be on Step 4 - Result */
+    expect( firstStep() ).not.toBeInTheDocument();
+    expect( secondStep() ).not.toBeInTheDocument();
+    expect( thirdStep() ).not.toBeInTheDocument();
+    expect( fourthStep() ).toBeInTheDocument();
+    expect( document.title ).toMatch( new RegExp( `.*${fourthStepTitle}.*` ) );
 
     act( () => {
       fireEvent.click( previousButton );
       jest.advanceTimersByTime( 1000 );
     } );
 
+    /* Should be back on Step 3 */
+    expect( firstStep() ).not.toBeInTheDocument();
+    expect( secondStep() ).not.toBeInTheDocument();
+    expect( thirdStep() ).toBeInTheDocument();
+    expect( fourthStep() ).not.toBeInTheDocument();
+
+    act( () => {
+      fireEvent.click( previousButton );
+      jest.advanceTimersByTime( 1000 );
+    } );
+
+    /* Should be back on Step 2 */
+    expect( firstStep() ).not.toBeInTheDocument();
+    expect( secondStep() ).toBeInTheDocument();
+    expect( thirdStep() ).not.toBeInTheDocument();
+    expect( fourthStep() ).not.toBeInTheDocument();
+
+    act( () => {
+      fireEvent.click( previousButton );
+      jest.advanceTimersByTime( 1000 );
+    } );
+
+    /* Should be back on Step 1 */
     expect( firstStep() ).toBeInTheDocument();
     expect( secondStep() ).not.toBeInTheDocument();
-    expect( document.title ).toMatch( new RegExp( `.*${firstStepTitle}.*` ) );
+    expect( thirdStep() ).not.toBeInTheDocument();
+    expect( fourthStep() ).not.toBeInTheDocument();
   } );
 
   it( 'Stores household income for use on other pages', () => {
