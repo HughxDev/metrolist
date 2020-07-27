@@ -1,17 +1,15 @@
 import '@babel/polyfill';
 import '__mocks__/matchMedia';
-import React from 'react';
-import {
-  render, act, fireEvent,
-} from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
+
+import React from 'react';
+import { render, act, fireEvent } from '@testing-library/react';
 import { LocalStorageMock } from '@react-mock/localstorage';
-
 import { MemoryRouter } from 'react-router-dom';
-import AmiEstimator from './index';
-import Routes from '../Routes';
 
-// jest.useFakeTimers();
+import Routes from '@components/Routes';
+
+// import AmiEstimator from './index';
 
 describe( 'AmiEstimator', () => {
   beforeAll( () => {
@@ -21,8 +19,6 @@ describe( 'AmiEstimator', () => {
   afterAll( () => {
     jest.useRealTimers();
   } );
-
-  const steps = ['HouseholdSize', 'HouseholdIncome', 'Disclosure', 'Result'];
 
   it( 'Renders', () => {
     const { getByText } = render(
@@ -52,8 +48,10 @@ describe( 'AmiEstimator', () => {
 
   it( 'Navigates between steps', async () => {
     const {
-      getByText, getByLabelText, queryByTestId, getByPlaceholderText,
-      queryByLabelText, queryByPlaceholderText,
+      getByText,
+      queryByTestId,
+      queryByLabelText,
+      queryByPlaceholderText,
     } = render(
       <MemoryRouter initialEntries={['/metrolist/ami-estimator']} initialIndex={0}>
         <Routes />
