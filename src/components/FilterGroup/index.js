@@ -145,7 +145,7 @@ FilterGroup.Label = function FilterGroupLabel( props ) {
     >
       <span className="ml-filter-group__label-ui-fix">
         <span className="ml-filter-group__label-text">{ props.children }</span>
-        <Icon className="ml-filter-group__icon" icon="icon-details-marker" width="19" height="11" alt={ isExpandedIndicator } isMetrolistIcon />
+        <Icon className="ml-filter-group__icon" icon="icon-details-marker" width="19" height="11" alt={ isExpandedIndicator } />
       </span>
     </legend>
   );

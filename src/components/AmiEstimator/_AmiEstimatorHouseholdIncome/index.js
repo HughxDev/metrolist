@@ -95,7 +95,7 @@ const AmiEstimatorHouseholdIncome = forwardRef( ( props, ref ) => {
           }{ isRequired ? <Required /> : '' }
         </legend>
         <Stack space="2">
-          <Icon className="ml-ami-estimator__prompt-answer-icon" icon="deposit_check" height="100" alt="" isMetrolistIcon />
+          <Icon className="ml-ami-estimator__prompt-answer-icon" icon="deposit_check" height="100" alt="" />
           <Stack space="1">{/* ami-estimator-income-rate */}
             <input
               id="household-income"

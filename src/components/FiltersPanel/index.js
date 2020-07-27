@@ -147,7 +147,7 @@ function FiltersPanel( props ) {
           tabIndex="0"
         >
           Filter Listings
-          <Icon className="ml-filters-panel__heading-icon" icon="icon-details-marker" width="19" height="11" alt={ isExpandedIndicator } isMetrolistIcon />
+          <Icon className="ml-filters-panel__heading-icon" icon="icon-details-marker" width="19" height="11" alt={ isExpandedIndicator } />
         </h3>
         <div
           id="filters-panel-content"

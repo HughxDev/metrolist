@@ -5,12 +5,8 @@ import '@testing-library/jest-dom/extend-expect';
 import Icon from './index';
 
 describe( 'Icon', () => {
-  it( 'Renders', () => {
-    render( <Icon /> );
-  } );
-
   it( 'Renders the specified icon as an SVG with PNG fallbacks', () => {
-    const { getByAltText, getByTestId } = render( <Icon icon="deposit_check" alt="" isMetrolistIcon /> );
+    const { getByAltText, getByTestId } = render( <Icon icon="deposit_check" alt="" /> );
     const $svgIcon = getByTestId( 'ml-icon__svg' ); // picture > source
     const $pngIcons = getByAltText( '' ); // img
 
