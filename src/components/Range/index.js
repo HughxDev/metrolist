@@ -28,6 +28,11 @@ function Range( props ) {
   const [outOfBounds, setOutOfBounds] = useState( false );
 
   useEffect( () => {
+    setLowerBound( props.lowerBound );
+    setUpperBound( props.upperBound );
+  }, [props] );
+
+  useEffect( () => {
     setOutOfBounds( lowerBound > upperBound );
   }, [lowerBound, upperBound] );
 
@@ -111,7 +116,7 @@ function Range( props ) {
             id="lower-bound"
             name="lowerBound"
             min={ min }
-            defaultValue={ lowerBound }
+            value={ lowerBound || min }
             max={ max }
             step={ props.step }
             onChange={ handleInput }
@@ -128,7 +133,7 @@ function Range( props ) {
             id="upper-bound"
             name="upperBound"
             min={ min }
-            defaultValue={ upperBound }
+            value={ upperBound || max }
             max={ max }
             step={ props.step }
             onChange={ handleInput }

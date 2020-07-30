@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 
 import './Button.scss';
 
-function Button( props ) {
+const Button = forwardRef( ( props, ref ) => {
   let htmlElement;
   const attributes = { ...props };
 
@@ -26,12 +26,15 @@ function Button( props ) {
       htmlElement,
       {
         ...attributes,
+        ref,
         "className": `btn btn--metrolist-${props.variant}${props.className ? ` ${props.className}` : ''}`,
       },
       props.children,
     )
   );
-}
+} );
+
+Button.displayName = 'Button';
 
 Button.propTypes = {
   "as": PropTypes.string,
@@ -41,6 +44,7 @@ Button.propTypes = {
   "children": PropTypes.node,
   "className": PropTypes.string,
 };
+
 Button.defaultProps = {
   "variant": "secondary",
 };

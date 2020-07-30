@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {
+  useState, useRef,
+} from 'react';
 import PropTypes from 'prop-types';
 import { capitalCase } from 'change-case';
 
@@ -14,31 +16,24 @@ import Icon from '@components/Icon';
 import Row from '@components/Row';
 import Column from '@components/Column';
 import Stack from '@components/Stack';
+import ClearFiltersButton from '@components/ClearFiltersButton';
 
 import './FiltersPanel.scss';
 
 const globalThis = getGlobalThis();
 
+function handleDoubleClick( event ) {
+  // https://stackoverflow.com/a/43321596/214325
+  if ( event.detail > 1 ) { // Number of clicks
+    event.preventDefault();
+  }
+}
+
 function FiltersPanel( props ) {
-  const isDesktop = globalThis.matchMedia( '(min-width: 992px)' ).matches; // TODO: define breakpoints that line up with the CSS in JS somewhere
+  const isDesktop = true; // globalThis.matchMedia( '(min-width: 992px)' ).matches; // TODO: define breakpoints that line up with the CSS in JS somewhere
   const attributes = { ...props };
   const [isExpanded, setExpanded] = useState( isDesktop );
-  // const [filters, setFilters] = useState( props.filters );
   const $self = useRef();
-
-  // const updateOwnHeight = () => {
-  //   const bodyHeight = getComputedStyle( document.body ).getPropertyValue( 'height' ).replace( 'px', '' );
-  //   const topOffset = getComputedStyle( $self.current ).getPropertyValue( 'top' ).replace( 'px', '' );
-
-  //   $self.current.style.height = `${bodyHeight - topOffset}px`;
-  // };
-
-  const handleDoubleClick = ( event ) => {
-    // https://stackoverflow.com/a/43321596/214325
-    if ( event.detail > 1 ) { // Number of clicks
-      event.preventDefault();
-    }
-  };
 
   const handleClick = ( event ) => {
     const $element = event.target;
@@ -69,8 +64,7 @@ function FiltersPanel( props ) {
     // updateOwnHeight();
   };
 
-  useEffect( props.updateDrawerHeight );
-  // useEffect( updateOwnHeight );
+  // useEffect( props.updateDrawerHeight );
 
   globalThis.addEventListener( 'resize', ( /* event */ ) => {
     if ( !props.updatingDrawerHeight ) {
@@ -102,6 +96,7 @@ function FiltersPanel( props ) {
   delete attributes.setUpdatingDrawerHeight;
   delete attributes.listingCounts;
   delete attributes.drawerRef;
+  delete attributes.clearFilters;
 
   const {
     offer,
@@ -111,10 +106,12 @@ function FiltersPanel( props ) {
     rentalPrice,
   } = props.filters;
   const { listingCounts } = props;
-
   const isExpandedIndicator = ( isExpanded ? '⌃' : '⌄' );
   const ariaLabel = `Filter Listings ${isExpandedIndicator}`;
   const rentalCount = listingCounts.offer.rent;
+
+  // console.log( 'props.filters.rentalPrice.upperBound', props.filters.rentalPrice.upperBound );
+  // console.log( 'rentalPrice.upperBound', rentalPrice.upperBound );
 
   return (
     <section
@@ -133,7 +130,6 @@ function FiltersPanel( props ) {
       onClick={ handleClick }
       onChange={ ( event ) => {
         props.handleFilterChange( event );
-        // updateOwnHeight();
       } }
     >
       <div className="ml-filters-panel__menu">
@@ -154,6 +150,11 @@ function FiltersPanel( props ) {
           ref={ props.drawerRef }
           className={ `ml-filters-panel__content${isExpanded ? ' ml-filters-panel__content--expanded' : ''}` }
         >
+          <menu className="ml-filters-panel__clear">
+            <li>
+              <ClearFiltersButton clearFilters={ props.clearFilters } />
+            </li>
+          </menu>
           <FilterGroup criterion="offer">
             <FilterGroup.Label>Offer</FilterGroup.Label>
             <Row space="rent-sale" stackAt="large">
@@ -192,7 +193,7 @@ function FiltersPanel( props ) {
                 )
               )
               || ''
-            }
+             }
           </FilterGroup>
           <FilterGroup criterion="location">
             <FilterGroup.Label>Location</FilterGroup.Label>
@@ -262,10 +263,7 @@ function FiltersPanel( props ) {
           </FilterGroup>
           <FilterGroup criterion="amiQualification">
             <FilterGroup.Label>Income Eligibility</FilterGroup.Label>
-            <div
-              onClick={ ( event ) => event.stopPropagation() }
-              // onChange={ ( event ) => event.stopPropagation() }
-            >
+            <div onClick={ ( event ) => event.stopPropagation() }>
               <Filter
                 type="range"
                 criterion="amiQualification"
@@ -288,6 +286,7 @@ FiltersPanel.propTypes = {
   "className": PropTypes.string,
   "columnWidth": PropTypes.string,
   "filters": filtersObject,
+  "clearFilters": PropTypes.func,
   "handleFilterChange": PropTypes.func.isRequired,
   "updateDrawerHeight": PropTypes.func.isRequired,
   "listingCounts": PropTypes.object,

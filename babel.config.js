@@ -1,15 +1,15 @@
 module.exports = {
   "presets": [
-    [
-      "@babel/preset-env", {
-        "useBuiltIns": "entry",
-        "corejs": 3,
-      },
-    ],
+    // [
+    //   "@babel/preset-env", {
+    //     "useBuiltIns": "entry",
+    //     "corejs": 3,
+    //   },
+    // ],
     "@babel/preset-react",
   ],
   "plugins": [
-    "@babel/plugin-proposal-optional-chaining",
+    // "@babel/plugin-proposal-optional-chaining",
     // "@babel/plugin-proposal-object-rest-spread",
     // "@babel/plugin-transform-destructuring",
     // "@babel/plugin-transform-spread",

@@ -26,7 +26,73 @@ import 'whatwg-fetch';
 const globalThis = getGlobalThis();
 const apiEndpoint = getDevelopmentsApiEndpoint();
 
-// https://stacko;verflow.com/a/11764168/214325
+const defaultFilters = {
+  "offer": {
+    "rent": false,
+    "sale": false,
+  },
+  "location": {
+    "city": {
+      "boston": false,
+      "beyondBoston": false,
+    },
+    "neighborhood": {},
+    "cardinalDirection": {
+      "west": false,
+      "north": false,
+      "south": false,
+    },
+  },
+  "bedrooms": {
+    "0": false,
+    "1": false,
+    "2": false,
+    "3": false,
+    "4+": false,
+  },
+  "amiQualification": {
+    "lowerBound": 0,
+    "upperBound": 200,
+  },
+  "incomeQualification": {
+    "upperBound": null,
+  },
+  "rentalPrice": {
+    "lowerBound": 0,
+    "upperBound": null,
+  },
+};
+const defaultFilterKeys = Object.keys( defaultFilters );
+
+let savedFilters = localStorage.getItem( 'filters' );
+if ( savedFilters ) {
+  savedFilters = JSON.parse( savedFilters );
+
+  // Sanitize localStorage values that might arise from testing/old releases
+  if ( isPlainObject( savedFilters ) ) {
+    Object.keys( savedFilters )
+      .filter( ( savedFilterKey ) => defaultFilterKeys.indexOf( savedFilterKey ) === -1 )
+      .forEach( ( errantKey ) => {
+        delete savedFilters[errantKey];
+      } );
+  } else {
+    savedFilters = {};
+  }
+} else {
+  savedFilters = {};
+}
+
+let useAmiRecommendationAsLowerBound = localStorage.getItem( 'useAmiRecommendationAsLowerBound' );
+if ( useAmiRecommendationAsLowerBound ) {
+  useAmiRecommendationAsLowerBound = ( useAmiRecommendationAsLowerBound === 'true' );
+
+  if ( useAmiRecommendationAsLowerBound ) {
+    savedFilters.amiQualification.lowerBound = parseInt( localStorage.getItem( 'amiRecommendation' ), 10 );
+    localStorage.setItem( 'useAmiRecommendationAsLowerBound', 'false' );
+  }
+}
+
+// https://stackoverflow.com/a/11764168/214325
 function paginate( homes, homesPerPage = 8 ) {
   const pages = [];
   let i = 0;
@@ -51,6 +117,331 @@ function getPage( location ) {
   return parseInt( getQuery( location ).get( 'page' ), 10 );
 }
 
+function filterHomes( homesToFilter, filtersToApply, matchOnNoneSelected = true ) {
+  const matchingHomes = homesToFilter
+    .filter( ( home ) => {
+      let matchesOffer = (
+        (
+          ( filtersToApply.offer.rent !== false )
+          && ( home.offer === 'rent' )
+        )
+        || (
+          ( filtersToApply.offer.sale !== false )
+          && ( home.offer === 'sale' )
+        )
+      );
+
+      let matchesBroadLocation = (
+        (
+          ( filtersToApply.location.city.boston !== false )
+          && ( home.cardinalDirection === null )
+        )
+        || (
+          ( filtersToApply.location.city.beyondBoston !== false )
+          && ( home.cardinalDirection !== null )
+        )
+      );
+
+      let matchesNarrowLocation = (
+        ( home.cardinalDirection === null )
+          ? (
+            hasOwnProperty( filtersToApply.location.neighborhood, home.neighborhood )
+            && ( filtersToApply.location.neighborhood[home.neighborhood] === true )
+          )
+          : (
+            hasOwnProperty( filtersToApply.location.cardinalDirection, home.cardinalDirection )
+            && ( filtersToApply.location.cardinalDirection[home.cardinalDirection] === true )
+          )
+      );
+
+      const unitBedroomSizes = home.units.map( ( unit ) => unit.bedrooms ).sort();
+      let matchesBedrooms = (
+        (
+          ( filtersToApply.bedrooms['0'] === true )
+          && ( unitBedroomSizes.indexOf( 0 ) !== -1 )
+        )
+        || (
+          ( filtersToApply.bedrooms['1'] === true )
+          && ( unitBedroomSizes.indexOf( 1 ) !== -1 )
+        )
+        || (
+          ( filtersToApply.bedrooms['2'] === true )
+          && ( unitBedroomSizes.indexOf( 2 ) !== -1 )
+        )
+        || (
+          ( filtersToApply.bedrooms['3'] === true )
+          && ( unitBedroomSizes.indexOf( 3 ) !== -1 )
+        )
+        || (
+          filtersToApply.bedrooms['4+']
+          && ( unitBedroomSizes[unitBedroomSizes.length - 1] >= 4 )
+        )
+      );
+
+      const dedupedAmi = new Set( home.units.map( ( unit ) => unit.amiQualification ) );
+      const unitAmiQualifications = Array.from( dedupedAmi );
+      let matchesAmiQualification;
+
+      if ( home.incomeRestricted === false ) {
+        matchesAmiQualification = true;
+      } else {
+        for ( let index = 0; index < unitAmiQualifications.length; index++ ) {
+          const amiQualification = ( unitAmiQualifications[index] || null );
+
+          if ( amiQualification === null ) {
+            matchesAmiQualification = true;
+            break;
+          }
+
+          if ( filtersToApply.amiQualification.lowerBound <= filtersToApply.amiQualification.upperBound ) {
+            matchesAmiQualification = (
+              ( amiQualification >= filtersToApply.amiQualification.lowerBound )
+              && ( amiQualification <= filtersToApply.amiQualification.upperBound )
+            );
+          // These values can be switched in the UI causing the names to no longer be semantic
+          } else if ( filtersToApply.amiQualification.lowerBound > filtersToApply.amiQualification.upperBound ) {
+            matchesAmiQualification = (
+              ( amiQualification >= filtersToApply.amiQualification.upperBound )
+              && ( amiQualification <= filtersToApply.amiQualification.lowerBound )
+            );
+          }
+
+          if ( matchesAmiQualification ) {
+            break;
+          }
+        }
+      }
+
+      if ( matchOnNoneSelected ) {
+        if ( !filtersToApply.offer.rent && !filtersToApply.offer.sale ) {
+          matchesOffer = true;
+        }
+
+        if ( !filtersToApply.location.city.boston && !filtersToApply.location.city.beyondBoston ) {
+          matchesBroadLocation = true;
+          matchesNarrowLocation = true;
+        }
+
+        if ( !filtersToApply.bedrooms['0'] && !filtersToApply.bedrooms['1'] && !filtersToApply.bedrooms['2'] && !filtersToApply.bedrooms['3'] && !filtersToApply.bedrooms['4+'] ) {
+          matchesBedrooms = true;
+        }
+      }
+
+      return (
+        matchesOffer
+        && matchesBroadLocation
+        && matchesNarrowLocation
+        && matchesBedrooms
+        && matchesAmiQualification
+      );
+    } )
+    .map( ( home ) => {
+      const newUnits = home.units.filter( ( unit ) => {
+        let unitMatchesRentalPrice;
+
+        if (
+          filtersToApply.rentalPrice.upperBound
+          && (
+            ( home.offer === 'rent' )
+            || ( home.type === 'apt' )
+          )
+        ) {
+          let rentalPriceLowerBound;
+          let rentalPriceUpperBound;
+
+          if ( filtersToApply.rentalPrice.lowerBound > filtersToApply.rentalPrice.upperBound ) {
+            rentalPriceLowerBound = filtersToApply.rentalPrice.upperBound;
+            rentalPriceUpperBound = filtersToApply.rentalPrice.lowerBound;
+          } else {
+            rentalPriceLowerBound = filtersToApply.rentalPrice.lowerBound;
+            rentalPriceUpperBound = filtersToApply.rentalPrice.upperBound;
+          }
+
+          unitMatchesRentalPrice = (
+            ( unit.price >= rentalPriceLowerBound )
+            && ( unit.price <= rentalPriceUpperBound )
+          );
+        } else {
+          unitMatchesRentalPrice = true;
+        }
+
+        let unitMatchesBedrooms = (
+          (
+            filtersToApply.bedrooms['0']
+            && ( unit.bedrooms === 0 )
+          )
+          || (
+            filtersToApply.bedrooms['1']
+            && ( unit.bedrooms === 1 )
+          )
+          || (
+            filtersToApply.bedrooms['2']
+            && ( unit.bedrooms === 2 )
+          )
+          || (
+            filtersToApply.bedrooms['3']
+            && ( unit.bedrooms === 3 )
+          )
+          || (
+            filtersToApply.bedrooms['4+']
+            && ( unit.bedrooms >= 4 )
+          )
+        );
+
+        if ( matchOnNoneSelected ) {
+          if (
+            !filtersToApply.bedrooms['0']
+            && !filtersToApply.bedrooms['1']
+            && !filtersToApply.bedrooms['2']
+            && !filtersToApply.bedrooms['3']
+            && !filtersToApply.bedrooms['4+']
+          ) {
+            unitMatchesBedrooms = true;
+          }
+        }
+
+        // TODO: Maybe exit early if we already know it is not a match?
+        // if ( !unitMatchesBedrooms ) {
+        //   return false;
+        // }
+
+        let unitMatchesAmiQualification;
+        const unitAmiQualification = ( unit.amiQualification || null );
+
+        if ( unitAmiQualification === null ) {
+          unitMatchesAmiQualification = true;
+        } else if ( filtersToApply.amiQualification.lowerBound <= filtersToApply.amiQualification.upperBound ) {
+          unitMatchesAmiQualification = (
+            ( unitAmiQualification >= filtersToApply.amiQualification.lowerBound )
+            && ( unitAmiQualification <= filtersToApply.amiQualification.upperBound )
+          );
+        // These values can be switched in the UI causing the names to no longer be semantic
+        } else if ( filtersToApply.amiQualification.lowerBound > filtersToApply.amiQualification.upperBound ) {
+          unitMatchesAmiQualification = (
+            ( unitAmiQualification >= filtersToApply.amiQualification.upperBound )
+            && ( unitAmiQualification <= filtersToApply.amiQualification.lowerBound )
+          );
+        }
+
+        // if ( !unitMatchesAmiQualification ) {
+        //   return false;
+        // }
+
+        let unitMatchesIncomeQualification;
+        const unitIncomeQualification = ( unit.incomeQualification || null );
+
+        if ( ( unitIncomeQualification === null ) || !filtersToApply.incomeQualification.upperBound ) {
+          unitMatchesIncomeQualification = true;
+        } else {
+          unitMatchesIncomeQualification = ( unitIncomeQualification <= filtersToApply.incomeQualification.upperBound );
+        }
+
+        return ( unitMatchesRentalPrice && unitMatchesBedrooms && unitMatchesAmiQualification && unitMatchesIncomeQualification );
+      } );
+
+      return {
+        ...home,
+        "units": newUnits,
+      };
+    } )
+    .filter( ( home ) => !!home.units.length );
+
+  return matchingHomes;
+}
+
+function getNewFilters( event, filters ) {
+  const $input = event.target;
+  let newValue;
+  const newFilters = { ...filters };
+  let valueAsKey = false;
+  let isNumeric = false;
+  let specialCase = false;
+  let parent;
+  let parentCriterion;
+
+  switch ( $input.type ) {
+    case 'checkbox':
+      newValue = $input.checked;
+      valueAsKey = true;
+      break;
+
+    default:
+      newValue = $input.value;
+  }
+
+  if ( hasOwnProperty( event, 'metrolist' ) ) {
+    if ( hasOwnProperty( event.metrolist, 'parentCriterion' ) ) {
+      parentCriterion = event.metrolist.parentCriterion;
+
+      switch ( parentCriterion ) { // eslint-disable-line default-case
+        case 'amiQualification':
+        case 'rentalPrice':
+          isNumeric = true;
+          break;
+      }
+
+      if ( isNumeric ) {
+        newValue = Number.parseInt( newValue, 10 );
+      }
+
+      if ( parentCriterion !== $input.name ) {
+        if ( valueAsKey ) {
+          specialCase = true;
+          parent = newFilters[parentCriterion][$input.name];
+          parent[$input.value] = newValue;
+        } else {
+          specialCase = true;
+          parent = newFilters[parentCriterion];
+          parent[$input.name] = newValue;
+        }
+      }
+    }
+  }
+
+  if ( !specialCase ) {
+    // console.log( '!specialCase' );
+    parent = newFilters[$input.name];
+    parent[$input.value] = newValue;
+  }
+
+  switch ( $input.name ) {
+    case 'neighborhood':
+      if ( newValue && !filters.location.city.boston ) {
+        newFilters.location.city.boston = newValue;
+      }
+      break;
+
+    case 'cardinalDirection':
+      if ( newValue && !filters.location.city.beyondBoston ) {
+        newFilters.location.city.beyondBoston = newValue;
+      }
+      break;
+
+    default:
+  }
+
+  // Selecting Boston or Beyond Boston checks/unchecks all subcategories
+  switch ( $input.value ) {
+    case 'boston':
+      Object.keys( filters.location.neighborhood ).forEach( ( neighborhood ) => {
+        newFilters.location.neighborhood[neighborhood] = newValue;
+      } );
+      break;
+
+    case 'beyondBoston':
+      Object.keys( filters.location.cardinalDirection ).forEach( ( cardinalDirection ) => {
+        newFilters.location.cardinalDirection[cardinalDirection] = newValue;
+      } );
+      break;
+
+      // case ''
+
+    default:
+  }
+
+  return newFilters;
+}
+
 function Search( props ) {
   const [filters, setFilters] = useState( props.filters );
   const [paginatedHomes, setPaginatedHomes] = useState( paginate( Object.freeze( props.homes ) ) );
@@ -69,6 +460,30 @@ function Search( props ) {
   const relativeAmiEstimatorUrl = '/metrolist/ami-estimator';
   const absoluteAmiEstimatorUrl = `${baseUrl}${relativeAmiEstimatorUrl}`;
   const amiEstimatorUrl = ( isBeingTranslated ? copyGoogleTranslateParametersToNewUrl( absoluteAmiEstimatorUrl ) : relativeAmiEstimatorUrl );
+  let listingCounts = {
+    "offer": {
+      "rent": 0,
+      "sale": 0,
+    },
+    "location": {
+      "city": {
+        "boston": 0,
+        "beyondBoston": 0,
+      },
+      "neighborhood": {},
+      "cardinalDirection": {
+        "west": 0,
+        "north": 0,
+        "south": 0,
+      },
+    },
+    // Technically not a count, but better to just log here than
+    // loop through the entire home array again in a separate function
+    "rentalPrice": {
+      "lowerBound": 0,
+      "upperBound": 0,
+    },
+  };
 
   history.listen( ( newLocation ) => {
     const requestedPage = getPage( newLocation );
@@ -80,8 +495,62 @@ function Search( props ) {
     }
   } );
 
-  const getListingCounts = ( homes ) => {
-    const listingCounts = {
+  const clearFilters = () => {
+    const resetNeighborhoods = {};
+
+    Object.keys( filters.location.neighborhood ).forEach( ( nb ) => {
+      resetNeighborhoods[nb] = false;
+    } );
+
+    // Unfortunately we have to do this manually rather than
+    // doing `setFilters( defaultFilters )` because of a
+    // “quantum entanglement” bug in React where `defaultFilters`
+    // is modified along with `filters`, even if it was frozen beforehand.
+    const resetFilters = {
+      "offer": {
+        "rent": false,
+        "sale": false,
+      },
+      "location": {
+        "city": {
+          "boston": false,
+          "beyondBoston": false,
+        },
+        "neighborhood": {
+          ...resetNeighborhoods,
+        },
+        "cardinalDirection": {
+          "west": false,
+          "north": false,
+          "south": false,
+        },
+      },
+      "bedrooms": {
+        "0": false,
+        "1": false,
+        "2": false,
+        "3": false,
+        "4+": false,
+      },
+      "amiQualification": {
+        "lowerBound": 0,
+        "upperBound": 200,
+      },
+      "incomeQualification": {
+        "upperBound": null,
+      },
+      "rentalPrice": {
+        "lowerBound": 0,
+        "upperBound": listingCounts.rentalPrice.upperBound,
+      },
+    };
+
+    // console.log( 'resetFilters', resetFilters );
+    setFilters( resetFilters );
+  };
+
+  const clearListingCounts = () => {
+    listingCounts = {
       "offer": {
         "rent": 0,
         "sale": 0,
@@ -98,13 +567,15 @@ function Search( props ) {
           "south": 0,
         },
       },
-      // Technically not a count, but better to just log here than
-      // loop through the entire home array again in a separate function
       "rentalPrice": {
         "lowerBound": 0,
         "upperBound": 0,
       },
     };
+  };
+
+  const populateListingCounts = ( homes ) => {
+    clearListingCounts();
 
     homes.forEach( ( home ) => {
       if ( home.offer === 'sale' ) {
@@ -146,240 +617,6 @@ function Search( props ) {
         } );
       }
     } );
-
-    return listingCounts;
-  };
-
-  const filterHomes = ( homesToFilter, filtersToApply, matchOnNoneSelected = true ) => {
-    const matchingHomes = homesToFilter
-      .filter( ( home ) => {
-        let matchesOffer = (
-          (
-            ( filtersToApply.offer.rent !== false )
-            && ( home.offer === 'rent' )
-          )
-          || (
-            ( filtersToApply.offer.sale !== false )
-            && ( home.offer === 'sale' )
-          )
-        );
-
-        let matchesBroadLocation = (
-          (
-            ( filtersToApply.location.city.boston !== false )
-            && ( home.cardinalDirection === null )
-          )
-          || (
-            ( filtersToApply.location.city.beyondBoston !== false )
-            && ( home.cardinalDirection !== null )
-          )
-        );
-
-        let matchesNarrowLocation = (
-          ( home.cardinalDirection === null )
-            ? (
-              hasOwnProperty( filtersToApply.location.neighborhood, home.neighborhood )
-              && ( filtersToApply.location.neighborhood[home.neighborhood] === true )
-            )
-            : (
-              hasOwnProperty( filtersToApply.location.cardinalDirection, home.cardinalDirection )
-              && ( filtersToApply.location.cardinalDirection[home.cardinalDirection] === true )
-            )
-        );
-
-        const unitBedroomSizes = home.units.map( ( unit ) => unit.bedrooms ).sort();
-        let matchesBedrooms = (
-          (
-            ( filtersToApply.bedrooms['0'] === true )
-            && ( unitBedroomSizes.indexOf( 0 ) !== -1 )
-          )
-          || (
-            ( filtersToApply.bedrooms['1'] === true )
-            && ( unitBedroomSizes.indexOf( 1 ) !== -1 )
-          )
-          || (
-            ( filtersToApply.bedrooms['2'] === true )
-            && ( unitBedroomSizes.indexOf( 2 ) !== -1 )
-          )
-          || (
-            ( filtersToApply.bedrooms['3'] === true )
-            && ( unitBedroomSizes.indexOf( 3 ) !== -1 )
-          )
-          || (
-            filtersToApply.bedrooms['4+']
-            && ( unitBedroomSizes[unitBedroomSizes.length - 1] >= 4 )
-          )
-        );
-
-        const dedupedAmi = new Set( home.units.map( ( unit ) => unit.amiQualification ) );
-        const unitAmiQualifications = Array.from( dedupedAmi );
-        let matchesAmiQualification;
-
-        if ( home.incomeRestricted === false ) {
-          matchesAmiQualification = true;
-        } else {
-          for ( let index = 0; index < unitAmiQualifications.length; index++ ) {
-            const amiQualification = ( unitAmiQualifications[index] || null );
-
-            if ( amiQualification === null ) {
-              matchesAmiQualification = true;
-              break;
-            }
-
-            if ( filtersToApply.amiQualification.lowerBound <= filtersToApply.amiQualification.upperBound ) {
-              matchesAmiQualification = (
-                ( amiQualification >= filtersToApply.amiQualification.lowerBound )
-                && ( amiQualification <= filtersToApply.amiQualification.upperBound )
-              );
-            // These values can be switched in the UI causing the names to no longer be semantic
-            } else if ( filtersToApply.amiQualification.lowerBound > filtersToApply.amiQualification.upperBound ) {
-              matchesAmiQualification = (
-                ( amiQualification >= filtersToApply.amiQualification.upperBound )
-                && ( amiQualification <= filtersToApply.amiQualification.lowerBound )
-              );
-            }
-
-            if ( matchesAmiQualification ) {
-              break;
-            }
-          }
-        }
-
-        if ( matchOnNoneSelected ) {
-          if ( !filtersToApply.offer.rent && !filtersToApply.offer.sale ) {
-            matchesOffer = true;
-          }
-
-          if ( !filtersToApply.location.city.boston && !filtersToApply.location.city.beyondBoston ) {
-            matchesBroadLocation = true;
-            matchesNarrowLocation = true;
-          }
-
-          if ( !filtersToApply.bedrooms['0'] && !filtersToApply.bedrooms['1'] && !filtersToApply.bedrooms['2'] && !filtersToApply.bedrooms['3'] && !filtersToApply.bedrooms['4+'] ) {
-            matchesBedrooms = true;
-          }
-        }
-
-        return (
-          matchesOffer
-          && matchesBroadLocation
-          && matchesNarrowLocation
-          && matchesBedrooms
-          && matchesAmiQualification
-        );
-      } )
-      .map( ( home ) => {
-        const newUnits = home.units.filter( ( unit ) => {
-          let unitMatchesRentalPrice;
-
-          if (
-            filtersToApply.rentalPrice.upperBound
-            && (
-              ( home.offer === 'rent' )
-              || ( home.type === 'apt' )
-            )
-          ) {
-            let rentalPriceLowerBound;
-            let rentalPriceUpperBound;
-
-            if ( filtersToApply.rentalPrice.lowerBound > filtersToApply.rentalPrice.upperBound ) {
-              rentalPriceLowerBound = filtersToApply.rentalPrice.upperBound;
-              rentalPriceUpperBound = filtersToApply.rentalPrice.lowerBound;
-            } else {
-              rentalPriceLowerBound = filtersToApply.rentalPrice.lowerBound;
-              rentalPriceUpperBound = filtersToApply.rentalPrice.upperBound;
-            }
-
-            unitMatchesRentalPrice = (
-              ( unit.price >= rentalPriceLowerBound )
-              && ( unit.price <= rentalPriceUpperBound )
-            );
-          } else {
-            unitMatchesRentalPrice = true;
-          }
-
-          let unitMatchesBedrooms = (
-            (
-              filtersToApply.bedrooms['0']
-              && ( unit.bedrooms === 0 )
-            )
-            || (
-              filtersToApply.bedrooms['1']
-              && ( unit.bedrooms === 1 )
-            )
-            || (
-              filtersToApply.bedrooms['2']
-              && ( unit.bedrooms === 2 )
-            )
-            || (
-              filtersToApply.bedrooms['3']
-              && ( unit.bedrooms === 3 )
-            )
-            || (
-              filtersToApply.bedrooms['4+']
-              && ( unit.bedrooms >= 4 )
-            )
-          );
-
-          if ( matchOnNoneSelected ) {
-            if (
-              !filtersToApply.bedrooms['0']
-              && !filtersToApply.bedrooms['1']
-              && !filtersToApply.bedrooms['2']
-              && !filtersToApply.bedrooms['3']
-              && !filtersToApply.bedrooms['4+']
-            ) {
-              unitMatchesBedrooms = true;
-            }
-          }
-
-          // TODO: Maybe exit early if we already know it is not a match?
-          // if ( !unitMatchesBedrooms ) {
-          //   return false;
-          // }
-
-          let unitMatchesAmiQualification;
-          const unitAmiQualification = ( unit.amiQualification || null );
-
-          if ( unitAmiQualification === null ) {
-            unitMatchesAmiQualification = true;
-          } else if ( filters.amiQualification.lowerBound <= filters.amiQualification.upperBound ) {
-            unitMatchesAmiQualification = (
-              ( unitAmiQualification >= filters.amiQualification.lowerBound )
-              && ( unitAmiQualification <= filters.amiQualification.upperBound )
-            );
-          // These values can be switched in the UI causing the names to no longer be semantic
-          } else if ( filters.amiQualification.lowerBound > filters.amiQualification.upperBound ) {
-            unitMatchesAmiQualification = (
-              ( unitAmiQualification >= filters.amiQualification.upperBound )
-              && ( unitAmiQualification <= filters.amiQualification.lowerBound )
-            );
-          }
-
-          // if ( !unitMatchesAmiQualification ) {
-          //   return false;
-          // }
-
-          let unitMatchesIncomeQualification;
-          const unitIncomeQualification = ( unit.incomeQualification || null );
-
-          if ( ( unitIncomeQualification === null ) || !filters.incomeQualification.upperBound ) {
-            unitMatchesIncomeQualification = true;
-          } else {
-            unitMatchesIncomeQualification = ( unitIncomeQualification <= filters.incomeQualification.upperBound );
-          }
-
-          return ( unitMatchesRentalPrice && unitMatchesBedrooms && unitMatchesAmiQualification && unitMatchesIncomeQualification );
-        } );
-
-        return {
-          ...home,
-          "units": newUnits,
-        };
-      } )
-      .filter( ( home ) => !!home.units.length );
-
-    return matchingHomes;
   };
 
   const getAllHomes = () => {
@@ -402,18 +639,7 @@ function Search( props ) {
         },
       ) // TODO: CORS
         .then( async ( response ) => {
-          // console.log( {
-          //   "responseBody": response.body,
-          // } );
-
           if ( !response.body && !response._bodyInit ) {
-            // if ( isDev() ) {
-            //   console.warn( 'API returned an invalid response; falling back to test data since we’re in a development environment.' );
-
-            //   return import( './test-data' )
-            //     .then( ( json ) => json.default );
-            // }
-
             throw new Error( `Metrolist Developments API returned an invalid response.` );
           } else {
             return response.json();
@@ -421,14 +647,12 @@ function Search( props ) {
         } )
         .then( ( apiHomes ) => {
           const paginatedApiHomes = paginate( apiHomes );
-          const listingCounts = getListingCounts( apiHomes );
+          populateListingCounts( apiHomes );
           const existingFilters = localStorage.getItem( 'filters' );
           const requestedPage = parseInt( query.get( 'page' ), 10 );
           let newFilters;
 
-          // setAllHomes( apiHomes );
           setPaginatedHomes( paginatedApiHomes );
-          // setCurrentHomes( paginatedApiHomes[0] );
 
           if ( requestedPage ) {
             setCurrentPage( requestedPage );
@@ -445,20 +669,14 @@ function Search( props ) {
           }
 
           Object.keys( listingCounts.location.neighborhood ).forEach( ( nb ) => {
-            newFilters.location.neighborhood[nb] = ( newFilters.location.neighborhood[nb] || null );
+            newFilters.location.neighborhood[nb] = ( newFilters.location.neighborhood[nb] || false );
+            // defaultFilters.location.neighborhood[nb] = false;
           } );
 
           Object.keys( listingCounts.location.cardinalDirection ).forEach( ( cd ) => {
-            newFilters.location.cardinalDirection[cd] = ( newFilters.location.cardinalDirection[cd] || null );
+            newFilters.location.cardinalDirection[cd] = ( newFilters.location.cardinalDirection[cd] || false );
+            // defaultFilters.location.cardinalDirection[cd] = false;
           } );
-
-          // if ( existingFilters.rentalPrice.lowerBound ) {
-          //   newFilters.rentalPrice.lowerBound = existingFilters.rentalPrice.lowerBound;
-          // }
-
-          // if ( existingFilters.rentalPrice.upperBound ) {
-          //   newFilters.rentalPrice.upperBound = existingFilters.rentalPrice.upperBound;
-          // }
 
           setFilters( newFilters );
           localStorage.setItem( 'filters', JSON.stringify( newFilters ) );
@@ -493,124 +711,15 @@ function Search( props ) {
     const paginatedFilteredHomes = paginate( filteredAllHomes );
     const currentPageFilteredHomes = paginatedFilteredHomes[currentPage - 1];
 
-    // console.log( {
-    //   filteredAllHomes,
-    //   paginatedFilteredHomes,
-    //   // currentPageFilteredHomes,
-    //   "currentPage - 1": currentPage - 1,
-    // } );
-
     setFilteredHomes( currentPageFilteredHomes );
     setTotalPages( paginatedFilteredHomes.length );
 
     localStorage.setItem( 'filters', JSON.stringify( filters ) );
   }, [paginatedHomes, filters, currentPage] );
 
-  // useEffect( () => {
-  //   if ( currentPage === 1 ) {
-  //     history.push( location.pathname );
-  //   } else {
-  //     history.push( `${location.pathname}?page=${currentPage}` );
-  //   }
-  // }, [currentPage] );
-
   useEffect( () => {
     setPages( Array.from( { "length": totalPages }, ( v, k ) => k + 1 ) );
   }, [totalPages] );
-
-  const handleFilterChange = ( event ) => {
-    const $input = event.target;
-    let newValue;
-    const newFilters = { ...filters };
-    let valueAsKey = false;
-    let isNumeric = false;
-    let specialCase = false;
-    let parent;
-    let parentCriterion;
-
-    switch ( $input.type ) {
-      case 'checkbox':
-        newValue = $input.checked;
-        valueAsKey = true;
-        break;
-
-      default:
-        newValue = $input.value;
-    }
-
-    if ( hasOwnProperty( event, 'metrolist' ) ) {
-      if ( hasOwnProperty( event.metrolist, 'parentCriterion' ) ) {
-        parentCriterion = event.metrolist.parentCriterion;
-
-        switch ( parentCriterion ) { // eslint-disable-line default-case
-          case 'amiQualification':
-          case 'rentalPrice':
-            isNumeric = true;
-            break;
-        }
-
-        if ( isNumeric ) {
-          newValue = Number.parseInt( newValue, 10 );
-        }
-
-        if ( parentCriterion !== $input.name ) {
-          if ( valueAsKey ) {
-            specialCase = true;
-            parent = newFilters[parentCriterion][$input.name];
-            parent[$input.value] = newValue;
-          } else {
-            specialCase = true;
-            parent = newFilters[parentCriterion];
-            parent[$input.name] = newValue;
-          }
-        }
-      }
-    }
-
-    if ( !specialCase ) {
-      parent = newFilters[$input.name];
-      parent[$input.value] = newValue;
-    }
-
-    switch ( $input.name ) {
-      case 'neighborhood':
-        if ( newValue && !filters.location.city.boston ) {
-          newFilters.location.city.boston = newValue;
-        }
-        break;
-
-      case 'cardinalDirection':
-        if ( newValue && !filters.location.city.beyondBoston ) {
-          newFilters.location.city.beyondBoston = newValue;
-        }
-        break;
-
-      default:
-    }
-
-    // Selecting Boston or Beyond Boston checks/unchecks all subcategories
-    switch ( $input.value ) {
-      case 'boston':
-        Object.keys( filters.location.neighborhood ).forEach( ( neighborhood ) => {
-          newFilters.location.neighborhood[neighborhood] = newValue;
-        } );
-        break;
-
-      case 'beyondBoston':
-        Object.keys( filters.location.cardinalDirection ).forEach( ( cardinalDirection ) => {
-          newFilters.location.cardinalDirection[cardinalDirection] = newValue;
-        } );
-        break;
-
-        // case ''
-
-      default:
-    }
-
-    setFilters( newFilters );
-    setCurrentPage( 1 );
-    localStorage.setItem( 'filters', JSON.stringify( newFilters ) );
-  };
 
   const updateDrawerHeight = ( drawerRef, wait ) => {
     // console.log( 'updateDrawerHeight' );
@@ -634,25 +743,31 @@ function Search( props ) {
     }
   };
 
-  const handleHomesLoaded = () => {
-    // updateDrawerHeight( $drawer );
-  };
-
   const supportsSvg = ( typeof SVGRect !== "undefined" );
 
-  const FiltersPanelUi = (
-    <FiltersPanel
-      key="filters-panel"
-      className="ml-search__filters"
-      drawerRef={ $drawer }
-      filters={ filters }
-      listingCounts={ getListingCounts( getAllHomes() ) }
-      updateDrawerHeight={ updateDrawerHeight }
-      updatingDrawerHeight={ updatingDrawerHeight }
-      setUpdatingDrawerHeight={ setUpdatingDrawerHeight }
-      handleFilterChange={ handleFilterChange }
-    />
-  );
+  const FiltersPanelUi = () => {
+    populateListingCounts( getAllHomes() );
+
+    return (
+      <FiltersPanel
+        key="filters-panel"
+        className="ml-search__filters"
+        drawerRef={ $drawer }
+        filters={ filters }
+        clearFilters={ clearFilters }
+        listingCounts={ listingCounts }
+        updateDrawerHeight={ updateDrawerHeight }
+        updatingDrawerHeight={ updatingDrawerHeight }
+        setUpdatingDrawerHeight={ setUpdatingDrawerHeight }
+        handleFilterChange={ ( event ) => {
+          const newFilters = getNewFilters( event, filters );
+          setFilters( newFilters );
+          setCurrentPage( 1 );
+          localStorage.setItem( 'filters', JSON.stringify( newFilters ) );
+        } }
+      />
+    );
+  };
 
   const CalloutUi = (
     <Inset key="ami-estimator-callout" className="filters-panel__callout-container" until="large">
@@ -685,7 +800,7 @@ function Search( props ) {
       </Callout>
     </Inset>
   );
-  const SidebarUi = [FiltersPanelUi, CalloutUi];
+  const SidebarUi = [FiltersPanelUi(), CalloutUi];
   const householdIncome = localStorage.getItem( 'householdIncome' );
 
   const incomeRate = localStorage.getItem( 'incomeRate' );
@@ -735,24 +850,26 @@ function Search( props ) {
   return (
     <article className={ `ml-search${props.className ? ` ${props.className}` : ''}` }>
       <h2 className="sr-only">Search</h2>
-      <menu className="ml-search__preferences">
-        <Row as="li" className="ml-search__hide-ineligible-income-restricted-units" space="1">
-        {
-          hasEnteredHouseholdIncome
-          && (
-            <Checkbox
-              criterion="hideIneligibleIncomeRestrictedUnits"
-              size="small"
-              onChange={ handleIncomeRestrictionToggle }
-            >
-              <span style={{ "display": "inline-block", "maxWidth": "15.2rem" }}>
-                Hide homes that require a household income over <abbr className="--shorthand" title={ `${abbreviatedHouseholdIncome} per ${incomeRateUnit}` }>{ householdIncomeRate }</abbr>
-              </span>
-            </Checkbox>
-          )
-        }
-      </Row>
-      </menu>
+      {
+        hasEnteredHouseholdIncome
+        && (
+          <menu className="ml-search__preferences">
+            <Row as="li" className="ml-search__hide-ineligible-income-restricted-units" space="1">
+            {
+              <Checkbox
+                criterion="hideIneligibleIncomeRestrictedUnits"
+                size="small"
+                onChange={ handleIncomeRestrictionToggle }
+              >
+                <span style={{ "display": "inline-block", "maxWidth": "15.2rem" }}>
+                  Hide homes that require a household income over <abbr className="--shorthand" title={ `${abbreviatedHouseholdIncome} per ${incomeRateUnit}` }>{ householdIncomeRate }</abbr>
+                </span>
+              </Checkbox>
+            }
+            </Row>
+          </menu>
+        )
+      }
       <Row space="panel" stackUntil="large">
         <Stack data-column-width="1/3" space="panel">
           { isDesktop ? SidebarUi.reverse() : SidebarUi }
@@ -762,8 +879,6 @@ function Search( props ) {
           columnWidth="2/3"
           filters={ filters }
           homes={ filteredHomes }
-          // homes={ ( filteredHomes && filteredHomes.length ) ? filteredHomes : getAllHomes() }
-          handleHomesLoaded={ handleHomesLoaded }
         />
       </Row>
       <nav className="ml-search__pagination">
@@ -788,77 +903,6 @@ function Search( props ) {
   );
 }
 
-export const baseFilters = {
-  "offer": {
-    "rent": false,
-    "sale": false,
-  },
-  "location": {
-    "city": {
-      "boston": false,
-      "beyondBoston": false,
-    },
-    "neighborhood": {
-      // "southBoston": false,
-      // "hydePark": false,
-      // "dorchester": false,
-      // "mattapan": false,
-    },
-    "cardinalDirection": {
-      "west": false,
-      "north": false,
-      "south": false,
-    },
-  },
-  "bedrooms": {
-    "0": false,
-    "1": false,
-    "2": false,
-    "3": false,
-    "4+": false,
-  },
-  "amiQualification": {
-    "lowerBound": 0,
-    "upperBound": 200,
-  },
-  "incomeQualification": {
-    "upperBound": null,
-  },
-  "rentalPrice": {
-    "lowerBound": 0,
-    "upperBound": null,
-  },
-};
-const baseFilterKeys = Object.keys( baseFilters );
-
-let savedFilters = localStorage.getItem( 'filters' );
-if ( savedFilters ) {
-  savedFilters = JSON.parse( savedFilters );
-
-  // Sanitize localStorage values that might arise from testing/old releases
-  if ( isPlainObject( savedFilters ) ) {
-    Object.keys( savedFilters )
-      .filter( ( savedFilterKey ) => baseFilterKeys.indexOf( savedFilterKey ) === -1 )
-      .forEach( ( errantKey ) => {
-        delete savedFilters[errantKey];
-      } );
-  } else {
-    savedFilters = {};
-  }
-} else {
-  savedFilters = {};
-}
-
-let useAmiRecommendationAsLowerBound = localStorage.getItem( 'useAmiRecommendationAsLowerBound' );
-if ( useAmiRecommendationAsLowerBound ) {
-  useAmiRecommendationAsLowerBound = ( useAmiRecommendationAsLowerBound === 'true' );
-
-  if ( useAmiRecommendationAsLowerBound ) {
-    savedFilters.amiQualification.lowerBound = parseInt( localStorage.getItem( 'amiRecommendation' ), 10 );
-    localStorage.setItem( 'useAmiRecommendationAsLowerBound', 'false' );
-  }
-}
-
 Search.propTypes = {
   "amiEstimation": PropTypes.number,
   "filters": filtersObject,
@@ -869,12 +913,9 @@ Search.propTypes = {
 Search.defaultProps = {
   "homes": [],
   "amiEstimation": null,
-  "filters": {
-    ...baseFilters,
-    ...savedFilters,
-  },
+  "filters": { ...defaultFilters },
 };
 
-localStorage.setItem( 'filters', JSON.stringify( Search.defaultProps.filters ) );
+// localStorage.setItem( 'filters', JSON.stringify( Search.defaultProps.filters ) );
 
 export default Search;

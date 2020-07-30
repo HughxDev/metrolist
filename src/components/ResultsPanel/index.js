@@ -35,7 +35,7 @@ import './ResultsPanel.scss';
 
 function ResultsPanel( props ) {
   const {
-    homes, className, columnWidth, filters, handleHomesLoaded,
+    homes, className, columnWidth, filters,
   } = props;
   const attributes = { ...props };
 
@@ -50,10 +50,6 @@ function ResultsPanel( props ) {
 
   if ( filters ) {
     delete attributes.filters;
-  }
-
-  if ( handleHomesLoaded ) {
-    delete attributes.handleHomesLoaded;
   }
 
   return (
@@ -81,7 +77,6 @@ ResultsPanel.propTypes = {
   "columnWidth": PropTypes.string,
   "className": PropTypes.string,
   "filters": PropTypes.object,
-  "handleHomesLoaded": PropTypes.func,
 };
 
 export default ResultsPanel;

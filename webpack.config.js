@@ -31,6 +31,7 @@ module.exports = {
       {
         "test": /\.js$/,
         "use": "babel-loader",
+        // "use": "raw-loader",
       },
       {
         "test": /\.css$/,
