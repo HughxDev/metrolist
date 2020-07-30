@@ -86,9 +86,7 @@ function serializeFiltersToUrlParams( filters, home ) {
   // /metrolist/search/listing/275-roxbury-street?ami=30-120&bedrooms=1+2&type=rent
   // /metrolist/search/listing/{slug}?ami={ami_low}-{ami_high}&bedrooms={num_beds}+{num_beds}&type={offer}
   const params = [];
-  const {
-    amiQualification, bedrooms, offer,
-  } = filters;
+  const { amiQualification, bedrooms } = filters;
 
   if ( amiQualification ) {
     let amiParam = 'ami=';
@@ -134,31 +132,17 @@ function serializeFiltersToUrlParams( filters, home ) {
     }
   }
 
-  if ( offer ) {
-    let offerParam = 'type=';
-
-    if ( offer.rent ) {
-      offerParam += 'rent';
-    }
-
-    if ( offer.rent && offer.sale ) {
-      offerParam += '+';
-    }
-
-    if ( offer.sale ) {
-      offerParam += 'sale';
-    }
-
-    if ( offerParam !== 'type=' ) {
-      params.push( offerParam );
-    }
-  }
-
   // Since single developments can be split into two virtual “homes” by the API, then
   // we need to tell the Property Page which version of a home it should display when
   // the user clicks on More Info.
-  if ( home && home.assignment ) {
-    params.push( `assignment=${home.assignment}` );
+  if ( home ) {
+    if ( home.offer ) {
+      params.push( `type=${home.offer}` );
+    }
+
+    if ( home.assignment ) {
+      params.push( `assignment=${home.assignment}` );
+    }
   }
 
   if ( params.length ) {
