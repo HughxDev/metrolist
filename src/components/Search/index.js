@@ -8,7 +8,6 @@ import ResultsPanel from '@components/ResultsPanel';
 import Row from '@components/Row';
 import Inset from '@components/Inset';
 import Callout from '@components/Callout';
-import Checkbox from '@components/Checkbox';
 import Stack from '@components/Stack';
 import Link from '@components/Link';
 
@@ -19,6 +18,7 @@ import {
   copyGoogleTranslateParametersToNewUrl,
   getUrlBeingTranslated,
 } from '@util/translation';
+import SearchPreferences from './_SearchPreferences';
 
 import './Search.scss';
 import 'whatwg-fetch';
@@ -547,6 +547,7 @@ function Search( props ) {
 
     // console.log( 'resetFilters', resetFilters );
     setFilters( resetFilters );
+    localStorage.setItem( 'useHouseholdIncomeAsIncomeQualificationFilter', 'false' );
   };
 
   const clearListingCounts = () => {
@@ -801,75 +802,11 @@ function Search( props ) {
     </Inset>
   );
   const SidebarUi = [FiltersPanelUi(), CalloutUi];
-  const householdIncome = localStorage.getItem( 'householdIncome' );
-
-  const incomeRate = localStorage.getItem( 'incomeRate' );
-  const hasEnteredHouseholdIncome = ( householdIncome && incomeRate );
-  let householdIncomeRate;
-  let abbreviatedHouseholdIncome;
-  let incomeRateUnit;
-  let abbreviatedIncomeRateUnit;
-  const handleIncomeRestrictionToggle = ( event ) => {
-    if ( !householdIncome ) {
-      console.error( `localStorage.householdIncome not found; cannot apply minimum income filter` );
-    }
-
-    if ( !incomeRate ) {
-      console.error( `localStorage.incomeRate not found; cannot apply minimum income filter` );
-    }
-
-    if ( !householdIncome || !incomeRate ) {
-      return;
-    }
-
-    const { checked } = event.target;
-
-    const householdIncomeNormalized = (
-      ( parseInt( householdIncome.replace( /\D/g, '' ), 10 ) / 100 )
-      * ( ( incomeRate === 'monthly' ) ? 12 : 1 )
-    );
-
-    const newFilters = {
-      ...filters,
-      "incomeQualification": {
-        "upperBound": ( checked ? householdIncomeNormalized : null ),
-      },
-    };
-
-    setFilters( newFilters );
-  };
-
-  if ( hasEnteredHouseholdIncome ) {
-    const incomeRateLength = incomeRate.length;
-    abbreviatedHouseholdIncome = householdIncome.substring( 0, householdIncome.length - 3 );
-    incomeRateUnit = incomeRate.substring( 0, incomeRateLength - 2 );
-    abbreviatedIncomeRateUnit = ( incomeRate === 'monthly' ) ? 'mo' : 'yr';
-    householdIncomeRate = `${abbreviatedHouseholdIncome}/${abbreviatedIncomeRateUnit}.`;
-  }
 
   return (
     <article className={ `ml-search${props.className ? ` ${props.className}` : ''}` }>
       <h2 className="sr-only">Search</h2>
-      {
-        hasEnteredHouseholdIncome
-        && (
-          <menu className="ml-search__preferences">
-            <Row as="li" className="ml-search__hide-ineligible-income-restricted-units" space="1">
-            {
-              <Checkbox
-                criterion="hideIneligibleIncomeRestrictedUnits"
-                size="small"
-                onChange={ handleIncomeRestrictionToggle }
-              >
-                <span style={{ "display": "inline-block", "maxWidth": "15.2rem" }}>
-                  Hide homes that require a household income over <abbr className="--shorthand" title={ `${abbreviatedHouseholdIncome} per ${incomeRateUnit}` }>{ householdIncomeRate }</abbr>
-                </span>
-              </Checkbox>
-            }
-            </Row>
-          </menu>
-        )
-      }
+      <SearchPreferences filters={ filters } setFilters={ setFilters } />
       <Row space="panel" stackUntil="large">
         <Stack data-column-width="1/3" space="panel">
           { isDesktop ? SidebarUi.reverse() : SidebarUi }

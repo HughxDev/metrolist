@@ -66,10 +66,6 @@
     display: inherit;
   }
 
-  .ml-search__preferences {
-    margin-top: ( $filters-panel-top-offset--half + $panel-spacing );
-    margin-bottom: 0;
-  }
   @include media-breakpoint-up( large ) {
     .ml-search__preferences {
       margin: 0;
@@ -77,13 +73,3 @@
     }
   }
 
-  .ml-search__hide-ineligible-income-restricted-units {
-    justify-content: center;
-    align-items: flex-start;
-    list-style: none;
-  }
-  @include media-breakpoint-up( large ) {
-    .ml-search__hide-ineligible-income-restricted-units {
-      justify-content: flex-end;
-    }
-  }

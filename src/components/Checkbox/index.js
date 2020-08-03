@@ -5,8 +5,6 @@ import Row from '@components/Row';
 import Stack from '@components/Stack';
 import Reveal from '@components/Reveal';
 
-import { hasOwnProperty } from '@util/objects';
-
 import './Checkbox.scss';
 
 function renderText( text ) {
@@ -92,7 +90,7 @@ function renderLabel( children, props ) {
 
 function renderChoices( props ) {
   const {
-    children, hasSubcategories, subcategoriesOnly, required,
+    children, hasSubcategories,
   } = props; // eslint-disable-line react/prop-types
 
   switch ( hasSubcategories ) {
@@ -163,6 +161,8 @@ Checkbox.propTypes = {
   "size": PropTypes.oneOf( ['small', null] ),
   "onChange": PropTypes.func,
 };
+
+renderLabel.propTypes = Checkbox.propTypes;
 
 Checkbox.defaultProps = {
   "required": false,
