@@ -166,7 +166,9 @@ describe( 'Search', () => {
         );
         const forRentInput = getByLabelText( /For Rent \(.*\)/, { "selector": "input" } );
 
-        fireEvent.click( forRentInput );
+        act( () => {
+          fireEvent.click( forRentInput );
+        } );
 
         const homeToBeFilteredOut = queryByText( homeToBuy.title );
 
@@ -193,7 +195,9 @@ describe( 'Search', () => {
           </MemoryRouter>,
         );
         const forSaleInput = getByLabelText( /For Sale \(.*\)/, { "selector": "input" } );
-        fireEvent.click( forSaleInput );
+        act( () => {
+          fireEvent.click( forSaleInput );
+        } );
         const homeToBeFilteredOut = queryByText( homeToRent.title );
 
         expect( forSaleInput ).toBeChecked();
@@ -228,7 +232,9 @@ describe( 'Search', () => {
           </MemoryRouter>,
         );
         const bostonInput = getByLabelText( 'Boston', { "selector": "input" } );
-        fireEvent.click( bostonInput );
+        act( () => {
+          fireEvent.click( bostonInput );
+        } );
         const homeToBeFilteredOut = queryByText( homeOutsideBoston.title );
 
         expect( bostonInput ).toBeChecked();
@@ -246,7 +252,9 @@ describe( 'Search', () => {
           </MemoryRouter>,
         );
         const beyondBostonInput = getByLabelText( 'Beyond Boston', { "selector": "input" } );
-        fireEvent.click( beyondBostonInput );
+        act( () => {
+          fireEvent.click( beyondBostonInput );
+        } );
         const homeToBeFilteredOut = queryByText( homeWithinBoston.title );
 
         expect( beyondBostonInput ).toBeChecked();
@@ -268,13 +276,17 @@ describe( 'Search', () => {
           southieInput = await waitForElement( () => getByLabelText( /South Boston \(.*\)/, { "selector": "input" } ) );
         } );
 
-        fireEvent.click( bostonInput );
+        act( () => {
+          fireEvent.click( bostonInput );
+        } );
 
         expect( bostonInput ).toBeChecked();
         expect( dotInput ).toBeChecked();
         expect( southieInput ).toBeChecked();
 
-        fireEvent.click( bostonInput );
+        act( () => {
+          fireEvent.click( bostonInput );
+        } );
 
         expect( bostonInput ).not.toBeChecked();
         expect( dotInput ).not.toBeChecked();
@@ -304,7 +316,9 @@ describe( 'Search', () => {
         expect( westInput ).toBeChecked();
         expect( southInput ).toBeChecked();
 
-        fireEvent.click( beyondBostonInput );
+        act( () => {
+          fireEvent.click( beyondBostonInput );
+        } );
 
         expect( beyondBostonInput ).not.toBeChecked();
         expect( westInput ).not.toBeChecked();
@@ -343,7 +357,9 @@ describe( 'Search', () => {
         const twoBedroomInput = getByLabelText( '2' );
         const aboveFourBedroomInput = getByLabelText( '4+' );
 
-        fireEvent.click( zeroBedroomInput );
+        act( () => {
+          fireEvent.click( zeroBedroomInput );
+        } );
 
         getByTestId( 'studio' );
         expect( queryByTestId( '1br' ) ).not.toBeInTheDocument();
@@ -352,9 +368,11 @@ describe( 'Search', () => {
         expect( queryByTestId( '4br' ) ).not.toBeInTheDocument();
         expect( queryByTestId( '4+br' ) ).not.toBeInTheDocument();
 
-        fireEvent.click( zeroBedroomInput );
-        fireEvent.click( twoBedroomInput );
-        fireEvent.click( aboveFourBedroomInput );
+        act( () => {
+          fireEvent.click( zeroBedroomInput );
+          fireEvent.click( twoBedroomInput );
+          fireEvent.click( aboveFourBedroomInput );
+        } );
 
         expect( queryByTestId( 'studio' ) ).not.toBeInTheDocument();
         expect( queryByTestId( '1br' ) ).not.toBeInTheDocument();
@@ -450,12 +468,16 @@ describe( 'Search', () => {
         );
         const incomeRestrictionFilterToggle = getByLabelText( /Hide homes that require a household income over \$[0-9,]+\/(mo|yr)\./, { "selector": "input" } );
 
-        fireEvent.click( incomeRestrictionFilterToggle );
+        act( () => {
+          fireEvent.click( incomeRestrictionFilterToggle );
+        } );
 
         expect( queryByTestId( '1br' ) ).not.toBeInTheDocument();
         expect( queryByTestId( '2br' ) ).toBeInTheDocument();
 
-        fireEvent.click( incomeRestrictionFilterToggle );
+        act( () => {
+          fireEvent.click( incomeRestrictionFilterToggle );
+        } );
 
         expect( queryByTestId( '1br' ) ).toBeInTheDocument();
         expect( queryByTestId( '2br' ) ).toBeInTheDocument();
