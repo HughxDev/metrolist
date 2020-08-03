@@ -1,6 +1,6 @@
 {
   "name": "metrolist",
-  "version": "2.3.4103561180",
+  "version": "2.4.4027328703",
   "private": true,
   "dependencies": {
     "@babel/cli": "^7.8.4",
@@ -105,7 +105,7 @@
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public",
     "codecov": "./node_modules/.bin/codecov",
-    "version:drupal": "node _scripts/version.js -n 3"
+    "version:drupal": "node _scripts/version.js -n 4"
   },
   "eslintConfig": {
     "extends": "react-app"

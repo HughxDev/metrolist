@@ -20,7 +20,7 @@ function ClearFiltersButton( props ) {
       className={ `ml-clear-filters-button${props.className ? ` ${props.className}` : ''}` }
       onClick={ handleClick }
     >
-      <span className="ml-clear-filters-button__icon" aria-hidden="true">&times;</span>&#30;
+      <span className="ml-clear-filters-button__icon" aria-hidden="true">&times;</span>{ ' ' }
       <span className="ml-clear-filters-button__text">Clear filters</span>
     </Button>
   );
