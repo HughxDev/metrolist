@@ -545,9 +545,33 @@ function Search( props ) {
       },
     };
 
+    // Save current filter state for undo functionality
+    localStorage.setItem(
+      'filters--undo',
+      localStorage.getItem( 'filters' ),
+    );
+    localStorage.setItem(
+      'useHouseholdIncomeAsIncomeQualificationFilter--undo',
+      localStorage.getItem( 'useHouseholdIncomeAsIncomeQualificationFilter' ),
+    );
+
     // console.log( 'resetFilters', resetFilters );
     setFilters( resetFilters );
     localStorage.setItem( 'useHouseholdIncomeAsIncomeQualificationFilter', 'false' );
+  };
+
+  const undoClearFilters = () => {
+    const filtersToRestore = JSON.parse( localStorage.getItem( 'filters--undo' ) );
+
+    setFilters( filtersToRestore );
+
+    localStorage.setItem(
+      'useHouseholdIncomeAsIncomeQualificationFilter',
+      localStorage.getItem( 'useHouseholdIncomeAsIncomeQualificationFilter--undo' ),
+    );
+
+    localStorage.removeItem( 'filters--undo' );
+    localStorage.removeItem( 'useHouseholdIncomeAsIncomeQualificationFilter--undo' );
   };
 
   const clearListingCounts = () => {
@@ -756,6 +780,7 @@ function Search( props ) {
         drawerRef={ $drawer }
         filters={ filters }
         clearFilters={ clearFilters }
+        undoClearFilters={ undoClearFilters }
         listingCounts={ listingCounts }
         updateDrawerHeight={ updateDrawerHeight }
         updatingDrawerHeight={ updatingDrawerHeight }

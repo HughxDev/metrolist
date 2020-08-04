@@ -97,6 +97,7 @@ function FiltersPanel( props ) {
   delete attributes.listingCounts;
   delete attributes.drawerRef;
   delete attributes.clearFilters;
+  delete attributes.undoClearFilters;
 
   const {
     offer,
@@ -152,7 +153,10 @@ function FiltersPanel( props ) {
         >
           <menu className="ml-filters-panel__clear">
             <li>
-              <ClearFiltersButton clearFilters={ props.clearFilters } />
+              <ClearFiltersButton
+                clearFilters={ props.clearFilters }
+                undoClearFilters={ props.undoClearFilters }
+              />
             </li>
           </menu>
           <FilterGroup criterion="offer">
@@ -287,6 +291,7 @@ FiltersPanel.propTypes = {
   "columnWidth": PropTypes.string,
   "filters": filtersObject,
   "clearFilters": PropTypes.func,
+  "undoClearFilters": PropTypes.func,
   "handleFilterChange": PropTypes.func.isRequired,
   "updateDrawerHeight": PropTypes.func.isRequired,
   "listingCounts": PropTypes.object,

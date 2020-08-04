@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Button from '@components/Button';
@@ -7,9 +7,16 @@ import './ClearFiltersButton.scss';
 
 function ClearFiltersButton( props ) {
   const $self = useRef();
+  const [showUndo, setShowUndo] = useState( false );
 
   const handleClick = () => {
-    props.clearFilters();
+    if ( showUndo ) {
+      props.undoClearFilters();
+    } else {
+      props.clearFilters();
+    }
+
+    setShowUndo( !showUndo );
   };
 
   return (
@@ -21,7 +28,8 @@ function ClearFiltersButton( props ) {
       onClick={ handleClick }
     >
       <span className="ml-clear-filters-button__icon" aria-hidden="true">&times;</span>{ ' ' }
-      <span className="ml-clear-filters-button__text">Clear filters</span>
+      { !showUndo && <span className="ml-clear-filters-button__text">Clear filters</span> }
+      { showUndo && <span className="ml-clear-filters-button__text">Undo clear filters</span> }
     </Button>
   );
 }
@@ -32,6 +40,7 @@ ClearFiltersButton.propTypes = {
   "children": PropTypes.node,
   "className": PropTypes.string,
   "clearFilters": PropTypes.func.isRequired,
+  "undoClearFilters": PropTypes.func.isRequired,
 };
 
 export default ClearFiltersButton;
