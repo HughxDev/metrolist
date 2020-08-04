@@ -1,3 +1,7 @@
+import { getGlobalThis } from '@util/objects';
+
+const globalThis = getGlobalThis();
+
 export function isOnGoogleTranslate() {
   return (
     ( globalThis.location.hostname === 'translate.googleusercontent.com' )
