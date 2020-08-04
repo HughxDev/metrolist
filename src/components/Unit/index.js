@@ -1,18 +1,17 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import NumberFormat from 'react-number-format';
-
-import { unitObject } from '@util/validation';
-
 import './Unit.scss';
+
+import NumberFormat from 'react-number-format';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { unitObject } from '@util/validation';
 
 function formatSize( bedrooms, numberOfIdenticalUnits ) {
   let formattedSize = '';
 
   if ( bedrooms > 0 ) {
     formattedSize = <>
-      <abbr title={ `${bedrooms} Bedroom` } className="--shorthand --hide-at-large">{ `${bedrooms} BR` }</abbr>
-      <span className="--hide-until-large">{ `${bedrooms} Bedroom` }</span>
+      <abbr title={ `${bedrooms} Bedroom` } className="--shorthand hide-at-large">{ `${bedrooms} BR` }</abbr>
+      <span className="hide-until-large">{ `${bedrooms} Bedroom` }</span>
       { numberOfIdenticalUnits && ` (×${numberOfIdenticalUnits})` }
     </>;
   } else {
@@ -29,8 +28,8 @@ function formatSize( bedrooms, numberOfIdenticalUnits ) {
 function formatAmiQualification( amiQualification ) {
   if ( amiQualification === null ) {
     return <>
-      <abbr className="--shorthand --hide-at-large">N/A</abbr>
-      <span className="--hide-until-large">Not Applicable</span>
+      <abbr className="--shorthand hide-at-large">N/A</abbr>
+      <span className="hide-until-large">Not Applicable</span>
     </>;
   }
 

@@ -55,13 +55,13 @@ When writing modifiers, ensure the base class is also present; modifiers should 
 .block.block--modifier {} // Good
 ```
 
-An exception to this would be for mixin classes that are intended to be used broadly. In that case, start the class name with two dashes to indicate detactedness:
+An exception to this would be for mixin classes that are intended to be used broadly. For example, responsive utilities to show/hide elements at different breakpoints:
 ```scss
-.--hide-until-large {
+.hide-until-large {
   display: none;
 }
 @media screen and (min-width: $large) {
-  .--hide-until-large {
+  .hide-until-large {
     display: unset;
   }
 }

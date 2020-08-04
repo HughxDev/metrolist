@@ -1,11 +1,10 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { filtersObject } from '@util/validation';
-
-import Row from '@components/Row';
-import Checkbox from '@components/Checkbox';
-
 import './SearchPreferences.scss';
+
+import Checkbox from '@components/Checkbox';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Row from '@components/Row';
+import { filtersObject } from '@util/validation';
 
 function SearchPreferences( props ) {
   const householdIncome = localStorage.getItem( 'householdIncome' );
@@ -65,10 +64,14 @@ function SearchPreferences( props ) {
         <Row as="li" className="ml-search-preferences__hide-ineligible" space="1">
         {
           <Checkbox
+            className="ml-search-preferences__hide-ineligible-checkbox"
             criterion="hideIneligibleIncomeRestrictedUnits"
             size="small"
             checked={ useHouseholdIncomeAsIncomeQualificationFilter }
             onChange={ handleIncomeRestrictionToggle }
+            style={ {
+              "width": "17.6rem"
+            } }
           >
             <span className="ml-search-preferences__hide-ineligible-text">
               Hide homes that require a household income over{ ' ' }

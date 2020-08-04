@@ -6,6 +6,11 @@
   margin-top: ( $filters-panel-top-offset--half + $panel-spacing );
   margin-bottom: 0;
 }
+@include media-breakpoint-up( large ) {
+  .ml-search-preferences {
+    margin-bottom: $panel-spacing;
+  }
+}
 
 .ml-search-preferences__hide-ineligible {
   justify-content: center;
@@ -18,7 +23,10 @@
   }
 }
 
-.ml-search-preferences__hide-ineligible-text {
+.ml-search-preferenceshide-ineligible-text {
   display: inline-block;
-  max-width: 15.2rem;
+}
+
+.ml-search-preferences__hide-ineligible-checkbox {
+  width: 17.6rem;
 }

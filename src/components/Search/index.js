@@ -1,27 +1,26 @@
-import React, { useState, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
-import { useLocation, useHistory } from 'react-router-dom';
-import { hasOwnProperty, isPlainObject, getGlobalThis } from '@util/objects';
-
-import FiltersPanel from '@components/FiltersPanel';
-import ResultsPanel from '@components/ResultsPanel';
-import Row from '@components/Row';
-import Inset from '@components/Inset';
-import Callout from '@components/Callout';
-import Stack from '@components/Stack';
-import Link from '@components/Link';
-
-import { homeObject, filtersObject } from '@util/validation';
-import { getDevelopmentsApiEndpoint } from '@util/dev';
-import {
-  isOnGoogleTranslate,
-  copyGoogleTranslateParametersToNewUrl,
-  getUrlBeingTranslated,
-} from '@util/translation';
-import SearchPreferences from './_SearchPreferences';
-
 import './Search.scss';
 import 'whatwg-fetch';
+
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  copyGoogleTranslateParametersToNewUrl,
+  getUrlBeingTranslated,
+  isOnGoogleTranslate,
+} from '@util/translation';
+import { filtersObject, homeObject } from '@util/validation';
+import { getGlobalThis, hasOwnProperty, isPlainObject } from '@util/objects';
+import { useHistory, useLocation } from 'react-router-dom';
+
+import Callout from '@components/Callout';
+import FiltersPanel from '@components/FiltersPanel';
+import Inset from '@components/Inset';
+import Link from '@components/Link';
+import PropTypes from 'prop-types';
+import ResultsPanel from '@components/ResultsPanel';
+import Row from '@components/Row';
+import SearchPreferences from './_SearchPreferences';
+import Stack from '@components/Stack';
+import { getDevelopmentsApiEndpoint } from '@util/dev';
 
 const globalThis = getGlobalThis();
 const apiEndpoint = getDevelopmentsApiEndpoint();
@@ -87,6 +86,8 @@ if ( useAmiRecommendationAsLowerBound ) {
   useAmiRecommendationAsLowerBound = ( useAmiRecommendationAsLowerBound === 'true' );
 
   if ( useAmiRecommendationAsLowerBound ) {
+    savedFilters.amiQualification = ( savedFilters.amiQualification || { "lowerBound": 0, "upperBound": null } );
+
     savedFilters.amiQualification.lowerBound = parseInt( localStorage.getItem( 'amiRecommendation' ), 10 );
     localStorage.setItem( 'useAmiRecommendationAsLowerBound', 'false' );
   }

@@ -63,7 +63,7 @@
 
   .pg-li:first-of-type .pg-li-i--link.ml-search__page-link,
   .pg-li:last-of-type .pg-li-i--link.ml-search__page-link {
-    display: inherit;
+    display: block;
   }
 
   @include media-breakpoint-up( large ) {

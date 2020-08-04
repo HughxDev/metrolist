@@ -10,7 +10,7 @@
   display: flex;
   transition: .125s border-color linear;
 
-  &.--invalid {
+  &.invalid {
     border-color: #d22d23;
   }
 }

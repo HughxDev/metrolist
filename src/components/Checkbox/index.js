@@ -1,11 +1,10 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import './Checkbox.scss';
 
+import PropTypes from 'prop-types';
+import React from 'react';
+import Reveal from '@components/Reveal';
 import Row from '@components/Row';
 import Stack from '@components/Stack';
-import Reveal from '@components/Reveal';
-
-import './Checkbox.scss';
 
 function renderText( text ) {
   return <span className="ml-checkbox__text">{ text }</span>;
@@ -137,6 +136,7 @@ function Checkbox( props ) {
     <div
       className={ `ml-checkbox${modifierClasses}${props.className ? ` ${props.className}` : ''}` }
       data-column-width={ props.columnWidth }
+      style={ props.style }
     >
       { renderChoices( props ) }
     </div>
@@ -151,6 +151,7 @@ Checkbox.propTypes = {
   "button": PropTypes.bool,
   "children": PropTypes.node,
   "className": PropTypes.string,
+  "style": PropTypes.object,
   "count": PropTypes.number,
   "criterion": PropTypes.string,
   "subcategoriesOnly": PropTypes.bool,
