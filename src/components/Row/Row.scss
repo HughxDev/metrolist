@@ -34,6 +34,7 @@ $spacing: 1rem;
     }
   }
   .ml-row.ml-row--stack-until > [data-column-width] {
+    width: inherit;
     width: unset;
   }
 
@@ -50,16 +51,19 @@ $spacing: 1rem;
 }
 
 .ml-row.ml-row--space-panel.ml-row--stack-until > * + * {
+  margin-left: inherit;
   margin-left: unset;
   margin-top: $panel-spacing;
 }
 
 .ml-row.ml-row--space-1.ml-row--stack-until > * + * {
+  margin-left: inherit;
   margin-left: unset;
   margin-top: $spacing;
 }
 
 .ml-row.ml-row--space-2.ml-row--stack-until > * + * {
+  margin-left: inherit;
   margin-left: unset;
   margin-top: $spacing * 2;
 }
@@ -74,21 +78,25 @@ $spacing: 1rem;
     flex-direction: row;
 
     & > * {
+      flex: initial;
       flex: unset;
     }
   }
 
   .ml-row.ml-row--space-panel.ml-row--stack-until-small > * + * {
+    margin-top: inherit;
     margin-top: unset;
     margin-left: $panel-spacing;
   }
 
   .ml-row.ml-row--space-1.ml-row--stack-until-small > * + * {
+    margin-top: inherit;
     margin-top: unset;
     margin-left: $spacing;
   }
 
   .ml-row.ml-row--space-2.ml-row--stack-until-small > * + * {
+    margin-top: inherit;
     margin-top: unset;
     margin-left: $spacing * 2;
   }
@@ -123,21 +131,25 @@ $spacing: 1rem;
     flex-direction: row;
 
     & > * {
+      flex: initial;
       flex: unset;
     }
   }
 
   .ml-row.ml-row--space-panel.ml-row--stack-until-medium > * + * {
+    margin-top: inherit;
     margin-top: unset;
     margin-left: $panel-spacing--desktop;
   }
 
   .ml-row.ml-row--space-1.ml-row--stack-until-medium > * + * {
+    margin-top: inherit;
     margin-top: unset;
     margin-left: $spacing;
   }
 
   .ml-row.ml-row--space-2.ml-row--stack-until-medium > * + * {
+    margin-top: inherit;
     margin-top: unset;
     margin-left: $spacing * 2;
   }
@@ -176,21 +188,25 @@ $spacing: 1rem;
     flex-direction: row;
 
     & > * {
+      flex: initial;
       flex: unset;
     }
   }
 
   .ml-row.ml-row--space-panel.ml-row--stack-until-large > * + * {
+    margin-top: inherit;
     margin-top: unset;
     margin-left: $panel-spacing--desktop;
   }
 
   .ml-row.ml-row--space-1.ml-row--stack-until-large > * + * {
+    margin-top: inherit;
     margin-top: unset;
     margin-left: $spacing;
   }
 
   .ml-row.ml-row--space-2.ml-row--stack-until-large > * + * {
+    margin-top: inherit;
     margin-top: unset;
     margin-left: $spacing * 2;
   }
@@ -225,11 +241,13 @@ $spacing: 1rem;
     flex-direction: row;
 
     & > * {
+      flex: initial;
       flex: unset;
     }
   }
 
   .ml-row.ml-row--space-panel.ml-row--stack-until-xlarge > * + * {
+    margin-top: inherit;
     margin-top: unset;
     margin-left: $panel-spacing--desktop;
   }

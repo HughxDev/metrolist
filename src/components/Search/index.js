@@ -18,9 +18,9 @@ import Link from '@components/Link';
 import PropTypes from 'prop-types';
 import ResultsPanel from '@components/ResultsPanel';
 import Row from '@components/Row';
-import SearchPreferences from './_SearchPreferences';
 import Stack from '@components/Stack';
 import { getDevelopmentsApiEndpoint } from '@util/dev';
+import SearchPreferences from './_SearchPreferences';
 
 const globalThis = getGlobalThis();
 const apiEndpoint = getDevelopmentsApiEndpoint();
@@ -876,7 +876,10 @@ Search.propTypes = {
 Search.defaultProps = {
   "homes": [],
   "amiEstimation": null,
-  "filters": { ...defaultFilters },
+  "filters": {
+    ...defaultFilters,
+    // ...savedFilters,
+  },
 };
 
 // localStorage.setItem( 'filters', JSON.stringify( Search.defaultProps.filters ) );
