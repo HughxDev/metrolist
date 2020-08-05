@@ -72,7 +72,7 @@ function SearchPreferences( props ) {
           >
             <span className="ml-search-preferences__hide-ineligible-text">
               Hide homes that require a household income over{ ' ' }
-              <abbr className="--shorthand" title={ `${abbreviatedHouseholdIncome} per ${incomeRateUnit}` }>{ householdIncomeRate }</abbr>
+              <abbr className="ml-shorthand" title={ `${abbreviatedHouseholdIncome} per ${incomeRateUnit}` }>{ householdIncomeRate }</abbr>
             </span>
           </Checkbox>
         }

@@ -57,11 +57,12 @@ When writing modifiers, ensure the base class is also present; modifiers should 
 
 An exception to this would be for mixin classes that are intended to be used broadly. For example, responsive utilities to show/hide elements at different breakpoints:
 ```scss
-.hide-until-large {
+.ml-hide-until-large {
   display: none;
 }
 @media screen and (min-width: $large) {
-  .hide-until-large {
+  .ml-hide-until-large {
+    display: inline-block;
     display: unset;
   }
 }

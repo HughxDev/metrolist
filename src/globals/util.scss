@@ -33,50 +33,50 @@
   }
 }
 
-.full-width {
+.ml-full-width {
   width: 100% !important;
 }
 
-.full-bleed {
+.ml-full-bleed {
   width: 100vw !important;
 }
 
 // Reveal at breakpoint — use sparingly
 // display: inline-block is a fallback for IE/other browsers
 // that don't support display: unset
-.hide-until-xsmall,
-.hide-until-small,
-.hide-until-medium,
-.hide-until-large,
-.hide-until-xlarge {
+.ml-hide-until-xsmall,
+.ml-hide-until-small,
+.ml-hide-until-medium,
+.ml-hide-until-large,
+.ml-hide-until-xlarge {
   display: none;
 }
 @include media-breakpoint-up( xsmall ) {
-  .hide-until-xsmall {
+  .ml-hide-until-xsmall {
     display: inline-block;
     display: unset;
   }
 }
 @include media-breakpoint-up( small ) {
-  .hide-until-small {
+  .ml-hide-until-small {
     display: inline-block;
     display: unset;
   }
 }
 @include media-breakpoint-up( medium ) {
-  .hide-until-medium {
+  .ml-hide-until-medium {
     display: inline-block;
     display: unset;
   }
 }
 @include media-breakpoint-up( large ) {
-  .hide-until-large {
+  .ml-hide-until-large {
     display: inline-block;
     display: unset;
   }
 }
 @include media-breakpoint-up( xlarge ) {
-  .hide-until-xlarge {
+  .ml-hide-until-xlarge {
     display: inline-block;
     display: unset;
   }
@@ -84,27 +84,27 @@
 
 // Hide at breakpoint — use sparingly
 @include media-breakpoint-up( xsmall ) {
-  .hide-at-xsmall {
+  .ml-hide-at-xsmall {
     display: none;
   }
 }
 @include media-breakpoint-up( small ) {
-  .hide-at-small {
+  .ml-hide-at-small {
     display: none;
   }
 }
 @include media-breakpoint-up( medium ) {
-  .hide-at-medium {
+  .ml-hide-at-medium {
     display: none;
   }
 }
 @include media-breakpoint-up( large ) {
-  .hide-at-large {
+  .ml-hide-at-large {
     display: none;
   }
 }
 @include media-breakpoint-up( xlarge ) {
-  .hide-at-xlarge {
+  .ml-hide-at-xlarge {
     display: none;
   }
 }

@@ -42,11 +42,11 @@ h3 {
 //   padding-top: 65px; // public.css sets .mn { padding-top: 65px; } but then adds .page { padding-top: 6.6em } creating extra white space.
 // }
 
-.block {
+.ml-block {
   display: block;
 }
 
-.inline-block {
+.ml-inline-block {
   display: inline-block;
 }
 
@@ -55,8 +55,8 @@ h3 {
   margin-top: 0;
 }
 
-.shorthand,
-.shorthand[title] {
+.ml-shorthand,
+.ml-shorthand[title] {
   text-decoration: none;
   border-bottom: none;
 }

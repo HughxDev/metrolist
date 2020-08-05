@@ -55,7 +55,7 @@ $space: 1rem;
   // }
   // @include media-breakpoint-up( large ) {
   //   .ml-stack.ml-stack--space-below-filters {
-  //     & > :not([class*="hide-until-xlarge"]) + * {
+  //     & > :not([class*="ml-hide-until-xlarge"]) + * {
   //       margin-top: $panel-spacing;
   //     }
   //   }
@@ -74,7 +74,7 @@ $space: 1rem;
   }
   @include media-breakpoint-up( large ) {
     .ml-stack.ml-stack--space-subcategories {
-      & > :not([class*="hide-until-xlarge"]) + * {
+      & > :not([class*="ml-hide-until-xlarge"]) + * {
         margin-top: rem( 21px );
       }
     }
@@ -87,7 +87,7 @@ $space: 1rem;
   }
   @include media-breakpoint-up( large ) {
     .ml-stack.ml-stack--space-home-header {
-      & > :not([class*="hide-until-xlarge"]) + * {
+      & > :not([class*="ml-hide-until-xlarge"]) + * {
         margin-top: rem( 24px );
       }
     }
@@ -150,7 +150,7 @@ $space: 1rem;
   }
   @include media-breakpoint-up( large ) {
     .ml-stack.ml-stack--space-panel {
-      & > :not([class*="hide-until-xlarge"]) + * {
+      & > :not([class*="ml-hide-until-xlarge"]) + * {
         margin-top: $panel-spacing--desktop;
       }
     }
@@ -284,12 +284,12 @@ $space: 1rem;
 
     // &.ml-stack--space-below-filters,
     &.ml-stack--space-panel {
-      & > :not([class*="hide-until-xlarge"]) + * {
+      & > :not([class*="ml-hide-until-xlarge"]) + * {
         margin-top: 0;
       }
     }
 
-    & > :not([class*="hide-until-xlarge"]) + * {
+    & > :not([class*="ml-hide-until-xlarge"]) + * {
       margin-bottom: $panel-spacing;
     }
   }
