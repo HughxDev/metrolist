@@ -58,7 +58,7 @@ const defaultFilters = {
   },
   "rentalPrice": {
     "lowerBound": 0,
-    "upperBound": null,
+    "upperBound": 3000,
   },
 };
 const defaultFilterKeys = Object.keys( defaultFilters );
@@ -260,7 +260,10 @@ function filterHomes( homesToFilter, filtersToApply, matchOnNoneSelected = true 
 
           unitMatchesRentalPrice = (
             ( unit.price >= rentalPriceLowerBound )
-            && ( unit.price <= rentalPriceUpperBound )
+            && (
+              ( unit.price <= rentalPriceUpperBound )
+              || ( unit.price >= rentalPriceUpperBound )
+            )
           );
         } else {
           unitMatchesRentalPrice = true;
@@ -451,6 +454,7 @@ function Search( props ) {
   const [totalPages, setTotalPages] = useState( 1 );
   const [pages, setPages] = useState( [1] );
   const [isDesktop, setIsDesktop] = useState( window.matchMedia( '(min-width: 992px)' ).matches );
+  const [showClearFiltersInitially, setShowClearFiltersInitially] = useState( false );
   const history = useHistory();
   const location = useLocation();
   const query = useQuery();
@@ -477,12 +481,6 @@ function Search( props ) {
         "north": 0,
         "south": 0,
       },
-    },
-    // Technically not a count, but better to just log here than
-    // loop through the entire home array again in a separate function
-    "rentalPrice": {
-      "lowerBound": 0,
-      "upperBound": 0,
     },
   };
 
@@ -542,7 +540,7 @@ function Search( props ) {
       },
       "rentalPrice": {
         "lowerBound": 0,
-        "upperBound": listingCounts.rentalPrice.upperBound,
+        "upperBound": 3000,
       },
     };
 
@@ -631,17 +629,17 @@ function Search( props ) {
         listingCounts.location.cardinalDirection[home.cardinalDirection]++;
       }
 
-      if ( Array.isArray( home.units ) ) {
-        home.units.forEach( ( unit ) => {
-          if ( home.offer === 'rent' ) {
-            // Not extracting lowest rent since we can just default to $0 and let the user adjust
+      // if ( Array.isArray( home.units ) ) {
+      //   home.units.forEach( ( unit ) => {
+      //     if ( home.offer === 'rent' ) {
+      //       // Not extracting lowest rent since we can just default to $0 and let the user adjust
 
-            if ( unit.price > listingCounts.rentalPrice.upperBound ) {
-              listingCounts.rentalPrice.upperBound = unit.price;
-            }
-          }
-        } );
-      }
+      //       if ( unit.price > listingCounts.rentalPrice.upperBound ) {
+      //         listingCounts.rentalPrice.upperBound = unit.price;
+      //       }
+      //     }
+      //   } );
+      // }
     } );
   };
 
@@ -696,16 +694,27 @@ function Search( props ) {
 
           Object.keys( listingCounts.location.neighborhood ).forEach( ( nb ) => {
             newFilters.location.neighborhood[nb] = ( newFilters.location.neighborhood[nb] || false );
-            // defaultFilters.location.neighborhood[nb] = false;
+            defaultFilters.location.neighborhood[nb] = false;
           } );
 
           Object.keys( listingCounts.location.cardinalDirection ).forEach( ( cd ) => {
             newFilters.location.cardinalDirection[cd] = ( newFilters.location.cardinalDirection[cd] || false );
-            // defaultFilters.location.cardinalDirection[cd] = false;
+            defaultFilters.location.cardinalDirection[cd] = false;
           } );
 
           setFilters( newFilters );
           localStorage.setItem( 'filters', JSON.stringify( newFilters ) );
+
+          const defaultFiltersString = JSON.stringify( defaultFilters, null, 2 );
+          const savedFiltersString = JSON.stringify( savedFilters, null, 2 );
+          const savedFiltersMatchDefaultFilters = ( defaultFiltersString === savedFiltersString );
+
+          console.log( 'defaultFilters', defaultFiltersString );
+          console.log( '---' );
+          console.log( 'savedFilters', savedFiltersString );
+          console.log( 'savedFiltersMatchDefaultFilters', savedFiltersMatchDefaultFilters );
+
+          setShowClearFiltersInitially( !savedFiltersMatchDefaultFilters );
         } )
         .catch( ( error ) => {
           console.error( error );
@@ -782,6 +791,7 @@ function Search( props ) {
         filters={ filters }
         clearFilters={ clearFilters }
         undoClearFilters={ undoClearFilters }
+        showClearFiltersInitially={ showClearFiltersInitially }
         listingCounts={ listingCounts }
         updateDrawerHeight={ updateDrawerHeight }
         updatingDrawerHeight={ updatingDrawerHeight }
@@ -878,10 +888,10 @@ Search.defaultProps = {
   "amiEstimation": null,
   "filters": {
     ...defaultFilters,
-    // ...savedFilters,
+    ...savedFilters,
   },
 };
 
-// localStorage.setItem( 'filters', JSON.stringify( Search.defaultProps.filters ) );
+localStorage.setItem( 'filters', JSON.stringify( Search.defaultProps.filters ) );
 
 export default Search;

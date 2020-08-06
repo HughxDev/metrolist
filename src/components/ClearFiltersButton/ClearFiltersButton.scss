@@ -5,6 +5,11 @@
 .ml-clear-filters-button.btn.btn--metrolist-secondary {
   border-color: transparent;
   margin: 0;
+  overflow: hidden;
+}
+
+.ml-clear-filters-button.ml-clear-filters-button--has-interacted-with-filters {
+  transition: all linear .25s;
 }
 
 .ml-clear-filters-button__icon,

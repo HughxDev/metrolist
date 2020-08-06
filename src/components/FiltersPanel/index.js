@@ -33,6 +33,8 @@ function FiltersPanel( props ) {
   const isDesktop = true; // globalThis.matchMedia( '(min-width: 992px)' ).matches; // TODO: define breakpoints that line up with the CSS in JS somewhere
   const attributes = { ...props };
   const [isExpanded, setExpanded] = useState( isDesktop );
+  const [hasInteractedWithFilters, setHasInteractedWithFilters] = useState( false );
+  const [lastInteractedWithFilters, setLastInteractedWithFilters] = useState( null );
   const $self = useRef();
 
   const handleClick = ( event ) => {
@@ -98,6 +100,7 @@ function FiltersPanel( props ) {
   delete attributes.drawerRef;
   delete attributes.clearFilters;
   delete attributes.undoClearFilters;
+  delete attributes.showClearFiltersInitially;
 
   const {
     offer,
@@ -130,6 +133,9 @@ function FiltersPanel( props ) {
       { ...attributes }
       onClick={ handleClick }
       onChange={ ( event ) => {
+        setHasInteractedWithFilters( true );
+        setLastInteractedWithFilters( Date.now() );
+
         props.handleFilterChange( event );
       } }
     >
@@ -156,6 +162,9 @@ function FiltersPanel( props ) {
               <ClearFiltersButton
                 clearFilters={ props.clearFilters }
                 undoClearFilters={ props.undoClearFilters }
+                showClearFiltersInitially={ props.showClearFiltersInitially }
+                hasInteractedWithFilters={ hasInteractedWithFilters }
+                lastInteractedWithFilters={ lastInteractedWithFilters }
               />
             </li>
           </menu>
@@ -178,26 +187,17 @@ function FiltersPanel( props ) {
           </FilterGroup>
           <FilterGroup criterion="rentalPrice">
             <FilterGroup.Label>Rental Price</FilterGroup.Label>
-            {
-              (
-                rentalPrice
-                && listingCounts.rentalPrice.upperBound
-                && (
-                  <Filter
-                    type="range"
-                    criterion="rentalPrice"
-                    min={ 0 }
-                    step={ 100 }
-                    max={ listingCounts.rentalPrice.upperBound }
-                    lowerBound={ rentalPrice.lowerBound }
-                    upperBound={ rentalPrice.upperBound }
-                    valueFormat="$"
-                    valueAppend={ () => <> per month</> }
-                  />
-                )
-              )
-              || ''
-             }
+            <Filter
+              type="range"
+              criterion="rentalPrice"
+              min={ 0 }
+              step={ 100 }
+              max={ 3000 }
+              lowerBound={ rentalPrice.lowerBound }
+              upperBound={ rentalPrice.upperBound }
+              valueFormat="$"
+              valueAppend={ () => <>+ per month</> }
+            />
           </FilterGroup>
           <FilterGroup criterion="location">
             <FilterGroup.Label>Location</FilterGroup.Label>
@@ -292,6 +292,7 @@ FiltersPanel.propTypes = {
   "filters": filtersObject,
   "clearFilters": PropTypes.func,
   "undoClearFilters": PropTypes.func,
+  "showClearFiltersInitially": PropTypes.bool,
   "handleFilterChange": PropTypes.func.isRequired,
   "updateDrawerHeight": PropTypes.func.isRequired,
   "listingCounts": PropTypes.object,
