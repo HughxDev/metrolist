@@ -542,3 +542,8 @@ While Metrolist loads under the offsite version of Google Translate, the React v
 ### Caveats
 - If Google Translate changes the way their code works, this could break.
 - Although this fix is verifiable on CI as far as translation goes, until the appropriate CORS headers are added to Acquia, the parts of the app that rely on API data will not resolve, so it will still appear broken. Although this also has to do with cross-origin restrictions, it is completely unrelated to the Translate issue, so it is safe to ignore. But to work around this and verify that the site is indeed 100% working, you can run Chrome without security enabled. Download Chrome Canary and run this command (macOS, but you can search for your platform equivalent): `open -n -a Google\ Chrome\ Canary --args --disable-web-security --user-data-dir=/tmp/chrome --disable-site-isolation-trials --allow-running-insecure-content`.
+
+## Clear Filters Show/Hide
+- On initial page load, should be hidden if localStorage.filters doesn’t exist or is identical to the default filters
+  - Presents a chicken-and-egg problem where we don’t actually know the upperBound of the Rental Price filter until an API response comes back
+  - Default Filters are defined before any API work has been done
