@@ -98,6 +98,7 @@ function Range( props ) {
             <span className="en-dash">–</span>
             <output className="ml-range__output" htmlFor="upper-bound">{ formatValue( upperBound ) }</output>
           </span>
+          { props.maxValueAppend && ( upperBound === max ) && props.maxValueAppend() }
           { props.valueAppend && props.valueAppend() }
         </p>
         <RangeMultiInput
@@ -158,6 +159,7 @@ Range.propTypes = {
   "upperBound": PropTypes.number,
   "valueFormat": PropTypes.oneOf( ['%', '$'] ),
   "valueAppend": PropTypes.func,
+  "maxValueAppend": PropTypes.func,
 };
 
 export default Range;

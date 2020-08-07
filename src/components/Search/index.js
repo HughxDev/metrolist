@@ -74,6 +74,12 @@ if ( savedFilters ) {
       .forEach( ( errantKey ) => {
         delete savedFilters[errantKey];
       } );
+
+    const savedNeighborhoods = savedFilters.location.neighborhood;
+    savedFilters.location.neighborhood = {};
+    Object.keys( savedNeighborhoods ).sort().forEach( ( nb ) => {
+      savedFilters.location.neighborhood[nb] = savedNeighborhoods[nb];
+    } );
   } else {
     savedFilters = {};
   }
@@ -262,7 +268,14 @@ function filterHomes( homesToFilter, filtersToApply, matchOnNoneSelected = true 
             ( unit.price >= rentalPriceLowerBound )
             && (
               ( unit.price <= rentalPriceUpperBound )
-              || ( unit.price >= rentalPriceUpperBound )
+              // If the current upper bound is equal to the default upper bound
+              // (which means it is all the way to the right on the slider),
+              // change from “$XXX” to “$XXX+”—i.e. expand the scope of prices to include
+              // values above the nominal maximum.
+              || (
+                ( rentalPriceUpperBound === defaultFilters.rentalPrice.upperBound )
+                && ( unit.price >= rentalPriceUpperBound )
+              )
             )
           );
         } else {
@@ -497,9 +510,11 @@ function Search( props ) {
   const clearFilters = () => {
     const resetNeighborhoods = {};
 
-    Object.keys( filters.location.neighborhood ).forEach( ( nb ) => {
-      resetNeighborhoods[nb] = false;
-    } );
+    Object.keys( filters.location.neighborhood )
+      .sort()
+      .forEach( ( nb ) => {
+        resetNeighborhoods[nb] = false;
+      } );
 
     // Unfortunately we have to do this manually rather than
     // doing `setFilters( defaultFilters )` because of a
@@ -692,10 +707,12 @@ function Search( props ) {
             newFilters = { ...filters };
           }
 
-          Object.keys( listingCounts.location.neighborhood ).forEach( ( nb ) => {
-            newFilters.location.neighborhood[nb] = ( newFilters.location.neighborhood[nb] || false );
-            defaultFilters.location.neighborhood[nb] = false;
-          } );
+          Object.keys( listingCounts.location.neighborhood )
+            .sort()
+            .forEach( ( nb ) => {
+              newFilters.location.neighborhood[nb] = ( newFilters.location.neighborhood[nb] || false );
+              defaultFilters.location.neighborhood[nb] = false;
+            } );
 
           Object.keys( listingCounts.location.cardinalDirection ).forEach( ( cd ) => {
             newFilters.location.cardinalDirection[cd] = ( newFilters.location.cardinalDirection[cd] || false );
