@@ -871,9 +871,9 @@ function Search( props ) {
           homes={ filteredHomes }
         />
       </Row>
-      <nav className="ml-search__pagination">
+      <nav>
         <h3 className="sr-only">Pages</h3>
-        <Row className="pg" space="panel">{
+        <Row className="pg ml-search__pagination" space="panel">{
           pages.map( ( pageNumber, index ) => {
             const isCurrentPage = ( currentPage === pageNumber );
 

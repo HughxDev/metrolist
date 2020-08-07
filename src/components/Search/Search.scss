@@ -43,11 +43,14 @@
     }
   }
 
-  // .ml-search__pagination {
-  //   text-align: center;
-  // }
+  .ml-search__pagination {
+    flex-wrap: wrap;
+    margin-bottom: ( $panel-spacing * -1 );
+  }
 
   .ml-search__page-link-container {
+    margin-bottom: $panel-spacing;
+
     &:last-child {
       border-right: none;
     }
