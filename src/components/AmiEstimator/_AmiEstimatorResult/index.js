@@ -8,75 +8,56 @@ import Stack from '@components/Stack';
 
 import { updatePageTitle } from '@util/a11y-seo';
 import { isOnGoogleTranslate, copyGoogleTranslateParametersToNewUrl, getUrlBeingTranslated } from '@util/translation';
-import { hasOwnProperty } from '@util/objects';
 
 import InputSummary from '../_AmiEstimatorInputSummary';
-import amiDefinitions from '../ami-definitions.json';
 
 import './AmiEstimatorResult.scss';
+import amiDefinitions from '../ami-definitions.json';
 
-function get100percentAmiDefinition() {
-  if ( !Array.isArray( amiDefinitions ) ) {
-    return false;
-  }
+function getAmiBracket( householdSize, annualizedHouseholdIncome ) {
+  let bestMaxIncome = 0;
+  let bestAmi = 0;
 
   for ( let index = 0; index < amiDefinitions.length; index++ ) {
-    const amiEstimation = amiDefinitions[index];
+    const amiBracket = amiDefinitions[index];
+    const maxIncome = amiBracket.maxIncomeByHouseholdSize[householdSize - 1];
 
-    if ( amiEstimation && hasOwnProperty( amiEstimation, 'ami' ) && ( amiEstimation.ami === 100 ) ) {
-      return amiEstimation;
+    if ( maxIncome >= annualizedHouseholdIncome ) {
+      bestMaxIncome = maxIncome;
+      bestAmi = amiBracket.ami;
+      break;
     }
   }
 
-  throw new Error( 'No 100% AMI definition (HUD) could be found.' );
+  return { "ami": bestAmi, "maxIncome": bestMaxIncome };
 }
 
-function estimateAmi( {
-  amiDefinition, householdSize, householdIncome, incomeRate,
-} ) {
-  if ( !amiDefinition ) {
-    return 0;
-  }
-
+function estimateAmi( { householdSize, householdIncome, incomeRate } ) {
   householdSize = householdSize.value.replace( '+', '' );
   householdIncome = householdIncome.value;
   incomeRate = incomeRate.value;
 
   const parsedHouseholdIncome = parseFloat( householdIncome.replace( /[$,]/g, '' ) );
-  const maxIncome = amiDefinition[householdSize];
   let annualizedHouseholdIncome = parsedHouseholdIncome;
-  let estimation;
 
   if ( incomeRate === 'Monthly' ) {
     annualizedHouseholdIncome *= 12;
   }
 
-  if (
-    Number.isNaN( annualizedHouseholdIncome )
-    || Number.isNaN( maxIncome )
-  ) {
+  if ( Number.isNaN( annualizedHouseholdIncome ) ) {
     console.warn(
-      `AMI calculation failed: one or both of \`annualizedHouseholdIncome\` and \`maxIncome\` resolved to non-numeric values.`
+      `AMI calculation failed:  \`annualizedHouseholdIncome\`  resolved to a non-numeric value.`
       + ` This could be due to \`props.formData\` being incomplete or missing.`,
     );
-    estimation = 0;
-  } else {
-    estimation = Math.floor( ( annualizedHouseholdIncome / maxIncome ) * 100 );
-  }
 
-  return estimation;
-}
-
-function recommendAmi( amiEstimation ) {
-  if ( amiEstimation < 0 ) {
     return 0;
   }
 
-  if ( amiEstimation ) {
-    return ( Math.ceil( amiEstimation / 5 ) * 5 );
-  }
+  const amiBracket = getAmiBracket( householdSize, annualizedHouseholdIncome );
 
-  return amiEstimation;
+  console.log( amiBracket );
+
+  return amiBracket.ami;
 }
 
 function isAboveUpperBound( amiEstimation ) {
@@ -86,10 +67,9 @@ function isAboveUpperBound( amiEstimation ) {
 const AmiEstimatorResult = forwardRef( ( props, ref ) => {
   const selfRef = ( ref || useRef() );
   const [amiEstimation, setAmiEstimation] = useState( 0 );
-  let amiRecommendation = recommendAmi( amiEstimation );
   const isBeingTranslated = isOnGoogleTranslate();
 
-  localStorage.setItem( 'amiRecommendation', amiRecommendation );
+  localStorage.setItem( 'amiRecommendation', amiEstimation );
   localStorage.setItem( 'useAmiRecommendationAsLowerBound', 'true' );
 
   useEffect( () => {
@@ -97,17 +77,18 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
     props.setStep( props.step );
     props.adjustContainerHeight( selfRef );
 
-    setAmiEstimation(
-      estimateAmi( {
-        "amiDefinition": get100percentAmiDefinition(),
-        ...props.formData,
-      } ),
-    );
+    const calculation = estimateAmi( {
+      "amiDefinition": amiDefinitions,
+      ...props.formData,
+    } );
+
+    console.log( calculation );
+
+    setAmiEstimation( calculation );
   }, [] );
 
   useEffect( () => {
-    amiRecommendation = recommendAmi( amiEstimation );
-    localStorage.setItem( 'amiRecommendation', amiRecommendation );
+    localStorage.setItem( 'amiRecommendation', amiEstimation );
   }, [amiEstimation] );
 
   const metrolistSearchPath = '/metrolist/search';
@@ -119,9 +100,8 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
       <Stack space="2" className="ml-ami-estimator__prompt-inner">
         <InputSummary formData={ props.formData } />
         <Stack space="1">
-          <p>Estimated Eligibility: <dfn className="ml-ami">{ amiEstimation }% AMI</dfn> (Area Median Income)</p>
           { isAboveUpperBound( amiEstimation ) && <p>Given your income level, you are unlikely to qualify for units marketed on Metrolist.</p> }
-          { !isAboveUpperBound( amiEstimation ) && <p>We recommend searching for homes listed at <b className="ml-ami">{ amiRecommendation }% AMI</b> and above. Note that minimum income restrictions apply, and are listed in the unit details.</p> }
+          { !isAboveUpperBound( amiEstimation ) && <p>Given your income and household size, please search for homes listed at <b className="ml-ami">{ amiEstimation }% AMI</b> and above. Note that minimum income restrictions apply, and are listed in the unit details.</p> }
         </Stack>
         <Stack as="nav" space="1">
           <Button as="a" variant="primary" href={ metrolistSearchUrl } target={ isBeingTranslated ? '_blank' : undefined }>See homes that match this eligibility range</Button>
