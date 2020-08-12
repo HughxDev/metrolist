@@ -1,5 +1,5 @@
 import React, {
-  useEffect, useRef, forwardRef,
+  useEffect, useRef, forwardRef, useState,
 } from 'react';
 import PropTypes from 'prop-types';
 
@@ -10,12 +10,18 @@ import Stack from '@components/Stack';
 import Required from '@components/Required';
 
 import { updatePageTitle } from '@util/a11y-seo';
+import { getIconId } from '../util';
 
 import './AmiEstimatorHouseholdSize.scss';
 
 const AmiEstimatorHouseholdSize = forwardRef( ( props, ref ) => {
   const selfRef = ( ref || useRef() );
   const isRequired = true;
+  const [familySizeIcon, setFamilySizeIcon] = useState( 'family2' );
+  const handleHouseholdSizeChange = ( event ) => {
+    const iconId = getIconId( event.target.value );
+    setFamilySizeIcon( iconId );
+  };
 
   useEffect( () => {
     updatePageTitle( 'Household Size', 'AMI Estimator' );
@@ -24,12 +30,22 @@ const AmiEstimatorHouseholdSize = forwardRef( ( props, ref ) => {
   }, [] );
 
   return (
-    <div ref={ selfRef } className="ml-ami-estimator__household-size ml-ami-estimator__prompt" data-testid="ml-ami-estimator__household-size">
+    <div
+      ref={ selfRef }
+      className="ml-ami-estimator__household-size ml-ami-estimator__prompt"
+      data-testid="ml-ami-estimator__household-size"
+      onChange={ handleHouseholdSizeChange }
+    >
       <Stack as="fieldset" space="2" className="ml-ami-estimator__prompt-inner">
         <legend className="ml-ami-estimator__prompt-question">How many people live in your household of any age? { isRequired ? <Required /> : '' }</legend>
         <div className="ml-ami-estimator__prompt-answer">
           <Stack space="2">
-            <Icon className="ml-ami-estimator__prompt-answer-icon" icon="family2" height="100" alt="" />
+            <Icon
+              className="ml-ami-estimator__prompt-answer-icon"
+              icon={ familySizeIcon }
+              height="100"
+              alt=""
+            />
             <Scale
               className={ `ml-ami-estimator__prompt--answer-input` }
               criterion="householdSize"
