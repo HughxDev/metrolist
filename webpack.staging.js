@@ -13,12 +13,12 @@ module.exports = merge( developmentConfig, {
         "options": {
           "multiple": [
             // {
-            //   "search": /\/images\/(.*)/g,
-            //   "replace": 'https://assets.boston.gov/icons/metrolist/$1',
+            //   "search": /(["'`])\/images\/([^\1]*)(\1)/g,
+            //   "replace": '$1https://assets.boston.gov/icons/metrolist/$2$3',
             // },
             {
-              "search": /\/images\/(.*)/g,
-              "replace": '/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/images/',
+              "search": /(["'`])\/images\/([^\1]*)(\1)/g,
+              "replace": '$1/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/images/$2$3',
             },
           ],
         },

@@ -8,6 +8,7 @@ import Stack from '@components/Stack';
 
 import { updatePageTitle } from '@util/a11y-seo';
 import { isOnGoogleTranslate, copyGoogleTranslateParametersToNewUrl, getUrlBeingTranslated } from '@util/translation';
+import { hasOwnProperty } from '@util/objects';
 
 import InputSummary from '../_AmiEstimatorInputSummary';
 
@@ -20,12 +21,17 @@ function getAmiBracket( householdSize, annualizedHouseholdIncome ) {
 
   for ( let index = 0; index < amiDefinitions.length; index++ ) {
     const amiBracket = amiDefinitions[index];
-    const maxIncome = amiBracket.maxIncomeByHouseholdSize[householdSize - 1];
 
-    if ( maxIncome >= annualizedHouseholdIncome ) {
-      bestMaxIncome = maxIncome;
-      bestAmi = amiBracket.ami;
-      break;
+    if ( hasOwnProperty( amiBracket, 'maxIncomeByHouseholdSize' ) ) {
+      const maxIncome = amiBracket.maxIncomeByHouseholdSize[householdSize - 1];
+
+      if ( maxIncome >= annualizedHouseholdIncome ) {
+        bestMaxIncome = maxIncome;
+        bestAmi = amiBracket.ami;
+        break;
+      }
+    } else {
+      console.error( `Variable \`amiBracket\` (${typeof amiBracket}) is missing the property \`maxIncomeByHouseholdSize\`. Value:`, amiBracket );
     }
   }
 
@@ -55,8 +61,6 @@ function estimateAmi( { householdSize, householdIncome, incomeRate } ) {
 
   const amiBracket = getAmiBracket( householdSize, annualizedHouseholdIncome );
 
-  console.log( amiBracket );
-
   return amiBracket.ami;
 }
 
@@ -81,8 +85,6 @@ const AmiEstimatorResult = forwardRef( ( props, ref ) => {
       "amiDefinition": amiDefinitions,
       ...props.formData,
     } );
-
-    console.log( calculation );
 
     setAmiEstimation( calculation );
   }, [] );

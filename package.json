@@ -1,6 +1,6 @@
 {
   "name": "metrolist",
-  "version": "2.4.2405586018",
+  "version": "2.4.2591474710",
   "private": true,
   "dependencies": {
     "@babel/cli": "^7.8.4",
@@ -91,7 +91,7 @@
     "start:win": "./node_modules/.bin/webpack-dev-server --open",
     "build": "yarn sync:icons && yarn sync:ami ci && rm -rf dist/ && webpack --config webpack.production.js",
     "build:dev": "yarn sync:icons && yarn sync:ami dev && rm -rf dist/ && webpack --config webpack.config.js && cp _redirects dist/",
-    "build:stage": "yarn sync:icons && yarn sync:ami dev && rm -rf dist/ && webpack --config webpack.staging.js",
+    "build:stage": "yarn sync:icons && yarn sync:ami ci && rm -rf dist/ && webpack --config webpack.staging.js && yarn copy:drupal",
     "copy:drupal": "rm -rf ../boston.gov-d8/docroot/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/* && cp -r dist/* ../boston.gov-d8/docroot/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/",
     "clean:drupal": "rm -rf ../boston.gov-d8/docroot/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/images/",
     "build:prod": "yarn build && yarn copy:drupal && yarn clean:drupal && yarn version:drupal",
