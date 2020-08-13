@@ -46,8 +46,7 @@ const defaultFilters = {
     "0": false,
     "1": false,
     "2": false,
-    "3": false,
-    "4+": false,
+    "3+": false,
   },
   "amiQualification": {
     "lowerBound": 0,
@@ -80,6 +79,13 @@ if ( savedFilters ) {
     Object.keys( savedNeighborhoods ).sort().forEach( ( nb ) => {
       savedFilters.location.neighborhood[nb] = savedNeighborhoods[nb];
     } );
+
+    if ( hasOwnProperty( savedFilters.bedrooms, '3' ) ) {
+      savedFilters.bedrooms['3+'] = savedFilters.bedrooms['3'];
+      delete savedFilters.bedrooms['3'];
+    }
+
+    delete savedFilters.bedrooms['4+'];
   } else {
     savedFilters = {};
   }
@@ -176,12 +182,8 @@ function filterHomes( homesToFilter, filtersToApply, matchOnNoneSelected = true 
           && ( unitBedroomSizes.indexOf( 2 ) !== -1 )
         )
         || (
-          ( filtersToApply.bedrooms['3'] === true )
-          && ( unitBedroomSizes.indexOf( 3 ) !== -1 )
-        )
-        || (
-          filtersToApply.bedrooms['4+']
-          && ( unitBedroomSizes[unitBedroomSizes.length - 1] >= 4 )
+          ( filtersToApply.bedrooms['3+'] === true )
+          && ( unitBedroomSizes[unitBedroomSizes.length - 1] >= 3 )
         )
       );
 
@@ -229,7 +231,12 @@ function filterHomes( homesToFilter, filtersToApply, matchOnNoneSelected = true 
           matchesNarrowLocation = true;
         }
 
-        if ( !filtersToApply.bedrooms['0'] && !filtersToApply.bedrooms['1'] && !filtersToApply.bedrooms['2'] && !filtersToApply.bedrooms['3'] && !filtersToApply.bedrooms['4+'] ) {
+        if (
+          !filtersToApply.bedrooms['0']
+          && !filtersToApply.bedrooms['1']
+          && !filtersToApply.bedrooms['2']
+          && !filtersToApply.bedrooms['3+']
+        ) {
           matchesBedrooms = true;
         }
       }
@@ -296,12 +303,8 @@ function filterHomes( homesToFilter, filtersToApply, matchOnNoneSelected = true 
             && ( unit.bedrooms === 2 )
           )
           || (
-            filtersToApply.bedrooms['3']
-            && ( unit.bedrooms === 3 )
-          )
-          || (
-            filtersToApply.bedrooms['4+']
-            && ( unit.bedrooms >= 4 )
+            filtersToApply.bedrooms['3+']
+            && ( unit.bedrooms >= 3 )
           )
         );
 
@@ -310,8 +313,7 @@ function filterHomes( homesToFilter, filtersToApply, matchOnNoneSelected = true 
             !filtersToApply.bedrooms['0']
             && !filtersToApply.bedrooms['1']
             && !filtersToApply.bedrooms['2']
-            && !filtersToApply.bedrooms['3']
-            && !filtersToApply.bedrooms['4+']
+            && !filtersToApply.bedrooms['3+']
           ) {
             unitMatchesBedrooms = true;
           }
@@ -543,8 +545,7 @@ function Search( props ) {
         "0": false,
         "1": false,
         "2": false,
-        "3": false,
-        "4+": false,
+        "3+": false,
       },
       "amiQualification": {
         "lowerBound": 0,

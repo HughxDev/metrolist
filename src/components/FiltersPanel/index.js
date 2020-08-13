@@ -263,8 +263,7 @@ function FiltersPanel( props ) {
             <Filter type="checkbox" criterion="bedrooms" aria-label="0-bedrooms" checked={ bedrooms['0'] }>0</Filter>
             <Filter type="checkbox" criterion="bedrooms" aria-label="1-bedrooms" checked={ bedrooms['1'] }>1</Filter>
             <Filter type="checkbox" criterion="bedrooms" aria-label="2-bedrooms" checked={ bedrooms['2'] }>2</Filter>
-            <Filter type="checkbox" criterion="bedrooms" aria-label="3-bedrooms" checked={ bedrooms['3'] }>3</Filter>
-            <Filter type="checkbox" criterion="bedrooms" aria-label="4+-bedrooms" checked={ bedrooms['4+'] }>4+</Filter>
+            <Filter type="checkbox" criterion="bedrooms" aria-label="3+-bedrooms" checked={ bedrooms['3+'] }>3+</Filter>
           </FilterGroup>
           <FilterGroup criterion="amiQualification">
             <FilterGroup.Label>Income Eligibility</FilterGroup.Label>

@@ -355,7 +355,7 @@ describe( 'Search', () => {
         );
         const zeroBedroomInput = getByLabelText( '0' );
         const twoBedroomInput = getByLabelText( '2' );
-        const aboveFourBedroomInput = getByLabelText( '4+' );
+        const aboveThreeBedroomInput = getByLabelText( '3+' );
 
         act( () => {
           fireEvent.click( zeroBedroomInput );
@@ -365,21 +365,20 @@ describe( 'Search', () => {
         expect( queryByTestId( '1br' ) ).not.toBeInTheDocument();
         expect( queryByTestId( '2br' ) ).not.toBeInTheDocument();
         expect( queryByTestId( '3br' ) ).not.toBeInTheDocument();
-        expect( queryByTestId( '4br' ) ).not.toBeInTheDocument();
-        expect( queryByTestId( '4+br' ) ).not.toBeInTheDocument();
+        expect( queryByTestId( '3+br' ) ).not.toBeInTheDocument();
 
         act( () => {
           fireEvent.click( zeroBedroomInput );
           fireEvent.click( twoBedroomInput );
-          fireEvent.click( aboveFourBedroomInput );
+          fireEvent.click( aboveThreeBedroomInput );
         } );
 
         expect( queryByTestId( 'studio' ) ).not.toBeInTheDocument();
         expect( queryByTestId( '1br' ) ).not.toBeInTheDocument();
         getByTestId( '2br' );
         expect( queryByTestId( '3br' ) ).not.toBeInTheDocument();
-        getByTestId( '4br' );
-        getByTestId( '4+br' );
+        getByTestId( '3br' );
+        getByTestId( '3+br' );
       } );
     } );
 

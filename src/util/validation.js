@@ -46,8 +46,7 @@ export const filtersObject = PropTypes.shape( {
     "0": PropTypes.bool,
     "1": PropTypes.bool,
     "2": PropTypes.bool,
-    "3": PropTypes.bool,
-    "4+": PropTypes.bool,
+    "3+": PropTypes.bool,
   } ),
   "amiQualification": PropTypes.shape( {
     "lowerBound": PropTypes.number,

@@ -101,7 +101,7 @@ Scale.propTypes = {
         componentName,
         "got": prop,
         "expected": "comma-delimited string",
-        "example": "0,1,2,3,4+",
+        "example": "0,1,2,3+",
       } ) );
     }
 
