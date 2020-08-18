@@ -21,6 +21,7 @@ import Row from '@components/Row';
 import Stack from '@components/Stack';
 import { getDevelopmentsApiEndpoint } from '@util/dev';
 import SearchPreferences from './_SearchPreferences';
+import SearchPagination from './_SearchPagination';
 
 const globalThis = getGlobalThis();
 const apiEndpoint = getDevelopmentsApiEndpoint();
@@ -342,10 +343,6 @@ function filterHomes( homesToFilter, filtersToApply, matchOnNoneSelected = true 
           );
         }
 
-        // if ( !unitMatchesAmiQualification ) {
-        //   return false;
-        // }
-
         let unitMatchesIncomeQualification;
         const unitIncomeQualification = ( unit.incomeQualification || null );
 
@@ -471,7 +468,6 @@ function Search( props ) {
   const [isDesktop, setIsDesktop] = useState( window.matchMedia( '(min-width: 992px)' ).matches );
   const [showClearFiltersInitially, setShowClearFiltersInitially] = useState( false );
   const history = useHistory();
-  const location = useLocation();
   const query = useQuery();
   const $drawer = useRef();
   let [updatingDrawerHeight, setUpdatingDrawerHeight] = useState( false ); // eslint-disable-line
@@ -874,21 +870,7 @@ function Search( props ) {
       </Row>
       <nav>
         <h3 className="sr-only">Pages</h3>
-        <Row className="pg ml-search__pagination" space="panel">{
-          pages.map( ( pageNumber, index ) => {
-            const isCurrentPage = ( currentPage === pageNumber );
-
-            return (
-              <span className="pg-li ml-search__page-link-container" key={ index }>
-                <Link
-                  className={ `pg-li-i pg-li-i--link${isCurrentPage ? ' pg-li-i--a ' : ' '}ml-search__page-link` }
-                  to={ ( pageNumber > 1 ) ? `${location.pathname}?page=${pageNumber}` : location.pathname }
-                  aria-label={ `Search Results: Page ${pageNumber}` }
-                >{ pageNumber }</Link>
-              </span>
-            );
-          } )
-        }</Row>
+        <SearchPagination pages={ pages } currentPage={ currentPage } />
       </nav>
     </article>
   );

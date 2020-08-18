@@ -30,19 +30,12 @@ export const twoBedroomUnit = {
 export const threeBedroomUnit = {
   "id": "3br",
   "bedrooms": 3,
-  "price": 3000,
-  "priceRate": "monthly",
-};
-
-export const fourBedroomUnit = {
-  "id": "4br",
-  "bedrooms": 4,
   "price": 4000,
   "priceRate": "monthly",
 };
 
-export const aboveFourBedroomUnit = {
-  "id": "4+br",
+export const aboveThreeBedroomUnit = {
+  "id": "3+br",
   "bedrooms": 10,
   "price": 5000,
   "priceRate": "monthly",
