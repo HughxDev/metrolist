@@ -9,30 +9,6 @@ import { homeObject } from '@util/validation';
 
 import './ResultsPanel.scss';
 
-/*
-  {
-    "development": "2424 Boylston st Boston - Fenway",
-    "developmentID": "11566036",
-    "developmentURI": "\/2424-boylston-st-boston-fenway",
-    "developmentURL": "https:\/\/d8-dev2.boston.gov\/2424-boylston-st-boston-fenway",
-    "region": "Boston",
-    "city": "Boston",
-    "neighborhood": "Fenway",
-    "type": "Rent",
-    "unitType": "",
-    "beds": "4",
-    "ami": "80",
-    "price": "2400",
-    "incomeRestricted": "true",
-    "userGuidType": "Waitlist",
-    "openWaitlist": "true",
-    "posted": "2020-04-22T14:38:55-0400",
-    "postedTimeAgo": "1 day ago",
-    "appDueDate": "",
-    "appDueDateTimeAgo": ""
-  },
-*/
-
 function ResultsPanel( props ) {
   const {
     homes, className, columnWidth, filters,

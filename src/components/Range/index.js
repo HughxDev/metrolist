@@ -105,7 +105,6 @@ function Range( props ) {
           space={ isIEorEdge ? '1.5' : undefined }
           className="ml-range__multi-input"
           role="group"
-          // onChange={ handleInput }
         >
           <label
             className={ isIEorEdge ? undefined : 'sr-only' }

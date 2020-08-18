@@ -16,17 +16,14 @@ function Reveal( props ) {
 
     if ( isExpanded ) {
       $content.current.style.maxHeight = '';
-      // $content.current.style.overflow = '';
     } else {
       $content.current.style.maxHeight = `${48 * ( props.children.length + 1 )}px`;
-      // $content.current.style.overflow = 'visible';
     }
 
     event.preventDefault();
   }
 
   return (
-    // <div className={ `ml-reveal${props.className ? ` ${props.className}` : ''}` }>
     <Stack { ...props.stack } space="0.5">
       <Stack id={ id.current } ref={ $content } { ...{ ...props.stack, "indent": false } } className="ml-reveal__content">
         { props.children }
@@ -46,7 +43,6 @@ function Reveal( props ) {
         )
       }
     </Stack>
-    // </div>
   );
 }
 

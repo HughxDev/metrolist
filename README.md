@@ -36,6 +36,10 @@ const newElCmpShrtNm = 'Header'; // Bad
 const newElementComponentShortName = 'Header'; // Good
 ```
 
+## Programming Conventions
+
+Use Functional Programming principals as often as possible to aid maintainability and predictability. The basic idea is for every function to produce the same output for a given set of inputs regardless of when/where/how often they are called. This means a preference for functions taking their values from explicit parameters as opposed to reading variables from the surrounding scope. Additionally, a function should not produce side-effects by e.g. changing the value of a variable in the surrounding scope.
+
 ## CSS Conventions
 
 ### Namespacing

@@ -5,63 +5,6 @@ import { propTypeErrorMessage } from '@util/errors';
 
 import './Scale.scss';
 
-// function getAriaLabel( props, value, omitValue = false ) {
-//   const { units, unitLabel } = props;
-//   const integerValue = parseInt( value, 10 );
-
-//   if ( unitLabel && ( unitLabel.type === 'aria' ) ) {
-//     if ( unitLabel.affix === 'prepend' ) {
-//       if ( integerValue > 1 ) {
-//         if ( units.many ) {
-//           if ( omitValue ) {
-//             return units.many;
-//           }
-
-//           return `${units.many} ${value}`;
-//         }
-
-//         return false;
-//       }
-
-//       if ( units.one ) {
-//         if ( omitValue ) {
-//           return units.one;
-//         }
-
-//         return `${units.one} ${value}`;
-//       }
-
-//       return false;
-//     }
-
-//     if ( unitLabel.affix === 'append' ) {
-//       if ( integerValue > 1 ) {
-//         if ( units.many ) {
-//           if ( omitValue ) {
-//             return units.many;
-//           }
-
-//           return `${value} ${units.many}`;
-//         }
-
-//         return false;
-//       }
-
-//       if ( units.one ) {
-//         if ( omitValue ) {
-//           return units.one;
-//         }
-
-//         return `${value} ${units.one}`;
-//       }
-
-//       return false;
-//     }
-//   }
-
-//   return false;
-// }
-
 const Scale = forwardRef( ( props, ref ) => (
   <div className={ `ml-scale${props.className ? ` ${props.className}` : ''}` } onChange={ props.onChange }>{
     props.values.split( ',' )
@@ -73,7 +16,6 @@ const Scale = forwardRef( ( props, ref ) => (
             name={ props.criterion }
             value={ value }
             type="radio"
-            // aria-label={ getAriaLabel( props, value, true ) }
             aria-describedby={ props['aria-describedby'] }
             aria-label={ props['aria-label'] }
             required={ props.required }

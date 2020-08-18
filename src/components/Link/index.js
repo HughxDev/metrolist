@@ -24,7 +24,6 @@ function Link( props ) {
   return (
     <ReactRouterLink
       data-testid="ml-link"
-      // className={ `ml-link${props.className ? ` ${props.className}` : ''}` }
       { ...props }
       onClick={ ( event ) => {
         handleClick( location );
