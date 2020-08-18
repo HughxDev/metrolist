@@ -3,6 +3,11 @@ import PropTypes from 'prop-types';
 
 import './Callout.scss';
 
+import CalloutIcon from './_CalloutIcon';
+import CalloutHeading from './_CalloutHeading';
+import CalloutText from './_CalloutText';
+import CalloutCta from './_CalloutCta';
+
 function Callout( props ) {
   let elementName;
   const attributes = { ...props };
@@ -32,54 +37,9 @@ Callout.propTypes = {
   "className": PropTypes.string,
 };
 
-Callout.Icon = ( { className, children } ) => <div className={ `ml-callout__icon${className ? ` ${className}` : ''}` }>{ children }</div>;
-Callout.Icon.displayName = 'CalloutIcon';
-Callout.Icon.propTypes = {
-  "className": PropTypes.string,
-  "children": PropTypes.node,
-};
-
-Callout.Heading = ( props ) => {
-  let elementName;
-  const attributes = { ...props };
-
-  if ( props.as ) {
-    delete attributes.as;
-    elementName = props.as;
-  } else {
-    elementName = 'h3';
-  }
-
-  return (
-    React.createElement(
-      elementName,
-      {
-        ...attributes,
-        "className": ( `ml-callout__heading${props.className ? ` ${props.className}` : ''}` ),
-      },
-      props.children,
-    )
-  );
-};
-Callout.Heading.displayName = 'CalloutHeading';
-Callout.Heading.propTypes = {
-  "className": PropTypes.string,
-  "as": PropTypes.string,
-  "children": PropTypes.node,
-};
-
-Callout.Text = ( { className, children } ) => <div className={ `ml-callout__text${className ? ` ${className}` : ''}` }>{ children }</div>;
-Callout.Text.displayName = 'CalloutText';
-Callout.Text.propTypes = {
-  "className": PropTypes.string,
-  "children": PropTypes.node,
-};
-
-Callout.CTA = ( { className, children } ) => <div className={ `ml-callout__cta${className ? ` ${className}` : ''}` }>{ children }</div>;
-Callout.CTA.displayName = 'CalloutCTA';
-Callout.CTA.propTypes = {
-  "className": PropTypes.string,
-  "children": PropTypes.node,
-};
+Callout.Icon = CalloutIcon;
+Callout.Heading = CalloutHeading;
+Callout.Text = CalloutText;
+Callout.CTA = CalloutCta;
 
 export default Callout;
