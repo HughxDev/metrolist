@@ -129,6 +129,7 @@ function Search( props ) {
   const [pages, setPages] = useState( [1] );
   const [isDesktop, setIsDesktop] = useState( window.matchMedia( '(min-width: 992px)' ).matches );
   const [showClearFiltersInitially, setShowClearFiltersInitially] = useState( false );
+  const [homesHaveLoaded, setHomesHaveLoaded] = useState( false );
   const history = useHistory();
   const query = useQuery();
   const $drawer = useRef();
@@ -385,12 +386,13 @@ function Search( props ) {
           const savedFiltersString = JSON.stringify( savedFilters, null, 2 );
           const savedFiltersMatchDefaultFilters = ( defaultFiltersString === savedFiltersString );
 
-          console.log( 'defaultFilters', defaultFiltersString );
-          console.log( '---' );
-          console.log( 'savedFilters', savedFiltersString );
-          console.log( 'savedFiltersMatchDefaultFilters', savedFiltersMatchDefaultFilters );
+          // console.log( 'defaultFilters', defaultFiltersString );
+          // console.log( '---' );
+          // console.log( 'savedFilters', savedFiltersString );
+          // console.log( 'savedFiltersMatchDefaultFilters', savedFiltersMatchDefaultFilters );
 
           setShowClearFiltersInitially( !savedFiltersMatchDefaultFilters );
+          setHomesHaveLoaded( true );
         } )
         .catch( ( error ) => {
           console.error( error );
@@ -532,6 +534,7 @@ function Search( props ) {
           columnWidth="2/3"
           filters={ filters }
           homes={ filteredHomes }
+          homesHaveLoaded={ homesHaveLoaded }
         />
       </Row>
       <nav>
