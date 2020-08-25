@@ -547,3 +547,90 @@ While Metrolist loads under the offsite version of Google Translate, the React v
 - On initial page load, should be hidden if localStorage.filters doesn’t exist or is identical to the default filters
   - Presents a chicken-and-egg problem where we don’t actually know the upperBound of the Rental Price filter until an API response comes back
   - Default Filters are defined before any API work has been done
+
+## Schema.org
+
+Implementing Schema.org metadata was started but abandoned as Google does not currently do anything with the “Apartment” type. Additionally, there are a number of different types that could potentially be in play here, and it is not clear how they would all fit together. For instance, the Apartment type does not have a specific property of type Offer, so indicating that an apartment is for rent is not straightforward. Below are side-by-side examples of Schema.org properties and Development API properties in an attempt to figure out the best mapping.
+
+```js
+/* eslint-disable */
+
+// https://schema.org/ApartmentComplex
+// https://schema.org/Offer
+// https://schema.org/RentAction
+// https://schema.org/PostalAddress
+
+// https://schema.org/Accommodation
+//    https://schema.org/Apartment
+//    https://schema.org/House
+
+const schemaJson = {
+  "@context": "http://schema.org",
+  "@type": "Apartment",
+  "name": "227  Lynn Street - Medium apartment",
+  "description": "Great downtown accommodation for family or group of friends.",
+  "numberOfRooms": 3,
+  "occupancy": {
+    "@type": "QuantitativeValue",
+    "minValue": 1,
+    "maxValue": 4,
+  },
+  "floorLevel": 5,
+  "floorSize": {
+    "@type": "QuantitativeValue",
+    "value": 81,
+    "unitCode": "MTK",
+  },
+  "numberOfBathroomsTotal": 2,
+  "numberOfBedrooms": 2,
+  "petsAllowed": true,
+  "tourBookingPage": "http://example.com",
+  "yearBuilt": 2005,
+  "telephone": "+1-617-312-9783",
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "US",
+    "addressLocality": "West Roxbury",
+    "addressRegion": "MA",
+    "postalCode": "02132",
+    "streetAddress": "227  Lynn Street",
+  },
+  "latitude": 42.2742,
+  "longitude": -71.1430,
+};
+
+const apiJson = {
+  "title": "St. Gabriel's - Phase 1", // Apartment#name
+  "offer": "rent", // Offer#businessFunction = 'LeaseOut'
+  // "offer": "sale", // Offer#businessFunction = 'Sell'
+  "assignment": "first",
+  "id": "13659036-r-f",
+  "slug": "st-gabriels-phase-1",
+  "cardinalDirection": null,
+  "city": "Boston", // Apartment#address.addressLocality
+  "neighborhood": "Brighton", // Apartment#address.addressLocality(?)
+  // Apartment#address.addressRegion = 'MA'
+  "streetAddress": "159-201 Washington St", // Apartment#address.streetAddress
+  "units": [
+    {
+      "id": "13659036-r-f-1",
+      "count": 2, // ApartmentComplex#numberOfAvailableAccommodationUnits
+      "amiQualification": 150,
+      "bedrooms": 2, // Apartment#numberOfBedrooms
+      "price": 2982, // Offer#price
+      "priceRate": "monthly",
+      // Offer#priceCurrency = 'USD'
+      "incomeQualification": 89460,
+    },
+  ],
+  "incomeRestricted": true,
+  "listingDate": "2020-07-08T20:45:01Z", // Offer#availabilityStarts
+  "applicationDueDate": "", // Offer#availabilityEnds
+  "type": null, // Residence
+  // 'apt', // Apartment
+  // 'single-family', // House, accomodationCategory = 'Single Family Residence' (RESO value - https://ddwiki.reso.org/display/DDW16/PropertySubType+Lookups)
+  // 'sro', //
+  // 'condo', // ApartmentComplex(?), accommodationCategory = 'Condominium'
+  // 'multi-family' // House, accomodationCategory = 'Multi Family'
+};
+```
