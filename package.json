@@ -1,6 +1,6 @@
 {
   "name": "metrolist",
-  "version": "2.4.1248206017",
+  "version": "2.4.4208709286",
   "private": true,
   "dependencies": {
     "@babel/cli": "^7.8.4",
