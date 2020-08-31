@@ -12,10 +12,13 @@ import {
 // import { act } from 'react-dom/test-utils';
 import FiltersPanel from './index';
 
-it( 'renders', () => {
-  const { getByLabelText } = render(
+it( 'Renders', () => {
+  /* const { getByLabelText } = */
+  render(
     <FiltersPanel
       filters={ getNoFiltersApplied() }
+      clearFilters={ () => {} }
+      undoClearFilters={ () => {} }
       handleFilterChange={ () => {} }
       updateDrawerHeight={ () => {} }
       listingCounts={ {
@@ -43,7 +46,7 @@ it( 'renders', () => {
       drawerRef={ { "current": null } }
     />,
   );
-  const filtersPanelHeading = getByLabelText( 'Filter Listings ⌄' );
+  // const filtersPanelHeading = getByLabelText( 'Filter Listings ⌄' );
   // Not possible to test for preventDefault being called?
   // const mockDoubleClick = {
   //   ...( new MouseEvent( 'click' ) ),

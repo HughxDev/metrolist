@@ -4,7 +4,7 @@ import { render } from '@testing-library/react';
 import Filter from '@components/Filter';
 import FilterGroup from './index';
 
-it( 'renders', () => {
+it( 'Renders', () => {
   render(
     <FilterGroup>
       <Filter />

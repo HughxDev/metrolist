@@ -634,3 +634,14 @@ const apiJson = {
   // 'multi-family' // House, accomodationCategory = 'Multi Family'
 };
 ```
+
+## [As a CoB Developer or ML PM, I would like passing unit/integration tests for all components and major site functionality, so I have confidence that future changes to the codebase will not break existing functionality.](https://github.com/CityOfBoston/boston.gov-d8/issues/1583)
+
+- Under the filtering tests for `Search`, `getByTestId( 'studio' )` is failing because React Testing Library can’t find `<tr data-testid="studio">` in the DOM.
+  - Is the DOM too big? Tried to increase `DEBUG_PRINT_LIMIT`, which helps with console output but does not help DOM querying.
+- If the Filters Panel and its queries are removed, then it finds everything fine.
+  - This either means RTL is failing on the large DOM or there is some kind of race condition. 
+- Tried to break out the Search filtering tests into `ResultsPanel` tests to sidestep `FiltersPanel` entirely. But this doesn’t work beause these were integration tests as opposed to unit tests, so they only make sense in a context where the Filters Panel is interacted with and the effects of the Filters Panel are observed in the Results Panel.
+- Seems to be stuck on 'Loading homes…'. Is this because of timeout?
+- Certain tests are failing only if the full test suite is run, and others are passing only if the full test suite is run
+- Separating each of `Search`’s `describe` blocks into their own files and running them independently makes them all pass. When they share scope with each other—either through direct inclusion or importing—tests break. Theoretically they should all be self-contained since each one is wrapped in a function and uses let/const, so this is a little ridiculous.

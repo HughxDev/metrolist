@@ -43,10 +43,10 @@ export const filtersObject = PropTypes.shape( {
     } ),
   } ),
   "bedrooms": PropTypes.shape( {
-    "0": PropTypes.bool,
-    "1": PropTypes.bool,
-    "2": PropTypes.bool,
-    "3+": PropTypes.bool,
+    "0br": PropTypes.bool,
+    "1br": PropTypes.bool,
+    "2br": PropTypes.bool,
+    "3+br": PropTypes.bool,
   } ),
   "amiQualification": PropTypes.shape( {
     "lowerBound": PropTypes.number,

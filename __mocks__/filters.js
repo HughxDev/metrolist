@@ -10,10 +10,10 @@ export function getNoFiltersApplied() { // eslint-disable-line import/prefer-def
         "beyondBoston": false,
       },
       "neighborhood": {
-        "southBoston": false,
-        "hydePark": false,
-        "dorchester": false,
-        "mattapan": false,
+        "South Boston": false,
+        "Hyde Park": false,
+        "Dorchester": false,
+        "Mattapan": false,
       },
       "cardinalDirection": {
         "west": false,
@@ -22,11 +22,10 @@ export function getNoFiltersApplied() { // eslint-disable-line import/prefer-def
       },
     },
     "bedrooms": {
-      "0": false,
-      "1": false,
-      "2": false,
-      "3": false,
-      "4+": false,
+      "0br": false,
+      "1br": false,
+      "2br": false,
+      "3+br": false,
     },
     "amiQualification": {
       "lowerBound": 0,
@@ -37,7 +36,7 @@ export function getNoFiltersApplied() { // eslint-disable-line import/prefer-def
     },
     "rentalPrice": {
       "lowerBound": 0,
-      "upperBound": null,
+      "upperBound": 3000,
     },
   };
 }

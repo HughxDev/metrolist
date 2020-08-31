@@ -6,7 +6,7 @@ import '@testing-library/jest-dom/extend-expect';
 import Component from './index';
 
 describe( 'Component', () => {
-  it( 'renders', () => {
+  it( 'Renders', () => {
     // render( <Component /> );
     throw new Error( 'Test missing' );
   } );

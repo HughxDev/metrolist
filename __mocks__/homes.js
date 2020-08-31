@@ -7,7 +7,7 @@ export const minimalHomeDefinition = {
 };
 
 export const studioUnit = {
-  "id": "studio",
+  "id": "0br",
   "bedrooms": 0,
   "price": 900,
   "priceRate": "monthly",

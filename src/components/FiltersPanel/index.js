@@ -260,10 +260,10 @@ function FiltersPanel( props ) {
           </FilterGroup>
           <FilterGroup criterion="bedrooms" orientation="horizontal">
             <FilterGroup.Label>Bedrooms</FilterGroup.Label>
-            <Filter type="checkbox" criterion="bedrooms" aria-label="0-bedrooms" checked={ bedrooms['0'] }>0</Filter>
-            <Filter type="checkbox" criterion="bedrooms" aria-label="1-bedrooms" checked={ bedrooms['1'] }>1</Filter>
-            <Filter type="checkbox" criterion="bedrooms" aria-label="2-bedrooms" checked={ bedrooms['2'] }>2</Filter>
-            <Filter type="checkbox" criterion="bedrooms" aria-label="3+-bedrooms" checked={ bedrooms['3+'] }>3+</Filter>
+            <Filter type="checkbox" criterion="bedrooms" aria-label="0-bedrooms" checked={ !!bedrooms['0br'] } value="0br">0</Filter>
+            <Filter type="checkbox" criterion="bedrooms" aria-label="1-bedrooms" checked={ !!bedrooms['1br'] } value="1br">1</Filter>
+            <Filter type="checkbox" criterion="bedrooms" aria-label="2-bedrooms" checked={ !!bedrooms['2br'] } value="2br">2</Filter>
+            <Filter type="checkbox" criterion="bedrooms" aria-label="3+-bedrooms" checked={ !!bedrooms['3+br'] } value="3+br">3+</Filter>
           </FilterGroup>
           <FilterGroup criterion="amiQualification">
             <FilterGroup.Label>Income Eligibility</FilterGroup.Label>

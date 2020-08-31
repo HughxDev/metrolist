@@ -1,4 +1,9 @@
 module.exports = {
+  // "testPathIgnorePatterns": [
+  //   "_tests/",
+  // ],
+  // "testURL": "http://localhost",
+  "testURL": "https://www.boston.gov",
   "moduleNameMapper": {
     "\\.(css|s[ca]ss|less|styl)$": "<rootDir>/__mocks__/styleMock.js",
     "\\.(svg|webp|png|jpe?g|gif)$": "<rootDir>/__mocks__/fileMock.js",

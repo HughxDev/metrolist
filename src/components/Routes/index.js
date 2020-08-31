@@ -5,14 +5,10 @@ import {
   useLocation,
 } from 'react-router-dom';
 
+import { resolveLocationConsideringGoogleTranslate } from '@util/translation';
 
 import Search from '@components/Search';
 import AmiEstimator from '@components/AmiEstimator';
-
-import {
-  resolveLocationConsideringGoogleTranslate,
-  // switchBackToMetrolistBaseIfNeeded,
-} from '@util/translation';
 
 import './Routes.scss';
 
