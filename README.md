@@ -14,6 +14,132 @@ yarn start
 
 Note: The `ipconfig` command has only been tested on a Mac, and it also may not work if your connection isn’t located at `en6` or `en0`.
 
+## Helper Scripts
+
+There are scripts available under `_scripts/` to aid development efforts. The examples herein use the `yarn [command]` (shorthand for `yarn run [command]`) but these can be substituted for `npm run` if you prefer.
+
+### Component CLI
+
+`yarn component` (`_scripts/component.js`) facilitates CRUD operations on components.
+
+#### Create
+
+```shell
+yarn component add Widget
+```
+
+This copies everything under `_templates/components/Component` to `src/components/Widget` and does a case-sensitive find-and-replace on the term “component”, replacing it with your new component’s name. For instance, this `index.js` template:
+
+```jsx
+import React from 'react';
+import PropTypes from 'prop-types';
+
+import './Component.scss';
+
+function Component( props ) {
+  return (
+    <div data-testid="ml-component" className={ `ml-component${props.className ? ` ${props.className}` : ''}` }>
+      { props.children }
+    </div>
+  );
+}
+
+Component.displayName = 'Component';
+
+Component.propTypes = {
+  "children": PropTypes.node,
+  "className": PropTypes.string,
+};
+
+export default Component;
+```
+
+…becomes this:
+
+```js
+import React from 'react';
+import PropTypes from 'prop-types';
+
+import './Widget.scss';
+
+function Widget( props ) {
+  return (
+    <div data-testid="ml-widget" className={ `ml-widget${props.className ? ` ${props.className}` : ''}` }>
+      { props.children }
+    </div>
+  );
+}
+
+Widget.displayName = 'Widget';
+
+Widget.propTypes = {
+  "children": PropTypes.node,
+  "className": PropTypes.string,
+};
+
+export default Widget;
+```
+
+Subcomponents can also be added. These are useful if you want to encapsulate some functionality inside of a larger component, but this smaller component isn’t useful elsewhere in the app.
+
+```bash
+yarn component add Widget/Gadget
+```
+
+This creates the directory `src/components/Widget/_WidgetGadget` containing this `index.js`:
+
+```jsx
+import React from 'react';
+import PropTypes from 'prop-types';
+
+import './WidgetGadget.scss';
+
+function WidgetGadget( props ) {
+  return (
+    <div data-testid="ml-widget__gadget" className={ `ml-widget__gadget${props.className ? ` ${props.className}` : ''}` }>
+      { props.children }
+    </div>
+  );
+}
+
+WidgetGadget.displayName = 'WidgetGadget';
+
+WidgetGadget.propTypes = {
+  "children": PropTypes.node,
+  "className": PropTypes.string,
+};
+
+export default WidgetGadget;
+```
+
+As you can see, the BEM double-underscore syntax is automatically added (`ml-widget__gadget`) to establish a hierarchical relationship between `Widget` and `WidgetGadget`.
+
+#### Read
+
+Not applicable.
+
+#### Update
+
+```bash
+yarn component rename Widget Doohickey # Aliases: rn, mv, move
+```
+
+This renames the directory and does a find-and-replace on its contents.
+
+<!-- TODO: Rename script does not fully work on subcomponents. -->
+
+#### Delete
+
+```
+yarn component remove Doohickey # Aliases: delete, del, remove, rm
+```
+
+### Sync Icons CLI
+
+### Sync AMI CLI
+
+### Version CLI
+
 ## General Naming Conventions
 
 ### DAMP (Descriptive And Meaningful Phrases).
@@ -37,6 +163,10 @@ const newElementComponentShortName = 'Header'; // Good
 ```
 
 ## Programming Conventions
+
+Consistent and readable JavaScript formatting is enforced by [`eslint-config-hughx`](https://github.com/hguiney/eslint-config-hughx) + an ESLint auto-formatter of your choice, such as [ESLint for VS Code](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint).
+
+### Functional Programming
 
 Use Functional Programming principals as often as possible to aid maintainability and predictability. The basic idea is for every function to produce the same output for a given set of inputs regardless of when/where/how often they are called. This means a preference for functions taking their values from explicit parameters as opposed to reading variables from the surrounding scope. Additionally, a function should not produce side-effects by e.g. changing the value of a variable in the surrounding scope.
 
@@ -187,6 +317,10 @@ Run `yarn build:stage`. This is identical to the production build, except Webpac
 
 - All `mailto:` links require the class `hide-form` to be set, otherwise they will trigger the generic feedback form.
 
+## Testing
+
+We’re using Jest + React Testing Library to test components. General
+
 ## Testing API integrations locally
 
 You have to run a browser without CORS restrictions enabled. For Chrome on macOS, you can add this to your `~/.bash_profile`, `~/.zshrc`, or equivalent for convenience:
@@ -231,4 +365,5 @@ history.push( newUrlPath );
 switchBackToMetrolistBaseIfNeeded();
 ```
 
-This is the technique used by the AMI Estimator component to link to navigate between the different steps in the form.
+This is the technique used by the AMI Estimator component to navigate between the different steps in the form.
+

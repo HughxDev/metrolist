@@ -4,10 +4,12 @@ import { render } from '@testing-library/react';
 import Filter from '@components/Filter';
 import FilterGroup from './index';
 
-it( 'Renders', () => {
-  render(
-    <FilterGroup>
-      <Filter />
-    </FilterGroup>,
-  );
+describe( 'FilterGroup', () => {
+  it( 'Renders', () => {
+    render(
+      <FilterGroup>
+        <Filter />
+      </FilterGroup>,
+    );
+  } );
 } );

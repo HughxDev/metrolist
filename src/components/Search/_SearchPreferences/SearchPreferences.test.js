@@ -8,6 +8,5 @@ import SearchPreferences from './index';
 describe( 'SearchPreferences', () => {
   it( 'Renders', () => {
     render( <SearchPreferences setFilters={ () => {} } /> );
-    // throw new Error( 'Test missing' );
   } );
 } );

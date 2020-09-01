@@ -77,7 +77,7 @@ function addComponent( componentName, subcomponentName, recursionLevel = 1 ) {
 
   return (
     Promise.resolve()
-      .then( () => {
+      .then( () => { // eslint-disable-line consistent-return
         if ( targetDirectoryExists && ( recursionLevel === 1 ) ) {
           if ( hasSubcomponent ) {
             return addComponent( componentName, subcomponentName, 2 );
