@@ -14,7 +14,7 @@ node_js:
 
 branches:
   only:
-    - new-unit-tests
+    - master
 
 cache:
   yarn: true
@@ -22,7 +22,6 @@ cache:
     - node_modules
 
 before_script:
-  - yarn run sync:icons
   - yarn run sync:ami ci
 
 after_success:

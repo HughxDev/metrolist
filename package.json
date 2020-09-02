@@ -83,8 +83,7 @@
   },
   "devDependencies": {
     "@react-mock/localstorage": "^0.1.2",
-    "codecov": "^3.7.0",
-    "pre-commit": "^1.2.2"
+    "codecov": "^3.7.0"
   },
   "scripts": {
     "watch": "[ -z \"$(ipconfig getifaddr en6)\" ] && export LAN_IP_ADDRESS=\"$(ipconfig getifaddr en0)\" || export LAN_IP_ADDRESS=\"$(ipconfig getifaddr en6)\"; ./node_modules/.bin/webpack-dev-server --host $LAN_IP_ADDRESS",
