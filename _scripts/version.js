@@ -36,7 +36,7 @@ parameters.forEach( ( parameter, index ) => {
   switch ( parameter ) {
     case '--help':
       console.log( `# version.js
-Sets the version number for Metrolist in Drupal’s libraries.yml file.
+Sets the version number for Metrolist in Drupal’s libraries.yml file and this project’s package.json file.
 
  -m | --major\tSets the left version part, e.g. 2.x.x.
  \t\tIf omitted, major will be taken from existing Metrolist version.

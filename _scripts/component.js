@@ -317,6 +317,8 @@ const action = process.argv.slice( 2 )[0];
 
 switch ( action ) {
   case 'add':
+  case 'create':
+  case 'new':
     addComponent()
       .then( ( successMessage ) => {
         console.log( successMessage );
@@ -345,6 +347,7 @@ switch ( action ) {
 
   case 'delete':
   case 'del':
+  case 'destroy':
   case 'remove':
   case 'rm':
     removeComponent()

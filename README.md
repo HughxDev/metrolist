@@ -1,12 +1,79 @@
-# Boston.gov Metrolist v2
+<h1 align="center">
+  <img src="https://raw.githubusercontent.com/hguiney/metrolist/master/public/images/metrolist-logo.svg?sanitize=true" width="300" alt="Metrolist" />
+</h1>
+
+<div align="center">
+  <a href="https://travis-ci.com/hguiney/metrolist">
+    <img src="https://api.travis-ci.com/hguiney/metrolist.svg?branch=master" alt="Build Status" />
+  </a>
+  <a href="https://codecov.io/gh/hguiney/metrolist/">
+    <img src="https://img.shields.io/codecov/c/github/hguiney/metrolist/master.svg" alt="Code Coverage" />
+  </a>
+</div>
+
+## Project Overview
+
+Metrolist allows Boston residents to search for affordable housing. The <b>Search</b> and <b>AMI Estimator</b> experiences are built in React (this repository). The rest of the app is built in Drupal, with the underlying data layer provided by Salesforce. The core UX is composed of the following:
+
+<dl>
+  <dt>Homepage</dt>
+  <dd>Links to Search, AMI Estimator, and introductory information.</dd>
+  <dd>Route: <a href="http://www.boston.gov/metrolist/">/metrolist/</a></dd>
+  <dd>Controlled by: Drupal</dd>
+
+  <dt>Search</dt>
+  <dd>Lists housing opportunities in a paginated fashion and allows user to filter according to various criteria.</dd>
+  <dd>Route: <a href="http://www.boston.gov/metrolist/search/">/metrolist/search</a></dd>
+  <dd>Controlled by: React</dd>
+  <dd>APIs in use: Developments API</dd>
+
+  <dt>AMI Estimator</dt>
+  <dd>Takes user’s household income and household size, and calculates a recommendation for which housing opportunities to look at.</dd>
+  <dd>URL: <a href="http://www.boston.gov/metrolist/ami-estimator/">/metrolist/ami-estimator/</a></dd>
+  <dd>Sub-routes:
+    <ul>
+      <li>/metrolist/ami-estimator/household-income</li>
+      <li>/metrolist/ami-estimator/disclosure</li>
+      <li>/metrolist/ami-estimator/result</li>
+    </ul>
+  </dd>
+  <dd>Controlled by: React</dd>
+  <dd>APIs in use: AMI API</dd>
+
+  <dt>Property Pages</dt>
+  <dd>Route: /metrolist/search/housing/[property]?[parameters]</dd>
+  <dd>Controlled by: Drupal</dd>
+
+  <dt>Developments API</dt>
+  <dd>Lists housing opportunities as a JSON object.</dd>
+  <dd>URL: <a href="https://www.boston.gov/metrolist/api/v1/developments?_format=json">/metrolist/api/v1/developments?_format=json</a>
+
+  <dt>AMI API</dt>
+  <dd>Lists income qualification brackets as a JSON object, taken from HUD (Department of Housing and Urban Development) data.</dd>
+  <dd>URL: <a href="https://www.boston.gov/metrolist/api/v1/ami/hud/base?_format=json">/metrolist/api/v1/ami/hud/base?_format=json</a></dd>
+</dl>
 
 ## Installing
 
-```shell
+Prerequisites:
+
+- Node.js
+- Yarn or NPM
+- Git
+- Access to CityOfBoston GitHub
+
+```bash
+git checkout git@github.com:CityOfBoston/boston.gov-d8.git
+git checkout git@github.com:hguiney/metrolist.git
+cd metrolist
 yarn install
-yarn sync-icons
+yarn sync:ami ci
 yarn start
 ```
+
+<b>Note:</b> The docs use `yarn` but these can be substituted for `npm` if you prefer.
+
+`yarn sync:ami ci` grabs a copy of the latest AMI figures from the CI development server in Acquia.
 
 `yarn start` runs:
   1. `ipconfig getifaddr en6` (or `ipconfig getifaddr en0` if `en6` isn’t found), which determines which LAN IP to bind to. This allows testing on mobile devices connected to the same network.
@@ -14,17 +81,17 @@ yarn start
 
 Note: The `ipconfig` command has only been tested on a Mac, and it also may not work if your connection isn’t located at `en6` or `en0`.
 
-## Helper Scripts
+## Command-line Tools
 
-There are scripts available under `_scripts/` to aid development efforts. The examples herein use the `yarn [command]` (shorthand for `yarn run [command]`) but these can be substituted for `npm run` if you prefer.
+There are Node.js scripts available under `_scripts/` to aid development efforts.
 
 ### Component CLI
 
-`yarn component` (`_scripts/component.js`) facilitates CRUD operations on components.
+Located at `_scripts/component.js`, this facilitates CRUD-style operations on components.
 
-#### Create
+#### Add
 
-```shell
+```bash
 yarn component add Widget
 ```
 
@@ -112,33 +179,57 @@ WidgetGadget.propTypes = {
 export default WidgetGadget;
 ```
 
-As you can see, the BEM double-underscore syntax is automatically added (`ml-widget__gadget`) to establish a hierarchical relationship between `Widget` and `WidgetGadget`.
+As you can see, the hierarchical relationship between Widget and Gadget is reflected in the naming. The React display name is `WidgetGadget`, and the CSS class name uses a [BEM](#bem-methodology) element `gadget` belonging to the `widget` block, i.e. `widget__gadget`.
 
-#### Read
-
-Not applicable.
-
-#### Update
+#### Rename
 
 ```bash
-yarn component rename Widget Doohickey # Aliases: rn, mv, move
+yarn component rename Widget Doohickey
 ```
 
 This renames the directory and does a find-and-replace on its contents.
 
-<!-- TODO: Rename script does not fully work on subcomponents. -->
+⚠️ Known issue: The component renaming algorithm does not fully find/replace on subcomponents.
 
-#### Delete
+#### Remove
 
+```bash
+yarn component remove Doohickey
 ```
-yarn component remove Doohickey # Aliases: delete, del, remove, rm
-```
-
-### Sync Icons CLI
 
 ### Sync AMI CLI
 
+```bash
+yarn sync:ami [environment id]
+```
+
+Due to [compatibility issues with Google Translate](#google-translate-compatibility), the AMI API is not fetched live from the AMI Estimator. Instead, it is fetched at compile time using this script, which caches it as a local JSON file at `src/components/AmiEstimator/ami-definitions.json`.
+
+The domain from which this data is fetched can be specified with the following environment IDs:
+
+- `www` or `prod` → https://www.boston.gov
+- Acquia environment
+  - `ci` → https://d8-ci.boston.gov
+  - `dev2` → https://d8-dev2.boston.gov
+  - etc.
+
+The default value is `ci`, as that should have the most recent data set in most cases.
+
 ### Version CLI
+
+```bash
+yarn version [-m major] [-n minor] [-p patch]
+```
+
+Sets the version number for Metrolist in Drupal’s `libraries.yml` file and this project’s `package.json` file.
+
+| Option      | Description                                                                                                                                                                                               |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-m`, `--major` | Sets the left version part, e.g. 2.x.x.<br />If omitted, major will be taken from existing Metrolist version.                                                                                             |
+| `-n`, `--minor` | Sets the middle version part, e.g. x.5.x.<br />If omitted, minor will be a hash of index.bundle.js for cache-busting.                                                                                     |
+| `-p`, `--patch` | Sets the right version part, e.g. x.x.3289.<br />If omitted while minor is set, patch will be a hash of index.bundle.js for cache-busting.<br />If omitted while minor is not set, patch will not be set. |
+| `-f`, `--force` | Allow downgrading of Metrolist version.                                                                                                                                                                   |
+| `--help`      | This screen.                                                                                                                                                                                              |
 
 ## General Naming Conventions
 
@@ -174,7 +265,7 @@ Use Functional Programming principals as often as possible to aid maintainabilit
 
 ### Namespacing
 
-All classes namespaced as `ml-` for Metrolist to avoid collisions with main site and/or third-party libraries.
+All classes namespaced as `ml-` for Metrolist to avoid collisions with main Boston.gov site and/or third-party libraries.
 
 ### BEM Methodology
 
@@ -196,7 +287,7 @@ An exception to this would be for mixin classes that are intended to be used bro
 }
 @media screen and (min-width: $large) {
   .ml-hide-until-large {
-    display: inline-block;
+    display: inline-block; // IE/Edge compat
     display: unset;
   }
 }
@@ -242,9 +333,31 @@ Don’t declare margins directly on components, only in wrappers.
 
 ### Postprocessing
 
-[Rucksack](https://www.rucksackcss.org/) is installed to enable the same CSS helper functions (such as `font-size: responsive 16px 24px`) that are used on Patterns.
+[Rucksack](https://www.rucksackcss.org/) is installed to enable the same CSS helper functions that are used on Patterns, such as `font-size: responsive 16px 24px`.
 
 ## Build Process
+
+### Development
+
+```bash
+yarn build:dev
+```
+
+Currently this is used for previewing on Netlify, to get a live URL up without going through the lengthy Travis and Acquia build process.
+
+### Production
+
+```bash
+yarn build:prod
+```
+
+This first runs a production Webpack build (referencing `webpack.config.js`), then copies the result of that build to `../boston.gov-d8/docroot/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/`, replacing whatever was there beforehand. This requires you to have the [`boston.gov-d8`](https://github.com/CityOfBoston/boston.gov-d8) repo checked out and up-to-date one directory up from the project root.
+
+To make asset URLs work both locally and on Drupal, all references to `/images/` get find-and-replaced to `https://assets.boston.gov/icons/metrolist/` when building for production. Note that this requires assets to be uploaded to `assets.boston.gov` first, by someone with appropriate access. If you want to look at a production build without uploading to `assets.boston.gov` first, you can run a staging build instead.
+
+### Staging
+
+Run `yarn build:stage`. This is identical to the production build, except Webpack replaces references to `/images/` with `/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/images/`. This is where images normally wind up when running `yarn copy:drupal`.
 
 ### Module Resolution
 
@@ -299,20 +412,6 @@ module.exports = {
 };
 ```
 
-### Development
-
-Run `yarn build:dev`. Currently this is used for previewing on Netlify, to get a live URL up without going through the lengthy Travis and Acquia build process.
-
-### Production
-
-Run `yarn build:prod`, which first runs a production Webpack build (referencing `webpack.config.js`), then copies the result of that build to `../boston.gov-d8/docroot/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/`, replacing whatever was there beforehand. This requires you to have the [`boston.gov-d8`](https://github.com/CityOfBoston/boston.gov-d8) repo checked out and up-to-date one directory up from the project root.
-
-To make asset URLs work both locally and on Drupal, all references to `/images/` get find-and-replaced to `https://assets.boston.gov/icons/metrolist/` when building for production. Note that this requires assets to be uploaded to `assets.boston.gov` first, by someone with appropriate access. If you want to look at a production build without uploading to `assets.boston.gov` first, you can run a staging build instead.
-
-### Staging
-
-Run `yarn build:stage`. This is identical to the production build, except Webpack replaces references to `/images/` with `/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/images/`. This is where images normally wind up when running `yarn copy:drupal`.
-
 ## Interfacing with Main Site
 
 - All `mailto:` links require the class `hide-form` to be set, otherwise they will trigger the generic feedback form.
@@ -339,7 +438,7 @@ Then in a terminal, just type `chrome-insecure` and you will get a separate wind
 
 ## Google Translate Compatibility
 
-We’re using React Router for routing, which provides a `Link` component to use in place of `a`. `Link` uses `history.pushState` under the hood, but this will fail inside the Google Translate iframe due to cross-domain security features in the browser. So in order to make app navigation work again, we have to hack around the issue like so:
+We’re using React Router for routing, which provides a `Link` component to use in place of `a`. `Link` uses `history.pushState` under the hood, but this will fail inside the Google Translate iframe due to cross-domain security features in the browser. (For an in-depth technical explanation of why this happens, see [DEVNOTES](./DEVNOTES.md#metrolist-fix-for-google-translate)). So in order to make app navigation work again, we have to hack around the issue like so:
 
 - Change `base.href` to the Google Translate iframe domain,
 - Perform the navigation,
