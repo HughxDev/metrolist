@@ -47,10 +47,10 @@ const defaultFilters = {
     },
   },
   "bedrooms": {
-    "0": false,
-    "1": false,
-    "2": false,
-    "3+": false,
+    "0br": false,
+    "1br": false,
+    "2br": false,
+    "3+br": false,
   },
   "amiQualification": {
     "lowerBound": 0,
@@ -124,6 +124,7 @@ if ( savedFilters ) {
 
     localStorage.setItem( 'filters', JSON.stringify( savedFilters ) );
   } else {
+    console.log( 'isNotPlainObject' );
     savedFilters = {};
   }
 } else {
@@ -385,10 +386,8 @@ function Search( props ) {
     setFilters( newFilters );
     localStorage.setItem( 'filters', JSON.stringify( newFilters ) );
 
-    const defaultFiltersString = JSON.stringify( defaultFilters, null, 2 );
-    const savedFiltersString = JSON.stringify( savedFilters, null, 2 );
-    // console.log( 'defaultFiltersString', defaultFiltersString );
-    // console.log( 'savedFiltersString', savedFiltersString );
+    const defaultFiltersString = JSON.stringify( defaultFilters );
+    const savedFiltersString = JSON.stringify( savedFilters );
 
     const savedFiltersMatchDefaultFilters = (
       ( savedFiltersString !== '{}' )
@@ -400,8 +399,6 @@ function Search( props ) {
   };
 
   const updateDrawerHeight = ( drawerRef, wait ) => {
-    // console.log( 'updateDrawerHeight' );
-
     const updateHeight = () => {
       if ( drawerRef && drawerRef.current ) {
         const height = getComputedStyle( drawerRef.current ).getPropertyValue( 'height' );

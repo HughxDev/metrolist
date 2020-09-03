@@ -28,3 +28,4 @@ src/components/Icon/icons_manifest.json
 src/components/AmiEstimator/ami-definitions.json
 report.*.json
 patterns.sass
+.vscode

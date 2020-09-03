@@ -10,7 +10,7 @@ import Stack from '@components/Stack';
 import Required from '@components/Required';
 
 import { updatePageTitle } from '@util/a11y-seo';
-import { getIconId } from '../util';
+import { getIconId } from '../methods';
 
 import './AmiEstimatorHouseholdSize.scss';
 

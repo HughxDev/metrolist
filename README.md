@@ -1,5 +1,6 @@
 <h1 align="center">
   <img src="https://raw.githubusercontent.com/hguiney/metrolist/master/public/images/metrolist-logo.svg?sanitize=true" width="300" alt="Metrolist" />
+  <br />React Codebase
 </h1>
 
 <div align="center">
@@ -58,28 +59,45 @@ Metrolist allows Boston residents to search for affordable housing. The <b>Searc
 Prerequisites:
 
 - Node.js
-- Yarn or NPM
+- Yarn or NPM (These docs use `yarn` but it can be substituted for `npm` if you prefer.)
 - Git
-- Access to CityOfBoston GitHub
+- Read/write access to `CityOfBoston` GitHub
 
 ```bash
+# Clone the Boston.gov Drupal monorepo
 git checkout git@github.com:CityOfBoston/boston.gov-d8.git
+
+# If installing directly from the monorepo:
+cd boston.gov-d8/docroot/modules/custom/bos_components/modules/bos_web_app/metrolist
+
+# If installing standalone:
 git checkout git@github.com:hguiney/metrolist.git
 cd metrolist
+
+# Dependencies
 yarn install
-yarn sync:ami ci
-yarn start
+yarn sync:ami ci # Grabs a copy of the latest AMI figures from the CI development server in Acquia.
 ```
 
-<b>Note:</b> The docs use `yarn` but these can be substituted for `npm` if you prefer.
+<b>⚠️ Warning:</b> These docs were written for a standalone installation of the Metrolist React codebase, which outputs JavaScript files that can be committed to the Drupal monorepo separately. However, the React codebase has since been subsumed into the monorepo, rendering certain build instructions herein out-of-date. Please refer to the Boston.gov documentation for further instruction.
 
-`yarn sync:ami ci` grabs a copy of the latest AMI figures from the CI development server in Acquia.
+## Development
+
+```bash
+yarn start
+```
 
 `yarn start` runs:
   1. `ipconfig getifaddr en6` (or `ipconfig getifaddr en0` if `en6` isn’t found), which determines which LAN IP to bind to. This allows testing on mobile devices connected to the same network.
   2. `webpack-dev-server`. This compiles the ES6+ JavaScript and starts an HTTP server on port 8080 at the address found in the previous step.
 
 Note: The `ipconfig` command has only been tested on a Mac, and it also may not work if your connection isn’t located at `en6` or `en0`.
+
+```bash
+yarn watch
+```
+
+This runs `webpack-dev-server` without launching a new browser window automatically.
 
 ## Command-line Tools
 
@@ -189,7 +207,7 @@ yarn component rename Widget Doohickey
 
 This renames the directory and does a find-and-replace on its contents.
 
-⚠️ Known issue: The component renaming algorithm does not fully find/replace on subcomponents.
+<b>⚠️ Known issue:</b> The component renaming algorithm does not fully find/replace on subcomponents.
 
 #### Remove
 
@@ -223,13 +241,13 @@ yarn version [-m major] [-n minor] [-p patch]
 
 Sets the version number for Metrolist in Drupal’s `libraries.yml` file and this project’s `package.json` file.
 
-| Option      | Description                                                                                                                                                                                               |
-| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Option          | Description                                                                                                                                                                                               |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `-m`, `--major` | Sets the left version part, e.g. 2.x.x.<br />If omitted, major will be taken from existing Metrolist version.                                                                                             |
 | `-n`, `--minor` | Sets the middle version part, e.g. x.5.x.<br />If omitted, minor will be a hash of index.bundle.js for cache-busting.                                                                                     |
 | `-p`, `--patch` | Sets the right version part, e.g. x.x.3289.<br />If omitted while minor is set, patch will be a hash of index.bundle.js for cache-busting.<br />If omitted while minor is not set, patch will not be set. |
 | `-f`, `--force` | Allow downgrading of Metrolist version.                                                                                                                                                                   |
-| `--help`      | This screen.                                                                                                                                                                                              |
+| `--help`        | This screen.                                                                                                                                                                                              |
 
 ## General Naming Conventions
 
@@ -260,6 +278,46 @@ Consistent and readable JavaScript formatting is enforced by [`eslint-config-hug
 ### Functional Programming
 
 Use Functional Programming principals as often as possible to aid maintainability and predictability. The basic idea is for every function to produce the same output for a given set of inputs regardless of when/where/how often they are called. This means a preference for functions taking their values from explicit parameters as opposed to reading variables from the surrounding scope. Additionally, a function should not produce side-effects by e.g. changing the value of a variable in the surrounding scope.
+
+### Directory Layout
+
+- `metrolist/`
+  - `__mocks__/`: Mocked functions for unit/integration tests.
+  - `_scripts/`: CLI tools
+  - `_templates/`: Stubbed files for project scaffolding. Used by CLI tools.
+  - `coverage/`: Code coverage report. Auto-generated. (`.gitignore`’d)
+  - `dist/`: Build output. Auto-generated. (`.gitignore`’d)
+  - `public/`: Static files such as images, favicon, etc. These files are not used by Drupal, which uses its own tempalting; only in development. Thus, images have to be copied to the appropriate directory prior to deployment.
+  - `src/`: React source.
+    - `components/`: React components.
+    - `globals/`: SASS variables, mixins, etc. which are used cross-component.
+    - `util/`: Utility functions.
+    - `index.js`: React entrypoint.
+    - `index.scss`: App-wide styles. (Use sparinginly; prefer component-scoped.)
+    - `serviceWorker.js`: Service Worker code from Create React App; not currently used.
+    - `setupTests.js`: Jest configuration.
+  - `_redirects`: Netlify redirects.
+  - `.env`, `.env.development`, `.env.production`: [Dotenv](https://github.com/motdotla/dotenv#readme) configuration (environment variables).
+  - `.eslintrc.js`: [ESLint](https://eslint.org/) configuration.
+  - `.travis.yml`: [Travis CI](https://travis-ci.com/) configuration.
+  - `babel.config.js`: [Babel](https://babeljs.io/) configuration.
+  - `DEVNOTES.md`: Notes taken during development.
+  - `package.json`: Project metadata/NPM dependencies.
+  - `postcss.config.js`: [PostCSS](https://postcss.org/) configuration. Used to postprocess CSS output.
+  - `README.md`: Project documentation (this file).
+  - `webpack.config.js`, `webpack.production.js`, `webpack.staging.js`: [Webpack](https://webpack.js.org/) configurations for different environments.
+  - `yarn.lock`/`package-lock.json`: Yarn/NPM dependency lock file.
+
+### Component Layout
+
+Every React component consists of the following structure:
+
+- `Component/`
+  - `__tests__`: Integration tests (optional)
+  - `Component.scss`: SASS styling
+  - `Component.test.js`: Unit test
+  - `index.js`: React component
+  - `methods.js`: Any methods that don’t need to go in the render function, for tidiness. (optional)
 
 ## CSS Conventions
 
@@ -357,7 +415,11 @@ To make asset URLs work both locally and on Drupal, all references to `/images/`
 
 ### Staging
 
-Run `yarn build:stage`. This is identical to the production build, except Webpack replaces references to `/images/` with `/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/images/`. This is where images normally wind up when running `yarn copy:drupal`.
+```bash
+yarn build:stage
+```
+
+This is identical to the production build, except Webpack replaces references to `/images/` with `/modules/custom/bos_components/modules/bos_web_app/apps/metrolist/images/`. This is where images normally wind up when running `yarn copy:drupal`.
 
 ### Module Resolution
 
@@ -418,19 +480,59 @@ module.exports = {
 
 ## Testing
 
-We’re using Jest + React Testing Library to test components. General
+```bash
+yarn test
+```
+
+We’re using [Jest](https://jestjs.io/) + [React Testing Library](https://testing-library.com/) to ensure that future development doesn’t break existing functionality.
+
+### Unit Tests
+
+Every component should have its own unit test in the same directory. This is enforced by the Component test stub (`_templates/components/Component/Component.test.js`), which contains the following:
+
+```js
+describe( 'Component', () => {
+  it( 'Renders', () => {
+    // render( <Component /> );
+    throw new Error( 'Test missing' );
+  } );
+} );
+```
+
+So when running `yarn component add`, you automatically generate a test that fails by default. You have to manually uncomment the call to `render` (and ideally write more specific tests) in order to pass. This is designed to be annoying so it isn’t neglected.
+
+### Integration Tests
+
+When testing interactions between two or more components, or for utility functions (`src/util`), put tests in a nested `__tests__` directory.
+
+One example of this is the `Search` component, which contains a separate test file for every `FiltersPanel` + `ResultsPanel` interaction,:
+
+```
+.
+├── Search.scss
+├── Search.test.js
+├── __tests__
+│   ├── bedrooms.test.js
+│   ├── incomeEligibility.test.js
+│   ├── incomeFeasibility.test.js
+│   ├── location.test.js
+│   ├── offer.test.js
+│   └── rentalPrice.test.js
+├── index.js
+└── methods.js
+```
 
 ## Testing API integrations locally
 
 You have to run a browser without CORS restrictions enabled. For Chrome on macOS, you can add this to your `~/.bash_profile`, `~/.zshrc`, or equivalent for convenience:
 
-```shell
+```bash
 alias chrome-insecure='open -n -a Google\ Chrome --args --disable-web-security --user-data-dir=/tmp/chrome --disable-site-isolation-trials --allow-running-insecure-content'
 ```
 
 This will prevent you from running your normal Chrome profile. To run both simultaneously, install an alternate Chrome such as Canary or Chromium. For Canary you would use this command instead:
 
-```shell
+```bash
 alias chrome-insecure='open -n -a Google\ Chrome\ Canary --args --disable-web-security --user-data-dir=/tmp/chrome --disable-site-isolation-trials --allow-running-insecure-content'
 ```
 

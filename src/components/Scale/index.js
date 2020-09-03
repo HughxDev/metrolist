@@ -51,14 +51,6 @@ Scale.propTypes = {
   },
   "value": PropTypes.string,
   "onChange": PropTypes.func,
-  // "units": PropTypes.shape( {
-  //   "one": PropTypes.string,
-  //   "many": PropTypes.string,
-  // } ),
-  // "unitLabel": PropTypes.shape( {
-  //   "type": PropTypes.oneOf( ['aria', 'text'] ),
-  //   "affix": PropTypes.oneOf( ['prepend', 'append'] ),
-  // } ),
   "aria-describedby": PropTypes.string,
   "aria-label": PropTypes.string,
 };
