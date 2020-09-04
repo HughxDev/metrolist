@@ -2,14 +2,8 @@ require( 'dotenv' ).config();
 const Dotenv = require( 'dotenv-webpack' );
 const webpack = require( 'webpack' );
 const path = require( 'path' );
-const glob = require( 'glob' );
 const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
 const CopyPlugin = require( 'copy-webpack-plugin' );
-const PurgecssPlugin = require( 'purgecss-webpack-plugin' );
-
-const PATHS = {
-  "src": path.join( __dirname, 'src' ),
-};
 
 module.exports = {
   "entry": "./src/index.js",
@@ -93,10 +87,6 @@ module.exports = {
     new webpack.DefinePlugin( {
       "process.env.SITE_TITLE": JSON.stringify( process.env.SITE_TITLE ),
       "process.env.DOMAIN_TITLE": JSON.stringify( process.env.DOMAIN_TITLE ),
-    } ),
-    new PurgecssPlugin( {
-      "verbose": true,
-      "paths": glob.sync( `${PATHS.src}/**/*`, { "nodir": true } ),
     } ),
   ],
 };
