@@ -4,7 +4,7 @@ import React, {
 import PropTypes from 'prop-types';
 
 import Icon from '@components/Icon';
-import Scale from '@components/Scale';
+import RadioGroup from '@components/RadioGroup';
 import FormErrorMessage from '@components/FormErrorMessage';
 import Stack from '@components/Stack';
 import Required from '@components/Required';
@@ -46,7 +46,7 @@ const AmiEstimatorHouseholdSize = forwardRef( ( props, ref ) => {
               height="100"
               alt=""
             />
-            <Scale
+            <RadioGroup
               className={ `ml-ami-estimator__prompt--answer-input` }
               criterion="householdSize"
               values="1,2,3,4,5,6+"

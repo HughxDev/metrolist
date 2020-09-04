@@ -1,8 +1,8 @@
-// <Scale />
+// <RadioGroup />
 @import '@globals';
 @import '@globals/typography/filters';
 
-.ml-scale {
+.ml-radio-group {
   padding: 0;
   margin: 0;
   height: rem( 43px );
@@ -14,7 +14,7 @@
     border-color: #d22d23;
   }
 }
-  .ml-scale__heading {
+  .ml-radio-group__heading {
     line-height: 1;
     font-style: italic;
     font-size: $font-size-filter-label;
@@ -23,7 +23,7 @@
     padding: 0;
     line-height: 0.8;
   }
-  .ml-scale__label {
+  .ml-radio-group__label {
     margin: 0;
     display: inline-block;
     display: inline-flex;
@@ -39,11 +39,11 @@
     text-align: center;
     text-transform: none;
   }
-    .ml-scale__label + .ml-scale__label .ml-scale__form-control {
-      // border-left: 1px solid $color-filters-scale-border;
+    .ml-radio-group__label + .ml-radio-group__label .ml-radio-group__form-control {
+      // border-left: 1px solid $color-filters-radio-group-border;
       border-left: none;
     }
-  .ml-scale__form-control {
+  .ml-radio-group__form-control {
     position: absolute;
     margin: 0;
     width: 100%;
@@ -54,7 +54,7 @@
     -moz-appearance: none;
     appearance: none;
     color: black;
-    border: 2px solid $color-filters-scale-border;
+    border: 2px solid $color-filters-radio-group-border;
 
     &, &:checked {
       display: block;
@@ -65,10 +65,10 @@
       background-color: $color-optimistic-blue--a11y;
     }
 
-    &:checked ~ .ml-scale__text {
+    &:checked ~ .ml-radio-group__text {
       color: $color-white;
     }
   }
-  .ml-scale__text {
+  .ml-radio-group__text {
     position: relative;
   }

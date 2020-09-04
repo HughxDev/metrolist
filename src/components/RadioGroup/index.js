@@ -3,16 +3,16 @@ import PropTypes from 'prop-types';
 
 import { propTypeErrorMessage } from '@util/errors';
 
-import './Scale.scss';
+import './RadioGroup.scss';
 
-const Scale = forwardRef( ( props, ref ) => (
-  <div className={ `ml-scale${props.className ? ` ${props.className}` : ''}` } onChange={ props.onChange }>{
+const RadioGroup = forwardRef( ( props, ref ) => (
+  <div className={ `ml-radio-group${props.className ? ` ${props.className}` : ''}` } onChange={ props.onChange }>{
     props.values.split( ',' )
       .map( ( value, index ) => (
-        <label key={ index } className="ml-scale__label">
+        <label key={ index } className="ml-radio-group__label">
           <input
             ref={ ( index === 0 ) ? ref : null }
-            className="ml-scale__form-control"
+            className="ml-radio-group__form-control"
             name={ props.criterion }
             value={ value }
             type="radio"
@@ -21,15 +21,15 @@ const Scale = forwardRef( ( props, ref ) => (
             required={ props.required }
             defaultChecked={ value === props.value }
           />
-          <span className="ml-scale__text">{ value }</span>
+          <span className="ml-radio-group__text">{ value }</span>
         </label>
       ) )
   }</div>
 ) );
 
-Scale.displayName = 'Scale';
+RadioGroup.displayName = 'RadioGroup';
 
-Scale.propTypes = {
+RadioGroup.propTypes = {
   "children": PropTypes.node,
   "required": PropTypes.bool,
   "className": PropTypes.string,
@@ -55,4 +55,4 @@ Scale.propTypes = {
   "aria-label": PropTypes.string,
 };
 
-export default Scale;
+export default RadioGroup;

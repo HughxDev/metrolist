@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Checkbox from '@components/Checkbox';
-import Scale from '@components/Scale';
+import RadioGroup from '@components/RadioGroup';
 import Range from '@components/Range';
 
 import './Filter.scss';
@@ -11,7 +11,7 @@ function renderFormControl( props ) {
   // console.log( 'props', props );
   switch ( props.type ) { // eslint-disable-line react/prop-types
     case 'scale':
-      return <Scale { ...props } />;
+      return <RadioGroup { ...props } />;
     case 'checkbox':
       return <Checkbox { ...props } />;
     case 'checkbox-button':
