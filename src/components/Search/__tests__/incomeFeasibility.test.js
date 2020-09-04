@@ -47,7 +47,7 @@ const incomeFeasibilityTest = () => {
 
     const { queryByTestId, getByLabelText } = render(
       <LocalStorageMock items={ { "householdIncome": "$5,000.00", "incomeRate": "monthly" } }>
-        <MemoryRouter initialEntries={['/metrolist/search']} initialIndex={0}>
+        <MemoryRouter initialEntries={ ['/metrolist/search'] } initialIndex={ 0 }>
           <Search homes={ homesToFilter } />
         </MemoryRouter>
       </LocalStorageMock>,
@@ -55,6 +55,7 @@ const incomeFeasibilityTest = () => {
     const incomeRestrictionFilterToggle = getByLabelText( /Hide homes that require a household income over \$[0-9,]+\/(mo|yr)\./, { "selector": "input" } );
 
     act( () => {
+      jest.advanceTimersByTime( 1500 );
       fireEvent.click( incomeRestrictionFilterToggle );
     } );
 

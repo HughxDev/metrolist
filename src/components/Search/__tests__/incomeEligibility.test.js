@@ -70,7 +70,7 @@ const incomeEligibilityTest = () => {
     const {
       getByTestId, queryByTestId, getByText,
     } = render(
-      <MemoryRouter initialEntries={['/metrolist/search']} initialIndex={0}>
+      <MemoryRouter initialEntries={ ['/metrolist/search'] } initialIndex={ 0 }>
         <Search
           homes={ homesToFilter }
           // filters={ getNoFiltersApplied() }
@@ -81,7 +81,7 @@ const incomeEligibilityTest = () => {
     const upperBoundInput = getByTestId( 'amiQualificationUpperBound' );
 
     act( () => {
-      // jest.advanceTimersByTime( 1500 );
+      jest.advanceTimersByTime( 1500 );
       fireEvent.change( lowerBoundInput, { "target": { "value": 80 } } );
       fireEvent.change( upperBoundInput, { "target": { "value": 100 } } );
     } );

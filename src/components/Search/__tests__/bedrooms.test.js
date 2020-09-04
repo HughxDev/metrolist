@@ -46,7 +46,7 @@ const bedroomsTest = () => {
     const {
       getByLabelText, getByTestId, queryByTestId,
     } = render(
-      <MemoryRouter initialEntries={['/metrolist/search']} initialIndex={0}>
+      <MemoryRouter initialEntries={ ['/metrolist/search'] } initialIndex={ 0 }>
         <Search
           homes={ homesToFilter }
           filters={ getNoFiltersApplied() }
@@ -58,6 +58,7 @@ const bedroomsTest = () => {
     const aboveThreeBedroomInput = getByLabelText( '3+' );
 
     act( () => {
+      jest.advanceTimersByTime( 1500 );
       fireEvent.click( zeroBedroomInput );
       // fireEvent.change( zeroBedroomInput, { "target": { "value": true } } );
     } );

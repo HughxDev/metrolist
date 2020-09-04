@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Home from '@components/Home';
-import Row from '@components/Row';
-import Column from '@components/Column';
 import Stack from '@components/Stack';
 import Inset from '@components/Inset';
 import Icon from '@components/Icon';
@@ -17,7 +15,6 @@ function ResultsPanel( props ) {
     homes, className, columnWidth, filters,
   } = props;
   const attributes = { ...props };
-  // const [homes, setHomes] = useState( props.homes );
   const [showHomes, setShowHomes] = useState( false );
 
   if ( homes && ( homes.length > 0 ) ) {
@@ -35,31 +32,29 @@ function ResultsPanel( props ) {
 
   delete attributes.homesHaveLoaded;
 
-  // const Homes = () => (
-  //   ( homes && homes.length )
-  //     ? homes.map( ( home ) => <Home key={ home.id } home={ home } filters={ filters } /> )
-  //     : <>No homes</>
-  //   //   <div className="ml-results-panel__home-status">
-  //   //     <Icon icon="house-missing" width="134" height="83" alt="" />
-  //   //     <p className="ml-results-panel__home-status-text">No homes match the selected filters.</p>
-  //   //   </div>
-  //   // )
-  // );
+  const Homes = () => (
+    ( homes && homes.length )
+      ? homes.map( ( home ) => <Home key={ home.id } home={ home } filters={ filters } /> )
+      : (
+        <div className="ml-results-panel__home-status">
+          <Icon icon="house-missing" width="134" height="83" alt="" />
+          <p className="ml-results-panel__home-status-text">No homes match the selected filters.</p>
+        </div>
+      )
+  );
 
-  // const NoHomesAvailable = () => (
-  //   <div className="ml-results-panel__home-status">
-  //     <Icon icon="house-loading" fallbackExtension="gif" width="134" height="83" alt="" />
-  //     <p className="ml-results-panel__home-status-text">Loading homes…</p>
-  //   </div>
-  // );
+  const NoHomesAvailable = () => (
+    <div className="ml-results-panel__home-status">
+      <Icon icon="house-loading" fallbackExtension="gif" width="134" height="83" alt="" />
+      <p className="ml-results-panel__home-status-text">Loading homes…</p>
+    </div>
+  );
 
-  // useEffect( () => {
-  //   // const showHomesAfterLoadingAnimationCompletes = setTimeout( () =>
-  //   setShowHomes( true );
-  //   // , 1500 );
+  useEffect( () => {
+    const showHomesAfterLoadingAnimationCompletes = setTimeout( () => setShowHomes( true ), 1500 );
 
-  //   // return () => clearTimeout( showHomesAfterLoadingAnimationCompletes );
-  // }, [homes] );
+    return () => clearTimeout( showHomesAfterLoadingAnimationCompletes );
+  }, [homes] );
 
   return (
     <article
@@ -71,9 +66,9 @@ function ResultsPanel( props ) {
       <Inset until="large">
         <Stack space="panel">
         {
-          ( homes && homes.length )
-            ? homes.map( ( home ) => <Home key={ home.id } home={ home } filters={ filters } /> )
-            : <>No homes</>
+          showHomes
+            ? <Homes />
+            : <NoHomesAvailable />
         }
         </Stack>
       </Inset>
