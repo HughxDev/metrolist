@@ -1,9 +1,9 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import Filter from './index';
+import FilterLabel from './index';
 
-describe( 'Filter', () => {
+describe( 'FilterLabel', () => {
   it( 'Renders', () => {
-    render( <Filter /> );
+    render( <FilterLabel /> );
   } );
 } );
