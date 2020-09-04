@@ -383,11 +383,23 @@ function Search( props ) {
       defaultFilters.location.cardinalDirection[cd] = false;
     } );
 
+    if (
+      hasOwnProperty( savedFilters, 'location' )
+      && hasOwnProperty( savedFilters.location, 'neighborhood' )
+    ) {
+      Object.keys( savedFilters.location.neighborhood )
+        .forEach( ( nb ) => {
+          if ( !hasOwnProperty( defaultFilters.location.neighborhood, nb ) ) {
+            delete savedFilters.location.neighborhood[nb];
+          }
+        } );
+    }
+
     setFilters( newFilters );
     localStorage.setItem( 'filters', JSON.stringify( newFilters ) );
 
-    const defaultFiltersString = JSON.stringify( defaultFilters );
-    const savedFiltersString = JSON.stringify( savedFilters );
+    const defaultFiltersString = JSON.stringify( defaultFilters, null, 2 );
+    const savedFiltersString = JSON.stringify( savedFilters, null, 2 );
 
     const savedFiltersMatchDefaultFilters = (
       ( savedFiltersString !== '{}' )
